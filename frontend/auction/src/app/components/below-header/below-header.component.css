@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap');
+#header{
+background: #FAFAFA;
+height:50px;
+display: flex;
+justify-content: space-around;
+margin-top: 10px;
+margin-right: -8px;
+margin-left: -8px;
+}
+#header :nth-child(1){
+font-family: 'Lato', sans-serif;
+font-weight: 400;
+font-size: 17px;
+color: #252525;
+letter-spacing: 0.63px;
+margin-top: 13px;
+flex-basis: 650px;
+}
+#header div{
+margin-top: 14px;
+font-size: 15px;
+font-family: 'Lato', sans-serif;
+font-weight: 400;
+color: #252525;
+flex-basis: 203px;
+}
+#header div :nth-child(1){
+opacity: 0.5;
+font-size: 16px;
+letter-spacing: 0.56px;
+}
+#header div :nth-child(2){
+font-size: 16px;
+letter-spacing: 0.56px;
+margin-left: 20px;
+}

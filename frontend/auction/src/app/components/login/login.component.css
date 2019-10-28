@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap');
+form div{
+    background: #FAFAFA;
+    height: 50px;
+    width: 600px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: #252525;
+    letter-spacing: 0.84px;
+    text-align: center;
+    margin-bottom: 40px;
+    padding-top: 15px;
+}
+#formLogin{
+    display: block;
+    text-align: center;
+    margin-top:25px;
+    margin-bottom: 150px;
+}
+form{
+    display: inline-block;
+    text-align: left;
+    background: #FFFFFF;
+    border: 1px solid #D8D8D8;
+}
+form input[type="checkbox"]{
+    background: #FFFFFF;
+    border: 1px solid #D8D8D8;
+    margin-left: 30px;
+    margin-bottom: 34px;
+}
+form label{
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #252525;
+    letter-spacing: 0.63px;
+}
+form input[type="button"]{
+    margin-left: 30px;
+    background: #8367D8;
+    border: 3px solid #8367D8;
+    box-shadow: 3px 3px 0 0 rgba(131,103,216,0.31);
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: #FFFFFF;
+    letter-spacing: 0.63px;
+    text-align: center;
+    width: 536px;
+    height: 40px;
+    margin-bottom: 54px;
+}
+form a{
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #8367D8;
+    letter-spacing: 0.63px;
+    text-decoration: none;
+    margin-left: 240px;
+    margin-bottom: 30px;
+}
