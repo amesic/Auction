@@ -4,7 +4,7 @@ import com.ajla.auction.model.User;
 import org.springframework.http.ResponseEntity;
 
 public interface IUserService {
-    public Long findByEmailPassword(String email, String password);
-    public Long findByEmail(String email);
-    public ResponseEntity<String> saveDataFromUser(User user);
+    public Long findByEmailPassword(final String email, final String password);
+    public Long findByEmail(final String email);
+    public ResponseEntity<String> saveDataFromUser(final User user);
 }

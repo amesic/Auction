@@ -65,8 +65,8 @@ testem.log
 typings/
 
 # e2e
-frontend/auction/e2e/*.js
-frontend/auction/e2e/*.map
+e2e/*.js
+e2e/*.map
 
 #System Files
 .DS_Store/

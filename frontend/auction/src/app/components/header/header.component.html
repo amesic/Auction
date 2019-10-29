@@ -1,38 +1,35 @@
 <div id="header">
-    <div id="upHeader">
-        <div id="icons">
-                <fa-icon [icon]="faFacebook"></fa-icon>
-                <fa-icon [icon]="faInstagram"></fa-icon>
-                <fa-icon [icon]="faTwitter"></fa-icon>
-                <fa-icon [icon]="faGooglePlus"></fa-icon>
-        </div>
-
-        <div id="links">
-            <a [routerLink]="['/home/login']">Login</a>
-            <label> or </label>
-            <a [routerLink]="['/home/register']">Create an Account</a>
-        </div>
+  <div id="upHeader">
+    <div id="icons">
+      <fa-icon [icon]="faFacebook"></fa-icon>
+      <fa-icon [icon]="faInstagram"></fa-icon>
+      <fa-icon [icon]="faTwitter"></fa-icon>
+      <fa-icon [icon]="faGooglePlus"></fa-icon>
     </div>
 
-    <div id="searchHeader">
+    <div id="links">
+      <a [routerLink]="['/home/login']">Login</a>
+      <label> or </label>
+      <a [routerLink]="['/home/register']">Create an Account</a>
+    </div>
+  </div>
 
-        <div id="auction">
-            <div id="auctionIcon">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        <label>AUCTION</label>
-        </div>
+  <div id="searchHeader">
+    <div id="auction">
+      <div id="auctionIcon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <label>AUCTION</label>
+    </div>
 
-    <input type="search" placeholder="Try enter: Shoes">
+    <input type="search" placeholder="Try enter: Shoes" />
     <fa-icon [icon]="faSearch" class="searchIcon"></fa-icon>
-    <div id=linksBelowHeader>
-        <a [routerLink]="['/home']" routerLinkActive="active">HOME</a>
-        <a [routerLink]="['/shop']" routerLinkActive="active">SHOP</a>
-        <a [routerLink]="['/myacc']" routerLinkActive="active">MY ACCOUNT</a>
-        </div>
-
-    </div>    
-    
+    <div id="linksBelowHeader">
+      <a [routerLink]="['/home']" routerLinkActive="active">HOME</a>
+      <a [routerLink]="['/shop']" routerLinkActive="active">SHOP</a>
+      <a [routerLink]="['/myacc']" routerLinkActive="active">MY ACCOUNT</a>
+    </div>
+  </div>
 </div>

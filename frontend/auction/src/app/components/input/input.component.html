@@ -1,6 +1,10 @@
 <div [formGroup]="parentForm">
-    <div id="error">{{errorMessage}}</div>
-    <label>{{title}}</label> <br>
-    <input type={{type}} formControlName={{controlName}} placeholder={{placeholder}}>
+  
+  <label>{{ title }}</label> <br />
+  <input
+    type="{{ type }}"
+    formControlName="{{ controlName }}"
+    placeholder="{{ placeholder }}"
+  />
+  <div id="error">{{ errorMessage }}</div>
 </div>
-

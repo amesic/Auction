@@ -1,127 +1,120 @@
-@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap');
-#upHeader{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background: #252525;
-    height: 25px;
-    font-family: 'Lato', sans-serif;
-    font-weight: 700;
-    margin-right: -8px;
-    margin-left: -8px;
-    margin-top:-8px;
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
+#upHeader {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: #252525;
+  height: 25px;
+  font: 700 15px "Lato", sans-serif;
+  margin-right: -8px;
+  margin-left: -8px;
+  margin-top: -8px;
 }
-#links{
-    font-size: 10px;
-    letter-spacing: 0.49px;
+#links {
+  font-size: 10px;
+  letter-spacing: 0.49px;
 }
-#links a{
-    margin: 15px;
-    color: #FFFFFF;
-    text-decoration: none;
+#links a {
+  margin: 15px;
+  color: #ffffff;
+  text-decoration: none;
 }
-#links label{
-    color: #9B9B9B;
+#links label {
+  color: #9b9b9b;
 }
-#icons fa-icon{
-    margin: 5px;
-    color: #FFFFFF;
-    width: 25px;
-    height: 25px;
-    opacity: 0.6;  
+#icons fa-icon {
+  margin: 5px;
+  color: #ffffff;
+  width: 25px;
+  height: 25px;
+  opacity: 0.6;
 }
-#searchHeader{
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-areas: "a a b b b c d d";
+#searchHeader {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-areas: "a a b b b c d d";
 }
-#searchHeader #auction{
-    grid-area: a;
+#searchHeader #auction {
+  grid-area: a;
 }
-#searchHeader input[type="search"]{
-    grid-area: b;
-    margin-left: 45px;
+#searchHeader input[type="search"] {
+  grid-area: b;
+  margin-left: 45px;
 }
-#searchHeader fa-icon{
-    grid-area: c;
-    margin-left:50px;
+#searchHeader fa-icon {
+  grid-area: c;
+  margin-left: 50px;
 }
-#searchHeader div{
-    grid-area: d;
+#searchHeader div {
+  grid-area: d;
 }
-#searchHeader input[type="search"]{
-    background: #FFFFFF;
-    border: 1px solid #E3E3E3;
-    box-shadow: 3px 3px 0 0 rgba(0,0,0,0.11);
-    width: 513px;
-    height: 43px;
-    font-size: 17px;
-    padding-left: 19px;
-    padding-right: 45px;
-    margin-top:10px;
-    font-family: 'Lato', sans-serif;
-    font-weight: 400;
+#searchHeader input[type="search"] {
+  background: #ffffff;
+  border: 1px solid #e3e3e3;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
+  width: 513px;
+  height: 43px;
+  padding-left: 19px;
+  padding-right: 45px;
+  margin-top: 10px;
+  font: 400 17px "Lato", sans-serif;
 }
-::placeholder{
-    font-size: 15px;
-    color: #9B9B9B;
-    letter-spacing: 0.63px;
-    width: 137px;
-    height: 22px;
+::placeholder {
+  font-size: 15px;
+  color: #9b9b9b;
+  letter-spacing: 0.63px;
+  width: 137px;
+  height: 22px;
 }
-.searchIcon{
-    margin-top:23px;
-    width: 20px;
-    height: 20px;
-    margin-left:13px;
+.searchIcon {
+  margin-top: 23px;
+  width: 20px;
+  height: 20px;
+  margin-left: 13px;
 }
-#searchHeader #auction{
-font-family: 'Lato', sans-serif;
-font-weight: 300;
-font-size: 24px;
-color: #8367D8;
-letter-spacing: 0.84px;
-height: 29px;
-width: 140px;
-margin-top: 19px;
-margin-left: 100px;
+#searchHeader #auction {
+  font: 300 24px "Lato", sans-serif;
+  color: #8367d8;
+  letter-spacing: 0.84px;
+  height: 29px;
+  width: 140px;
+  margin-top: 19px;
+  margin-left: 100px;
 }
-#searchHeader #auction #auctionIcon span{
-background: #C4BFD6;
-display: inline-block;
-border-radius: 1px;
-height: 16px;
-width: 4px;
+#searchHeader #auction #auctionIcon span {
+  background: #c4bfd6;
+  display: inline-block;
+  border-radius: 1px;
+  height: 16px;
+  width: 4px;
 }
-#auction{
-display: flex;
+#auction {
+  display: flex;
 }
-#auction label{
-margin-left: 14px;
+#auction label {
+  margin-left: 14px;
 }
-#searchHeader #auction #auctionIcon :nth-child(1){
-transform: rotate(45deg);
+#searchHeader #auction #auctionIcon :nth-child(1) {
+  transform: rotate(45deg);
 }
-#searchHeader #auction #auctionIcon :nth-child(2){
-transform: rotate(-45deg) translateX(7px) translateY(-2px);
+#searchHeader #auction #auctionIcon :nth-child(2) {
+  transform: rotate(-45deg) translateX(7px) translateY(-2px);
 }
-#searchHeader #auction #auctionIcon :nth-child(3){
-transform: rotate( 90deg) translateX(5px) translateY(-4px);
+#searchHeader #auction #auctionIcon :nth-child(3) {
+  transform: rotate(90deg) translateX(5px) translateY(-4px);
 }
-#linksBelowHeader a{
-text-decoration: none;
-font-family: 'Lato', sans-serif;
-font-weight: 300;
-font-size: 16px;
-color: #252525;
-letter-spacing: 0.56px;
-margin-right: 28px;
+#linksBelowHeader a {
+  text-decoration: none;
+  font: 300 16px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.56px;
+  margin-right: 28px;
 }
-#linksBelowHeader{
-    margin-top: 20px;
-    margin-left: -31px;
+#linksBelowHeader {
+  margin-top: 20px;
+  margin-left: -31px;
 }
-#linksBelowHeader .active{
-    color: #8367D8;;
-    font-weight: 700;
+#linksBelowHeader .active {
+  color: #8367d8;
+  font-weight: 700;
 }

@@ -1,18 +1,17 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { InputComponent } from './components/input/input.component';
-import { LoginComponent } from './components/login/login.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { HeaderComponent } from './components/header/header.component';
-import { BelowHeaderComponent } from './components/below-header/below-header.component';
-import { RegisterComponent } from './components/register/register.component';
-
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { InputComponent } from "./components/input/input.component";
+import { LoginComponent } from "./components/login/login.component";
+import { FooterComponent } from "./components/footer/footer.component";
+import { HeaderComponent } from "./components/header/header.component";
+import { BelowHeaderComponent } from "./components/below-header/below-header.component";
+import { RegisterComponent } from "./components/register/register.component";
 
 @NgModule({
   declarations: [
@@ -22,8 +21,7 @@ import { RegisterComponent } from './components/register/register.component';
     FooterComponent,
     HeaderComponent,
     BelowHeaderComponent,
-    RegisterComponent,
-
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -35,4 +33,4 @@ import { RegisterComponent } from './components/register/register.component';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
