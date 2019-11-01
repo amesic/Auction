@@ -1,0 +1,28 @@
+<div>
+  <app-below-header [title1]="'LOGIN'"></app-below-header>
+  <div id="loginMess" [style.color]="color">{{ message }}</div>
+  <div id="formLogin">
+    <form [formGroup]="loginForm">
+      <div>LOGIN</div>
+      <!--ako koristimo [] onda ono što mu se dodijeli 
+        gleda kao objekat, a bez '' bio bi niz charova-->
+      <app-input
+        [title]="'Enter Email'"
+        type="email"
+        [parentForm]="loginForm"
+        [controlName]="'email'"
+        [errorMessage]="errorMessageEmail"
+      ></app-input>
+      <app-input
+        [title]="'Password'"
+        type="password"
+        [parentForm]="loginForm"
+        [controlName]="'password'"
+        [errorMessage]="errorMessagePass"
+      ></app-input>
+      <input type="checkbox" /> <label>Remember me</label> <br />
+      <input type="button" value="LOGIN" (click)="onSubmit()" /> <br />
+      <a href="">Forgot password?</a>
+    </form>
+  </div>
+</div>

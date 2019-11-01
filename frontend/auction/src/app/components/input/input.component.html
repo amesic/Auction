@@ -1,0 +1,10 @@
+<div [formGroup]="parentForm">
+  
+  <label>{{ title }}</label> <br />
+  <input
+    type="{{ type }}"
+    formControlName="{{ controlName }}"
+    placeholder="{{ placeholder }}"
+  />
+  <div id="error">{{ errorMessage }}</div>
+</div>
