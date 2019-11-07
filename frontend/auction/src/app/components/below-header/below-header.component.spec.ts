@@ -1,16 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { BelowHeaderComponent } from './below-header.component';
+import { BelowHeaderComponent } from "./below-header.component";
 
-describe('BelowHeaderComponent', () => {
+describe("BelowHeaderComponent", () => {
   let component: BelowHeaderComponent;
   let fixture: ComponentFixture<BelowHeaderComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BelowHeaderComponent ]
-    })
-    .compileComponents();
+      declarations: [BelowHeaderComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('BelowHeaderComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

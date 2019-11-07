@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.Objects;
+
 
 @Configuration
 @EnableWebSecurity
@@ -27,14 +29,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     //dependency injection
     @Autowired
-    public WebSecurityConfig(final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, final UserService userService, final JwtRequestFilter jwtRequestFilter) {
+    public WebSecurityConfig(final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+                             final UserService userService,
+                             final JwtRequestFilter jwtRequestFilter) {
+        Objects.requireNonNull(jwtAuthenticationEntryPoint, "userService must not be null.");
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+        Objects.requireNonNull(userService, "userService must not be null.");
         this.userService = userService;
+        Objects.requireNonNull(jwtRequestFilter, "userService must not be null.");
         this.jwtRequestFilter = jwtRequestFilter;
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception {
     // configure AuthenticationManager so that it knows from where to load
     // user for matching credentials
     // Use BCryptPasswordEncoder

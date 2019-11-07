@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Objects;
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/users")
@@ -30,10 +32,14 @@ public class UserController {
 
     //dependency injection
     @Autowired
-    public UserController(final UserService userService, final AuthenticationManager authenticationManager,
-    final JwtTokenUtil jwtTokenUtil){
+    public UserController(final UserService userService,
+                          final AuthenticationManager authenticationManager,
+                          final JwtTokenUtil jwtTokenUtil) {
+        Objects.requireNonNull(userService, "userService must not be null.");
         this.userService = userService;
+        Objects.requireNonNull(authenticationManager, "authenticationManager must not be null.");
         this.authenticationManager = authenticationManager;
+        Objects.requireNonNull(jwtTokenUtil, "jwtTokenUtil must not be null.");
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
@@ -57,7 +63,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> saveUserData(@RequestBody final User user){
+    public ResponseEntity<String> saveUserData(@RequestBody final User user) {
         return userService.saveDataFromUser(user);
     }
 }

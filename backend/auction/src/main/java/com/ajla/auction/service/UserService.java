@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 @Service
@@ -26,6 +27,7 @@ public class UserService implements IUserService, UserDetailsService {
     //for example Smth1 implements userRepo, Smth2 implements userRepo,and then we have two beans
     @Autowired
     public UserService(final UserRepo userRepo) {
+        Objects.requireNonNull(userRepo, "userService must not be null.");
         this.userRepo = userRepo;
     }
     @Override
@@ -39,7 +41,7 @@ public class UserService implements IUserService, UserDetailsService {
         return null;
     }
     @Override
-    public Long findByEmail(final String email){
+    public Long findByEmail(final String email) {
        final User user = userRepo.findByEmail(email);
        if (user == null) {
            return null;
@@ -47,7 +49,7 @@ public class UserService implements IUserService, UserDetailsService {
        return user.getId();
     }
     @Override
-    public ResponseEntity<String> saveDataFromUser(final User user){
+    public ResponseEntity<String> saveDataFromUser(final User user) {
         final Long id = findByEmail(user.getEmail());
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);

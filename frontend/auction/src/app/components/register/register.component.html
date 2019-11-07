@@ -9,29 +9,25 @@
         type="text"
         [parentForm]="registerForm"
         [controlName]="'firstName'"
-        [errorMessage]="errorMessageFirst"
-      ></app-input>
+        [errorMessage]="errorMessageFirst"></app-input>
       <app-input
         [title]="'Last Name'"
         type="text"
         [parentForm]="registerForm"
         [controlName]="'lastName'"
-        [errorMessage]="errorMessageLast"
-      ></app-input>
+        [errorMessage]="errorMessageLast"></app-input>
       <app-input
         [title]="'Enter Email'"
         type="email"
         [parentForm]="registerForm"
         [controlName]="'email'"
-        [errorMessage]="errorMessageEmail"
-      ></app-input>
+        [errorMessage]="errorMessageEmail"></app-input>
       <app-input
         [title]="'Password'"
         type="password"
         [parentForm]="registerForm"
         [controlName]="'password'"
-        [errorMessage]="errorMessagePass"
-      ></app-input>
+        [errorMessage]="errorMessagePass"></app-input>
       <input type="button" value="REGISTER" (click)="onSubmit()" /> <br />
       <label>Already have an account?</label>
       <a href="http://localhost:4200/login">Login</a>

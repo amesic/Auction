@@ -1,6 +1,7 @@
 package com.ajla.auction.config;
 
 import java.io.IOException;
+import java.util.Objects;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,13 +28,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     //dependency injection
     @Autowired
-    public JwtRequestFilter (final UserService userService, final JwtTokenUtil jwtTokenUtil){
+    public JwtRequestFilter (final UserService userService, final JwtTokenUtil jwtTokenUtil) {
+        Objects.requireNonNull(userService, "userService must not be null.");
         this.userService = userService;
+        Objects.requireNonNull(jwtTokenUtil, "userService must not be null.");
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+    protected void doFilterInternal(final HttpServletRequest request,
+                                    final HttpServletResponse response,
+                                    final FilterChain chain) throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader("Authorization");
         String username = null;
         String jwtToken = null;
@@ -56,7 +61,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             UserDetails userDetails = this.userService.loadUserByUsername(username);
             // if token is valid configure Spring Security to manually set authentication
             if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                final UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken
                         .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

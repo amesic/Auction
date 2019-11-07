@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 //The JwtTokenUtil is responsible for performing JWT operations like creation and validation
 @Component
-public class JwtTokenUtil implements Serializable{
+public class JwtTokenUtil implements Serializable {
     //properties
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 

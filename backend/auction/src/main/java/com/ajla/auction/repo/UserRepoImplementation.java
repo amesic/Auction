@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Objects;
 
 @Repository
 public class UserRepoImplementation implements UserRepoMethods {
@@ -16,13 +17,14 @@ public class UserRepoImplementation implements UserRepoMethods {
     EntityManager em;
 
     //dependency injection
-    public UserRepoImplementation(final EntityManager em){
-        this.em=em;
+    public UserRepoImplementation(final EntityManager em) {
+        Objects.requireNonNull(em, "userService must not be null.");
+        this.em = em;
     }
 
     @Override
     //find me user with parameter email in database if exist
-    public User findByEmail(final String email){
+    public User findByEmail(final String email) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
         //describes what we want to do in the query. Also, it declares the type of a row in the result
         final CriteriaQuery<User> cq = cb.createQuery(User.class);
