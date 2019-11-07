@@ -11,8 +11,6 @@ import { Input } from "@angular/core";
 export class ProductComponent implements OnInit {
   @Input() title;
   @Input() startPrice;
-  @Input() description;
-  @Input() imageUrls: Array<String>;
   @Input() firstImage;
 
   constructor() {}
