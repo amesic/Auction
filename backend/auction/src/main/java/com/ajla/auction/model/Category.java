@@ -1,14 +1,19 @@
 package com.ajla.auction.model;
 
+import org.hibernate.annotations.Target;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import java.util.List;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.CascadeType;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "categories")
@@ -20,10 +25,14 @@ public class Category {
     private Long id;
 
     private String name;
-
-    //inter-table product_category, mappedBy is name of the variable from product class
-    @ManyToMany(mappedBy = "productCategories")
-    private List<Product> products;
+    //cascade bc you have a collection in your entity,
+    //and that collection has one or more items which are not present in the database.
+    //By specifying the above options you tell hibernate to save them to the database when saving their parent
+    //or else org.hibernate.TransientObjectException: object references an unsaved transient instance - save the transient instance before flushing: com.ajla.auction.model.Category
+    @OneToMany(cascade={CascadeType.ALL})
+    @Target(Category.class)
+    @JoinColumn(name = "categoryParentId")
+    private List<Category> subcategories= new ArrayList();
 
     public Long getId() {
         return id;
@@ -41,11 +50,11 @@ public class Category {
         this.name = name;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public List<Category> getSubcategories() {
+        return subcategories;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setSubcategories(List<Category> subcategories) {
+        this.subcategories = subcategories;
     }
 }

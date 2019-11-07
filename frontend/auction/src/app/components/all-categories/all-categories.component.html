@@ -1,0 +1,15 @@
+<div *ngIf="categories != undefined" class="container">
+    <app-below-header [title1]="'ALL CATEGORIES'" [title2]="'HOME'" [title3]="'ALL CATEGORIES'"></app-below-header>
+  <div class="categories">
+    <div *ngFor="let category of categories; let i = index">
+      <p *ngIf="category.subcategories.length != 0" class="category">
+          <a [routerLink]="['/home/allCategories']">{{ category.name }}</a>
+      </p>
+      <div *ngFor="let subcategory of category.subcategories">
+        <p class="subcategory">
+          <a [routerLink]="['/home/allCategories']">{{ subcategory.name }}</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

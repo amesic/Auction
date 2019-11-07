@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
+.button {
+  background: #ffffff;
+  border: 3px solid #f7f4fd;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.05);
+  font: 200 1em "Lato", sans-serif;
+  margin-left: 80%;
+  margin-bottom: 5%;
+  padding-left: 2em;
+  padding-right: 2em;
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
+}
+.title {
+  margin-left: 10.625em;
+  margin-right: 10.625em;
+  margin-bottom: -2.875em;
+}
+.title > a {
+  margin-right: 4.25em;
+  font: 400 1.5em "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.06125em;
+}
+.title :nth-child(1) {
+    border-bottom: 0.18em solid #8367d8;
+}

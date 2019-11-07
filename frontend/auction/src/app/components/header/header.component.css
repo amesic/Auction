@@ -43,7 +43,7 @@
 }
 #searchHeader fa-icon {
   grid-area: c;
-  margin-left: 50px;
+  margin-left: 10px;
 }
 #searchHeader div {
   grid-area: d;

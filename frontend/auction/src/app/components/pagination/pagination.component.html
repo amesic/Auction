@@ -1,0 +1,14 @@
+
+<div class="title">
+    <a routerLinkActive="active" [routerLink]="['/home']" ng-click="showme=true">New Arrivals</a>
+    <a routerLinkActive="active"  [routerLink]="['/home']" ng-click="showme=false">Last Chance</a>
+</div>
+<div>
+<app-set-products [products]="productsNew" ng-hide="showme"></app-set-products>
+<input type="button" (click)="onClick()" value="Load more..." [disabled]="disabled" class="button" ng-hide="showme">
+</div>
+
+<div>
+<app-set-products [products]="productsLast" ng-show="showme"></app-set-products>
+<input type="button" (click)="onClick1()" value="Load more..." [disabled]="disabled1" class="button" ng-show="showme">
+</div>

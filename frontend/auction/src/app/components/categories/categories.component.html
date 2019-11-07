@@ -1,0 +1,26 @@
+<div class="container">
+ 
+<div class="categories">
+  <ul>
+    <p>CATEGORIES</p>
+    <div *ngFor="let category of categories; let i = index">
+      <div>
+        <li *ngIf="category.subcategories.length != 0" class="category">
+          <a appShowHide>{{ category.name }}</a>
+          <ul>
+            <li
+              *ngFor="let subcategory of category.subcategories"
+              class="subcategory"
+            >
+              <a href="">{{ subcategory.name }}</a>
+            </li>
+          </ul>
+        </li>
+      </div>
+    </div>
+    <li class="category">
+      <a [routerLink]="['/home/allCategories']">All Categories</a>
+    </li>
+  </ul>
+</div>
+</div>

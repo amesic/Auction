@@ -1,6 +1,7 @@
 package com.ajla.auction.repo;
 
 import com.ajla.auction.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -12,17 +13,18 @@ import javax.persistence.criteria.Root;
 import java.util.Objects;
 
 @Repository
-public class UserRepoImplementation implements UserRepoMethods {
+public class UserRepositoryImpl implements UserRepositoryCustom {
     //properties
-    EntityManager em;
+    final EntityManager em;
 
     //dependency injection
-    public UserRepoImplementation(final EntityManager em) {
+    @Autowired
+    public UserRepositoryImpl(final EntityManager em){
         Objects.requireNonNull(em, "userService must not be null.");
         this.em = em;
     }
 
-    @Override
+   /* @Override
     //find me user with parameter email in database if exist
     public User findByEmail(final String email) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -40,6 +42,6 @@ public class UserRepoImplementation implements UserRepoMethods {
             return null;
         }
         return  query.getSingleResult();
-    }
+    }*/
 
 }

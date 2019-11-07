@@ -1,7 +1,7 @@
 package com.ajla.auction.service;
 
 import com.ajla.auction.model.User;
-import com.ajla.auction.repo.UserRepo;
+import com.ajla.auction.repo.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,26 +20,17 @@ import java.util.Objects;
 @Service
 public class UserService implements IUserService, UserDetailsService {
     //properties
-    private final UserRepo userRepo;
+    private final UserRepository userRepo;
 
     //dependency injection
     //we need qualifier when have more implementations of userRepo
     //for example Smth1 implements userRepo, Smth2 implements userRepo,and then we have two beans
     @Autowired
-    public UserService(final UserRepo userRepo) {
+    public UserService(final UserRepository userRepo) {
         Objects.requireNonNull(userRepo, "userService must not be null.");
         this.userRepo = userRepo;
     }
-    @Override
-    public Long findByEmailPassword(final String email, final String password) {
-        final Iterable<User> users = userRepo.findAll();
-        for (final User user: users){
-            if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
-                return user.getId();
-            }
-        }
-        return null;
-    }
+
     @Override
     public Long findByEmail(final String email) {
        final User user = userRepo.findByEmail(email);
