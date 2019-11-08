@@ -2,31 +2,36 @@ import { Injectable, OnDestroy } from "@angular/core";
 import { Observable } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Product } from "../models/Product";
+import { PaginationInfo } from "../models/PaginationInfo";
 
 @Injectable({
   providedIn: "root"
 })
 export class ProductService {
   constructor(private http: HttpClient) {}
-  urlAdv = "http://localhost:8080/product/advertisement";
-  urlFeatPro = "http://localhost:8080/product/featureProduct";
-  urlFeatColl = "http://localhost:8080/product/featureCollection";
-  urlNewArr = "http://localhost:8080/product/newArrivals";
-  urlLastChan = "http://localhost:8080/product/lastChance";
+  urlAdvertisement = "http://localhost:8080/product/advertisement";
+  urlFeatureProducts = "http://localhost:8080/product/featureProduct";
+  urlFeatureCollection = "http://localhost:8080/product/featureCollection";
+  urlNewArrivals = "http://localhost:8080/product/newArrivals";
+  urlLastChance = "http://localhost:8080/product/lastChance";
 
-  getAdvProduct(): Observable<Product> {
-    return this.http.get<Product>(this.urlAdv);
+  getAdvertisementProduct(): Observable<Product> {
+    return this.http.get<Product>(this.urlAdvertisement);
   }
-  getFeatPro(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.urlFeatPro);
+  getFeatureProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.urlFeatureProducts);
   }
-  getFeatColl(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.urlFeatColl);
+  getFeatureCollection(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.urlFeatureCollection);
   }
-  getNewArr(page, size): Observable<Product[]> {
-    return this.http.get<Product[]>(this.urlNewArr + "?page=" + page + "&size=" + size);
+  getNewArrivals(pageNumber, size): Observable<PaginationInfo> {
+    return this.http.get<PaginationInfo>(
+      this.urlNewArrivals + "?page=" + pageNumber + "&size=" + size
+    );
   }
-  getLastChan(page, size): Observable<Product[]> {
-    return this.http.get<Product[]>(this.urlLastChan + "?page=" + page + "&size=" + size);
+  getLastChance(pageNumber, size): Observable<PaginationInfo> {
+    return this.http.get<PaginationInfo>(
+      this.urlLastChance + "?page=" + pageNumber + "&size=" + size
+    );
   }
 }

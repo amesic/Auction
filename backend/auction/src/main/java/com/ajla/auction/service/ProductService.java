@@ -1,5 +1,6 @@
 package com.ajla.auction.service;
 
+import com.ajla.auction.model.PaginationInfo;
 import com.ajla.auction.model.Product;
 import com.ajla.auction.repo.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,13 +42,13 @@ public class ProductService implements IProductService{
         return new ResponseEntity<>(productRepo.getAllFeatureCollection(), HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<List<Product>>  findPaginatedNewArrivals(int page, int size) {
+    public ResponseEntity<PaginationInfo<Product>> findPaginatedNewArrivals(int page, int size) {
         //final List<Product> orderedList = productRepo.findAllOrOrderByDatePublishingDesc();
         //return productRepo.findAll(PageRequest.of(page, size, Sort.by("datePublishing").descending()));
         return new ResponseEntity<>(productRepo.getAllNewArrivalProducts(page, size), HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<List<Product>>  findPaginatedLastChance(int page, int size) {
+    public ResponseEntity<PaginationInfo<Product>> findPaginatedLastChance(int page, int size) {
         return new ResponseEntity<>(productRepo.getAllLastChanceProducts(page, size), HttpStatus.OK);
     }
 }

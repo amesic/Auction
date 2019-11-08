@@ -1,5 +1,6 @@
 package com.ajla.auction.repo;
 
+import com.ajla.auction.model.PaginationInfo;
 import com.ajla.auction.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -16,11 +17,13 @@ import java.util.List;
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
     //properties
     final EntityManager em;
+    PaginationInfo<Product> paginationInfo;
 
     //dependency injection
     @Autowired
-    public ProductRepositoryImpl(EntityManager em) {
+    public ProductRepositoryImpl(final EntityManager em) {
         this.em = em;
+        paginationInfo = new PaginationInfo<Product>();
     }
 
     @Override
@@ -64,14 +67,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return  query.getResultList();
     }
     @Override
-    public List<Product> getAllLastChanceProducts(int page, int size) {
+    public PaginationInfo<Product> getAllLastChanceProducts(int pageNumber, int size) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
         //describes what we want to do in the query. Also, it declares the type of a row in the result
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
 
         final Root<Product> product = cq.from(Product.class);
-        //we create predicates against our Category entity. Note, that these predicates don't have any effect yet
-        //get categoryParentId where that is null
         final LocalDate now = LocalDate.now();
         final Predicate endDateProductsNow = cb.equal(product.get("endDate"), now);
         final LocalDate tomorrow = now.plusDays(1);
@@ -83,42 +84,41 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         if (query.getResultList().isEmpty()) {
             return null;
         }
-        //page starts from 0, return list of size number element, starting from page*size index of element
-        query.setFirstResult(page * size);
-        //if there is no elements left in list return null
-        if(query.getResultList().isEmpty()) {
-            return null;
-        }
+        //set total number of last chance products
+        paginationInfo.setTotalNumberOfItems(query.getResultList().size());
+        //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
+        query.setFirstResult(pageNumber * size);
         query.setMaxResults(size);
-        return  query.getResultList();
+        paginationInfo.setItems(query.getResultList());
+        paginationInfo.setPageSize(size);
+        paginationInfo.setPageNumber(pageNumber);
+        return  paginationInfo;
     }
     @Override
-    public List<Product> getAllNewArrivalProducts(int page, int size) {
+    public PaginationInfo<Product> getAllNewArrivalProducts(int pageNumber, int size) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
-        //describes what we want to do in the query. Also, it declares the type of a row in the result
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
 
         final Root<Product> product = cq.from(Product.class);
-        //we create predicates against our Category entity. Note, that these predicates don't have any effect yet
-        //get categoryParentId where that is null
         LocalDate now = LocalDate.now();
         final Predicate currentProducts = cb.greaterThan(product.get("endDate"), now);
-        //apply predicates to our CriteriaQuery
         final Predicate currentProducts1 = cb.lessThanOrEqualTo(product.get("startDate"), now);
         final Predicate newArrivalsProduct = cb.and(currentProducts, currentProducts1);
         cq.where(newArrivalsProduct).orderBy( cb.desc(product.get("startDate")));
+
         final TypedQuery<Product> query = em.createQuery(cq);
         if (query.getResultList().isEmpty()) {
             return null;
         }
+        //set total number of new arrivals products
+        paginationInfo.setTotalNumberOfItems(query.getResultList().size());
         //page starts from 0, return list of size number element, starting from page*size index of element
-        query.setFirstResult(page * size);
-        //if there is no elements left in list return null
-        if(query.getResultList().isEmpty()) {
-            return null;
-        }
+        query.setFirstResult(pageNumber * size);
         query.setMaxResults(size);
-        return  query.getResultList();
+        paginationInfo.setItems(query.getResultList());
+        paginationInfo.setPageSize(size);
+        paginationInfo.setPageNumber(pageNumber);
+        return  paginationInfo;
 
 
     }

@@ -1,12 +1,10 @@
-<div class="container"><p class="title">{{ title }}</p></div>
-<div class="container" *ngIf="products != undefined">
-  <div class="products">
+<div class="container">
+  <p class="title">{{ title }}</p>
+  <div [class]="className">
     <app-product
-      class="product"
       *ngFor="let product of products; let i = index"
       [title]="product.title"
       [startPrice]="product.startPrice"
-      [firstImage]="product.images[0].link"
-    ></app-product>
+      [firstImage]="product.images[0].link"></app-product>
   </div>
 </div>

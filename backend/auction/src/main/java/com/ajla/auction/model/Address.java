@@ -24,7 +24,7 @@ public class Address {
     private String zipCode;
     private String country;
 
-    @OneToOne(mappedBy = "address", cascade={CascadeType.ALL})
+    @OneToOne(mappedBy = "address", cascade = {CascadeType.ALL})
     private User user;
 
     //getter setter

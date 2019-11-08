@@ -12,11 +12,8 @@ export class CategoriesComponent implements OnInit {
   categories: Array<Category>;
 
   ngOnInit() {
-    this.categoriesService
-      .getAllCategories(9)
-      .subscribe(allCategories => {
-        this.categories = allCategories;
-      });
+    this.categoriesService.getAllCategories(9).subscribe(allCategories => {
+      this.categories = allCategories;
+    });
   }
-
 }

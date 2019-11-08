@@ -31,10 +31,7 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom {
 
         final Root<Category> category = cq.from(Category.class);
         //we create predicates against our Category entity. Note, that these predicates don't have any effect yet
-        //get categoryParentId where that is null
-        //final Predicate categoryParentIdPredicate = cb.equal(category.get("subcategories"), );
         //apply predicates to our CriteriaQuery
-        //cq.where(categoryParentIdPredicate);
         final TypedQuery<Category> query = em.createQuery(cq);
         query.setMaxResults(Math.toIntExact(numberOfCategories));
         if (query.getResultList().isEmpty()) {

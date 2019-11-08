@@ -1,44 +1,47 @@
-<div id="header">
-  <div id="upHeader">
-    <div id="icons">
-      <fa-icon [icon]="faFacebook"></fa-icon>
-      <fa-icon [icon]="faInstagram"></fa-icon>
-      <fa-icon [icon]="faTwitter"></fa-icon>
-      <fa-icon [icon]="faGooglePlus"></fa-icon>
-    </div>
-
-    <div id="links">
-      <a *ngIf="!loginService.isUserLoggedIn()" [routerLink]="['/home/login']">Login</a>
-      <label *ngIf="!loginService.isUserLoggedIn()"> or </label>
-      <a
-        *ngIf="!loginService.isUserLoggedIn()"
-        [routerLink]="['/home/register']">Create an Account</a>
-      <label *ngIf="loginService.isUserLoggedIn()">Welcome {{ userName }}!</label>
-      <a
-        *ngIf="loginService.isUserLoggedIn()"
-        [routerLink]="['/home']"
-        (click)="loginService.logOut()">Logout</a>
-    </div>
-  </div>
-  <div id="searchHeader">
-    <div id="auction">
-      <div id="auctionIcon">
-        <span></span>
-        <span></span>
-        <span></span>
+  <div class="upHeader">
+    <div class="container">
+      <div class="icons">
+        <fa-icon [icon]="faFacebook"></fa-icon>
+        <fa-icon [icon]="faInstagram"></fa-icon>
+        <fa-icon [icon]="faTwitter"></fa-icon>
+        <fa-icon [icon]="faGooglePlus"></fa-icon>
       </div>
-      <label>AUCTION</label>
+  
+      <div class="links">
+        <a *ngIf="!loginService.isUserLoggedIn()" [routerLink]="['/home/login']">Login</a>
+        <label *ngIf="!loginService.isUserLoggedIn()"> or </label>
+        <a
+          *ngIf="!loginService.isUserLoggedIn()"
+          [routerLink]="['/home/register']">Create an Account</a>
+        <label *ngIf="loginService.isUserLoggedIn()">Welcome {{ userName }}!</label>
+        <a
+          *ngIf="loginService.isUserLoggedIn()"
+          [routerLink]="['/home']"
+          (click)="loginService.logOut()">Logout</a>
+      </div>
     </div>
+    </div>
+    <div class="searchHeader container">
+      <div class="auction">
+        <div class="auctionIcon">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <label>AUCTION</label>
+      </div>
 
-    <input type="search" placeholder="Try enter: Shoes" />
-    <fa-icon [icon]="faSearch" class="searchIcon"></fa-icon>
-    <div id="linksBelowHeader">
-      <a [routerLink]="['/home']" routerLinkActive="active">HOME</a>
-      <a [routerLink]="['/shop']" routerLinkActive="active">SHOP</a>
-      <a
-        *ngIf="loginService.isUserLoggedIn()"
-        [routerLink]="['/myacc']"
-        routerLinkActive="active">MY ACCOUNT</a>
+      <div class="search">
+        <input type="search" placeholder="Try enter: Shoes" />
+        <fa-icon [icon]="faSearch" class="searchIcon"></fa-icon>
+      </div>
+  
+      <div class="linksBelowHeader">
+        <a [routerLink]="['/home']" routerLinkActive="active">HOME</a>
+        <a [routerLink]="['/shop']" routerLinkActive="active">SHOP</a>
+        <a
+          *ngIf="loginService.isUserLoggedIn()"
+          [routerLink]="['/myacc']"
+          routerLinkActive="active">MY ACCOUNT</a>
+      </div>
     </div>
-  </div>
-</div>

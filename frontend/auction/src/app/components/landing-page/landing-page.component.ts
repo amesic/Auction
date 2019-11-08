@@ -9,19 +9,19 @@ import { Product } from "../../models/Product";
 })
 export class LandingPageComponent implements OnInit {
   advertisementProduct: Product; //from database one product for advertisement
-  featureProducts: Array<Product>; //from database feature products
-  featureCollection: Array<Product>; //from database feature collection
+  featureProducts: Product[] = []; //from database feature products
+  featureCollection: Product[] = []; //from database feature collection
 
   constructor(private productService: ProductService) {}
 
   ngOnInit() {
-    this.productService.getAdvProduct().subscribe(advPro => {
+    this.productService.getAdvertisementProduct().subscribe(advPro => {
       this.advertisementProduct = advPro;
     });
-    this.productService.getFeatPro().subscribe(featPro => {
+    this.productService.getFeatureProducts().subscribe(featPro => {
       this.featureProducts = featPro;
     });
-    this.productService.getFeatColl().subscribe(featColl => {
+    this.productService.getFeatureCollection().subscribe(featColl => {
       this.featureCollection = featColl;
     });
   }

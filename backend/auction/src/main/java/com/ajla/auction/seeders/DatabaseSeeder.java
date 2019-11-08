@@ -397,8 +397,8 @@ public class DatabaseSeeder {
             c = categoryRepo.findCategoryById((long) 23);
             p14.setSubcategory(c);
             p14.setDatePublishing((LocalDate.parse("01.12.2019", formatter)));
-            p14.setStartDate((LocalDate.parse("1.12.2019", formatter)));
-            p14.setEndDate((LocalDate.parse("4.02.2020", formatter)));
+            p14.setStartDate((LocalDate.parse("1.10.2019", formatter)));
+            p14.setEndDate((LocalDate.parse("8.11.2019", formatter)));
             u = userRepo.findUserById((long) 1);
             p14.setSeller(u);
             p14.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -413,7 +413,7 @@ public class DatabaseSeeder {
             p15.setSubcategory(c);
             p15.setDatePublishing((LocalDate.parse("13.12.2019", formatter)));
             p15.setStartDate((LocalDate.parse("13.10.2019", formatter)));
-            p15.setEndDate((LocalDate.parse("15.12.2019", formatter)));
+            p15.setEndDate((LocalDate.parse("9.11.2019", formatter)));
             u = userRepo.findUserById((long) 1);
             p15.setSeller(u);
             p15.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -427,8 +427,8 @@ public class DatabaseSeeder {
             c = categoryRepo.findCategoryById((long) 27);
             p16.setSubcategory(c);
             p16.setDatePublishing((LocalDate.parse("18.12.2019", formatter)));
-            p16.setStartDate((LocalDate.parse("20.12.2019", formatter)));
-            p16.setEndDate((LocalDate.parse("30.12.2019", formatter)));
+            p16.setStartDate((LocalDate.parse("20.10.2019", formatter)));
+            p16.setEndDate((LocalDate.parse("8.11.2019", formatter)));
             u = userRepo.findUserById((long) 1);
             p16.setSeller(u);
             p16.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -457,8 +457,8 @@ public class DatabaseSeeder {
             c = categoryRepo.findCategoryById((long) 30);
             p18.setSubcategory(c);
             p18.setDatePublishing((LocalDate.parse("15.11.2019", formatter)));
-            p18.setStartDate((LocalDate.parse("1.12.2019", formatter)));
-            p18.setEndDate((LocalDate.parse("4.12.2019", formatter)));
+            p18.setStartDate((LocalDate.parse("1.11.2019", formatter)));
+            p18.setEndDate((LocalDate.parse("9.11.2019", formatter)));
             u = userRepo.findUserById((long) 1);
             p18.setSeller(u);
             p18.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -472,8 +472,8 @@ public class DatabaseSeeder {
             c = categoryRepo.findCategoryById((long) 31);
             p19.setSubcategory(c);
             p19.setDatePublishing((LocalDate.parse("15.11.2019", formatter)));
-            p19.setStartDate((LocalDate.parse("1.12.2019", formatter)));
-            p19.setEndDate((LocalDate.parse("10.11.2019", formatter)));
+            p19.setStartDate((LocalDate.parse("1.10.2019", formatter)));
+            p19.setEndDate((LocalDate.parse("8.11.2019", formatter)));
             u = userRepo.findUserById((long) 1);
             p19.setSeller(u);
             p19.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");

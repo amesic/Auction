@@ -1,16 +1,19 @@
-<div id="container" *ngIf="product != undefined">
-  <!--bc products aren't load yet-->
-  <app-categories></app-categories>
-  <div id="aboutPro">
-    <p id="title">{{ product.title }}</p>
-    <p id="price">Start from - ${{ product.startPrice }}</p>
-    <p id="desc">{{ product.description }}</p>
-    
-      <input type="button" value="BID NOW" />
-      <fa-icon [icon]="faChevronRight"></fa-icon>
-    
-  </div>
-  <div>
-    <img src="{{ product.images[0].link }}" />
+<div id="container">
+  <div class="container">
+    <app-categories></app-categories>
+    <div id="aboutPro">
+      <div>
+        <p id="title">{{ product.title }}</p>
+        <p id="price">Start from - ${{ product.startPrice }}</p>
+        <p id="desc">{{ product.description }}</p>
+      </div>
+      <div class="wrap-input">
+        <input type="button" value="BID NOW" />
+        <fa-icon [icon]="faChevronRight"></fa-icon>
+      </div>
+    </div>
+    <div>
+      <img src="{{ product.images[0].link }}" />
+    </div>
   </div>
 </div>

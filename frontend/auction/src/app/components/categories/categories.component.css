@@ -22,31 +22,32 @@ a {
   letter-spacing: 0.56px;
   font: 400 16px "Lato", sans-serif;
 }
-.category > a, p {
-    border-bottom: 1.5px solid rgba(143, 143, 143, 0.11);
-    padding-left: 20px;
-    height: 50px;
-    display: flex;
-    align-items: center;  
+.category > a,
+p {
+  border-bottom: 1.5px solid rgba(143, 143, 143, 0.11);
+  padding-left: 20px;
+  height: 50px;
+  display: flex;
+  align-items: center;
 }
-p{
+p {
   font: 700 16px "Lato", sans-serif;
-  color: #8367D8;
+  color: #8367d8;
   letter-spacing: 0.56px;
   border: none;
-  height: 17px;
-  }
+  margin: 0;
+  margin-bottom: 13px;
+}
 .category > ul {
   display: none;
 }
 .category > a.show ~ ul {
   display: block;
-} 
+}
 .subcategory {
   margin-bottom: 10px;
   padding-left: 30px;
-
 }
-li :hover{
-    cursor: pointer;
+li :hover {
+  cursor: pointer;
 }

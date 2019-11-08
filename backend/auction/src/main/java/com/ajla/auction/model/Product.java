@@ -41,12 +41,11 @@ public class Product {
     private double startPrice;
 
     //bids table
-    @OneToMany(mappedBy = "product", cascade={CascadeType.ALL})
+    @OneToMany(mappedBy = "product", cascade = {CascadeType.ALL})
     private List<Bid> bids = new ArrayList();
 
     //ImageProduct table
-    @OneToMany(cascade={CascadeType.ALL}) //mapped by nece
-    //@Target(ImageProduct.class)
+    @OneToMany(cascade = {CascadeType.ALL})
     private List<Image> images = new ArrayList();
 
     @ManyToOne

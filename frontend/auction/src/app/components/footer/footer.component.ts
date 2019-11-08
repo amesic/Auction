@@ -5,6 +5,7 @@ import { faInstagram } from "@fortawesome/free-brands-svg-icons";
 import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faGooglePlus } from "@fortawesome/free-brands-svg-icons";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: "app-footer",
@@ -17,7 +18,7 @@ export class FooterComponent implements OnInit {
   faTwitter = faTwitter;
   faGooglePlus = faGooglePlus;
   faSearch = faSearch;
-
+  faChevronRight = faChevronRight;
   constructor() {}
 
   ngOnInit() {}

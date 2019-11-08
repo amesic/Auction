@@ -1,56 +1,95 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from "@angular/core";
 import { Product } from "../../models/Product";
 import { ProductService } from "../../services/product.service";
 
 @Component({
-  selector: 'app-pagination',
-  templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.css']
+  selector: "app-pagination",
+  templateUrl: "./pagination.component.html",
+  styleUrls: ["./pagination.component.css"]
 })
 export class PaginationComponent implements OnInit {
-  page;
+  pageNumber;
   size = 8;
-  productsNew: Array<Product>;
-  disabled = false;
+  products: Product[] = [];
+  hide = false;
+  @Input() className;
 
-  page1;
-  productsLast: Array<Product>;
-  disabled1 = false;
+  activeLinkNewArrivals = true;
+  activeLinkLastChance = false;
 
-  constructor(private productService: ProductService) { }
+  event = "New Arrivals";
+
+  constructor(private productService: ProductService) {}
 
   ngOnInit() {
-    this.page = 0;
-    this.page1 = 0;
-    this.productService.getNewArr(this.page, this.size).subscribe(newArr => {
-      this.productsNew = newArr;
-    });
-    this.productService.getLastChan(this.page1, this.size).subscribe(lastChan => {
-      this.productsLast = lastChan;
-    });
+    this.pageNumber = 0;
+    this.getNewArrivals(this.pageNumber, this.size);
   }
-  onClick(){
-    this.page += 1;
-    this.productService.getNewArr(this.page, this.size).subscribe(newArr => {
-      if(newArr != null) {
-      this.productsNew = this.productsNew.concat(newArr);
-      }
-      else {
-      this.disabled = true;
-      }
-    })
+  checkIfThereIsNoItemsLeft(pageNumber, size, totalNumberOfItems) {
+    if (
+      pageNumber * size + totalNumberOfItems - size == totalNumberOfItems ||
+      pageNumber * size + totalNumberOfItems - size < 0
+    ) {
+      return true;
+    }
+    return false;
   }
-  onClick1(){
-    this.page1 += 1;
-    this.productService.getLastChan(this.page1, this.size).subscribe(lastChan => {
-      if(lastChan != null) {
-      this.productsLast = this.productsLast.concat(lastChan);
-      }
-      else {
-      this.disabled1 = true;
-      }
-    })
+  getNewArrivals(pageNumber, size) {
+    this.productService
+      .getNewArrivals(pageNumber, size)
+      .subscribe(paginationInfo => {
+        this.products = this.products.concat(paginationInfo.items);
+        if (
+          this.checkIfThereIsNoItemsLeft(
+            pageNumber,
+            size,
+            paginationInfo.totalNumberOfItems
+          )
+        ) {
+          this.hide = true;
+        }
+      });
   }
-
-
+  getLastChance(pageNumber, size) {
+    this.productService
+      .getLastChance(pageNumber, size)
+      .subscribe(paginationInfo => {
+        this.products = this.products.concat(paginationInfo.items);
+        if (
+          this.checkIfThereIsNoItemsLeft(
+            pageNumber,
+            size,
+            paginationInfo.totalNumberOfItems
+          )
+        ) {
+          this.hide = true;
+        }
+      });
+  }
+  onClick() {
+    this.pageNumber += 1;
+    if (this.event == "New Arrivals") {
+      this.getNewArrivals(this.pageNumber, this.size);
+    } else {
+      this.getLastChance(this.pageNumber, this.size);
+    }
+  }
+  clickLink(event) {
+    this.event = event.target.innerHTML;
+    if (event.target.innerHTML == "New Arrivals") {
+      this.pageNumber = 0;
+      this.products = [];
+      this.hide = false;
+      this.getNewArrivals(this.pageNumber, this.size);
+      this.activeLinkNewArrivals = true;
+      this.activeLinkLastChance = false;
+    } else {
+      this.pageNumber = 0;
+      this.products = [];
+      this.hide = false;
+      this.getLastChance(this.pageNumber, this.size);
+      this.activeLinkNewArrivals = false;
+      this.activeLinkLastChance = true;
+    }
+  }
 }

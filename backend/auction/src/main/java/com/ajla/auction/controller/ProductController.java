@@ -1,5 +1,6 @@
 package com.ajla.auction.controller;
 
+import com.ajla.auction.model.PaginationInfo;
 import com.ajla.auction.model.Product;
 import com.ajla.auction.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,13 +45,13 @@ public class ProductController {
     public ResponseEntity<Product> getAdvertisementProduct() {
         return  productService.getAdvertisementProduct();
     }
-    //http://localhost:8080/product/newArrivals?page=0&size=5 provjeri end date
+    //http://localhost:8080/product/newArrivals?page=0&size=5
     @GetMapping("/newArrivals")
-    public ResponseEntity<List<Product>> findPaginatedNewArrivals(@RequestParam("page") int page, @RequestParam("size") int size) {
+    public ResponseEntity<PaginationInfo<Product>> findPaginatedNewArrivals(@RequestParam("page") int page, @RequestParam("size") int size) {
        return productService.findPaginatedNewArrivals(page, size);
     }
     @GetMapping("/lastChance")
-    public ResponseEntity<List<Product>> findPaginatedLastChance(@RequestParam("page") int page, @RequestParam("size") int size) {
+    public ResponseEntity<PaginationInfo<Product>> findPaginatedLastChance(@RequestParam("page") int page, @RequestParam("size") int size) {
         return productService.findPaginatedLastChance(page, size);
     }
 }

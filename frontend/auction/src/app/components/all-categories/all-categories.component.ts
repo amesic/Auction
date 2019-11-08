@@ -9,7 +9,7 @@ import { Category } from "../../models/Category";
 })
 export class AllCategoriesComponent implements OnInit {
   constructor(private categoriesService: CategoriesService) {}
-  categories: Array<Category>;
+  categories: Category[] = [];
 
   ngOnInit() {
     //null like maxNumberOfCategories bc I need all of them

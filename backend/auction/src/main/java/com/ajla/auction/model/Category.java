@@ -29,7 +29,7 @@ public class Category {
     //and that collection has one or more items which are not present in the database.
     //By specifying the above options you tell hibernate to save them to the database when saving their parent
     //or else org.hibernate.TransientObjectException: object references an unsaved transient instance - save the transient instance before flushing: com.ajla.auction.model.Category
-    @OneToMany(cascade={CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.ALL})
     @Target(Category.class)
     @JoinColumn(name = "categoryParentId")
     private List<Category> subcategories= new ArrayList();

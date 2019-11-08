@@ -35,13 +35,13 @@ public class User {
     private String phoneNumber;
 
     //address table
-    @OneToOne(cascade={CascadeType.ALL})
+    @OneToOne(cascade = {CascadeType.ALL})
     @Target(Address.class)
     @JoinColumn(name = "idAddress")
     private Address address;
 
     //bids table
-    @OneToMany(mappedBy = "user", cascade={CascadeType.ALL})
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
     @Target(Bid.class)
     private List<Bid> bids = new ArrayList();
 

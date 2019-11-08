@@ -1,6 +1,6 @@
 <div *ngIf="advertisementProduct != undefined && featureCollection != undefined && featureProducts != undefined">
   <app-advertisement [product]="advertisementProduct"></app-advertisement>
-  <app-set-products [title]="'Feature Collection'" [products]="featureCollection"></app-set-products>
-  <app-set-products [title]="'Feature Products'" [products]="featureProducts"></app-set-products>
-  <app-pagination></app-pagination>
+  <app-set-products [title]="'Feature Collection'" [products]="featureCollection" [className]="'featureCollection'"></app-set-products>
+  <app-set-products [title]="'Feature Products'" [products]="featureProducts" [className]="'allOtherTypeOfProducts'"></app-set-products>
+  <app-pagination [className]="'allOtherTypeOfProducts'"></app-pagination>
 </div>
