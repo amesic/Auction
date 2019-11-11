@@ -16,6 +16,6 @@ export class AdvertisementComponent implements OnInit {
 
   ngOnInit() {}
   sendInfoOfProduct(product){
-    this.router.navigate(['/shop/product/' + product.title + "/" + product.id + "/" + product.subcategory.id]);
+    this.router.navigate(['/shop/product/' + product.title + "/" + product.id]);
   }
 }

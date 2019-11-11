@@ -261,6 +261,52 @@ public class DatabaseSeeder {
             p1.setFeature(true);
             p1.setStartPrice(1000);
 
+            Product p23 = new Product();
+            p23.setTitle("Sheep-jacquard crew-neck sweater");
+            c = categoryRepo.findCategoryById((long) 1);
+            p23.setCategory(c);
+            c = categoryRepo.findCategoryById((long) 3);
+            p23.setSubcategory(c);
+            p23.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
+            p23.setStartDate((LocalDate.parse("11.11.2019", formatter)));
+            p23.setEndDate((LocalDate.parse("6.01.2020", formatter)));
+            u = userRepo.findUserById((long) 1);
+            p23.setSeller(u);
+            p23.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
+            p23.setFeature(true);
+            p23.setStartPrice(1000);
+
+
+            Product p24 = new Product();
+            p24.setTitle("Anagram-embroidered wool sweater");
+            c = categoryRepo.findCategoryById((long) 1);
+            p24.setCategory(c);
+            c = categoryRepo.findCategoryById((long) 3);
+            p24.setSubcategory(c);
+            p24.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
+            p24.setStartDate((LocalDate.parse("11.11.2019", formatter)));
+            p24.setEndDate((LocalDate.parse("6.01.2020", formatter)));
+            u = userRepo.findUserById((long) 1);
+            p24.setSeller(u);
+            p24.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
+            p24.setFeature(true);
+            p24.setStartPrice(300);
+
+            Product p25 = new Product();
+            p25.setTitle("Cosma elasticated-waist straight-leg trousers");
+            c = categoryRepo.findCategoryById((long) 1);
+            p25.setCategory(c);
+            c = categoryRepo.findCategoryById((long) 3);
+            p25.setSubcategory(c);
+            p25.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
+            p25.setStartDate((LocalDate.parse("11.11.2019", formatter)));
+            p25.setEndDate((LocalDate.parse("6.01.2020", formatter)));
+            u = userRepo.findUserById((long) 1);
+            p25.setSeller(u);
+            p25.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
+            p25.setFeature(true);
+            p25.setStartPrice(1500);
+
             Product p2 = new Product();
             p2.setTitle("Women Big Frame Sunglasses");
             c = categoryRepo.findCategoryById((long) 4);
@@ -531,7 +577,7 @@ public class DatabaseSeeder {
             p19.setFeature(false);
             p19.setStartPrice(50);
 
-            productRepo.saveAll(Arrays.asList(p, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, p20, p21, p22));
+            productRepo.saveAll(Arrays.asList(p, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, p20, p21, p22, p23, p24, p25));
             logger.info("Product table seeded");
         }
         else {
@@ -554,13 +600,13 @@ public class DatabaseSeeder {
 
             Product p1 = productRepo.findProductById((long) 1);
             Image i12 = new Image();
-            i12.setLink("https://assetsprx.matchesfashion.com/img/product/1319740_1_zoom.jpg");
+            i12.setLink("https://assetsprx.matchesfashion.com/img/product/1307659_1_zoom.jpg");
             Image i13 = new Image();
-            i13.setLink("https://assetsprx.matchesfashion.com/img/product/1319740_3_zoom.jpg");
+            i13.setLink("https://assetsprx.matchesfashion.com/img/product/outfit_1307659_1_zoom.jpg");
             Image i14 = new Image();
-            i14.setLink("https://assetsprx.matchesfashion.com/img/product/1319740_4_zoom.jpg");
+            i14.setLink("https://assetsprx.matchesfashion.com/img/product/1307659_4_large.jpg");
             Image i15 = new Image();
-            i15.setLink(" https://assetsprx.matchesfashion.com/img/product/1319740_6_zoom.jpg");
+            i15.setLink("https://assetsprx.matchesfashion.com/img/product/1307659_6_zoom.jpg");
             p1.setImages(Arrays.asList(i12, i13, i14, i15));
 
 
@@ -581,7 +627,7 @@ public class DatabaseSeeder {
             Image i5 = new Image();
             i5.setLink("https://www.affordableluxurys.com/PICTURE/142673-74-dsc_2749.jpg");
             Image i6 = new Image();
-            i6.setLink(" https://www.affordableluxurys.com/PICTURE/142674-74-dsc_27561.jpg");
+            i6.setLink("https://www.affordableluxurys.com/PICTURE/142674-74-dsc_27561.jpg");
             Image i7 = new Image();
             i7.setLink("https://www.affordableluxurys.com/PICTURE/142675-74-dsc_2753.jpg");
             p3.setImages(Arrays.asList(i4, i5, i6, i7));
@@ -795,17 +841,51 @@ public class DatabaseSeeder {
             i91.setLink("https://assetsprx.matchesfashion.com/img/product/1306471_5_zoom.jpg");
             p22.setImages(Arrays.asList(i88, i89, i90, i91));
 
+            Product p23 = productRepo.findProductById((long) 24);
+            Image i92 = new Image();
+            i92.setLink("https://assetsprx.matchesfashion.com/img/product/1316241_1_zoom.jpg");
+            Image i93 = new Image();
+            i93.setLink("https://assetsprx.matchesfashion.com/img/product/outfit_1316241_1_zoom.jpg");
+            Image i94 = new Image();
+            i94.setLink("https://assetsprx.matchesfashion.com/img/product/1316241_4_zoom.jpg");
+            Image i95 = new Image();
+            i95.setLink("https://assetsprx.matchesfashion.com/img/product/1316241_3_zoom.jpg");
+            p23.setImages(Arrays.asList(i92, i93, i94, i95));
+
+            Product p24 = productRepo.findProductById((long) 25);
+            Image i96 = new Image();
+            i96.setLink("https://assetsprx.matchesfashion.com/img/product/1290689_1_zoom.jpg");
+            Image i97 = new Image();
+            i97.setLink("https://assetsprx.matchesfashion.com/img/product/1290689_4_large.jpg");
+            Image i98 = new Image();
+            i98.setLink("https://assetsprx.matchesfashion.com/img/product/1290689_5_zoom.jpg");
+            Image i99 = new Image();
+            i99.setLink("https://assetsprx.matchesfashion.com/img/product/1290689_3_zoom.jpg");
+            p24.setImages(Arrays.asList(i96, i97, i98, i99));
+
+            Product p25 = productRepo.findProductById((long) 26);
+            Image i100 = new Image();
+            i100.setLink("https://assetsprx.matchesfashion.com/img/product/1314604_1_zoom.jpg");
+            Image i101 = new Image();
+            i101.setLink("https://assetsprx.matchesfashion.com/img/product/1314604_3_large.jpg");
+            Image i102 = new Image();
+            i102.setLink("https://assetsprx.matchesfashion.com/img/product/1314604_5_large.jpg");
+            Image i103 = new Image();
+            i103.setLink("https://assetsprx.matchesfashion.com/img/product/outfit_1314604_1_large.jpg");
+            p25.setImages(Arrays.asList(i100, i101, i102, i103));
+
+
 
 
             productRepo.saveAll(Arrays.asList(p, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16,
-                    p17, p18, p19, p20, p21, p22));
+                    p17, p18, p19, p20, p21, p22, p23, p24, p25));
 
             imageProductRepo.saveAll(Arrays.asList(i, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13,
                     i14, i15, i16, i17, i18, i19, i20, i21, i22, i23, i24, i25, i26, i27, i28, i29, i30, i31,
                     i32, i33, i34, i35, i36, i37, i38, i39, i40, i41, i42, i43, i44, i45, i46, i47, i48, i49,
                     i50, i51, i52, i53, i54, i55, i56, i57, i58, i59, i60, i61, i62, i63, i64, i65, i66, i67,
                     i68, i69, i70, i71, i72, i73, i74, i75, i76, i77, i78, i79, i80, i81, i82, i83, i84, i85,
-                    i86, i87, i88, i89, i90, i91));
+                    i86, i87, i88, i89, i90, i91, i92, i93, i94, i95, i96, i97, i98, i99, i100, i101, i102, i103));
             logger.info("ImageProduct table seeded");
         }
         else {
@@ -827,7 +907,7 @@ public class DatabaseSeeder {
             b.setValue(1600);
 
             Bid b1 = new Bid();
-            b1.setDate((LocalDate.parse("15.11.2019", formatter)));
+            b1.setDate((LocalDate.parse("5.11.2019", formatter)));
             p = productRepo.findProductById((long) 4);
             b1.setProduct(p);
             u = userRepo.findUserById((long) 3);
@@ -835,7 +915,7 @@ public class DatabaseSeeder {
             b1.setValue(1700);
 
             Bid b2 = new Bid();
-            b2.setDate((LocalDate.parse("15.11.2019", formatter)));
+            b2.setDate((LocalDate.parse("5.11.2019", formatter)));
             p = productRepo.findProductById((long) 4);
             b2.setProduct(p);
             u = userRepo.findUserById((long) 4);

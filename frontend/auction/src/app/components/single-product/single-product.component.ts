@@ -4,7 +4,6 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { LoginService } from 'src/app/services/login.service';
 import { BidsService } from 'src/app/services/bids.service';
-import { Bid } from 'src/app/models/Bid';
 
 @Component({
   selector: "app-single-product",
@@ -24,23 +23,29 @@ export class SingleProductComponent implements OnInit {
   @Input() clickedImage;
   @Input() userIsLoged;
   @Input() idProduct;
+  @Input() highestBidOfLogedUser;
+  @Input() userIsSeller;
 
   faChevronRight = faChevronRight;
   faHeart = faHeart;
   valueFromUser;
   errorMess = null;
+  messStatusAboutBids = null;
 
   constructor(private loginService: LoginService, private bidService: BidsService) {}
 
   ngOnInit() {
+    if(this.userIsLoged != true) {
+      this.errorMess = "Please login for bidding!"
+    }
   }
+  
   clickOnImage(event) {
     this.clickedImage = event.target.src;
   }
   saveValue(value) {
     this.valueFromUser = value;
   }
-
   saveNewBid() {
     if(this.valueFromUser != null && this.valueFromUser != "") {
       this.errorMess = null;
@@ -55,13 +60,19 @@ export class SingleProductComponent implements OnInit {
       this.valueFromUser, highestValue).subscribe(
         bid => {
           this.highestBid = bid;
+          this.messStatusAboutBids = "Congrats! you are the higest bider!"
+          window.scrollTo(0, 0);
       },
       err => {
-        this.errorMess = "Please enter greater number than " + highestValue;
+        this.messStatusAboutBids = null;
+        this.errorMess = "Please enter greater number than " + highestValue + "!";
+        window.scrollTo(0, 0);
     });
   }
     else {
+      this.messStatusAboutBids = null;
       this.errorMess = "Please enter valid number!";
+      window.scrollTo(0, 0);
     }
   }
 }

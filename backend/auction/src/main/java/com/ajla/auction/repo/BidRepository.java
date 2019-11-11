@@ -11,4 +11,5 @@ public interface BidRepository extends CrudRepository<Bid, Long> {
     //my methods
     Bid findBidById(Long id);
     List<Bid> findByProductIdOrderByDateAsc(Long id);
+    List<Bid> findBidByUserIdAndProductIdOrderByValueDesc(Long idUser, Long idProduct);
 }

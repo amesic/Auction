@@ -54,7 +54,7 @@ public class ProductService implements IProductService{
         return new ResponseEntity<>(productRepo.findProductById(id), HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<List<Product>> getRelatedProducts (long idSubcategory, long idProduct) {
-        return new ResponseEntity<>(productRepo.getRelatedProducts(idSubcategory, idProduct), HttpStatus.OK);
+    public ResponseEntity<List<Product>> getRelatedProducts (Long idProduct) {
+        return new ResponseEntity<>(productRepo.getRelatedProducts(idProduct), HttpStatus.OK);
     }
 }

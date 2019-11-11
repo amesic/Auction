@@ -57,7 +57,7 @@ public class ProductController {
         return productService.findSingleProduct(id);
     }
     @GetMapping("/relatedProducts")
-    public ResponseEntity<List<Product>> getRelatedProducts (@RequestParam("idSubcategory") long idSubcategory, @RequestParam("idProduct") long idProduct) {
-        return productService.getRelatedProducts(idSubcategory, idProduct);
+    public ResponseEntity<List<Product>> getRelatedProducts (@RequestParam("idProduct") long idProduct) {
+        return productService.getRelatedProducts(idProduct);
     }
 }

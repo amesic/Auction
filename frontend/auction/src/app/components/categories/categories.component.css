@@ -45,8 +45,10 @@ p {
   display: block;
 }
 .subcategory {
-  margin-bottom: 10px;
   padding-left: 30px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  border-bottom: 1px solid rgba(161, 161, 161, 0.11);
 }
 li :hover {
   cursor: pointer;

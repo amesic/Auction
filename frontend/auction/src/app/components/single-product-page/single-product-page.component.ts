@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ProductService } from "src/app/services/product.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { LoginService } from "src/app/services/login.service";
 import { BidsService } from 'src/app/services/bids.service';
 
@@ -15,16 +15,18 @@ export class SingleProductPageComponent implements OnInit {
   relatedProducts;
   userIsSeller = false;
   userIsLoged;
+  highestBidOfLogedUser;
   constructor(
     private productService: ProductService,
-    private router: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private loginService: LoginService,
-    private bidService: BidsService
+    private bidService: BidsService,
+    private router: Router
   ) {}
 
   ngOnInit() {
    this.userIsLoged = this.loginService.isUserLoggedIn();
-    this.router.params.subscribe(routeParams => {
+    this.activatedRoute.params.subscribe(routeParams => {
       this.productService
         .getSingleProduct(routeParams.idProduct)
         .subscribe(singleProduct => {
@@ -46,5 +48,11 @@ export class SingleProductPageComponent implements OnInit {
           this.relatedProducts = relatedProducts;
         });
     });
+    this.router.events.subscribe((evt) => {
+      if (!(evt instanceof NavigationEnd)) {
+          return;
+      }
+      window.scrollTo(0, 0)
+  });
   }
 }

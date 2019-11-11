@@ -5,6 +5,7 @@
     [title3]="'SINGLE PRODUCT'"></app-below-header>
 
   <app-single-product
+    [highestBidOfLogedUser]="highestBidOfLogedUser"
     [images]="productInfo.images"
     [title]="productInfo.title"
     [description]="productInfo.description"
@@ -16,7 +17,8 @@
     [days]="bidsOfProduct.days"
     [months]="bidsOfProduct.months"
     [years]="bidsOfProduct.years"
-    [userIsLoged]="userIsLoged"></app-single-product>
+    [userIsLoged]="userIsLoged"
+    [userIsSeller]="userIsSeller"></app-single-product>
 
   <app-set-products
     [title]="'Related Products'"

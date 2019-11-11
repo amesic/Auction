@@ -5,15 +5,36 @@
   justify-content: space-between;
   margin-bottom: 120px;
 }
+.messError {
+  color: rgb(171, 78, 78);
+  background: rgb(246, 229, 229);
+  padding-left: 75px;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  font: 700 18px "Lato", sans-serif;
+  letter-spacing: 0.63px;
+}
+.messStatusAboutBids {
+  padding-left: 75px;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  font: 700 18px "Lato", sans-serif;
+  letter-spacing: 0.63px;
+  color: #417505;
+  background: #F0F3EE;
+}
+
 .allImages {
-    margin-right: 60px;
+  margin-right: 60px;
 }
 .allImages .smallImages {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
 }
 .allImages .smallImages div {
-    width: 100px;
+  width: 100px;
 }
 .allImages .smallImages div > img {
   width: 90px;
@@ -22,7 +43,7 @@
   background: rgb(252, 252, 252);
 }
 .allImages .smallImages div > img:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 .allImages .bigImage {
   width: 389px;
@@ -49,7 +70,7 @@
 .container .bid .enterBid > input[type="number"] {
   border: 1px solid #d8d8d8;
   height: 54px;
-  width: 185px;
+  width: 252px;
   font: 400 22px "Lato", sans-serif;
   -moz-appearance: textfield;
 }
@@ -84,6 +105,7 @@
   background: #ececec;
 }
 .disabledButton {
+  pointer-events: none;
   cursor: not-allowed;
 }
 .infoBid {
@@ -92,7 +114,7 @@
   letter-spacing: 0.56px;
 }
 .time {
-    margin-bottom: 50px;
+  margin-bottom: 50px;
 }
 .container .watchlist > input[type="button"] {
   background: #ffffff;
@@ -116,7 +138,7 @@
   font: 400 18px "Lato", sans-serif;
   color: #252525;
   letter-spacing: 0.63px;
-  border-bottom: 2px solid  #ECECEC;
+  border-bottom: 2px solid #ececec;
   padding-bottom: 10px;
 }
 .container .details .titleOfDetails ~ p {
@@ -127,16 +149,16 @@
   line-height: 22px;
 }
 .container .bid {
-    display: flex;
-    margin-bottom: 43px;
+  display: flex;
+  margin-bottom: 43px;
 }
 .container .enterBid {
-    margin-right: 21px;
-    flex-basis: 251px;
+  margin-right: 21px;
+  flex-basis: 251px;
 }
 .infoBid > .high {
-font-weight: 700;
-color: #8367D8;
+  font-weight: 700;
+  color: #8367d8;
 }
 .error {
   font: 200 15px "Lato", sans-serif;

@@ -3,7 +3,6 @@ package com.ajla.auction.service;
 import com.ajla.auction.model.Bid;
 import com.ajla.auction.model.BidInfo;
 import com.ajla.auction.model.Product;
-import com.ajla.auction.model.User;
 import com.ajla.auction.repo.BidRepository;
 import com.ajla.auction.repo.ProductRepository;
 import com.ajla.auction.repo.UserRepository;
@@ -13,9 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.Period;
-import java.util.*;
+import java.util.List;
 
 @Service
 public class BidService implements IBidService{
@@ -42,7 +40,6 @@ public class BidService implements IBidService{
             bi.setNumberOfBids(null);
             bi.setBidsOfProduct(null);
             p = productRepository.findProductById(id);
-            System.out.println("tu");
         }
         else {
             bi.setBidsOfProduct(b);
@@ -76,6 +73,13 @@ public class BidService implements IBidService{
             b.setDate(LocalDate.now());
             bidRepository.save(b);
         return new ResponseEntity<>(b, HttpStatus.OK);
-
+    }
+    @Override
+    public ResponseEntity<Bid> findBidFromUser(String emailUser, Long idProduct) {
+        List<Bid> bids = bidRepository.findBidByUserIdAndProductIdOrderByValueDesc(userRepository.findByEmail(emailUser).getId(), idProduct);
+        if (bids == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(bidRepository.findBidByUserIdAndProductIdOrderByValueDesc(userRepository.findByEmail(emailUser).getId(), idProduct).get(0), HttpStatus.OK);
     }
 }

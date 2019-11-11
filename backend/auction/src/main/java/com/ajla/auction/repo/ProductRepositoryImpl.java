@@ -120,7 +120,22 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return  paginationInfo;
     }
     @Override
-    public List<Product> getRelatedProducts(Long idSubcategory, Long idProduct) {
+    public Long getSubcategoryIdOfProduct (Long idProduct) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        //describes what we want to do in the query. Also, it declares the type of a row in the result
+        final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+
+        final Root<Product> product = cq.from(Product.class);
+        final Predicate productFromSubcategory = cb.equal(product.get("id"), idProduct);
+        cq.where(productFromSubcategory);
+        final TypedQuery<Product> query = em.createQuery(cq);
+
+        System.out.println(idProduct);
+        return query.getSingleResult().getSubcategory().getId();
+    }
+    @Override
+    public List<Product> getRelatedProducts(Long idProduct) {
+        final Long idSubcategory = getSubcategoryIdOfProduct(idProduct);
         final CriteriaBuilder cb = em.getCriteriaBuilder();
         //describes what we want to do in the query. Also, it declares the type of a row in the result
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);

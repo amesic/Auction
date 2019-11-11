@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/bid")
@@ -29,6 +31,9 @@ public class BidController {
     public ResponseEntity<Bid> saveBidFromUser(@RequestBody NewBid newBid) {
         return  bidService.saveBidFromUser(newBid.getIdProduct(), newBid.getEmailUser(), newBid.getValue(), newBid.getHighestValue());
     }
-
+    @GetMapping("/bidUserOfProduct")
+    public ResponseEntity<Bid> findBidFromUser(@RequestParam("emailUser") String emailUser, @RequestParam("idProduct") Long idProduct) {
+        return bidService.findBidFromUser(emailUser, idProduct);
+    }
 
 }

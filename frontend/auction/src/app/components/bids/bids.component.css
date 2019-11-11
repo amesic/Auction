@@ -42,7 +42,8 @@
   grid-template-columns: repeat(2, 1fr);
   align-items: center;
   height: 60px;
-  margin-top: 30px;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 .biders .user > p, .biders .dateBid > p, .biders .user > img  {
   margin-bottom: 0;

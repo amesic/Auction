@@ -15,6 +15,6 @@ public interface IProductService {
     ResponseEntity<PaginationInfo<Product>> findPaginatedNewArrivals(int page, int size);
     ResponseEntity<PaginationInfo<Product>> findPaginatedLastChance(int page, int size);
     ResponseEntity<Product> findSingleProduct (long id);
-    ResponseEntity<List<Product>> getRelatedProducts (long idSubcategory, long idProduct);
+    ResponseEntity<List<Product>> getRelatedProducts (Long idProduct);
 
 }
