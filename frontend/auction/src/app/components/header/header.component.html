@@ -8,14 +8,14 @@
       </div>
   
       <div class="links">
-        <a *ngIf="!loginService.isUserLoggedIn()" [routerLink]="['/home/login']">Login</a>
-        <label *ngIf="!loginService.isUserLoggedIn()"> or </label>
+        <a *ngIf="!userLoged" [routerLink]="['/home/login']">Login</a>
+        <label *ngIf="!userLoged"> or </label>
         <a
-          *ngIf="!loginService.isUserLoggedIn()"
+          *ngIf="!userLoged"
           [routerLink]="['/home/register']">Create an Account</a>
-        <label *ngIf="loginService.isUserLoggedIn()">Welcome {{ userName }}!</label>
+        <label *ngIf="userLoged">Welcome {{ userName }}!</label>
         <a
-          *ngIf="loginService.isUserLoggedIn()"
+          *ngIf="userLoged"
           [routerLink]="['/home']"
           (click)="loginService.logOut()">Logout</a>
       </div>
@@ -28,7 +28,7 @@
           <span></span>
           <span></span>
         </div>
-        <label>AUCTION</label>
+        <label [routerLink]="['/home']">AUCTION</label>
       </div>
 
       <div class="search">
@@ -40,7 +40,7 @@
         <a [routerLink]="['/home']" routerLinkActive="active">HOME</a>
         <a [routerLink]="['/shop']" routerLinkActive="active">SHOP</a>
         <a
-          *ngIf="loginService.isUserLoggedIn()"
+          *ngIf="userLoged"
           [routerLink]="['/myacc']"
           routerLinkActive="active">MY ACCOUNT</a>
       </div>

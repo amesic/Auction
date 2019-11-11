@@ -9,7 +9,7 @@
             <li
               *ngFor="let subcategory of category.subcategories"
               class="subcategory" >
-              <a href="">{{ subcategory.name }}</a>
+              <a [routerLink]="['/home']">{{ subcategory.name }}</a>
             </li>
           </ul>
         </li>

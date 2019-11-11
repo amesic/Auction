@@ -4,8 +4,6 @@ import com.ajla.auction.model.PaginationInfo;
 import com.ajla.auction.model.Product;
 import com.ajla.auction.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,5 +51,13 @@ public class ProductController {
     @GetMapping("/lastChance")
     public ResponseEntity<PaginationInfo<Product>> findPaginatedLastChance(@RequestParam("page") int page, @RequestParam("size") int size) {
         return productService.findPaginatedLastChance(page, size);
+    }
+    @GetMapping("/singleProduct")
+    public ResponseEntity<Product> findSingleProduct (@RequestParam("id") long id) {
+        return productService.findSingleProduct(id);
+    }
+    @GetMapping("/relatedProducts")
+    public ResponseEntity<List<Product>> getRelatedProducts (@RequestParam("idProduct") long idProduct) {
+        return productService.getRelatedProducts(idProduct);
     }
 }

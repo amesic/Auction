@@ -12,6 +12,8 @@ export class PaginationComponent implements OnInit {
   size = 8;
   products: Product[] = [];
   hide = false;
+  messProductsNull;
+
   @Input() className;
 
   activeLinkNewArrivals = true;
@@ -28,7 +30,8 @@ export class PaginationComponent implements OnInit {
   checkIfThereIsNoItemsLeft(pageNumber, size, totalNumberOfItems) {
     if (
       pageNumber * size + totalNumberOfItems - size == totalNumberOfItems ||
-      pageNumber * size + totalNumberOfItems - size < 0
+      pageNumber * size + totalNumberOfItems - size < 0 || 
+      pageNumber * size + totalNumberOfItems - size == 0
     ) {
       return true;
     }
@@ -38,6 +41,8 @@ export class PaginationComponent implements OnInit {
     this.productService
       .getNewArrivals(pageNumber, size)
       .subscribe(paginationInfo => {
+        if(paginationInfo != null) { 
+          this.messProductsNull = "";
         this.products = this.products.concat(paginationInfo.items);
         if (
           this.checkIfThereIsNoItemsLeft(
@@ -48,12 +53,20 @@ export class PaginationComponent implements OnInit {
         ) {
           this.hide = true;
         }
+      }
+      else {
+        this.products = null;
+        this.hide = true;
+        this.messProductsNull = "There are no new arrivals!";
+      }
       });
   }
   getLastChance(pageNumber, size) {
     this.productService
       .getLastChance(pageNumber, size)
       .subscribe(paginationInfo => {
+        if(paginationInfo != null) { 
+        this.messProductsNull = "";
         this.products = this.products.concat(paginationInfo.items);
         if (
           this.checkIfThereIsNoItemsLeft(
@@ -64,6 +77,12 @@ export class PaginationComponent implements OnInit {
         ) {
           this.hide = true;
         }
+      }
+      else {
+        this.products = null;
+        this.hide = true;
+        this.messProductsNull = "There are no last chances!";
+      }
       });
   }
   onClick() {

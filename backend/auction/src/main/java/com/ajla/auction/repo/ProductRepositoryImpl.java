@@ -3,7 +3,6 @@ package com.ajla.auction.repo;
 import com.ajla.auction.model.PaginationInfo;
 import com.ajla.auction.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -119,7 +118,43 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         paginationInfo.setPageSize(size);
         paginationInfo.setPageNumber(pageNumber);
         return  paginationInfo;
+    }
+    @Override
+    public Long getSubcategoryIdOfProduct (Long idProduct) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        //describes what we want to do in the query. Also, it declares the type of a row in the result
+        final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
 
+        final Root<Product> product = cq.from(Product.class);
+        final Predicate productFromSubcategory = cb.equal(product.get("id"), idProduct);
+        cq.where(productFromSubcategory);
+        final TypedQuery<Product> query = em.createQuery(cq);
 
+        System.out.println(idProduct);
+        return query.getSingleResult().getSubcategory().getId();
+    }
+    @Override
+    public List<Product> getRelatedProducts(Long idProduct) {
+        final Long idSubcategory = getSubcategoryIdOfProduct(idProduct);
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        //describes what we want to do in the query. Also, it declares the type of a row in the result
+        final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+
+        final Root<Product> product = cq.from(Product.class);
+        final LocalDate now = LocalDate.now();
+        final Predicate productFromSubcategory = cb.equal(product.get("subcategory"), idSubcategory);
+        final Predicate productsThatAreNotClickedProduct = cb.notEqual(product.get("id"), idProduct);
+        final Predicate currentProducts1 = cb.lessThanOrEqualTo(product.get("startDate"), now);
+        final Predicate currentProducts = cb.greaterThan(product.get("endDate"), now);
+        final Predicate relatedProducts = cb.and(productFromSubcategory, productsThatAreNotClickedProduct, currentProducts, currentProducts1);
+        //apply predicates to our CriteriaQuery
+        //get me the newest from subcategory
+        cq.where(relatedProducts).orderBy(cb.desc(product.get("startDate")));
+        final TypedQuery<Product> query = em.createQuery(cq);
+        query.setMaxResults(3);
+        if (query.getResultList().isEmpty()) {
+            return null;
+        }
+        return query.getResultList();
     }
 }

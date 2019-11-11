@@ -1,0 +1,51 @@
+<div class="messStatusAboutBids" *ngIf="messStatusAboutBids != null">{{messStatusAboutBids}}</div>
+<div class="messError" *ngIf="errorMess != null" >{{errorMess}}</div>
+<div class="container">
+    
+<div class="allImages"> 
+    <div class="bigImage">
+    <img src="{{clickedImage}}">
+</div>
+<div class="smallImages" > 
+    <div *ngFor="let image of images; let i = index" >
+    <img src="{{image.link}}" (click)="clickOnImage($event)">
+</div>
+</div>
+</div>
+
+<div class="aboutProduct">
+<p class="title">{{title}}</p>
+<p class="price">Start from -{{startPrice | currency:'USD'}}</p>
+
+<div class="bid">
+<div class="enterBid">
+<input type="number" [ngClass]="{'disabledInput': !userIsLoged || userIsSeller}" (change)="saveValue($event.target.value)">
+<p class="enter"><label *ngIf="highestBid != null">Enter {{highestBid.value + 1 | currency:'USD'}} or more</label>
+<label *ngIf="highestBid == null">Enter {{startPrice | currency:'USD'}} or more</label> <br>
+</p>
+</div>
+
+<div class="buttonPlaceBid">
+<input type="button" value="PLACE BID" [ngClass]="{'disabledButton': !userIsLoged  || userIsSeller}" (click)="saveNewBid()">
+<fa-icon [icon]="faChevronRight"></fa-icon>
+</div>
+</div>
+<p class="infoBid">Highest bid: <label class="high" *ngIf="highestBid != null">{{highestBid.value | currency:'USD'}}</label>
+<label *ngIf="highestBid == null">There are not bids yet!</label></p>
+<p class="infoBid">No bids: <label *ngIf="numberOfBids != null">{{numberOfBids}}</label> 
+<label *ngIf="numberOfBids == null">0</label>
+</p>
+<p class="infoBid time">Time left: <label *ngIf="years != 0">{{years}} years</label> <label *ngIf="months != 0">{{months}} months</label> {{days}} days</p>
+
+<div class="watchlist">
+<input type="button" value="Watchlist">
+<fa-icon [icon]="faHeart"></fa-icon>
+</div>
+
+<div class="details">
+<p class="titleOfDetails">Details</p>
+<p>{{description}}</p>
+</div>
+</div>
+</div>
+

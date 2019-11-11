@@ -16,3 +16,6 @@ img {
   color: #252525;
   letter-spacing: 0.035em;
 }
+img:hover {
+  cursor: pointer;
+}

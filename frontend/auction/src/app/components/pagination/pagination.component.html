@@ -5,7 +5,8 @@
 <div>
 <app-set-products [products]="products" [className]="className"></app-set-products>
 <div class="container">
-<input type="button" (click)="onClick($event)" value="Load more..." [disabled]="disabled" class="button" [ngClass]="{'noMoreItems': hide}">
+<input type="button" (click)="onClick($event)" value="Load more..." class="button" [ngClass]="{'noMoreItems': hide}">
+<div class="messProductsNull">{{messProductsNull}}</div>
 </div>
 </div>
 

@@ -1,5 +1,7 @@
 package com.ajla.auction.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Target;
 
 import javax.persistence.Entity;
@@ -29,20 +31,21 @@ public class Product {
     private String title;
     @Column(length = 65535, columnDefinition = "text")
     private String description;
+    @JsonIgnore
     private LocalDate datePublishing;
 
     @ManyToOne
     @Target(User.class)
     @JoinColumn(name = "idSeller")
+    @JsonIgnoreProperties({"password", "gender", "birthDate", "phoneNumber", "address"})
     private User seller;
 
+    @JsonIgnore
     private LocalDate startDate;
+    @JsonIgnore
     private LocalDate endDate;
     private double startPrice;
 
-    //bids table
-    @OneToMany(mappedBy = "product", cascade = {CascadeType.ALL})
-    private List<Bid> bids = new ArrayList();
 
     //ImageProduct table
     @OneToMany(cascade = {CascadeType.ALL})
@@ -51,13 +54,16 @@ public class Product {
     @ManyToOne
     @Target(Category.class)
     @JoinColumn(name = "idCategory")
+    @JsonIgnoreProperties({"name", "subcategories"})
     private Category category;
 
     @ManyToOne
     @Target(Category.class)
     @JoinColumn(name = "idSubcategory")
+    @JsonIgnoreProperties({"name", "subcategories"})
     private Category subcategory;
 
+    @JsonIgnore
     private Boolean feature;
 
 
@@ -125,14 +131,6 @@ public class Product {
 
     public void setStartPrice(double startPrice) {
         this.startPrice = startPrice;
-    }
-
-    public List<Bid> getBids() {
-        return bids;
-    }
-
-    public void setBids(List<Bid> bids) {
-        this.bids = bids;
     }
 
    public List<Image> getImages() {

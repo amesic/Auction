@@ -114,10 +114,12 @@ export class RegisterComponent implements OnInit {
           this.color = "green";
           this.message = message;
           this.registerForm.reset();
+          window.scrollTo(0, 0);
         },
         err => {
           this.color = "red";
           this.message = err.error;
+          window.scrollTo(0, 0);
         }
       );
     }

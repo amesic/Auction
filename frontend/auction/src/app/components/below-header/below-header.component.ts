@@ -10,9 +10,15 @@ export class BelowHeaderComponent implements OnInit {
   @Input() title1: string;
   @Input() title2: string;
   @Input() title3: string;
+  routerLink;
   constructor() {}
 
   ngOnInit() {
-    if (this.title2 != undefined) this.title2 = this.title2 + "/";
+    if (this.title2 == "SHOP") {
+      this.routerLink = ['/shop'];
+    }
+    if (this.title2 != undefined) {
+      this.title2 = this.title2 + "/";
+    }
   }
 }

@@ -1,5 +1,8 @@
 package com.ajla.auction.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
@@ -10,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -23,14 +27,16 @@ public class Bid {
 
     @ManyToOne
     @JoinColumn(name = "idUser")
+    @JsonIgnoreProperties({"password", "email", "gender", "birthDate", "phoneNumber", "address"})
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "idProduct")
+    @JsonIgnore
     private Product product;
 
-    private Number value;
-    private Date date;
+    private long value;
+    private LocalDate date;
 
     public Long getId() {
         return id;
@@ -56,19 +62,19 @@ public class Bid {
         this.product = product;
     }
 
-    public Number getValue() {
+    public long getValue() {
         return value;
     }
 
-    public void setValue(Number value) {
+    public void setValue(long value) {
         this.value = value;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 }
