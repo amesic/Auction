@@ -64,9 +64,12 @@
 .enterEmail {
   display: flex;
 }
+.button {
+  position: relative;
+}
 .button > fa-icon {
   position: absolute;
-  right: 310px;
+  right: 20px;
   font-size: 20px;
   transform: translateY(39%);
   color: #d8d8d8;

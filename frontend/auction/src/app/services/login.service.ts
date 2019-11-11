@@ -14,6 +14,7 @@ export class LoginService {
         sessionStorage.setItem("username", userData.username);
         let tokenStr = "Bearer " + userData.token;
         sessionStorage.setItem("token", tokenStr);
+        sessionStorage.setItem("email", email);
         return userData;
       })
     );
@@ -24,11 +25,20 @@ export class LoginService {
   }
   logOut() {
     sessionStorage.removeItem("username");
+    sessionStorage.removeItem("email");
   }
   getUserName() {
     if (this.isUserLoggedIn) {
       return sessionStorage.getItem("username");
     } else {
+      return "";
+    }
+  }
+  getUserEmail() {
+    if(this.isUserLoggedIn) {
+      return sessionStorage.getItem("email");
+    }
+    else {
       return "";
     }
   }

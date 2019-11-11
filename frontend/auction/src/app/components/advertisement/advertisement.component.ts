@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Product } from "../../models/Product";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-advertisement",
@@ -11,7 +12,10 @@ export class AdvertisementComponent implements OnInit {
   @Input() product: Product;
   faChevronRight = faChevronRight;
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {}
+  sendInfoOfProduct(product){
+    this.router.navigate(['/shop/product/' + product.title + "/" + product.id + "/" + product.subcategory.id]);
+  }
 }

@@ -14,6 +14,8 @@ export class ProductService {
   urlFeatureCollection = "http://localhost:8080/product/featureCollection";
   urlNewArrivals = "http://localhost:8080/product/newArrivals";
   urlLastChance = "http://localhost:8080/product/lastChance";
+  urlSingleProduct = "http://localhost:8080/product/singleProduct";
+  urlRelatedProducts = "http://localhost:8080/product/relatedProducts";
 
   getAdvertisementProduct(): Observable<Product> {
     return this.http.get<Product>(this.urlAdvertisement);
@@ -33,5 +35,12 @@ export class ProductService {
     return this.http.get<PaginationInfo>(
       this.urlLastChance + "?page=" + pageNumber + "&size=" + size
     );
+  }
+  getSingleProduct(id): Observable<Product> {
+    return this.http.get<Product>(this.urlSingleProduct + "?id=" + id);
+  }
+  getRelatedProducts(idSubcategory, idProduct): Observable<Product[]> {
+    return this.http.get<Product[]>(this.urlRelatedProducts + 
+      "?idSubcategory=" + idSubcategory + "&idProduct=" + idProduct);
   }
 }

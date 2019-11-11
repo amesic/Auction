@@ -10,4 +10,5 @@ public interface ProductRepositoryCustom {
     List<Product> getAllFeatureCollection();
     PaginationInfo<Product> getAllLastChanceProducts(int page, int size);
     PaginationInfo<Product> getAllNewArrivalProducts(int page, int size);
+    List<Product> getRelatedProducts(Long idSubcategory, Long idProduct);
 }

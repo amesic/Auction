@@ -20,6 +20,10 @@ import { LandingPageComponent } from './components/landing-page/landing-page.com
 import { SetProductsComponent } from './components/set-products/set-products.component';
 import { AllCategoriesComponent } from './components/all-categories/all-categories.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
+import { SingleProductComponent } from './components/single-product/single-product.component';
+import { SingleProductPageComponent } from './components/single-product-page/single-product-page.component';
+import { BidsComponent } from './components/bids/bids.component';
+import { LoginRegisterActivate } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -37,7 +41,10 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     LandingPageComponent,
     SetProductsComponent,
     AllCategoriesComponent,
-    PaginationComponent
+    PaginationComponent,
+    SingleProductComponent,
+    SingleProductPageComponent,
+    BidsComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +53,7 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     HttpClientModule,
     FontAwesomeModule
   ],
-  providers: [],
+  providers: [LoginRegisterActivate],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

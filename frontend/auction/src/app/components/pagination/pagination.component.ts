@@ -28,7 +28,8 @@ export class PaginationComponent implements OnInit {
   checkIfThereIsNoItemsLeft(pageNumber, size, totalNumberOfItems) {
     if (
       pageNumber * size + totalNumberOfItems - size == totalNumberOfItems ||
-      pageNumber * size + totalNumberOfItems - size < 0
+      pageNumber * size + totalNumberOfItems - size < 0 || 
+      pageNumber * size + totalNumberOfItems - size == 0
     ) {
       return true;
     }

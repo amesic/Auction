@@ -1,14 +1,12 @@
 package com.ajla.auction.seeders;
 
-import com.ajla.auction.model.Category;
-import com.ajla.auction.model.Image;
-import com.ajla.auction.model.Product;
 import com.ajla.auction.model.User;
-import com.ajla.auction.repo.CategoryRepository;
+import com.ajla.auction.model.Product;
+import com.ajla.auction.model.Image;
+import com.ajla.auction.model.Category;
+import com.ajla.auction.model.Bid;
+import com.ajla.auction.repo.*;
 
-import com.ajla.auction.repo.ImageRepository;
-import com.ajla.auction.repo.ProductRepository;
-import com.ajla.auction.repo.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +27,21 @@ public class DatabaseSeeder {
     private final ProductRepository productRepo;
     private final UserRepository userRepo;
     private final ImageRepository imageProductRepo;
+    private final BidRepository bidRepository;
     Logger logger = LoggerFactory.getLogger(DatabaseSeeder.class);
 
     //dependency injection
     @Autowired
-    public DatabaseSeeder(final CategoryRepository categoryRepo, final ProductRepository productRepo, final UserRepository userRepo, final ImageRepository imageProductRepo) {
+    public DatabaseSeeder(final CategoryRepository categoryRepo,
+                          final ProductRepository productRepo,
+                          final UserRepository userRepo,
+                          final ImageRepository imageProductRepo,
+                          final BidRepository bidRepository) {
         this.categoryRepo = categoryRepo;
         this.productRepo = productRepo;
         this.userRepo = userRepo;
         this.imageProductRepo = imageProductRepo;
+        this.bidRepository = bidRepository;
     }
 
     @EventListener
@@ -46,6 +50,7 @@ public class DatabaseSeeder {
         seedCategories();
         seedProducts();
         seedImagesForProducts();
+        seedBids();
     }
     private void seedUser() {
         User user = userRepo.findUserById((long) 1);
@@ -61,6 +66,7 @@ public class DatabaseSeeder {
             u1.setUserName("Mujo Mujic");
             u1.setPassword(passwordEncoder.encode("12345678"));
             u1.setEmail("mujo@gmail.com");
+            u1.setImage("https://assets.nrdc.org/sites/default/files/styles/headshot/public/brendan-guy-450.jpg?itok=MK85ttfr");
 
             User u2 = new User();
             u2.setUserName("Fata Fatic");
@@ -188,12 +194,57 @@ public class DatabaseSeeder {
             p.setSubcategory(c);
             p.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
             p.setStartDate((LocalDate.parse("2.11.2019", formatter)));
-            p.setEndDate((LocalDate.parse("7.11.2019", formatter)));
+            p.setEndDate((LocalDate.parse("7.12.2019", formatter)));
             User u = userRepo.findUserById((long) 1);
             p.setSeller(u);
             p.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
             p.setFeature(false);
             p.setStartPrice(90);
+
+            Product p20 = new Product();
+            p20.setTitle("Women Blaze Milano");
+            c = categoryRepo.findCategoryById((long) 1);
+            p20.setCategory(c);
+            c = categoryRepo.findCategoryById((long) 2);
+            p20.setSubcategory(c);
+            p20.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
+            p20.setStartDate((LocalDate.parse("2.11.2019", formatter)));
+            p20.setEndDate((LocalDate.parse("7.12.2019", formatter)));
+            u = userRepo.findUserById((long) 1);
+            p20.setSeller(u);
+            p20.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
+            p20.setFeature(false);
+            p20.setStartPrice(1500);
+
+            Product p21 = new Product();
+            p21.setTitle("Max Mara");
+            c = categoryRepo.findCategoryById((long) 1);
+            p21.setCategory(c);
+            c = categoryRepo.findCategoryById((long) 2);
+            p21.setSubcategory(c);
+            p21.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
+            p21.setStartDate((LocalDate.parse("2.11.2019", formatter)));
+            p21.setEndDate((LocalDate.parse("7.12.2019", formatter)));
+            u = userRepo.findUserById((long) 1);
+            p21.setSeller(u);
+            p21.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
+            p21.setFeature(false);
+            p21.setStartPrice(1500);
+
+            Product p22 = new Product();
+            p22.setTitle("Paco Rabanne Blazer");
+            c = categoryRepo.findCategoryById((long) 1);
+            p22.setCategory(c);
+            c = categoryRepo.findCategoryById((long) 2);
+            p22.setSubcategory(c);
+            p22.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
+            p22.setStartDate((LocalDate.parse("2.11.2019", formatter)));
+            p22.setEndDate((LocalDate.parse("7.12.2019", formatter)));
+            u = userRepo.findUserById((long) 1);
+            p22.setSeller(u);
+            p22.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
+            p22.setFeature(false);
+            p22.setStartPrice(900);
 
             Product p1 = new Product();
             p1.setTitle("Men Winter Jacket");
@@ -203,7 +254,7 @@ public class DatabaseSeeder {
             p1.setSubcategory(c);
             p1.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
             p1.setStartDate((LocalDate.parse("6.11.2019", formatter)));
-            p1.setEndDate((LocalDate.parse("6.11.2019", formatter)));
+            p1.setEndDate((LocalDate.parse("6.01.2020", formatter)));
             u = userRepo.findUserById((long) 1);
             p1.setSeller(u);
             p1.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -218,7 +269,7 @@ public class DatabaseSeeder {
             p2.setSubcategory(c);
             p2.setDatePublishing((LocalDate.parse("5.11.2019", formatter)));
             p2.setStartDate((LocalDate.parse("1.11.2019", formatter)));
-            p2.setEndDate((LocalDate.parse("7.11.2019", formatter)));
+            p2.setEndDate((LocalDate.parse("7.12.2019", formatter)));
             u = userRepo.findUserById((long) 1);
             p2.setSeller(u);
             p2.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -233,7 +284,7 @@ public class DatabaseSeeder {
             p3.setSubcategory(c);
             p3.setDatePublishing((LocalDate.parse("3.11.2019", formatter)));
             p3.setStartDate((LocalDate.parse("1.10.2019", formatter)));
-            p3.setEndDate((LocalDate.parse("6.11.2019", formatter)));
+            p3.setEndDate((LocalDate.parse("20.12.2019", formatter)));
             u = userRepo.findUserById((long) 1);
             p3.setSeller(u);
             p3.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -398,7 +449,7 @@ public class DatabaseSeeder {
             p14.setSubcategory(c);
             p14.setDatePublishing((LocalDate.parse("01.12.2019", formatter)));
             p14.setStartDate((LocalDate.parse("1.10.2019", formatter)));
-            p14.setEndDate((LocalDate.parse("8.11.2019", formatter)));
+            p14.setEndDate((LocalDate.parse("10.11.2019", formatter)));
             u = userRepo.findUserById((long) 1);
             p14.setSeller(u);
             p14.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -413,7 +464,7 @@ public class DatabaseSeeder {
             p15.setSubcategory(c);
             p15.setDatePublishing((LocalDate.parse("13.12.2019", formatter)));
             p15.setStartDate((LocalDate.parse("13.10.2019", formatter)));
-            p15.setEndDate((LocalDate.parse("9.11.2019", formatter)));
+            p15.setEndDate((LocalDate.parse("10.11.2019", formatter)));
             u = userRepo.findUserById((long) 1);
             p15.setSeller(u);
             p15.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -428,7 +479,7 @@ public class DatabaseSeeder {
             p16.setSubcategory(c);
             p16.setDatePublishing((LocalDate.parse("18.12.2019", formatter)));
             p16.setStartDate((LocalDate.parse("20.10.2019", formatter)));
-            p16.setEndDate((LocalDate.parse("8.11.2019", formatter)));
+            p16.setEndDate((LocalDate.parse("10.11.2019", formatter)));
             u = userRepo.findUserById((long) 1);
             p16.setSeller(u);
             p16.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -458,7 +509,7 @@ public class DatabaseSeeder {
             p18.setSubcategory(c);
             p18.setDatePublishing((LocalDate.parse("15.11.2019", formatter)));
             p18.setStartDate((LocalDate.parse("1.11.2019", formatter)));
-            p18.setEndDate((LocalDate.parse("9.11.2019", formatter)));
+            p18.setEndDate((LocalDate.parse("10.11.2019", formatter)));
             u = userRepo.findUserById((long) 1);
             p18.setSeller(u);
             p18.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -473,14 +524,14 @@ public class DatabaseSeeder {
             p19.setSubcategory(c);
             p19.setDatePublishing((LocalDate.parse("15.11.2019", formatter)));
             p19.setStartDate((LocalDate.parse("1.10.2019", formatter)));
-            p19.setEndDate((LocalDate.parse("8.11.2019", formatter)));
+            p19.setEndDate((LocalDate.parse("10.11.2019", formatter)));
             u = userRepo.findUserById((long) 1);
             p19.setSeller(u);
             p19.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
             p19.setFeature(false);
             p19.setStartPrice(50);
 
-            productRepo.saveAll(Arrays.asList(p, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19));
+            productRepo.saveAll(Arrays.asList(p, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, p20, p21, p22));
             logger.info("Product table seeded");
         }
         else {
@@ -711,25 +762,93 @@ public class DatabaseSeeder {
             i79.setLink("http://www.thepinupfiles.com/runci/RUNCI_img_22.jpg");
             p19.setImages(Arrays.asList(i76, i77, i78, i79));
 
+            Product p20 = productRepo.findProductById((long) 21);
+            Image i80 = new Image();
+            i80.setLink("https://assetsprx.matchesfashion.com/img/product/1328880_3_large.jpg");
+            Image i81 = new Image();
+            i81.setLink("https://assetsprx.matchesfashion.com/img/product/outfit_1328880_1_zoom.jpg");
+            Image i82 = new Image();
+            i82.setLink("https://assetsprx.matchesfashion.com/img/product/1328880_4_zoom.jpg");
+            Image i83 = new Image();
+            i83.setLink("https://assetsprx.matchesfashion.com/img/product/1328880_1_zoom.jpg");
+            p20.setImages(Arrays.asList(i80, i81, i82, i83));
 
+            Product p21 = productRepo.findProductById((long) 22);
+            Image i84 = new Image();
+            i84.setLink("https://assetsprx.matchesfashion.com/img/product/1317079_1_zoom.jpg");
+            Image i85 = new Image();
+            i85.setLink("https://assetsprx.matchesfashion.com/img/product/outfit_1317079_1_zoom.jpg");
+            Image i86 = new Image();
+            i86.setLink("https://assetsprx.matchesfashion.com/img/product/1317079_3_zoom.jpg");
+            Image i87 = new Image();
+            i87.setLink("https://assetsprx.matchesfashion.com/img/product/1317079_4_zoom.jpg");
+            p21.setImages(Arrays.asList(i84, i85, i86, i87));
 
-
+            Product p22 = productRepo.findProductById((long) 23);
+            Image i88 = new Image();
+            i88.setLink("https://assetsprx.matchesfashion.com/img/product/1306471_1_zoom.jpg");
+            Image i89 = new Image();
+            i89.setLink("https://assetsprx.matchesfashion.com/img/product/1306471_3_zoom.jpg");
+            Image i90 = new Image();
+            i90.setLink("https://assetsprx.matchesfashion.com/img/product/1306471_4_zoom.jpg");
+            Image i91 = new Image();
+            i91.setLink("https://assetsprx.matchesfashion.com/img/product/1306471_5_zoom.jpg");
+            p22.setImages(Arrays.asList(i88, i89, i90, i91));
 
 
 
             productRepo.saveAll(Arrays.asList(p, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16,
-                    p17, p18, p19));
+                    p17, p18, p19, p20, p21, p22));
 
             imageProductRepo.saveAll(Arrays.asList(i, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13,
                     i14, i15, i16, i17, i18, i19, i20, i21, i22, i23, i24, i25, i26, i27, i28, i29, i30, i31,
                     i32, i33, i34, i35, i36, i37, i38, i39, i40, i41, i42, i43, i44, i45, i46, i47, i48, i49,
-                    i50, i51, i52, i53, i54, i55, i56, i57, i58, i59, i60, i61, i62, i63, i64, i65, i66, i67, i68,
-                    i69, i70, i71, i72, i73, i74, i75, i76, i77, i78, i79));
+                    i50, i51, i52, i53, i54, i55, i56, i57, i58, i59, i60, i61, i62, i63, i64, i65, i66, i67,
+                    i68, i69, i70, i71, i72, i73, i74, i75, i76, i77, i78, i79, i80, i81, i82, i83, i84, i85,
+                    i86, i87, i88, i89, i90, i91));
             logger.info("ImageProduct table seeded");
         }
         else {
             logger.trace("ImageProduct Seeding Not Required");
         }
+
+
+    }
+    private void seedBids() {
+        final Bid bid = bidRepository.findBidById((long) 1);
+        if (bid == null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d.MM.yyyy");
+            Bid b = new Bid();
+            b.setDate((LocalDate.parse("1.11.2019", formatter)));
+            Product p = productRepo.findProductById((long) 4);
+            b.setProduct(p);
+            User u = userRepo.findUserById((long) 2);
+            b.setUser(u);
+            b.setValue(1600);
+
+            Bid b1 = new Bid();
+            b1.setDate((LocalDate.parse("15.11.2019", formatter)));
+            p = productRepo.findProductById((long) 4);
+            b1.setProduct(p);
+            u = userRepo.findUserById((long) 3);
+            b1.setUser(u);
+            b1.setValue(1700);
+
+            Bid b2 = new Bid();
+            b2.setDate((LocalDate.parse("15.11.2019", formatter)));
+            p = productRepo.findProductById((long) 4);
+            b2.setProduct(p);
+            u = userRepo.findUserById((long) 4);
+            b2.setUser(u);
+            b2.setValue(1800);
+
+            bidRepository.saveAll(Arrays.asList(b, b1, b2));
+
+        logger.info("Bid table seeded");
+    }
+        else {
+        logger.trace("Bid Seeding Not Required");
+    }
 
 
     }

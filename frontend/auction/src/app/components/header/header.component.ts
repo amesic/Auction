@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
   faSearch = faSearch;
 
   @Input() userName = "";
+  @Input() userLoged;
 
   constructor(private loginService: LoginService) {}
 
