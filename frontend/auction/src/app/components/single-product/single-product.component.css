@@ -66,6 +66,7 @@
   color: #8367d8;
   letter-spacing: 0.84px;
   margin-bottom: 46px;
+  margin-top: -9px;
 }
 .container .bid .enterBid > input[type="number"] {
   border: 1px solid #d8d8d8;

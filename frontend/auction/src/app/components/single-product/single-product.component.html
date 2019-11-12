@@ -19,14 +19,14 @@
 
 <div class="bid">
 <div class="enterBid">
-<input type="number" [ngClass]="{'disabledInput': !userIsLoged || userIsSeller}" (change)="saveValue($event.target.value)">
+<input type="number" [ngClass]="{'disabledInput': !userIsLoged || userIsSeller}" (change)="saveValue($event.target.value)" #reference>
 <p class="enter"><label *ngIf="highestBid != null">Enter {{highestBid.value + 1 | currency:'USD'}} or more</label>
 <label *ngIf="highestBid == null">Enter {{startPrice | currency:'USD'}} or more</label> <br>
 </p>
 </div>
 
 <div class="buttonPlaceBid">
-<input type="button" value="PLACE BID" [ngClass]="{'disabledButton': !userIsLoged  || userIsSeller}" (click)="saveNewBid()">
+<input type="button" value="PLACE BID" [ngClass]="{'disabledButton': !userIsLoged  || userIsSeller}" (click)="reference.value=''" (click)="saveNewBid()">
 <fa-icon [icon]="faChevronRight"></fa-icon>
 </div>
 </div>
