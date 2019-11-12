@@ -36,8 +36,6 @@ export class RegisterComponent implements OnInit {
       Validators.compose([Validators.required, Validators.minLength(8)])
     )
   });
-
-  url = "http://localhost:8080/users/register";
   errorMessageFirst = "";
   errorMessageLast = "";
   errorMessageEmail = "";
@@ -109,7 +107,7 @@ export class RegisterComponent implements OnInit {
       this.user.email = this.registerForm.value.email;
       this.user.password = this.registerForm.value.password;
 
-      this.registerService.saveUserData(this.url, this.user).subscribe(
+      this.registerService.saveUserData(this.user).subscribe(
         message => {
           this.color = "green";
           this.message = message;

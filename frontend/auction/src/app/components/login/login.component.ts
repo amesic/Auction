@@ -23,7 +23,6 @@ export class LoginComponent implements OnInit {
     )
   });
 
-  url = "http://localhost:8080/users/login";
   userToken;
   userName;
   errorMessageEmail = "";
@@ -32,6 +31,7 @@ export class LoginComponent implements OnInit {
   message;
 
   constructor(private loginService: LoginService, private router: Router) {}
+  previousUrl: string;
 
   ngOnInit() {}
 
@@ -63,7 +63,6 @@ export class LoginComponent implements OnInit {
     if (this.email.valid && this.password.valid) {
       this.loginService
         .authenticate(
-          this.url,
           this.loginForm.value.email,
           this.loginForm.value.password
         )
@@ -71,7 +70,7 @@ export class LoginComponent implements OnInit {
           userData => {
             this.userName = userData.username;
             this.userToken = userData.token;
-            this.router.navigate(["/home"], { queryParams: this.userName });
+            this.router.navigate(["/home"]);
           },
           err => {
             this.color = "red";

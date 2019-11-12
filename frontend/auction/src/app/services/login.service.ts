@@ -6,10 +6,11 @@ import { map } from "rxjs/operators";
   providedIn: "root"
 })
 export class LoginService {
+  url = "/users/login";
   constructor(private http: HttpClient) {}
 
-  authenticate(url: string, email: string, password: string) {
-    return this.http.post<any>(url, { email, password }).pipe(
+  authenticate(email: string, password: string) {
+    return this.http.post<any>(this.url, { email, password }).pipe(
       map(userData => {
         sessionStorage.setItem("username", userData.username);
         let tokenStr = "Bearer " + userData.token;

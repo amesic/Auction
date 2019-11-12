@@ -9,9 +9,9 @@ import { Bid } from "../models/Bid";
 })
 export class BidsService {
   constructor(private http: HttpClient) {}
-  urlBidsInfoProduct = "http://localhost:8080/bid/bidsOfProduct";
-  urlSaveNewBid = "http://localhost:8080/bid/newBid";
-  urlGetBidsFromUserOfProduct = "http://localhost:8080/bid/bidUserOfProduct";
+  urlBidsInfoProduct = "/bid/bidsOfProduct";
+  urlSaveNewBid = "/bid/newBid";
+  urlGetBidsFromUserOfProduct = "/bid/bidUserOfProduct";
 
   getBidsInfoOfProduct(id): Observable<BidInfo> {
     return this.http.get<BidInfo>(this.urlBidsInfoProduct + "?id=" + id);

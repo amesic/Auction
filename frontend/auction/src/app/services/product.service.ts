@@ -9,13 +9,13 @@ import { PaginationInfo } from "../models/PaginationInfo";
 })
 export class ProductService {
   constructor(private http: HttpClient) {}
-  urlAdvertisement = "http://localhost:8080/product/advertisement";
-  urlFeatureProducts = "http://localhost:8080/product/featureProduct";
-  urlFeatureCollection = "http://localhost:8080/product/featureCollection";
-  urlNewArrivals = "http://localhost:8080/product/newArrivals";
-  urlLastChance = "http://localhost:8080/product/lastChance";
-  urlSingleProduct = "http://localhost:8080/product/singleProduct";
-  urlRelatedProducts = "http://localhost:8080/product/relatedProducts";
+  urlAdvertisement = "/product/advertisement";
+  urlFeatureProducts = "/product/featureProduct";
+  urlFeatureCollection = "/product/featureCollection";
+  urlNewArrivals = "/product/newArrivals";
+  urlLastChance = "/product/lastChance";
+  urlSingleProduct = "/product/singleProduct";
+  urlRelatedProducts = "/product/relatedProducts";
 
   getAdvertisementProduct(): Observable<Product> {
     return this.http.get<Product>(this.urlAdvertisement);
