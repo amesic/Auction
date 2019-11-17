@@ -8,8 +8,8 @@ import java.util.List;
 public interface ProductRepositoryCustom {
     List<Product> getAllFeatureProducts();
     List<Product> getAllFeatureCollection();
-    PaginationInfo<Product> getAllLastChanceProducts(int page, int size);
-    PaginationInfo<Product> getAllNewArrivalProducts(int page, int size);
-    Long getSubcategoryIdOfProduct (Long idProduct);
-    List<Product> getRelatedProducts(Long idProduct);
+    PaginationInfo<Product> getAllLastChanceProducts(final int page, final int size);
+    PaginationInfo<Product> getAllNewArrivalProducts(final int page, final int size);
+    Long getSubcategoryIdOfProduct (final Long idProduct);
+    List<Product> getRelatedProducts(final Long idProduct);
 }

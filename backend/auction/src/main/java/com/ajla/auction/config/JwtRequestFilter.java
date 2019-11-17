@@ -31,7 +31,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     public JwtRequestFilter (final UserService userService, final JwtTokenUtil jwtTokenUtil) {
         Objects.requireNonNull(userService, "userService must not be null.");
         this.userService = userService;
-        Objects.requireNonNull(jwtTokenUtil, "userService must not be null.");
+        Objects.requireNonNull(jwtTokenUtil, "jwtTokenUtil must not be null.");
         this.jwtTokenUtil = jwtTokenUtil;
     }
 

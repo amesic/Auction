@@ -7,21 +7,21 @@
     <img src="{{clickedImage}}">
 </div>
 <div class="smallImages" > 
-    <div *ngFor="let image of images; let i = index" >
+    <div *ngFor="let image of productInfo.images; let i = index" >
     <img src="{{image.link}}" (click)="clickOnImage($event)">
 </div>
 </div>
 </div>
 
 <div class="aboutProduct">
-<p class="title">{{title}}</p>
-<p class="price">Start from -{{startPrice | currency:'USD'}}</p>
+<p class="title">{{productInfo.title}}</p>
+<p class="price">Start from -{{productInfo.startPrice | currency:'USD'}}</p>
 
 <div class="bid">
 <div class="enterBid">
 <input type="number" [ngClass]="{'disabledInput': !userIsLoged || userIsSeller}" (change)="saveValue($event.target.value)" #reference>
 <p class="enter"><label *ngIf="highestBid != null">Enter {{highestBid.value + 1 | currency:'USD'}} or more</label>
-<label *ngIf="highestBid == null">Enter {{startPrice | currency:'USD'}} or more</label> <br>
+<label *ngIf="highestBid == null">Enter {{productInfo.startPrice | currency:'USD'}} or more</label> <br>
 </p>
 </div>
 
@@ -44,7 +44,7 @@
 
 <div class="details">
 <p class="titleOfDetails">Details</p>
-<p>{{description}}</p>
+<p>{{productInfo.description}}</p>
 </div>
 </div>
 </div>

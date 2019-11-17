@@ -32,11 +32,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public WebSecurityConfig(final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
                              final UserService userService,
                              final JwtRequestFilter jwtRequestFilter) {
-        Objects.requireNonNull(jwtAuthenticationEntryPoint, "userService must not be null.");
+        Objects.requireNonNull(jwtAuthenticationEntryPoint, "jwtAuthenticationEntryPoint must not be null.");
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         Objects.requireNonNull(userService, "userService must not be null.");
         this.userService = userService;
-        Objects.requireNonNull(jwtRequestFilter, "userService must not be null.");
+        Objects.requireNonNull(jwtRequestFilter, "jwtRequestFilter must not be null.");
         this.jwtRequestFilter = jwtRequestFilter;
     }
 

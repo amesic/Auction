@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { BelowHeaderComponent } from "./below-header.component";
+import { BreadcrumbsComponent } from "./breadcrumbs.component";
 
 describe("BelowHeaderComponent", () => {
-  let component: BelowHeaderComponent;
-  let fixture: ComponentFixture<BelowHeaderComponent>;
+  let component: BreadcrumbsComponent;
+  let fixture: ComponentFixture<BreadcrumbsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [BelowHeaderComponent]
+      declarations: [BreadcrumbsComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BelowHeaderComponent);
+    fixture = TestBed.createComponent(BreadcrumbsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

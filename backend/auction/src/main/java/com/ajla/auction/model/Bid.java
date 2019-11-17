@@ -27,15 +27,15 @@ public class Bid {
 
     @ManyToOne
     @JoinColumn(name = "idUser")
-    @JsonIgnoreProperties({"password", "email", "gender", "birthDate", "phoneNumber", "address"})
+    @JsonIgnoreProperties({"password", "gender", "birthDate", "phoneNumber", "address"})
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "idProduct")
-    @JsonIgnore
+    @JsonIgnoreProperties({"title", "description", "datePublishing", "seller", "startDate", "endDate", "startPrice", "images", "category", "subcategory", "feature"})
     private Product product;
 
-    private long value;
+    private Long value;
     private LocalDate date;
 
     public Long getId() {

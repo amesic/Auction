@@ -1,6 +1,5 @@
 package com.ajla.auction.model;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
 public class PaginationInfo<Type> {
@@ -8,6 +7,13 @@ public class PaginationInfo<Type> {
     private long pageNumber;
     private long totalNumberOfItems;
     private List<Type> items;
+
+    public PaginationInfo(long pageSize, long pageNumber, long totalNumberOfItems, List<Type> items) {
+        this.pageSize = pageSize;
+        this.pageNumber = pageNumber;
+        this.totalNumberOfItems = totalNumberOfItems;
+        this.items = items;
+    }
 
     public long getPageSize() {
         return pageSize;

@@ -2,9 +2,9 @@ import { NgModule, Injectable } from "@angular/core";
 import { Routes, RouterModule, CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { LoginComponent } from "./components/login/login.component";
 import { RegisterComponent } from "./components/register/register.component";
-import { LandingPageComponent } from "./components/landing-page/landing-page.component";
+import { LandingPageComponent } from "./components/landingPage/landing-page/landing-page.component";
 import { AllCategoriesComponent } from "./components/all-categories/all-categories.component";
-import { SingleProductPageComponent } from "./components/single-product-page/single-product-page.component";
+import { SingleProductPageComponent } from "./components/singleProductPage/single-product-page/single-product-page.component";
 import { LoginService } from './services/login.service';
 
 @Injectable()
@@ -26,7 +26,7 @@ const routes: Routes = [
   {
     path: "home",
     children: [
-      { path: "login", component: LoginComponent, canActivate:[LoginRegisterActivate] },
+      { path: "login", component: LoginComponent, canActivate:[LoginRegisterActivate]},
       { path: "register", component: RegisterComponent, canActivate:[LoginRegisterActivate] },
       { path: "", component: LandingPageComponent },
       { path: "allCategories", component: AllCategoriesComponent }

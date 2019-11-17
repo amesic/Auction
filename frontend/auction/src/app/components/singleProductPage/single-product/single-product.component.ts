@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { ImageProduct } from "../../models/ImageProduct";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { LoginService } from 'src/app/services/login.service';
@@ -11,20 +10,13 @@ import { BidsService } from 'src/app/services/bids.service';
   styleUrls: ["./single-product.component.css"]
 })
 export class SingleProductComponent implements OnInit {
-  @Input() images: ImageProduct[] = [];
-  @Input() title;
-  @Input() description;
-  @Input() startPrice; 
+  @Input() productInfo;
+  @Input() bidsOfProduct;
+  @Input() userIsLoged;
+  @Input() userIsSeller;
+  @Input() clickedImage;
   @Input() highestBid;
   @Input() numberOfBids;
-  @Input() days;
-  @Input() months;
-  @Input() years;
-  @Input() clickedImage;
-  @Input() userIsLoged;
-  @Input() idProduct;
-  @Input() highestBidOfLogedUser;
-  @Input() userIsSeller;
 
   faChevronRight = faChevronRight;
   faHeart = faHeart;
@@ -32,14 +24,14 @@ export class SingleProductComponent implements OnInit {
   errorMess = null;
   messStatusAboutBids = null;
 
-  constructor(private loginService: LoginService, private bidService: BidsService) {}
+  constructor(private loginService: LoginService, 
+    private bidService: BidsService) {}
 
   ngOnInit() {
     if(this.userIsLoged != true) {
       this.errorMess = "Please login for bidding!"
     }
-  }
-  
+}
   clickOnImage(event) {
     this.clickedImage = event.target.src;
   }
@@ -48,24 +40,22 @@ export class SingleProductComponent implements OnInit {
   }
   saveNewBid() {
     if(this.valueFromUser != null && this.valueFromUser != "") {
-      this.errorMess = null;
-      let highestValue;
-      if(this.highestBid != null) {
-        highestValue = this.highestBid.value;
-      }
-      else {
-        highestValue = this.startPrice;
-      }
-      this.bidService.saveBidFromUser(this.idProduct, this.loginService.getUserEmail(), 
-      this.valueFromUser, highestValue).subscribe(
+      this.bidService.saveBidFromUser(this.productInfo, this.loginService.getUserEmail(), 
+      this.valueFromUser).subscribe(
         bid => {
+          this.errorMess = null;
           this.highestBid = bid;
-          this.messStatusAboutBids = "Congrats! you are the higest bider!"
+          this.numberOfBids = this.numberOfBids + 1;
+          this.messStatusAboutBids = "Congrats! You are the highest bider!"
           window.scrollTo(0, 0);
       },
       err => {
         this.messStatusAboutBids = null;
-        this.errorMess = "Please enter greater number than " + highestValue + "!";
+        if(this.highestBid != null) {
+        this.errorMess = "Please enter greater number than " + this.highestBid.value + "!";
+        } else {
+          this.errorMess = "Please enter greater number than " + this.productInfo.startPrice + "!";
+        }
         window.scrollTo(0, 0);
     });
   }

@@ -1,0 +1,12 @@
+<div class="container">
+    <a (click)="newArrivals()" [ngClass]="{'activeLink': activeLinkNewArrivals}">New Arrivals</a>
+    <a (click)="lastChance()"[ngClass]="{'activeLink': activeLinkLastChance}">Last Chance</a>
+</div>
+<div>
+<app-set-products [products]="products" [className]="className"></app-set-products>
+<div class="container">
+<input type="button" (click)="onClick()" value="Load more..." class="button" [ngClass]="{'noMoreItems': hide}">
+<div class="messageIfProductsIsNull">{{messageIfProductsIsNull}}</div>
+</div>
+</div>
+

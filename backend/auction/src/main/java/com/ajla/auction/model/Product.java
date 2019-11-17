@@ -42,7 +42,6 @@ public class Product {
 
     @JsonIgnore
     private LocalDate startDate;
-    @JsonIgnore
     private LocalDate endDate;
     private double startPrice;
 

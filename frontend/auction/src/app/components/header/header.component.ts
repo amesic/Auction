@@ -23,7 +23,7 @@ export class HeaderComponent implements OnInit {
   @Input() userName = "";
   @Input() userLoged;
 
-  constructor(private loginService: LoginService) {}
+  constructor(public loginService: LoginService) {}
 
   ngOnInit() {}
 }

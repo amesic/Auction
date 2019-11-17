@@ -12,7 +12,7 @@ export class AllCategoriesComponent implements OnInit {
   categories: Category[] = [];
 
   ngOnInit() {
-    //null like maxNumberOfCategories bc I need all of them
+    //null like maxNumberOfCategories because I need all of them
     this.categoriesService.getAllCategories(null).subscribe(allCategories => {
       this.categories = allCategories;
     });

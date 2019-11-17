@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { LoginService } from "../../services/login.service"; //servis za login
 import { FormGroup, FormControl, Validators } from "@angular/forms"; //da pokupimo podatke sa forme
-import { Router } from "@angular/router";
+import { Router, NavigationEnd, ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-login",
@@ -30,10 +30,11 @@ export class LoginComponent implements OnInit {
   color;
   message;
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private loginService: LoginService, private router: Router, private activatedRoute: ActivatedRoute) {}
   previousUrl: string;
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   get email() {
     return this.loginForm.get("email");

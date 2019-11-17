@@ -27,6 +27,7 @@ export class LoginService {
   logOut() {
     sessionStorage.removeItem("username");
     sessionStorage.removeItem("email");
+    sessionStorage.removeItem("token");
   }
   getUserName() {
     if (this.isUserLoggedIn) {

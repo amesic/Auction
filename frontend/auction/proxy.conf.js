@@ -6,9 +6,12 @@ const PROXY_CONFIG = [
             "/product",
             "/users"
         ],
-        target: "http://localhost:8080",
-        secure: false
+        target:"http://localhost:8080",
+        secure: false,
+        "changeOrigin": true
     }
 ]
 
 module.exports = PROXY_CONFIG;
+
+//"https://atlantbh-auction-api.herokuapp.com"

@@ -19,44 +19,40 @@ import java.util.Objects;
 
 @Service
 public class UserService implements IUserService, UserDetailsService {
-    //properties
-    private final UserRepository userRepo;
+    private final UserRepository userRepository;
 
-    //dependency injection
     //we need qualifier when have more implementations of userRepo
-    //for example Smth1 implements userRepo, Smth2 implements userRepo,and then we have two beans
+    //for example Smth1 implements userRepo, Smth2 implements userRepo, and then we have two beans
     @Autowired
-    public UserService(final UserRepository userRepo) {
-        Objects.requireNonNull(userRepo, "userService must not be null.");
-        this.userRepo = userRepo;
+    public UserService(final UserRepository userRepository) {
+        Objects.requireNonNull(userRepository, "userRepository must not be null.");
+        this.userRepository = userRepository;
     }
 
     @Override
     public Long findByEmail(final String email) {
-       final User user = userRepo.findByEmail(email);
+       final User user = userRepository.findByEmail(email);
        if (user == null) {
            return null;
        }
        return user.getId();
     }
     @Override
-    public ResponseEntity<String> saveDataFromUser(final User user) {
+    public Boolean saveDataFromUser(final User user) {
         final Long id = findByEmail(user.getEmail());
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_PLAIN);
         if (id == null) {
             final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             //encoder.matches(password, user.getPassword());  ovako provjeravamo jel isti
-            userRepo.save(user);
-            return new ResponseEntity<>("You are successfully registered " + user.getUserName() + "!", headers, HttpStatus.OK);
+            userRepository.save(user);
+            return false;
         }
-        return new ResponseEntity<>("You are already registered with " + user.getEmail() + " email!", headers, HttpStatus.BAD_REQUEST);
+        return true;
     }
     //for auth looking for user from database
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepo.findByEmail(email);
+    public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("User not found with email: " + email);
         }

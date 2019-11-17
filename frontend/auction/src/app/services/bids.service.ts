@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { BidInfo } from "../models/BidInfo";
 import { Bid } from "../models/Bid";
+import { Product } from '../models/Product';
 
 @Injectable({
   providedIn: "root"
@@ -11,26 +12,15 @@ export class BidsService {
   constructor(private http: HttpClient) {}
   urlBidsInfoProduct = "/bid/bidsOfProduct";
   urlSaveNewBid = "/bid/newBid";
-  urlGetBidsFromUserOfProduct = "/bid/bidUserOfProduct";
 
   getBidsInfoOfProduct(id): Observable<BidInfo> {
     return this.http.get<BidInfo>(this.urlBidsInfoProduct + "?id=" + id);
   }
-  saveBidFromUser(idProduct, emailUser, value, highestValue): Observable<Bid> {
+  saveBidFromUser(product: Product, emailUser, value): Observable<Bid> {
     return this.http.post<any>(this.urlSaveNewBid, {
-      idProduct,
-      emailUser,
+      product,
+      "user": {"email": emailUser},
       value,
-      highestValue
     });
-  }
-  getBidUserOfProduct(emailUser, idProduct): Observable<Bid> {
-    return this.http.get<Bid>(
-      this.urlGetBidsFromUserOfProduct +
-        "?emailUser=" +
-        emailUser +
-        "&idProduct=" +
-        idProduct
-    );
   }
 }

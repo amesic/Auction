@@ -8,13 +8,11 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface IProductService {
-    ResponseEntity<List<Product>> getAllProducts();
-    ResponseEntity<Product> getAdvertisementProduct();
-    ResponseEntity<List<Product>> getFeatureProducts();
-    ResponseEntity<List<Product>> getFeatureCollection();
-    ResponseEntity<PaginationInfo<Product>> findPaginatedNewArrivals(int page, int size);
-    ResponseEntity<PaginationInfo<Product>> findPaginatedLastChance(int page, int size);
-    ResponseEntity<Product> findSingleProduct (long id);
-    ResponseEntity<List<Product>> getRelatedProducts (Long idProduct);
-
+    Product getAdvertisementProduct();
+    List<Product> getFeatureProducts();
+    List<Product> getFeatureCollection();
+    PaginationInfo<Product> findPaginatedNewArrivals(final int page, final int size);
+    PaginationInfo<Product> findPaginatedLastChance(final int page, final int size);
+    Product findSingleProduct (final Long id);
+    List<Product> getRelatedProducts (final Long idProduct);
 }

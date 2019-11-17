@@ -8,38 +8,30 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
-    //properties
     final EntityManager em;
-    PaginationInfo<Product> paginationInfo;
 
-    //dependency injection
     @Autowired
     public ProductRepositoryImpl(final EntityManager em) {
+        Objects.requireNonNull(em, "em must not be null.");
         this.em = em;
-        paginationInfo = new PaginationInfo<Product>();
     }
 
     @Override
     public List<Product> getAllFeatureProducts() {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
-        //describes what we want to do in the query. Also, it declares the type of a row in the result
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
-
         final Root<Product> product = cq.from(Product.class);
-        //we create predicates against our Category entity. Note, that these predicates don't have any effect yet
-        //get categoryParentId where that is null
-        final Predicate feature = cb.equal(product.get("feature"), true);
-        //apply predicates to our CriteriaQuery
-        cq.where(feature);
+
+        cq.where(cb.equal(product.get("feature"), true));
+
         final TypedQuery<Product> query = em.createQuery(cq);
         query.setMaxResults(4);
-
         if (query.getResultList().isEmpty()) {
             return null;
         }
@@ -48,15 +40,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     @Override
     public List<Product> getAllFeatureCollection() {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
-        //describes what we want to do in the query. Also, it declares the type of a row in the result
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
-
         final Root<Product> product = cq.from(Product.class);
-        //we create predicates against our Category entity. Note, that these predicates don't have any effect yet
-        //get categoryParentId where that is null
-        final Predicate feature = cb.equal(product.get("feature"), false);
-        //apply predicates to our CriteriaQuery
-        cq.where(feature);
+
+        cq.where(cb.equal(product.get("feature"), false));
+
         final TypedQuery<Product> query = em.createQuery(cq);
         query.setMaxResults(3);
 
@@ -66,90 +54,80 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return  query.getResultList();
     }
     @Override
-    public PaginationInfo<Product> getAllLastChanceProducts(int pageNumber, int size) {
+    public PaginationInfo<Product> getAllLastChanceProducts(final int pageNumber, final int size) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
-        //describes what we want to do in the query. Also, it declares the type of a row in the result
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
-
         final Root<Product> product = cq.from(Product.class);
-        final LocalDate now = LocalDate.now();
-        final Predicate endDateProductsNow = cb.equal(product.get("endDate"), now);
-        final LocalDate tomorrow = now.plusDays(1);
-        final Predicate endDateProductsTomorrow = cb.equal(product.get("endDate"), tomorrow);
-        final Predicate endDateProducts = cb.or(endDateProductsNow, endDateProductsTomorrow);
-        //apply predicates to our CriteriaQuery
-        cq.where(endDateProducts).orderBy( cb.asc(product.get("endDate")));;
+
+        cq.where(cb.or(
+                cb.equal(product.get("endDate"), LocalDate.now()),
+                cb.equal(product.get("endDate"), LocalDate.now().plusDays(1))
+        ))
+                .orderBy( cb.asc(product.get("endDate")));
         final TypedQuery<Product> query = em.createQuery(cq);
         if (query.getResultList().isEmpty()) {
             return null;
         }
         //set total number of last chance products
-        paginationInfo.setTotalNumberOfItems(query.getResultList().size());
+        final int totalNumberOfItems = query.getResultList().size();
         //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
         query.setFirstResult(pageNumber * size);
         query.setMaxResults(size);
-        paginationInfo.setItems(query.getResultList());
-        paginationInfo.setPageSize(size);
-        paginationInfo.setPageNumber(pageNumber);
+
+        PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
         return  paginationInfo;
     }
     @Override
-    public PaginationInfo<Product> getAllNewArrivalProducts(int pageNumber, int size) {
+    public PaginationInfo<Product> getAllNewArrivalProducts(final int pageNumber, final int size) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
-
         final Root<Product> product = cq.from(Product.class);
-        LocalDate now = LocalDate.now();
-        final Predicate currentProducts = cb.greaterThan(product.get("endDate"), now);
-        final Predicate currentProducts1 = cb.lessThanOrEqualTo(product.get("startDate"), now);
-        final Predicate newArrivalsProduct = cb.and(currentProducts, currentProducts1);
-        cq.where(newArrivalsProduct).orderBy( cb.desc(product.get("startDate")));
+
+        cq.where(cb.and(
+                cb.greaterThan(product.get("endDate"), LocalDate.now()),
+                cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
+        ))
+                .orderBy( cb.desc(product.get("startDate")));
 
         final TypedQuery<Product> query = em.createQuery(cq);
         if (query.getResultList().isEmpty()) {
             return null;
         }
-        //set total number of new arrivals products
-        paginationInfo.setTotalNumberOfItems(query.getResultList().size());
-        //page starts from 0, return list of size number element, starting from page*size index of element
+        //set total number of last chance products
+        final int totalNumberOfItems = query.getResultList().size();
+        //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
         query.setFirstResult(pageNumber * size);
         query.setMaxResults(size);
-        paginationInfo.setItems(query.getResultList());
-        paginationInfo.setPageSize(size);
-        paginationInfo.setPageNumber(pageNumber);
+
+        PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
         return  paginationInfo;
     }
     @Override
-    public Long getSubcategoryIdOfProduct (Long idProduct) {
+    public Long getSubcategoryIdOfProduct (final Long idProduct) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
-        //describes what we want to do in the query. Also, it declares the type of a row in the result
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
-
         final Root<Product> product = cq.from(Product.class);
-        final Predicate productFromSubcategory = cb.equal(product.get("id"), idProduct);
-        cq.where(productFromSubcategory);
+
+        cq.where(cb.equal(product.get("id"), idProduct));
         final TypedQuery<Product> query = em.createQuery(cq);
 
-        System.out.println(idProduct);
         return query.getSingleResult().getSubcategory().getId();
     }
     @Override
-    public List<Product> getRelatedProducts(Long idProduct) {
+    public List<Product> getRelatedProducts(final Long idProduct) {
         final Long idSubcategory = getSubcategoryIdOfProduct(idProduct);
         final CriteriaBuilder cb = em.getCriteriaBuilder();
-        //describes what we want to do in the query. Also, it declares the type of a row in the result
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
 
         final Root<Product> product = cq.from(Product.class);
-        final LocalDate now = LocalDate.now();
-        final Predicate productFromSubcategory = cb.equal(product.get("subcategory"), idSubcategory);
-        final Predicate productsThatAreNotClickedProduct = cb.notEqual(product.get("id"), idProduct);
-        final Predicate currentProducts1 = cb.lessThanOrEqualTo(product.get("startDate"), now);
-        final Predicate currentProducts = cb.greaterThan(product.get("endDate"), now);
-        final Predicate relatedProducts = cb.and(productFromSubcategory, productsThatAreNotClickedProduct, currentProducts, currentProducts1);
-        //apply predicates to our CriteriaQuery
-        //get me the newest from subcategory
-        cq.where(relatedProducts).orderBy(cb.desc(product.get("startDate")));
+
+        cq.where(cb.and(cb.equal(product.get("subcategory"), idSubcategory),
+                cb.notEqual(product.get("id"), idProduct),
+                cb.greaterThan(product.get("endDate"), LocalDate.now()),
+                cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
+        ))
+                .orderBy(cb.desc(product.get("startDate")));
+
         final TypedQuery<Product> query = em.createQuery(cq);
         query.setMaxResults(3);
         if (query.getResultList().isEmpty()) {

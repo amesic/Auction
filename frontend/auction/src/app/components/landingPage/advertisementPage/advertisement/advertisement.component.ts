@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { Product } from "../../models/Product";
+import { Product } from "../../../../models/Product";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Router } from '@angular/router';
 

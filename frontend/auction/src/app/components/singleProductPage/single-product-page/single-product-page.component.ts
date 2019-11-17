@@ -15,7 +15,7 @@ export class SingleProductPageComponent implements OnInit {
   relatedProducts;
   userIsSeller = false;
   userIsLoged;
-  highestBidOfLogedUser;
+  
   constructor(
     private productService: ProductService,
     private activatedRoute: ActivatedRoute,
@@ -43,7 +43,7 @@ export class SingleProductPageComponent implements OnInit {
           this.bidsOfProduct = bidsOfProduct;
         });
       this.productService
-        .getRelatedProducts(routeParams.idSubcategory, routeParams.idProduct)
+        .getRelatedProducts(routeParams.idProduct)
         .subscribe(relatedProducts => {
           this.relatedProducts = relatedProducts;
         });

@@ -14,13 +14,11 @@ import java.util.Objects;
 
 @Repository
 public class UserRepositoryImpl implements UserRepositoryCustom {
-    //properties
     final EntityManager em;
 
-    //dependency injection
     @Autowired
     public UserRepositoryImpl(final EntityManager em){
-        Objects.requireNonNull(em, "userService must not be null.");
+        Objects.requireNonNull(em, "em must not be null.");
         this.em = em;
     }
 

@@ -39,8 +39,8 @@ export class ProductService {
   getSingleProduct(id): Observable<Product> {
     return this.http.get<Product>(this.urlSingleProduct + "?id=" + id);
   }
-  getRelatedProducts(idSubcategory, idProduct): Observable<Product[]> {
+  getRelatedProducts(id): Observable<Product[]> {
     return this.http.get<Product[]>(this.urlRelatedProducts + 
-      "?idSubcategory=" + idSubcategory + "&idProduct=" + idProduct);
+      "?id=" + id);
   }
 }

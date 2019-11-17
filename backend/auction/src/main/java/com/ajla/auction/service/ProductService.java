@@ -10,51 +10,47 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ProductService implements IProductService{
-    //properties
-    private final ProductRepository productRepo;
+    private final ProductRepository productRepository;
     private final BidRepository bidRepository;
 
-    //dependency injection
     @Autowired
-    public ProductService(final ProductRepository productRepo, final BidRepository bidRepository) {
-        this.productRepo = productRepo;
+    public ProductService(final ProductRepository productRepository, final BidRepository bidRepository) {
+        Objects.requireNonNull(productRepository, "productRepository must not be null.");
+        this.productRepository = productRepository;
+        Objects.requireNonNull(bidRepository, "bidRepository must not be null.");
         this.bidRepository = bidRepository;
     }
 
     @Override
-    public ResponseEntity<List<Product>> getAllProducts() {
-        final List<Product> listOfProducts = productRepo.findAll();
-        return new ResponseEntity<List<Product>>(listOfProducts, HttpStatus.OK);
+    public Product getAdvertisementProduct() {
+        return productRepository.findProductById((long) 4);
     }
     @Override
-    public ResponseEntity<Product> getAdvertisementProduct() {
-        return new ResponseEntity<> (productRepo.findProductById((long) 4), HttpStatus.OK);
+    public List<Product> getFeatureProducts() {
+        return productRepository.getAllFeatureProducts();
     }
     @Override
-    public ResponseEntity<List<Product>> getFeatureProducts() {
-        return new ResponseEntity<>(productRepo.getAllFeatureProducts(), HttpStatus.OK);
+    public List<Product> getFeatureCollection() {
+        return productRepository.getAllFeatureCollection();
     }
     @Override
-    public ResponseEntity<List<Product>> getFeatureCollection() {
-        return new ResponseEntity<>(productRepo.getAllFeatureCollection(), HttpStatus.OK);
+    public PaginationInfo<Product> findPaginatedNewArrivals(final int page, final int size) {
+        return productRepository.getAllNewArrivalProducts(page, size);
     }
     @Override
-    public ResponseEntity<PaginationInfo<Product>> findPaginatedNewArrivals(int page, int size) {
-        return new ResponseEntity<>(productRepo.getAllNewArrivalProducts(page, size), HttpStatus.OK);
+    public PaginationInfo<Product> findPaginatedLastChance(final int page, final int size) {
+        return productRepository.getAllLastChanceProducts(page, size);
     }
     @Override
-    public ResponseEntity<PaginationInfo<Product>> findPaginatedLastChance(int page, int size) {
-        return new ResponseEntity<>(productRepo.getAllLastChanceProducts(page, size), HttpStatus.OK);
+    public Product findSingleProduct (final Long id) {
+        return productRepository.findProductById(id);
     }
     @Override
-    public  ResponseEntity<Product> findSingleProduct (long id) {
-        return new ResponseEntity<>(productRepo.findProductById(id), HttpStatus.OK);
-    }
-    @Override
-    public ResponseEntity<List<Product>> getRelatedProducts (Long idProduct) {
-        return new ResponseEntity<>(productRepo.getRelatedProducts(idProduct), HttpStatus.OK);
+    public List<Product> getRelatedProducts (final Long idProduct) {
+        return productRepository.getRelatedProducts(idProduct);
     }
 }

@@ -8,28 +8,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CategoryService implements ICategoryService{
-    //properties
-    private final CategoryRepository categoryRepo;
+    private final CategoryRepository categoryRepository;
 
-    //dependency injection
     @Autowired
-    public CategoryService(final CategoryRepository categoryRepo) {
-        this.categoryRepo = categoryRepo;
+    public CategoryService(final CategoryRepository categoryRepository) {
+        Objects.requireNonNull(categoryRepository, "categoryRepository must not be null.");
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
-    public ResponseEntity<List<Category>> getAllCategories(Long numberOfCategories) {
+    public List<Category> getAllCategories(final Long numberOfCategories) {
         final List<Category> listCategories;
         if(numberOfCategories == null) {
-           listCategories = categoryRepo.findAll();
+           listCategories = categoryRepository.findAll();
+        } else {
+            listCategories = categoryRepository.findExactNumberOfCategories(numberOfCategories);
         }
-        else {
-            listCategories = categoryRepo.findExactNumberOfCategories(numberOfCategories);
-        }
-        return new ResponseEntity<List<Category>>(listCategories, HttpStatus.OK);
+        return listCategories;
     }
 
 }
