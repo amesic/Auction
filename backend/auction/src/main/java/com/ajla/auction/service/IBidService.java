@@ -1,9 +1,6 @@
 package com.ajla.auction.service;
 
 import com.ajla.auction.model.Bid;
-import com.ajla.auction.model.BidInfo;
-import org.springframework.http.ResponseEntity;
-
 import java.util.List;
 
 

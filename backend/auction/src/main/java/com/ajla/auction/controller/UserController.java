@@ -37,10 +37,10 @@ public class UserController {
                           final AuthenticationManager authenticationManager,
                           final JwtTokenUtil jwtTokenUtil) {
         Objects.requireNonNull(userService, "userService must not be null.");
-        this.userService = userService;
         Objects.requireNonNull(authenticationManager, "authenticationManager must not be null.");
-        this.authenticationManager = authenticationManager;
         Objects.requireNonNull(jwtTokenUtil, "jwtTokenUtil must not be null.");
+        this.userService = userService;
+        this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
@@ -49,8 +49,9 @@ public class UserController {
         authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
         final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
+        final  String userName = userService.findByEmail(authenticationRequest.getEmail()).getUserName();
         //when we have 3 arg, first is response, second is headers, and third is status
-       return ResponseEntity.ok(new JwtResponse(userDetails.getUsername(), token));
+       return ResponseEntity.ok(new JwtResponse(userName, token, userDetails.getUsername()));
     }
 
     private void authenticate(final String email, final String password) throws Exception {
@@ -65,9 +66,12 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> saveUserData(@RequestBody final User user) {
-        Boolean emailExist = userService.saveDataFromUser(user);
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
+        Boolean emailExist = userService.saveDataFromUser(user);
+        if(emailExist == null) {
+            return new ResponseEntity<>("Your data is not valid!", headers, HttpStatus.BAD_REQUEST);
+        }
         if(!emailExist) {
             return new ResponseEntity<>("You are successfully registered " + user.getUserName() + "!", headers, HttpStatus.OK);
         }

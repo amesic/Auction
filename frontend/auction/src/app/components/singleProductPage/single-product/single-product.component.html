@@ -1,4 +1,5 @@
 <div class="messStatusAboutBids" *ngIf="messStatusAboutBids != null">{{messStatusAboutBids}}</div>
+<div class="usersProduct" *ngIf="usersProduct != null">{{usersProduct}}</div>
 <div class="messError" *ngIf="errorMess != null" >{{errorMess}}</div>
 <div class="container">
     
@@ -17,7 +18,7 @@
 <p class="title">{{productInfo.title}}</p>
 <p class="price">Start from -{{productInfo.startPrice | currency:'USD'}}</p>
 
-<div class="bid">
+<div *ngIf="!userIsSeller" class="bid">
 <div class="enterBid">
 <input type="number" [ngClass]="{'disabledInput': !userIsLoged || userIsSeller}" (change)="saveValue($event.target.value)" #reference>
 <p class="enter"><label *ngIf="highestBid != null">Enter {{highestBid.value + 1 | currency:'USD'}} or more</label>
@@ -35,7 +36,7 @@
 <p class="infoBid">No bids: <label *ngIf="numberOfBids != null">{{numberOfBids}}</label> 
 <label *ngIf="numberOfBids == null">0</label>
 </p>
-<p class="infoBid time">Time left: <label *ngIf="years != 0">{{years}} years</label> <label *ngIf="months != 0">{{months}} months</label> {{days}} days</p>
+<p class="infoBid time">Time left: <label *ngIf = "timeLeft != undefined">{{timeLeft}}</label></p>
 
 <div class="watchlist">
 <input type="button" value="Watchlist">

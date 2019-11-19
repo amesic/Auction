@@ -5,10 +5,12 @@ import java.io.Serializable;
 public class JwtResponse implements Serializable {
     private final String jwtToken;
     private final String username;
+    private final String email;
 
-    public JwtResponse(String username, String jwtToken) {
+    public JwtResponse(String username, String jwtToken, String email) {
         this.jwtToken = jwtToken;
         this.username = username;
+        this.email = email;
     }
 
     public String getToken() {

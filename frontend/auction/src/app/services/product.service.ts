@@ -1,6 +1,6 @@
-import { Injectable, OnDestroy } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Product } from "../models/Product";
 import { PaginationInfo } from "../models/PaginationInfo";
 

@@ -13,15 +13,13 @@ export class RegisterComponent implements OnInit {
     firstName: new FormControl(
       "",
       Validators.compose([
-        Validators.required,
-        Validators.pattern("^[A-Z][a-z]+$")
+        Validators.required
       ])
     ),
     lastName: new FormControl(
       "",
       Validators.compose([
-        Validators.required,
-        Validators.pattern("^[A-Z][a-z]+$")
+        Validators.required
       ])
     ),
     email: new FormControl(
@@ -64,16 +62,12 @@ export class RegisterComponent implements OnInit {
     //first name errors
     if (this.firstName.errors != null && this.firstName.errors.required) {
       this.errorMessageFirst = "First Name is required!";
-    } else if (this.firstName.errors != null && this.firstName.errors.pattern) {
-      this.errorMessageFirst = "First Name is not valid!";
     } else {
       this.errorMessageFirst = "";
     }
     //last name errors
     if (this.lastName.errors != null && this.lastName.errors.required) {
       this.errorMessageLast = "Last Name is required!";
-    } else if (this.lastName.errors != null && this.lastName.errors.pattern) {
-      this.errorMessageLast = "Last Name is not valid!";
     } else {
       this.errorMessageLast = "";
     }
@@ -93,7 +87,7 @@ export class RegisterComponent implements OnInit {
     } else {
       this.errorMessagePass = "";
     }
-    //valid both
+    //valid everything
     if (
       this.email.valid &&
       this.password.valid &&

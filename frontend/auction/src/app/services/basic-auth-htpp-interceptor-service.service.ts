@@ -3,25 +3,26 @@ import {
   HttpInterceptor,
   HttpRequest,
   HttpHandler,
-  HttpEvent
+  HttpEvent,
+  HttpResponse,
+  HttpErrorResponse
 } from "@angular/common/http";
 import { Observable } from 'rxjs';
+import { map, catchError, retry } from 'rxjs/operators';
 
-@Injectable({
-  providedIn: "root"
-})
+@Injectable()
 //This service checks if the session has a valid username and token string,
 //then it will update the headers of all outgoing HTTP requests.
 //We implement the interceptor by extending the HttpInterceptor.
 export class BasicAuthHtppInterceptorServiceService implements HttpInterceptor {
   constructor() {}
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>{
-      req = req.clone({
-        setHeaders: {
-          Authorization: sessionStorage.getItem("token")
-        }
+  intercept(req: HttpRequest<any>, next: HttpHandler) {
+    
+        const request = req.clone({
+        url: "http://localhost:8080" + req.url,
+        headers: req.headers.set("Authorization", sessionStorage.getItem("token") || ""),
+        withCredentials: false
       });
-
-    return next.handle(req);
-  }
+      return next.handle(request);
+    }
 }

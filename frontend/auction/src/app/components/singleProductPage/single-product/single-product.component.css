@@ -25,7 +25,16 @@
   color: #417505;
   background: #F0F3EE;
 }
-
+.usersProduct {
+  padding-left: 75px;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  font: 700 18px "Lato", sans-serif;
+  letter-spacing: 0.63px;
+  color: #AB944E;
+  background: #F6F2E5;
+}
 .allImages {
   margin-right: 60px;
 }

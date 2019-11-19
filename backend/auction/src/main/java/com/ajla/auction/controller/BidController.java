@@ -1,13 +1,16 @@
 package com.ajla.auction.controller;
 
+import com.ajla.auction.config.JwtTokenUtil;
 import com.ajla.auction.model.Bid;
-import com.ajla.auction.model.BidInfo;
 import com.ajla.auction.service.BidService;
+import com.ajla.auction.service.ProductService;
+import com.ajla.auction.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,24 +18,38 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/bid")
 public class BidController {
-    final BidService bidService;
+    private final BidService bidService;
+    private final JwtTokenUtil jwtTokenUtil;
+    private final ProductService productService;
+    private final UserService userService;
 
     @Autowired
-    public BidController(final BidService bidService) {
+    public BidController(final BidService bidService,
+                          final JwtTokenUtil jwtTokenUtil,
+                          final ProductService productService,
+                          final UserService userService) {
         Objects.requireNonNull(bidService, "bidService must not be null.");
+        Objects.requireNonNull(jwtTokenUtil, "jwtTokenUtil must not be null.");
+        Objects.requireNonNull(productService, "productService must not be null.");
+        Objects.requireNonNull(userService, "userService must not be null.");
         this.bidService = bidService;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.productService = productService;
+        this.userService = userService;
     }
 
     @GetMapping("/bidsOfProduct")
-    public ResponseEntity<List<Bid>> getBidsOfProduct (@RequestParam("id") final Long id) {
-        return new ResponseEntity<>(bidService.bidsOfProduct(id), HttpStatus.OK);
-    }
-    @PostMapping("/newBid")
-    public ResponseEntity<Bid> saveBidFromUser(@RequestBody final Bid bid) {
-        final Bid savedBid = bidService.saveBidFromUser(bid.getProduct().getId(), bid.getUser().getEmail(), bid.getValue());
-        if (savedBid == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<List<Bid>> getBidsOfProduct (@RequestParam("id") final Long id, final HttpServletRequest request) {
+        final String requestTokenHeader = request.getHeader("Authorization");
+        String jwtToken = null;
+        if(requestTokenHeader != "") {
+            jwtToken = requestTokenHeader.substring(7);
+            if (!productService.userIsSellerOfProduct(userService.findByEmail(jwtTokenUtil.getUsernameFromToken(jwtToken)).getId(), id)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+            return new ResponseEntity<>(bidService.bidsOfProduct(id), HttpStatus.OK);
         }
-        return new ResponseEntity<>(savedBid, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
+
 }

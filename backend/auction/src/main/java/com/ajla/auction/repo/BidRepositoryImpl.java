@@ -9,12 +9,14 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.Objects;
 
 public class BidRepositoryImpl implements BidRepositoryCustom {
     final EntityManager em;
 
     @Autowired
     public BidRepositoryImpl(final EntityManager em) {
+        Objects.requireNonNull(em, "em must not be null.");
         this.em = em;
     }
 

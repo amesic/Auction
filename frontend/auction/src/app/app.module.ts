@@ -56,11 +56,11 @@ import { LoginRegisterActivate } from './app-routing.module';
   ],
   providers: [
     LoginRegisterActivate,
-  /* {
+  {
       provide: HTTP_INTERCEPTORS,
       useClass: BasicAuthHtppInterceptorServiceService,
       multi: true,
-    }*/
+    }
   ],
   bootstrap: [AppComponent]
 })

@@ -17,12 +17,14 @@ export class SingleProductComponent implements OnInit {
   @Input() clickedImage;
   @Input() highestBid;
   @Input() numberOfBids;
-
+  @Input() usersProduct;
+  @Input() timeLeft;
+  
+  messStatusAboutBids;
   faChevronRight = faChevronRight;
   faHeart = faHeart;
   valueFromUser;
   errorMess = null;
-  messStatusAboutBids = null;
 
   constructor(private loginService: LoginService, 
     private bidService: BidsService) {}
@@ -39,7 +41,7 @@ export class SingleProductComponent implements OnInit {
     this.valueFromUser = value;
   }
   saveNewBid() {
-    if(this.valueFromUser != null && this.valueFromUser != "") {
+    if(this.valueFromUser != null && this.valueFromUser.match("^[1-9][0-9]*$")) {
       this.bidService.saveBidFromUser(this.productInfo, this.loginService.getUserEmail(), 
       this.valueFromUser).subscribe(
         bid => {

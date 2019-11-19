@@ -5,8 +5,6 @@ import com.ajla.auction.model.Product;
 import com.ajla.auction.repo.BidRepository;
 import com.ajla.auction.repo.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +18,8 @@ public class ProductService implements IProductService{
     @Autowired
     public ProductService(final ProductRepository productRepository, final BidRepository bidRepository) {
         Objects.requireNonNull(productRepository, "productRepository must not be null.");
-        this.productRepository = productRepository;
         Objects.requireNonNull(bidRepository, "bidRepository must not be null.");
+        this.productRepository = productRepository;
         this.bidRepository = bidRepository;
     }
 
@@ -52,5 +50,9 @@ public class ProductService implements IProductService{
     @Override
     public List<Product> getRelatedProducts (final Long idProduct) {
         return productRepository.getRelatedProducts(idProduct);
+    }
+    @Override
+    public Boolean userIsSellerOfProduct(final Long idUser, final Long idProduct) {
+        return productRepository.userIsSellerOfProduct(idUser, idProduct);
     }
 }

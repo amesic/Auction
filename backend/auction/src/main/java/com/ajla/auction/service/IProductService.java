@@ -13,6 +13,7 @@ public interface IProductService {
     List<Product> getFeatureCollection();
     PaginationInfo<Product> findPaginatedNewArrivals(final int page, final int size);
     PaginationInfo<Product> findPaginatedLastChance(final int page, final int size);
-    Product findSingleProduct (final Long id);
-    List<Product> getRelatedProducts (final Long idProduct);
+    Product findSingleProduct(final Long id);
+    List<Product> getRelatedProducts(final Long idProduct);
+    Boolean userIsSellerOfProduct(final Long idUser, final Long idProduct);
 }

@@ -30,33 +30,34 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
-    public Long findByEmail(final String email) {
+    public User findByEmail(final String email) {
        final User user = userRepository.findByEmail(email);
-       if (user == null) {
-           return null;
-       }
-       return user.getId();
+       return user;
     }
     @Override
     public Boolean saveDataFromUser(final User user) {
-        final Long id = findByEmail(user.getEmail());
-        if (id == null) {
-            final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            //encoder.matches(password, user.getPassword());  ovako provjeravamo jel isti
-            userRepository.save(user);
-            return false;
+        final User userWithEmail = findByEmail(user.getEmail());
+        if (userWithEmail == null) {
+            if (user.getEmail().matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$")
+                    && user.getPassword().length() >= 8
+                    && user.getUserName() != null && user.getUserName() != "") {
+                final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                userRepository.save(user);
+                return false;
+            }
+            return null;
         }
         return true;
     }
     //for auth looking for user from database
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
+        User user = findByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("User not found with email: " + email);
         }
-        return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
                 new ArrayList<>());
     }
 }

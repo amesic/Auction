@@ -10,6 +10,7 @@ public interface ProductRepositoryCustom {
     List<Product> getAllFeatureCollection();
     PaginationInfo<Product> getAllLastChanceProducts(final int page, final int size);
     PaginationInfo<Product> getAllNewArrivalProducts(final int page, final int size);
-    Long getSubcategoryIdOfProduct (final Long idProduct);
+    Long getSubcategoryIdOfProduct(final Long idProduct);
     List<Product> getRelatedProducts(final Long idProduct);
+    Boolean userIsSellerOfProduct(final Long idUser, final Long idProduct);
 }

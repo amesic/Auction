@@ -121,7 +121,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         final Root<Product> product = cq.from(Product.class);
 
-        cq.where(cb.and(cb.equal(product.get("subcategory"), idSubcategory),
+        cq.where(cb.and(
+                cb.equal(product.get("subcategory"), idSubcategory),
                 cb.notEqual(product.get("id"), idProduct),
                 cb.greaterThan(product.get("endDate"), LocalDate.now()),
                 cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
@@ -134,5 +135,23 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             return null;
         }
         return query.getResultList();
+    }
+    @Override
+    public Boolean userIsSellerOfProduct(final Long idUser, final Long idProduct) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+
+        final Root<Product> product = cq.from(Product.class);
+
+        cq.where(cb.and(
+                cb.equal(product.get("id"), idProduct),
+                cb.equal(product.get("seller"), idUser)));
+
+        final TypedQuery<Product> query = em.createQuery(cq);
+        if(query.getResultList().isEmpty()) {
+            return false;
+        }
+        return true;
+
     }
 }
