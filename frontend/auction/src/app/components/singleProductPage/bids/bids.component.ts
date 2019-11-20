@@ -12,19 +12,13 @@ export class BidsComponent implements OnInit {
 @Input() highestBid;
 @Input() idProduct;
 @Input() numberOfBids;
+@Input() hide;
 
 pageNumber = 0;
-hide = false;
 size = 5;
   constructor(private bidsService: BidsService) { }
 
   ngOnInit() {
-    if(this.checkIfThereIsNoItemsLeft(this.pageNumber, this.size, this.numberOfBids)) {
-      this.hide = true;
-    }
-    if(!this.userIsSeller) {
-      this.highestBid = true;
-    }
   }
   checkIfThereIsNoItemsLeft(pageNumber, size, totalNumberOfItems) {
     if (

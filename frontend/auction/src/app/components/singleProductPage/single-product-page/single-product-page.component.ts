@@ -19,6 +19,7 @@ export class SingleProductPageComponent implements OnInit {
   userIsLoged;
   usersProduct;
   timeLeft;
+  hide;
 
   pageNumber = 0;
   size = 5;
@@ -95,10 +96,19 @@ export class SingleProductPageComponent implements OnInit {
               this.bidsOfProduct = [];
               this.numberOfBids = null;
               this.highestBid = null;
+              this.hide = true;
             } else {
               this.bidsOfProduct = bidInfo.items;
               this.numberOfBids = bidInfo.totalNumberOfItems;
               this.highestBid = bidInfo.highestBid;
+              if (
+                this.pageNumber * this.size + this.numberOfBids - this.size == this.numberOfBids ||
+                this.pageNumber * this.size + this.numberOfBids - this.size < 0 ||
+                this.pageNumber * this.size + this.numberOfBids - this.size == 0
+              ) {
+                this.hide = true;
+              }
+              this.hide = false;
             }
             this.userIsSeller = true;
             this.usersProduct = "This is your item.";
@@ -113,6 +123,7 @@ export class SingleProductPageComponent implements OnInit {
               this.highestBid = null;
             }
             this.userIsSeller = false;
+            this.hide = true;
             this.usersProduct = null;
           }
         );
