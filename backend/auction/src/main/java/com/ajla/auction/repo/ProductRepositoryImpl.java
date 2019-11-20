@@ -54,7 +54,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return  query.getResultList();
     }
     @Override
-    public PaginationInfo<Product> getAllLastChanceProducts(final int pageNumber, final int size) {
+    public PaginationInfo<Product> getAllLastChanceProducts(final Long pageNumber, final Long size) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
         final Root<Product> product = cq.from(Product.class);
@@ -69,16 +69,16 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             return null;
         }
         //set total number of last chance products
-        final int totalNumberOfItems = query.getResultList().size();
+        final Long totalNumberOfItems = new Long(query.getResultList().size());
         //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
-        query.setFirstResult(pageNumber * size);
-        query.setMaxResults(size);
+        query.setFirstResult(Math.toIntExact(pageNumber * size));
+        query.setMaxResults(Math.toIntExact(size));
 
         PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
         return  paginationInfo;
     }
     @Override
-    public PaginationInfo<Product> getAllNewArrivalProducts(final int pageNumber, final int size) {
+    public PaginationInfo<Product> getAllNewArrivalProducts(final Long pageNumber, final Long size) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
         final Root<Product> product = cq.from(Product.class);
@@ -94,10 +94,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             return null;
         }
         //set total number of last chance products
-        final int totalNumberOfItems = query.getResultList().size();
+        final Long totalNumberOfItems = new Long(query.getResultList().size());
         //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
-        query.setFirstResult(pageNumber * size);
-        query.setMaxResults(size);
+        query.setFirstResult(Math.toIntExact(pageNumber * size));
+        query.setMaxResults(Math.toIntExact(size));
 
         PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
         return  paginationInfo;

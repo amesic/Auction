@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Objects;
 
-@CrossOrigin(origins = {"http://localhost:4200", "https://atlantbh-auction.herokuapp.com"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://atlantbh-auction.herokuapp.com"}, allowCredentials = "true")
 @RestController
 @RequestMapping("/users")
 public class UserController {

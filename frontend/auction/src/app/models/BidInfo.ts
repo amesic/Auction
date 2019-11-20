@@ -1,7 +1,10 @@
 import { Bid } from './Bid';
+import { PaginationInfo } from './PaginationInfo';
 
 export class BidInfo {
-  bidsOfProduct: Array<Bid>;
   highestBid: Bid;
-  numberOfBids: number;
+  pageSize;
+  pageNumber;
+  totalNumberOfItems;
+  items: Bid[];
 }

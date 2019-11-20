@@ -7,12 +7,45 @@ import { BidsService } from 'src/app/services/bids.service';
   styleUrls: ['./bids.component.css']
 })
 export class BidsComponent implements OnInit {
-@Input() bids;
+@Input() bids = [];
 @Input() userIsSeller;
 @Input() highestBid;
+@Input() idProduct;
+@Input() numberOfBids;
+
+pageNumber = 0;
+hide = false;
+size = 5;
   constructor(private bidsService: BidsService) { }
 
   ngOnInit() {
+    if(this.checkIfThereIsNoItemsLeft(this.pageNumber, this.size, this.numberOfBids)) {
+      this.hide = true;
+    }
+    if(!this.userIsSeller) {
+      this.highestBid = true;
+    }
+  }
+  checkIfThereIsNoItemsLeft(pageNumber, size, totalNumberOfItems) {
+    if (
+      pageNumber * size + totalNumberOfItems - size == totalNumberOfItems ||
+      pageNumber * size + totalNumberOfItems - size < 0 ||
+      pageNumber * size + totalNumberOfItems - size == 0
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  onClick() {
+    this.pageNumber = this.pageNumber + 1;
+    this.bidsService.getBidsInfoOfProduct(this.idProduct, this.pageNumber, this.size).subscribe(
+      bidInfo => {
+        this.bids = this.bids.concat(bidInfo.items); 
+      });
+      if(this.checkIfThereIsNoItemsLeft(this.pageNumber, this.size, this.numberOfBids)) {
+        this.hide = true;
+      }
   }
 
 }

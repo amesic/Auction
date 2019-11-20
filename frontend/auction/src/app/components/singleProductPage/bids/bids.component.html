@@ -23,5 +23,8 @@
       <p [ngClass]="{'green': bid.value == highestBid.value}">{{bid.value | currency:'USD'}}</p>
     </div>
   </div>
-
 </div>
+
+<div class="containerButton">
+  <input type="button" (click)="onClick()" value="Load more..." class="button" [ngClass]="{'noMoreItems': hide}">
+  </div>

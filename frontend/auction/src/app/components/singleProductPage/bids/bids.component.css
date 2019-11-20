@@ -3,7 +3,7 @@
   background: #ffffff;
   border: 1px solid #d8d8d8;
   padding: 0;
-  margin-bottom: 350px;
+  margin-bottom: 50px;
 }
 .info {
   display: grid;
@@ -16,7 +16,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
- .biders .dateBid {
+.biders .dateBid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
@@ -45,7 +45,9 @@
   margin-top: 15px;
   margin-bottom: 15px;
 }
-.biders .user > p, .biders .dateBid > p, .biders .user > img  {
+.biders .user > p,
+.biders .dateBid > p,
+.biders .user > img {
   margin-bottom: 0;
 }
 .biders .user .img > img {
@@ -59,8 +61,28 @@
   margin-left: 35px;
 }
 .green {
-  color: #6CC047;
+  color: #6cc047;
 }
-.biders .dateBid > p ~ p, .biders .user > p {
+.biders .dateBid > p ~ p,
+.biders .user > p {
   font-weight: 700;
+}
+.noMoreItems {
+  display: none;
+}
+.button {
+  background: #ffffff;
+  border: 3px solid #f7f4fd;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.05);
+  font: 200 1em "Lato", sans-serif;
+  padding-left: 2em;
+  padding-right: 2em;
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
+}
+.containerButton {
+  padding-right: 62px;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 200px;
 }

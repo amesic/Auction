@@ -33,8 +33,7 @@
 </div>
 <p class="infoBid">Highest bid: <label class="high" *ngIf="highestBid != null">{{highestBid.value | currency:'USD'}}</label>
 <label *ngIf="highestBid == null">There are not bids yet!</label></p>
-<p class="infoBid">No bids: <label *ngIf="numberOfBids != null">{{numberOfBids}}</label> 
-<label *ngIf="numberOfBids == null">0</label>
+<p class="infoBid"><label *ngIf="numberOfBids != null">No bids: {{numberOfBids}}</label> 
 </p>
 <p class="infoBid time">Time left: <label *ngIf = "timeLeft != undefined">{{timeLeft}}</label></p>
 

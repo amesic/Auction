@@ -2,20 +2,14 @@ package com.ajla.auction.model;
 
 import java.util.List;
 
-public class BidInfo {
+public class BidInfo extends PaginationInfo<Bid>{
 
-    private List<Bid> bidsOfProduct;
     private Bid highestBid;
-    private Long numberOfBids;
 
-    public List<Bid> getBidsOfProduct() {
-        return bidsOfProduct;
+    public BidInfo(Long pageSize, Long pageNumber, Long totalNumberOfItems, List<Bid> items, Bid highestBid) {
+        super(pageSize, pageNumber, totalNumberOfItems, items);
+        this.highestBid = highestBid;
     }
-
-    public void setBidsOfProduct(List<Bid> bidsOfProduct) {
-        this.bidsOfProduct = bidsOfProduct;
-    }
-
 
     public Bid getHighestBid() {
         return highestBid;
@@ -23,13 +17,5 @@ public class BidInfo {
 
     public void setHighestBid(Bid highestBid) {
         this.highestBid = highestBid;
-    }
-
-    public Long getNumberOfBids() {
-        return numberOfBids;
-    }
-
-    public void setNumberOfBids(Long numberOfBids) {
-        this.numberOfBids = numberOfBids;
     }
 }

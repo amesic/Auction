@@ -1,7 +1,7 @@
 package com.ajla.auction.controller;
 
 import com.ajla.auction.config.JwtTokenUtil;
-import com.ajla.auction.model.Bid;
+import com.ajla.auction.model.BidInfo;
 import com.ajla.auction.service.BidService;
 import com.ajla.auction.service.ProductService;
 import com.ajla.auction.service.UserService;
@@ -11,10 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Objects;
 
-@CrossOrigin(origins = {"http://localhost:4200", "https://atlantbh-auction.herokuapp.com"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://atlantbh-auction.herokuapp.com"}, allowCredentials = "true")
 @RestController
 @RequestMapping("/bid")
 public class BidController {
@@ -39,15 +38,22 @@ public class BidController {
     }
 
     @GetMapping("/bidsOfProduct")
-    public ResponseEntity<List<Bid>> getBidsOfProduct (@RequestParam("id") final Long id, final HttpServletRequest request) {
+    public ResponseEntity<BidInfo> getBidsOfProduct (@RequestParam("pageNumber") final Long pageNumber,
+                                                     @RequestParam("size") final Long size,
+                                                     @RequestParam("id") final Long idProduct,
+                                                     final HttpServletRequest request) {
         final String requestTokenHeader = request.getHeader("Authorization");
         String jwtToken = null;
         if(requestTokenHeader != "") {
             jwtToken = requestTokenHeader.substring(7);
-            if (!productService.userIsSellerOfProduct(userService.findByEmail(jwtTokenUtil.getUsernameFromToken(jwtToken)).getId(), id)) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            if (!productService.userIsSellerOfProduct(userService.findByEmail(jwtTokenUtil.getUsernameFromToken(jwtToken)).getId(), idProduct)) {
+                final BidInfo bidInfoOfUser = bidService.bidsOfProduct(pageNumber, size, idProduct);
+                if(bidInfoOfUser != null) {
+                    bidInfoOfUser.setItems(null);
+                }
+                return new ResponseEntity<>(bidInfoOfUser, HttpStatus.UNAUTHORIZED);
             }
-            return new ResponseEntity<>(bidService.bidsOfProduct(id), HttpStatus.OK);
+            return new ResponseEntity<>(bidService.bidsOfProduct(pageNumber, size, idProduct), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }

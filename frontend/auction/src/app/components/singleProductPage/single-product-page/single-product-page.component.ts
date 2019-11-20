@@ -12,11 +12,16 @@ import { BidsService } from "src/app/services/bids.service";
 export class SingleProductPageComponent implements OnInit {
   productInfo;
   bidsOfProduct;
+  numberOfBids;
+  highestBid;
   relatedProducts;
   userIsSeller = false;
   userIsLoged;
   usersProduct;
   timeLeft;
+
+  pageNumber = 0;
+  size = 5;
 
   dhms(t) {
     var years, months, days, hours;
@@ -51,7 +56,7 @@ export class SingleProductPageComponent implements OnInit {
     } else {
       months = months + " months";
     }
-    
+
     if (years == 1) {
       years = years + " year";
     } else if (years == 0) {
@@ -82,17 +87,35 @@ export class SingleProductPageComponent implements OnInit {
             Math.floor((<any>date - new Date().getTime()) / 1000)
           );
         });
-      this.bidService.getBidsInfoOfProduct(routeParams.idProduct).subscribe(
-        bidsOfProduct => {
-          this.bidsOfProduct = bidsOfProduct;
-          this.userIsSeller = true;
-          this.usersProduct = "Your item!";
-        },
-        err => {
-          this.bidsOfProduct = [];
-          this.userIsSeller = false;
-        }
-      );
+      this.bidService
+        .getBidsInfoOfProduct(routeParams.idProduct, this.pageNumber, this.size)
+        .subscribe(
+          bidInfo => {
+            if (bidInfo == null) {
+              this.bidsOfProduct = [];
+              this.numberOfBids = null;
+              this.highestBid = null;
+            } else {
+              this.bidsOfProduct = bidInfo.items;
+              this.numberOfBids = bidInfo.totalNumberOfItems;
+              this.highestBid = bidInfo.highestBid;
+            }
+            this.userIsSeller = true;
+            this.usersProduct = "This is your item.";
+          },
+          err => {
+            this.bidsOfProduct = [];
+            if (err.error != null) {
+              this.numberOfBids = err.error.totalNumberOfItems;
+              this.highestBid = err.error.highestBid;
+            } else {
+              this.numberOfBids = null;
+              this.highestBid = null;
+            }
+            this.userIsSeller = false;
+            this.usersProduct = null;
+          }
+        );
       this.productService
         .getRelatedProducts(routeParams.idProduct)
         .subscribe(relatedProducts => {

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
-@CrossOrigin(origins = {"http://localhost:4200", "https://atlantbh-auction.herokuapp.com"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://atlantbh-auction.herokuapp.com"}, allowCredentials = "true")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -47,7 +47,7 @@ public class AuthController {
             }
         }
             final Bid savedBid = bidService.saveBidFromUser(bid.getProduct().getId(), bid.getUser().getEmail(), bid.getValue());
-            if (savedBid == null) {
+        if (savedBid == null) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             return new ResponseEntity<>(savedBid, HttpStatus.OK);

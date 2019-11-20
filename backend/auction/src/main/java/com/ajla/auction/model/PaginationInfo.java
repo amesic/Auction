@@ -3,39 +3,39 @@ package com.ajla.auction.model;
 import java.util.List;
 
 public class PaginationInfo<Type> {
-    private long pageSize;
-    private long pageNumber;
-    private long totalNumberOfItems;
+    private Long pageSize;
+    private Long pageNumber;
+    private Long totalNumberOfItems;
     private List<Type> items;
 
-    public PaginationInfo(long pageSize, long pageNumber, long totalNumberOfItems, List<Type> items) {
+    public PaginationInfo(Long pageSize, Long pageNumber, Long totalNumberOfItems, List<Type> items) {
         this.pageSize = pageSize;
         this.pageNumber = pageNumber;
         this.totalNumberOfItems = totalNumberOfItems;
         this.items = items;
     }
 
-    public long getPageSize() {
+    public Long getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(long pageSize) {
+    public void setPageSize(Long pageSize) {
         this.pageSize = pageSize;
     }
 
-    public long getPageNumber() {
+    public Long getPageNumber() {
         return pageNumber;
     }
 
-    public void setPageNumber(long pageNumber) {
+    public void setPageNumber(Long pageNumber) {
         this.pageNumber = pageNumber;
     }
 
-    public long getTotalNumberOfItems() {
+    public Long getTotalNumberOfItems() {
         return totalNumberOfItems;
     }
 
-    public void setTotalNumberOfItems(long totalNumberOfItems) {
+    public void setTotalNumberOfItems(Long totalNumberOfItems) {
         this.totalNumberOfItems = totalNumberOfItems;
     }
 

@@ -17,11 +17,10 @@ import { map, catchError, retry } from 'rxjs/operators';
 export class BasicAuthHtppInterceptorServiceService implements HttpInterceptor {
   constructor() {}
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    
         const request = req.clone({
         url: "http://localhost:8080" + req.url,
         headers: req.headers.set("Authorization", sessionStorage.getItem("token") || ""),
-        withCredentials: false
+        withCredentials: true
       });
       return next.handle(request);
     }

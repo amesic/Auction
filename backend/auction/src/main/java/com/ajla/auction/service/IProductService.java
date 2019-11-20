@@ -11,8 +11,8 @@ public interface IProductService {
     Product getAdvertisementProduct();
     List<Product> getFeatureProducts();
     List<Product> getFeatureCollection();
-    PaginationInfo<Product> findPaginatedNewArrivals(final int page, final int size);
-    PaginationInfo<Product> findPaginatedLastChance(final int page, final int size);
+    PaginationInfo<Product> findPaginatedNewArrivals(final Long page, final Long size);
+    PaginationInfo<Product> findPaginatedLastChance(final Long page, final Long size);
     Product findSingleProduct(final Long id);
     List<Product> getRelatedProducts(final Long idProduct);
     Boolean userIsSellerOfProduct(final Long idUser, final Long idProduct);

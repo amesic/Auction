@@ -195,7 +195,7 @@ public class DatabaseSeeder {
             p.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
             p.setStartDate((LocalDate.parse("2.11.2019", formatter)));
             p.setEndDate((LocalDate.parse("7.12.2019", formatter)));
-            User u = userRepo.findUserById((long) 1);
+            User u = userRepo.findUserById((long) 2);
             p.setSeller(u);
             p.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
             p.setFeature(false);
@@ -922,7 +922,31 @@ public class DatabaseSeeder {
             b2.setUser(u);
             b2.setValue(1800);
 
-            bidRepository.saveAll(Arrays.asList(b, b1, b2));
+            Bid b3 = new Bid();
+            b3.setDate((LocalDate.parse("5.11.2019", formatter)));
+            p = productRepo.findProductById((long) 4);
+            b3.setProduct(p);
+            u = userRepo.findUserById((long) 4);
+            b3.setUser(u);
+            b3.setValue(1900);
+
+            Bid b4 = new Bid();
+            b4.setDate((LocalDate.parse("5.11.2019", formatter)));
+            p = productRepo.findProductById((long) 4);
+            b4.setProduct(p);
+            u = userRepo.findUserById((long) 4);
+            b4.setUser(u);
+            b4.setValue(2000);
+
+            Bid b5 = new Bid();
+            b5.setDate((LocalDate.parse("5.11.2019", formatter)));
+            p = productRepo.findProductById((long) 4);
+            b5.setProduct(p);
+            u = userRepo.findUserById((long) 4);
+            b5.setUser(u);
+            b5.setValue(3000);
+
+            bidRepository.saveAll(Arrays.asList(b, b1, b2, b3, b4, b5));
 
         logger.info("Bid table seeded");
     }

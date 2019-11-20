@@ -2,6 +2,7 @@ package com.ajla.auction.service;
 
 import com.ajla.auction.config.JwtTokenUtil;
 import com.ajla.auction.model.Bid;
+import com.ajla.auction.model.BidInfo;
 import com.ajla.auction.model.Product;
 import com.ajla.auction.model.User;
 import com.ajla.auction.repo.BidRepository;
@@ -37,9 +38,9 @@ public class BidService implements IBidService{
     }
 
     @Override
-    public List<Bid> bidsOfProduct(final Long id) {
-        List<Bid> bidsOfProduct = bidRepository.findByProductIdOrderByDateAsc(id);
-        return bidsOfProduct;
+    public BidInfo bidsOfProduct(final Long pageNumber, final Long size, final Long idProduct) {
+        BidInfo bidInfo = bidRepository.getBidsOfPage(pageNumber, size, idProduct);
+        return bidInfo;
     }
     @Override
     public Bid saveBidFromUser(final Long idProduct, final String emailUser, final Long value) {

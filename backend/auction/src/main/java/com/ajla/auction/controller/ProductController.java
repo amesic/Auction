@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Objects;
 
-@CrossOrigin(origins = {"http://localhost:4200", "https://atlantbh-auction.herokuapp.com"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://atlantbh-auction.herokuapp.com"}, allowCredentials = "true")
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -41,11 +41,11 @@ public class ProductController {
     }
     //http://localhost:8080/product/newArrivals?page=0&size=5
     @GetMapping("/newArrivals")
-    public ResponseEntity<PaginationInfo<Product>> findPaginatedNewArrivals(@RequestParam("page") final int page, @RequestParam("size") final int size) {
+    public ResponseEntity<PaginationInfo<Product>> findPaginatedNewArrivals(@RequestParam("page") final Long page, @RequestParam("size") final Long size) {
        return new ResponseEntity<>(productService.findPaginatedNewArrivals(page, size), HttpStatus.OK);
     }
     @GetMapping("/lastChance")
-    public ResponseEntity<PaginationInfo<Product>> findPaginatedLastChance(@RequestParam("page") final int page, @RequestParam("size") final int size) {
+    public ResponseEntity<PaginationInfo<Product>> findPaginatedLastChance(@RequestParam("page") final Long page, @RequestParam("size") final Long size) {
         return new ResponseEntity<>(productService.findPaginatedLastChance(page, size), HttpStatus.OK);
     }
     @GetMapping("/singleProduct")

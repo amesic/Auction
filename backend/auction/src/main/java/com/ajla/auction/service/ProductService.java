@@ -36,11 +36,11 @@ public class ProductService implements IProductService{
         return productRepository.getAllFeatureCollection();
     }
     @Override
-    public PaginationInfo<Product> findPaginatedNewArrivals(final int page, final int size) {
+    public PaginationInfo<Product> findPaginatedNewArrivals(final Long page, final Long size) {
         return productRepository.getAllNewArrivalProducts(page, size);
     }
     @Override
-    public PaginationInfo<Product> findPaginatedLastChance(final int page, final int size) {
+    public PaginationInfo<Product> findPaginatedLastChance(final Long page, final Long size) {
         return productRepository.getAllLastChanceProducts(page, size);
     }
     @Override

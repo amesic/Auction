@@ -8,8 +8,8 @@
     [productInfo]="productInfo"
     [clickedImage]="productInfo.images[0].link"
     [bidsOfProduct]="bidsOfProduct"
-    [highestBid]="bidsOfProduct[this.bidsOfProduct.length-1]"
-    [numberOfBids]="bidsOfProduct.length"
+    [highestBid]="highestBid"
+    [numberOfBids]="numberOfBids"
     [userIsLoged]="userIsLoged"
     [userIsSeller]="userIsSeller"
     [usersProduct]="usersProduct"
@@ -23,5 +23,7 @@
   <app-bids
     [bids]="bidsOfProduct"
     [userIsSeller]="userIsSeller"
-    [highestBid]="bidsOfProduct[this.bidsOfProduct.length-1]"></app-bids>
+    [highestBid]="highestBid"
+    [idProduct]="productInfo.id"
+    [numberOfBids]="numberOfBids"></app-bids>
 </div>
