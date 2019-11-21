@@ -1,12 +1,13 @@
 <div class="header">
     <div class="container">
-
-  <label>{{ title1 }}</label>
+      
+  <label [routerLink]="routerLinkTitle1">{{ title1 }}</label>
 
   <div>
-    <label [routerLink]="routerLink">{{ title2 }}</label>
-    <label>{{ title3 }}</label>
+    <label *ngIf="title1 != 'LOGIN' && title1 != 'REGISTER'" [routerLink]="routerLinkTitle2">{{ title2 }}/</label>
+    <label *ngIf="title1 != 'LOGIN' && title1 != 'REGISTER'" [routerLink]="routerLinkTitle1">{{ title1 }}</label>
   </div>
 
 </div>
+
 </div>

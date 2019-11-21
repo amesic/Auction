@@ -13,6 +13,7 @@
   color: #252525;
   letter-spacing: 0.039375em;
   margin-top: 0.8125em;
+  cursor: pointer;
 }
 .container div {
   margin-top: 5px;
@@ -29,5 +30,6 @@
   font-size: 1em;
   letter-spacing: 0.035em;
   margin-left: 1.25em;
+  cursor: pointer;
 }
 
