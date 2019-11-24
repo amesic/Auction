@@ -68,9 +68,15 @@ const routes: Routes = [
     data: {
       breadcrumb: "SHOP"
     },
-    component: ShopComponent,
     children: [
       {
+        path: "",
+        component: ShopComponent,
+        data: {
+          breadcrumb: "ALL CATEGORIES"
+        }
+      },
+      { 
         path: "product/:title/:idProduct",
         component: SingleProductPageComponent,
         data: {
