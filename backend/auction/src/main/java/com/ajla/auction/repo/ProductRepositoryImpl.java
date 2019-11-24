@@ -1,17 +1,16 @@
 package com.ajla.auction.repo;
 
-import com.ajla.auction.model.PaginationInfo;
-import com.ajla.auction.model.Product;
+import com.ajla.auction.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
     final EntityManager em;
@@ -152,6 +151,57 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             return false;
         }
         return true;
+    }
+    @Override
+    public List<NumberOfProductsInfo> numberOfProductsBySubcategory(final List<Category> categories) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
 
+        final Root<Product> product = cq.from(Product.class);
+        TypedQuery<Product> query;
+
+        List<NumberOfProductsInfo> allCategories = new ArrayList<>();
+        for (Category category: categories) {
+            if(category.getSubcategories().size() != 0) {
+                NumberOfProductsInfo categoryInfo = new NumberOfProductsInfo(category.getId(), category.getName(), Arrays.asList(), null);
+                List<NumberOfProductsInfo> listOfSubcategoryInfo = new ArrayList<>();
+                Long numberOfProductsByCategory = (long) 0;
+                for (Category subcategory : category.getSubcategories()) {
+                    cq.where(cb.equal(product.get("subcategory"), subcategory.getId()));
+                    query = em.createQuery(cq);
+                    NumberOfProductsInfo subcategoryInfo = new NumberOfProductsInfo(subcategory.getId(), subcategory.getName(), Arrays.asList(), (long) query.getResultList().size());
+                    listOfSubcategoryInfo.add(subcategoryInfo);
+                    numberOfProductsByCategory += (long) query.getResultList().size();
+                }
+                categoryInfo.setChildren(listOfSubcategoryInfo);
+                categoryInfo.setNumberOfProducts(numberOfProductsByCategory);
+                allCategories.add(categoryInfo);
+            }
+            continue;
+        }
+        return allCategories;
+    }
+
+    @Override
+    public NumberOfProductsInfo numberOfProductsByCharacteristic(final Characteristic characteristic) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+        final Root<Product> product = cq.from(Product.class);
+        TypedQuery<Long> query;
+        NumberOfProductsInfo mainCharacteristic = new NumberOfProductsInfo(characteristic.getId(), characteristic.getName(), Arrays.asList(), null);
+        List<NumberOfProductsInfo> allCategoriesOfMainCharacteristic = new ArrayList<>();
+        Long numberOfProductsBelongToMainCharacteristic = (long) 0;
+        for (Characteristic oneOfCharacteristic: characteristic.getAllCharacteristic()) {
+            //cq.where(cb.equal(product.get("characteristics.id"), oneOfCharacteristic.getId()));
+            query = em.createQuery("SELECT COUNT(p) FROM Characteristic c JOIN c.products p WHERE c.id =:characteristics_id", Long.class);
+            query.setParameter("characteristics_id", oneOfCharacteristic.getId());
+            NumberOfProductsInfo categoryOfCharacteristic = new NumberOfProductsInfo(oneOfCharacteristic.getId(),
+                    oneOfCharacteristic.getName(), Arrays.asList(), query.getSingleResult());
+            allCategoriesOfMainCharacteristic.add(categoryOfCharacteristic);
+            numberOfProductsBelongToMainCharacteristic += query.getSingleResult();
+        }
+        mainCharacteristic.setChildren(allCategoriesOfMainCharacteristic);
+        mainCharacteristic.setNumberOfProducts(numberOfProductsBelongToMainCharacteristic);
+        return mainCharacteristic;
     }
 }

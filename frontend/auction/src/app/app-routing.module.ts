@@ -12,6 +12,7 @@ import { RegisterComponent } from "./components/register/register.component";
 import { LandingPageComponent } from "./components/landingPage/landing-page/landing-page.component";
 import { AllCategoriesComponent } from "./components/all-categories/all-categories.component";
 import { SingleProductPageComponent } from "./components/singleProductPage/single-product-page/single-product-page.component";
+import { ShopComponent } from "./components/shopProduct/shop/shop.component"
 import { LoginService } from "./services/login.service";
 
 @Injectable()
@@ -67,6 +68,7 @@ const routes: Routes = [
     data: {
       breadcrumb: "SHOP"
     },
+    component: ShopComponent,
     children: [
       {
         path: "product/:title/:idProduct",

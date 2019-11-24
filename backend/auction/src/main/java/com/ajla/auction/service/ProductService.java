@@ -1,8 +1,10 @@
 package com.ajla.auction.service;
 
 import com.ajla.auction.model.PaginationInfo;
+import com.ajla.auction.model.NumberOfProductsInfo;
 import com.ajla.auction.model.Product;
 import com.ajla.auction.repo.BidRepository;
+import com.ajla.auction.repo.CategoryRepository;
 import com.ajla.auction.repo.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,11 +16,16 @@ import java.util.Objects;
 public class ProductService implements IProductService{
     private final ProductRepository productRepository;
     private final BidRepository bidRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public ProductService(final ProductRepository productRepository, final BidRepository bidRepository) {
+    public ProductService(final ProductRepository productRepository,
+                          final BidRepository bidRepository,
+                          final CategoryRepository categoryRepository) {
         Objects.requireNonNull(productRepository, "productRepository must not be null.");
         Objects.requireNonNull(bidRepository, "bidRepository must not be null.");
+        Objects.requireNonNull(categoryRepository, "categoryRepository must not be null.");
+        this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.bidRepository = bidRepository;
     }
@@ -54,5 +61,9 @@ public class ProductService implements IProductService{
     @Override
     public Boolean userIsSellerOfProduct(final Long idUser, final Long idProduct) {
         return productRepository.userIsSellerOfProduct(idUser, idProduct);
+    }
+    @Override
+    public List<NumberOfProductsInfo> numberOfProductsBySubcategories() {
+        return productRepository.numberOfProductsBySubcategory(categoryRepository.findAll());
     }
 }

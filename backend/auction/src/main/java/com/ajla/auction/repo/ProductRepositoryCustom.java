@@ -1,7 +1,6 @@
 package com.ajla.auction.repo;
 
-import com.ajla.auction.model.PaginationInfo;
-import com.ajla.auction.model.Product;
+import com.ajla.auction.model.*;
 
 import java.util.List;
 
@@ -13,4 +12,6 @@ public interface ProductRepositoryCustom {
     Long getSubcategoryIdOfProduct(final Long idProduct);
     List<Product> getRelatedProducts(final Long idProduct);
     Boolean userIsSellerOfProduct(final Long idUser, final Long idProduct);
+    List<NumberOfProductsInfo> numberOfProductsBySubcategory(final List<Category> categories);
+    NumberOfProductsInfo numberOfProductsByCharacteristic(final Characteristic characteristic);
 }

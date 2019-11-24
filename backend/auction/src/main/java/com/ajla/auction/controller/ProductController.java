@@ -49,11 +49,11 @@ public class ProductController {
         return new ResponseEntity<>(productService.findPaginatedLastChance(page, size), HttpStatus.OK);
     }
     @GetMapping("/singleProduct")
-    public ResponseEntity<Product> findSingleProduct (@RequestParam("id") final Long id) {
+    public ResponseEntity<Product> findSingleProduct(@RequestParam("id") final Long id) {
         return new ResponseEntity<>(productService.findSingleProduct(id), HttpStatus.OK);
     }
     @GetMapping("/relatedProducts")
-    public ResponseEntity<List<Product>> getRelatedProducts (@RequestParam("id") final Long idProduct) {
+    public ResponseEntity<List<Product>> getRelatedProducts(@RequestParam("id") final Long idProduct) {
         return new ResponseEntity<>(productService.getRelatedProducts(idProduct), HttpStatus.OK);
     }
 }

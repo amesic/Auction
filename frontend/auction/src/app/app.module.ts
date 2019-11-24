@@ -25,6 +25,10 @@ import { SingleProductComponent } from './components/singleProductPage/single-pr
 import { SingleProductPageComponent } from './components/singleProductPage/single-product-page/single-product-page.component';
 import { BidsComponent } from './components/singleProductPage/bids/bids.component';
 import { LoginRegisterActivate } from './app-routing.module';
+import { ShopComponent } from './components/shopProduct/shop/shop.component';
+import { FilterCategoriesComponent } from './components/shopProduct/filters/categories/filterCategories.component'; 
+import { AllFiltersComponent } from './components/shopProduct/filters/all-filters/all-filters.component';
+import { FilterComponent } from './components/shopProduct/filters/filter/filter.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +49,11 @@ import { LoginRegisterActivate } from './app-routing.module';
     PaginationComponent,
     SingleProductComponent,
     SingleProductPageComponent,
-    BidsComponent
+    BidsComponent,
+    ShopComponent,
+    AllFiltersComponent,
+    FilterCategoriesComponent,
+    FilterComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,23 @@
+<div class="categories">
+  <ul>
+    <p>PRODUCT CATEGORIES</p>
+    <div *ngFor="let category of allCategories; let i = index">
+      <div>
+        <li class="category">
+        <div class="categoryIcon" appShowHide>
+          <a >{{ category.name }}</a>
+          <fa-icon class="plus" [icon]="faPlus"></fa-icon>
+          <fa-icon class="minus" [icon]="faMinus"></fa-icon>
+        </div>
+          <ul>
+            <li
+              *ngFor="let subcategory of category.children"
+              class="subcategory">
+              <a [routerLink]="['/shop']">{{ subcategory.name }} ({{subcategory.numberOfProducts}})</a>
+            </li>
+          </ul>
+        </li>
+      </div>
+    </div>
+  </ul>
+</div>
