@@ -22,12 +22,10 @@ import java.util.Objects;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    //properties
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final UserService userService;
     private final JwtRequestFilter jwtRequestFilter;
 
-    //dependency injection
     @Autowired
     public WebSecurityConfig(final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
                              final UserService userService,
@@ -65,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.cors();
         httpSecurity.csrf().disable()
     // dont authenticate this particular request, allow requests on /users/** /category/**
-                .authorizeRequests().antMatchers("/users/**", "/category/**", "/product/**", "/bid/**").permitAll().
+                .authorizeRequests().antMatchers("/users/**", "/category/**", "/product/**", "/bid/**", "/characteristic/**").permitAll().
     // all other requests need to be authenticated
         anyRequest().authenticated().and().
     // make sure we use stateless session; session won't be used to

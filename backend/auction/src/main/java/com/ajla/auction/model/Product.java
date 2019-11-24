@@ -14,10 +14,12 @@ import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.CascadeType;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Entity
 @Table(name = "products")
@@ -45,10 +47,11 @@ public class Product {
     private LocalDate endDate;
     private double startPrice;
 
-
-    //ImageProduct table
     @OneToMany(cascade = {CascadeType.ALL})
     private List<Image> images = new ArrayList();
+
+    @ManyToMany
+    private List<Characteristic> characteristics = new ArrayList();
 
     @ManyToOne
     @Target(Category.class)
@@ -162,5 +165,13 @@ public class Product {
 
     public void setFeature(Boolean feature) {
         this.feature = feature;
+    }
+
+    public List<Characteristic> getCharacteristics() {
+        return characteristics;
+    }
+
+    public void setCharacteristics(List<Characteristic> characteristics) {
+        this.characteristics = characteristics;
     }
 }
