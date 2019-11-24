@@ -1,0 +1,26 @@
+<div class="{{ className }}">
+
+<div class="image">
+  <img src="{{ image }}" />
+  <div class="buttons">
+      <div class="watchlist">
+        <input type="button" value="Watchlist" />
+        <fa-icon [icon]="faHeart"></fa-icon>
+      </div>
+      <div class="bid">
+        <input type="button" value="Bid" />
+        <fa-icon [icon]="faGavel"></fa-icon>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="about">
+  <p class="title">{{ title }}</p>
+  <p class="description">{{ description }}</p>
+  <p>Start From {{ startPrice | currency: "USD" }}</p>
+</div>
+  
+</div>

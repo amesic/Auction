@@ -1,0 +1,64 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
+.grid {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.grid img {
+  height: 350px;
+  width: 95%;
+}
+.grid .description {
+  display: none;
+}
+.grid .image {
+  position: relative;
+}
+.grid .image .buttons {
+  display: none;
+  background: rgba(49, 48, 51, 0.3);
+  height: 350px;
+  width: 95%;
+  position: absolute;
+  right: 14px;
+  transform: translateY(-100%);
+}
+.grid .image .buttons .watchlist, .grid .image .buttons .bid {
+    position: relative;
+}
+.grid .image .buttons .watchlist > fa-icon, .grid .image .buttons .bid > fa-icon {
+    position: absolute;
+    right: 25px;
+    transform: translateY(9%);
+    font-size: 20px;
+}
+.grid .image .buttons .watchlist > input, .grid .image .buttons .bid > input {
+  background: #ffffff;
+  border: none;
+  font: 400 15px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.52px;
+  line-height: 22px;
+  padding-left: 21px;
+  padding-right: 51px;
+  padding-bottom: 7px;
+  padding-top: 7px;
+}
+.grid .title {
+  font: 700 20px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.84px;
+}
+.grid .image:hover {
+  cursor: pointer;
+}
+.grid .image:hover .buttons {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.list img {
+  width: 30%;
+  height: 30%;
+}

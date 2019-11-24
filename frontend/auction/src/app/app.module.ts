@@ -29,6 +29,8 @@ import { ShopComponent } from './components/shopProduct/shop/shop.component';
 import { FilterCategoriesComponent } from './components/shopProduct/filters/categories/filterCategories.component'; 
 import { AllFiltersComponent } from './components/shopProduct/filters/all-filters/all-filters.component';
 import { FilterComponent } from './components/shopProduct/filters/filter/filter.component';
+import { ShopProductComponent } from './components/shopProduct/products/shop-product/shop-product.component';
+import { ShopProductsComponent } from './components/shopProduct/products/shop-products/shop-products.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,9 @@ import { FilterComponent } from './components/shopProduct/filters/filter/filter.
     ShopComponent,
     AllFiltersComponent,
     FilterCategoriesComponent,
-    FilterComponent
+    FilterComponent,
+    ShopProductComponent,
+    ShopProductsComponent
   ],
   imports: [
     BrowserModule,
