@@ -21,23 +21,18 @@ size = 5;
   ngOnInit() {
   }
   checkIfThereIsNoItemsLeft(pageNumber, size, totalNumberOfItems) {
-    if (
-      pageNumber * size + totalNumberOfItems - size == totalNumberOfItems ||
-      pageNumber * size + totalNumberOfItems - size < 0 ||
-      pageNumber * size + totalNumberOfItems - size == 0
-    ) {
+    if (totalNumberOfItems - pageNumber * size < 0 || totalNumberOfItems - pageNumber * size == 0) {
       return true;
     }
     return false;
   }
-
   onClick() {
     this.pageNumber = this.pageNumber + 1;
     this.bidsService.getBidsInfoOfProduct(this.idProduct, this.pageNumber, this.size).subscribe(
       bidInfo => {
         this.bids = this.bids.concat(bidInfo.items); 
       });
-      if(this.checkIfThereIsNoItemsLeft(this.pageNumber, this.size, this.numberOfBids)) {
+      if(this.checkIfThereIsNoItemsLeft(this.pageNumber + 1, this.size, this.numberOfBids)) {
         this.hide = true;
       }
   }

@@ -101,11 +101,9 @@ export class SingleProductPageComponent implements OnInit {
               this.bidsOfProduct = bidInfo.items;
               this.numberOfBids = bidInfo.totalNumberOfItems;
               this.highestBid = bidInfo.highestBid;
-              if (
-                this.pageNumber * this.size + this.numberOfBids - this.size == this.numberOfBids ||
-                this.pageNumber * this.size + this.numberOfBids - this.size < 0 ||
-                this.pageNumber * this.size + this.numberOfBids - this.size == 0
-              ) {
+              this.pageNumber++;
+              if (this.numberOfBids - this.pageNumber * this.size < 0 ||
+                this.numberOfBids - this.pageNumber * this.size == 0) {
                 this.hide = true;
               }
               this.hide = false;

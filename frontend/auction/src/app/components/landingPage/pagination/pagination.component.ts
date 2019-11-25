@@ -26,11 +26,7 @@ export class PaginationComponent implements OnInit {
     this.getNewArrivals(this.pageNumber, this.size);
   }
   checkIfThereIsNoItemsLeft(pageNumber, size, totalNumberOfItems) {
-    if (
-      pageNumber * size + totalNumberOfItems - size == totalNumberOfItems ||
-      pageNumber * size + totalNumberOfItems - size < 0 ||
-      pageNumber * size + totalNumberOfItems - size == 0
-    ) {
+    if (totalNumberOfItems - pageNumber * size < 0 || totalNumberOfItems - pageNumber * size == 0) {
       return true;
     }
     return false;
@@ -44,7 +40,7 @@ export class PaginationComponent implements OnInit {
           this.products = this.products.concat(paginationInfo.items);
           if (
             this.checkIfThereIsNoItemsLeft(
-              pageNumber,
+              pageNumber + 1,
               size,
               paginationInfo.totalNumberOfItems
             )
@@ -67,7 +63,7 @@ export class PaginationComponent implements OnInit {
           this.products = this.products.concat(paginationInfo.items);
           if (
             this.checkIfThereIsNoItemsLeft(
-              pageNumber,
+              pageNumber + 1,
               size,
               paginationInfo.totalNumberOfItems
             )
