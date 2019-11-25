@@ -119,3 +119,6 @@ ul > li:hover {
 .explore {
   text-align: center;
 }
+.noMoreItems {
+  display: none;
+}
