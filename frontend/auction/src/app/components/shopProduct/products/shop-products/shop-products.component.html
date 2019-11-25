@@ -23,11 +23,15 @@
     </div>
   </div>
 </div>
-<div [ngClass]="{ productsGrid: activeGrid, productsList: activeList }">
-  <div *ngFor="let product of products" class="shopProduct">
+<div *ngIf="products != undefined" [ngClass]="{ productsGrid: activeGrid, productsList: activeList }">
+  <div *ngFor="let product of products.items" class="shopProduct">
     <app-shop-product
       [product]="product"
       [className]="className"
     ></app-shop-product>
   </div>
+</div>
+
+<div class="explore">
+<input type="button" value="EXPLORE MORE">
 </div>

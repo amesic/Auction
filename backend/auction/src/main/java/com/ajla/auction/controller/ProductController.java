@@ -56,4 +56,10 @@ public class ProductController {
     public ResponseEntity<List<Product>> getRelatedProducts(@RequestParam("id") final Long idProduct) {
         return new ResponseEntity<>(productService.getRelatedProducts(idProduct), HttpStatus.OK);
     }
+    @GetMapping("/sortProducts")
+    public ResponseEntity<PaginationInfo<Product>> getAllProductsBySort(@RequestParam(required = false) final String typeOfSort,
+                                                                        @RequestParam("pageNumber") final Long pageNumber,
+                                                                        @RequestParam("size") final Long size) {
+        return new ResponseEntity<>(productService.getAllProductsBySort(typeOfSort, pageNumber, size), HttpStatus.OK);
+    }
 }

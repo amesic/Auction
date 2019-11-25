@@ -16,6 +16,7 @@ export class ProductService {
   urlLastChance = "/product/lastChance";
   urlSingleProduct = "/product/singleProduct";
   urlRelatedProducts = "/product/relatedProducts";
+  urlSortedProducts = "/product/sortProducts"
 
   getAdvertisementProduct(): Observable<Product> {
     return this.http.get<Product>(this.urlAdvertisement);
@@ -42,5 +43,13 @@ export class ProductService {
   getRelatedProducts(id): Observable<Product[]> {
     return this.http.get<Product[]>(this.urlRelatedProducts + 
       "?id=" + id);
+  }
+  getSortedProducts(typeOfSort, pageNumber, size): Observable<PaginationInfo> {
+    if(typeOfSort == null) {
+    return this.http.get<PaginationInfo>(this.urlSortedProducts + "?pageNumber=" + pageNumber +
+    "&size=" + size);
+    }
+    return this.http.get<PaginationInfo>(this.urlSortedProducts + "?typeOfSort=" + typeOfSort +
+    "&pageNumber=" + pageNumber + "&size=" + size )
   }
 }

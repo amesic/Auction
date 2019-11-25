@@ -93,10 +93,29 @@ ul > li:hover {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 }
+.productsGrid .shopProduct {
+  margin-bottom: 40px;
+}
 .productsList {
   display: flex;
   flex-direction: column;
 }
 .productsList .shopProduct {
   margin-bottom: 15px;
+}
+.explore > input{
+  margin-bottom: 201px;
+  margin-top: 92px;
+  background: #8367d8;
+  font: 700 18px "Lato", sans-serif;
+  color: #ffffff;
+  letter-spacing: 0.63px;
+  border: none;
+  padding-right: 57px;
+  padding-left: 49px;
+  padding-top: 17px;
+  padding-bottom: 17px;
+}
+.explore {
+  text-align: center;
 }
