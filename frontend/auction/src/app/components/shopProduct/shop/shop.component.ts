@@ -4,6 +4,7 @@ import { FilterService } from "src/app/services/filter.service";
 import { Filter } from 'src/app/models/Filter';
 import { Product } from 'src/app/models/Product';
 import { ProductService } from 'src/app/services/product.service';
+import { PaginationInfo } from 'src/app/models/PaginationInfo';
 
 @Component({
   selector: "app-shop",
@@ -14,7 +15,7 @@ export class ShopComponent implements OnInit {
   allCategories;
   filterColor: Filter;
   filterSize: Filter;
-  products: Product[];
+  products: PaginationInfo;
 
   constructor(
     private categoriesService: CategoriesService,
@@ -34,7 +35,7 @@ export class ShopComponent implements OnInit {
     this.filterService.getFilterItemsByName("size").subscribe(items => {
       this.filterSize = items;
     });
-    this.productService.getFeatureCollection().subscribe(products => {
+    this.productService.getSortedProducts(null, 0, 9).subscribe(products => {
       this.products = products;
     })
   }

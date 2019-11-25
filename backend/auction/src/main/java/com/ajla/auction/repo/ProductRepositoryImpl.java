@@ -204,4 +204,29 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         mainCharacteristic.setNumberOfProducts(numberOfProductsBelongToMainCharacteristic);
         return mainCharacteristic;
     }
+    @Override
+    public PaginationInfo<Product> getAllProductsBySort(final String typeOfSort, final Long pageNumber, final Long size) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+        final Root<Product> product = cq.from(Product.class);
+        TypedQuery<Product> query;
+
+        if(typeOfSort == null) {
+            cq.where(cb.greaterThan(product.get("endDate"), LocalDate.now()));
+            query = em.createQuery(cq);
+            if (query.getResultList().isEmpty()) {
+                return null;
+            }
+            //set total number of last chance products
+            final Long totalNumberOfItems = new Long(query.getResultList().size());
+            //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
+            query.setFirstResult(Math.toIntExact(pageNumber * size));
+            query.setMaxResults(Math.toIntExact(size));
+
+            PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
+            return  paginationInfo;
+        } else {
+            return null;
+        }
+    }
 }

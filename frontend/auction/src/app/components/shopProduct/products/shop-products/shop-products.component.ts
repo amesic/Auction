@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from "@angular/core";
 import { faTh } from "@fortawesome/free-solid-svg-icons";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { PaginationInfo } from 'src/app/models/PaginationInfo';
 
 @Component({
   selector: "app-shop-products",

@@ -16,4 +16,5 @@ public interface IProductService {
     List<Product> getRelatedProducts(final Long idProduct);
     Boolean userIsSellerOfProduct(final Long idUser, final Long idProduct);
     List<NumberOfProductsInfo> numberOfProductsBySubcategories();
+    PaginationInfo<Product> getAllProductsBySort(final String typeOfSort, final Long pageNumber, final Long size);
 }
