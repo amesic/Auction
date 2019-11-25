@@ -1,9 +1,9 @@
 <div class="sorting">
   <div class="sortingOptions">
     <div class="sortingOption" appShowHide>
-    <a>Default Sorting</a>
-    <fa-icon [icon]="faChevronDown"></fa-icon>
-  </div>
+      <a>Default Sorting</a>
+      <fa-icon [icon]="faChevronDown"></fa-icon>
+    </div>
     <ul>
       <li>Default Sorting</li>
       <li>Sort by Popularity</li>
@@ -23,13 +23,11 @@
     </div>
   </div>
 </div>
-<div [ngClass]="{ productsGrid: activeGrid }">
-<div *ngFor="let product of products">
-  <app-shop-product
-    [image]="product.images[0].link"
-    [title]="product.title"
-    [description]="product.description"
-    [startPrice]="product.startPrice"
-    [className]="className"></app-shop-product>
+<div [ngClass]="{ productsGrid: activeGrid, productsList: activeList }">
+  <div *ngFor="let product of products" class="shopProduct">
+    <app-shop-product
+      [product]="product"
+      [className]="className"
+    ></app-shop-product>
   </div>
 </div>

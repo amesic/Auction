@@ -1,26 +1,35 @@
 <div class="{{ className }}">
-
-<div class="image">
-  <img src="{{ image }}" />
-  <div class="buttons">
+  <div *ngIf="className == 'grid'" class="image">
+    <img src="{{ product.images[0].link }}" />
+    <div class="buttons">
       <div class="watchlist">
         <input type="button" value="Watchlist" />
         <fa-icon [icon]="faHeart"></fa-icon>
       </div>
-      <div class="bid">
+      <div class="bid" (click)="sendInfoOfProduct(product)">
         <input type="button" value="Bid" />
         <fa-icon [icon]="faGavel"></fa-icon>
       </div>
     </div>
   </div>
 
-
-
-
+  <img *ngIf="className == 'list'" src="{{ product.images[0].link }}" />
+  <div class="aboutAndButtons">
   <div class="about">
-  <p class="title">{{ title }}</p>
-  <p class="description">{{ description }}</p>
-  <p>Start From {{ startPrice | currency: "USD" }}</p>
+    <p class="title">{{ product.title }}</p>
+    <p class="description">{{ product.description }}</p>
+    <p class="startPrice">Start From {{ product.startPrice | currency: "USD" }}</p>
+  </div>
+
+  <div *ngIf="className == 'list'" class="buttons">
+    <div class="watchlist">
+      <input type="button" value="Watchlist" />
+      <fa-icon [icon]="faHeart"></fa-icon>
+    </div>
+    <div class="bid" (click)="sendInfoOfProduct(product)">
+      <input type="button" value="Bid" />
+      <fa-icon [icon]="faGavel"></fa-icon>
+    </div>
+  </div>
 </div>
-  
 </div>
