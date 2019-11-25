@@ -93,3 +93,10 @@ ul > li:hover {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 }
+.productsList {
+  display: flex;
+  flex-direction: column;
+}
+.productsList .shopProduct {
+  margin-bottom: 15px;
+}

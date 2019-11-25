@@ -11,6 +11,11 @@
 .grid .description {
   display: none;
 }
+.grid .startPrice {
+  font: 400 16px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.56px;
+}
 .grid .image {
   position: relative;
 }
@@ -23,16 +28,19 @@
   right: 14px;
   transform: translateY(-100%);
 }
-.grid .image .buttons .watchlist, .grid .image .buttons .bid {
-    position: relative;
+.grid .image .buttons .watchlist,
+.grid .image .buttons .bid {
+  position: relative;
 }
-.grid .image .buttons .watchlist > fa-icon, .grid .image .buttons .bid > fa-icon {
-    position: absolute;
-    right: 25px;
-    transform: translateY(9%);
-    font-size: 20px;
+.grid .image .buttons .watchlist > fa-icon,
+.grid .image .buttons .bid > fa-icon {
+  position: absolute;
+  right: 25px;
+  transform: translateY(9%);
+  font-size: 20px;
 }
-.grid .image .buttons .watchlist > input, .grid .image .buttons .bid > input {
+.grid .image .buttons .watchlist > input,
+.grid .image .buttons .bid > input {
   background: #ffffff;
   border: none;
   font: 400 15px "Lato", sans-serif;
@@ -44,7 +52,8 @@
   padding-bottom: 7px;
   padding-top: 7px;
 }
-.grid .title {
+.grid .title,
+.list .title {
   font: 700 20px "Lato", sans-serif;
   color: #252525;
   letter-spacing: 0.84px;
@@ -58,7 +67,53 @@
   justify-content: space-around;
   align-items: center;
 }
+
+.list {
+  display: flex;
+}
 .list img {
-  width: 30%;
-  height: 30%;
+  height: 280px;
+  width: 212px;
+  margin-right: 20px;
+}
+.list .description {
+  font: 400 16px "Lato", sans-serif;
+  color: #9b9b9b;
+  letter-spacing: 0.56px;
+  line-height: 21px;
+  margin-bottom: 36px;
+}
+.list .startPrice {
+  font: 400 20px "Lato", sans-serif;
+  color: #8367d8;
+  letter-spacing: 0.84px;
+  margin-bottom: 21px;
+}
+.list .aboutAndButtons .buttons {
+  display: flex;
+}
+.list .aboutAndButtons .buttons .watchlist > input,
+.list .aboutAndButtons .buttons .bid > input {
+  background: #ffffff;
+  border: 3px solid #ececec;
+  padding-left: 21px;
+  padding-right: 51px;
+  padding-bottom: 7px;
+  padding-top: 7px;
+  font: 400 15px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.52px;
+  line-height: 22px;
+  margin-left: 10px;
+}
+.list .aboutAndButtons .buttons .watchlist, .list .aboutAndButtons .buttons .bid {
+  position: relative;
+}
+.list .aboutAndButtons .buttons .watchlist > fa-icon,
+.list .aboutAndButtons .buttons .bid > fa-icon {
+  color: #ececec;
+  font-size: 20px;
+  position: absolute;
+  right: 25px;
+  transform: translateY(18%);
 }
