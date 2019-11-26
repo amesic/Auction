@@ -44,12 +44,12 @@ export class ProductService {
     return this.http.get<Product[]>(this.urlRelatedProducts + 
       "?id=" + id);
   }
-  getSortedProducts(typeOfSort, pageNumber, size): Observable<PaginationInfo> {
-    if(typeOfSort == null) {
-    return this.http.get<PaginationInfo>(this.urlSortedProducts + "?pageNumber=" + pageNumber +
-    "&size=" + size);
+  getSortedProducts(typeOfSort, filterId, categoryId, pageNumber, size): Observable<PaginationInfo> {
+    if(filterId == null && categoryId == null) {
+      return this.http.get<PaginationInfo>(this.urlSortedProducts + "?typeOfSort=" + typeOfSort +
+      "&pageNumber=" + pageNumber + "&size=" + size);
     }
     return this.http.get<PaginationInfo>(this.urlSortedProducts + "?typeOfSort=" + typeOfSort +
-    "&pageNumber=" + pageNumber + "&size=" + size )
+    "&pageNumber=" + pageNumber + "&size=" + size);
   }
 }

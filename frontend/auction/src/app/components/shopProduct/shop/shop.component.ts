@@ -1,8 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { CategoriesService } from "src/app/services/categories.service";
 import { FilterService } from "src/app/services/filter.service";
 import { Filter } from "src/app/models/Filter";
-import { Product } from "src/app/models/Product";
 import { ProductService } from "src/app/services/product.service";
 import { PaginationInfo } from "src/app/models/PaginationInfo";
 
@@ -20,6 +19,12 @@ export class ShopComponent implements OnInit {
   hide;
   pageNumber = 0;
   size = 9;
+
+  //from children
+  filterColorId;
+  filterSizeId;
+  categoryId;
+  typeOfSorting;
 
   constructor(
     private categoriesService: CategoriesService,
@@ -40,7 +45,7 @@ export class ShopComponent implements OnInit {
       this.filterSize = items;
     });
     this.productService
-      .getSortedProducts(null, this.pageNumber, this.size)
+      .getSortedProducts("default", null, null, this.pageNumber, this.size)
       .subscribe(products => {
         this.products = products;
         this.pageNumber++;
@@ -50,5 +55,26 @@ export class ShopComponent implements OnInit {
         }
         this.hide = false;
       });
+  }
+
+  receiveMessageFromFilterColor($event) {
+    if ($event != this.filterColorId) {
+    this.filterColorId = $event;
+    }
+  }
+  receiveMessageFromFilterSize($event) {
+    if ($event != this.filterSizeId) {
+    this.filterSizeId = $event;
+    }
+  }
+  receiveMessageFromCategories($event) {
+    if ($event != this.categoryId) {
+    this.categoryId = $event;
+    }
+  }
+  recieveMessageFromShopProducts($event) {
+    if ($event != this.typeOfSorting) {
+    this.typeOfSorting = $event;
+    }
   }
 }

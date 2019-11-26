@@ -13,7 +13,7 @@
             <li
               *ngFor="let subcategory of category.children"
               class="subcategory">
-              <a [routerLink]="['/shop']">{{ subcategory.name }} ({{subcategory.numberOfProducts}})</a>
+              <a (click)="sendSubcategoryId(subcategory.id)">{{ subcategory.name }} ({{subcategory.numberOfProducts}})</a>
             </li>
           </ul>
         </li>

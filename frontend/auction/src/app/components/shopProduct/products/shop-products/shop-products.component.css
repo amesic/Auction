@@ -73,6 +73,7 @@ ul {
   letter-spacing: 0.56px;
   position: absolute;
   margin-top: 44px;
+  z-index: 10;
 }
 ul > li {
   cursor: pointer;

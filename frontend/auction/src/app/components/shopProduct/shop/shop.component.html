@@ -3,6 +3,11 @@
 <app-all-filters
   [allCategories]="allCategories"
   [filterColor]="filterColor"
-  [filterSize]="filterSize"></app-all-filters>
-<app-shop-products [products]="products" [hide]="hide"></app-shop-products>
+  [filterSize]="filterSize"
+  (messageEventFilterColor)="receiveMessageFromFilterColor($event)"
+  (messageEventFilterSize)="receiveMessageFromFilterSize($event)"
+  (messageEventCategory)="receiveMessageFromCategories($event)"></app-all-filters>
+<app-shop-products [products]="products" 
+[hide]="hide" 
+(messageEventSorting)="recieveMessageFromShopProducts($event)"></app-shop-products>
 </div>

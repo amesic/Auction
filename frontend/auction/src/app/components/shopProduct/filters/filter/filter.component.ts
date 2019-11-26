@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Filter } from 'src/app/models/Filter';
 
 @Component({
@@ -11,8 +11,15 @@ export class FilterComponent implements OnInit {
   @Input() filter: Filter;
 
   constructor() { }
+  message;
+
+  @Output() messageEvent = new EventEmitter<string>();
 
   ngOnInit() {
+  }
+  sendFilterId(id) {
+    this.message = id;
+    this.messageEvent.emit(this.message);
   }
 
 }

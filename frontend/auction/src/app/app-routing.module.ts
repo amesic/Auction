@@ -12,8 +12,9 @@ import { RegisterComponent } from "./components/register/register.component";
 import { LandingPageComponent } from "./components/landingPage/landing-page/landing-page.component";
 import { AllCategoriesComponent } from "./components/all-categories/all-categories.component";
 import { SingleProductPageComponent } from "./components/singleProductPage/single-product-page/single-product-page.component";
-import { ShopComponent } from "./components/shopProduct/shop/shop.component"
+import { ShopComponent } from "./components/shopProduct/shop/shop.component";
 import { LoginService } from "./services/login.service";
+import { ErrorComponent } from "./components/error/error.component";
 
 @Injectable()
 export class LoginRegisterActivate implements CanActivate {
@@ -76,7 +77,7 @@ const routes: Routes = [
           breadcrumb: "ALL CATEGORIES"
         }
       },
-      { 
+      {
         path: "product/:title/:idProduct",
         component: SingleProductPageComponent,
         data: {
@@ -84,6 +85,14 @@ const routes: Routes = [
         }
       }
     ]
+  },
+  {
+    path: "pageNotFound",
+    component: ErrorComponent
+  },
+  {
+    path: "**",
+    redirectTo: "pageNotFound"
   }
 ];
 
