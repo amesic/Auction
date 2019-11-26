@@ -5,11 +5,10 @@
       <fa-icon [icon]="faChevronDown"></fa-icon>
     </div>
     <ul>
-      <li>Default Sorting</li>
-      <li>Sort by Popularity</li>
-      <li>Sort by Rating</li>
-      <li>Sort by Newness</li>
-      <li>Sort by Price</li>
+      <li (click)="sendTypeOfSorting('default')">Default Sorting</li>
+      <li (click)="sendTypeOfSorting('popularity')">Sort by Popularity</li>
+      <li (click)="sendTypeOfSorting('newness')">Sort by Newness</li>
+      <li (click)="sendTypeOfSorting('price')">Sort by Price</li>
     </ul>
   </div>
   <div class="list">

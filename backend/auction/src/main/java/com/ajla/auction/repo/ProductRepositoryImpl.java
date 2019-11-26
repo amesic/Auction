@@ -7,17 +7,19 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import java.time.LocalDate;
 import java.util.*;
 
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
     final EntityManager em;
+    final CategoryRepository categoryRepository;
 
     @Autowired
-    public ProductRepositoryImpl(final EntityManager em) {
+    public ProductRepositoryImpl(final EntityManager em, final CategoryRepository categoryRepository) {
         Objects.requireNonNull(em, "em must not be null.");
+        Objects.requireNonNull(categoryRepository, "categoryRepository must not be null.");
+        this.categoryRepository = categoryRepository;
         this.em = em;
     }
 
@@ -83,7 +85,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         final Root<Product> product = cq.from(Product.class);
 
         cq.where(cb.and(
-                cb.greaterThan(product.get("endDate"), LocalDate.now()),
+                cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
                 cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
         ))
                 .orderBy( cb.desc(product.get("startDate")));
@@ -123,7 +125,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         cq.where(cb.and(
                 cb.equal(product.get("subcategory"), idSubcategory),
                 cb.notEqual(product.get("id"), idProduct),
-                cb.greaterThan(product.get("endDate"), LocalDate.now()),
+                cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
                 cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
         ))
                 .orderBy(cb.desc(product.get("startDate")));
@@ -192,7 +194,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         List<NumberOfProductsInfo> allCategoriesOfMainCharacteristic = new ArrayList<>();
         Long numberOfProductsBelongToMainCharacteristic = (long) 0;
         for (Characteristic oneOfCharacteristic: characteristic.getAllCharacteristic()) {
-            //cq.where(cb.equal(product.get("characteristics.id"), oneOfCharacteristic.getId()));
             query = em.createQuery("SELECT COUNT(p) FROM Characteristic c JOIN c.products p WHERE c.id =:characteristics_id", Long.class);
             query.setParameter("characteristics_id", oneOfCharacteristic.getId());
             NumberOfProductsInfo categoryOfCharacteristic = new NumberOfProductsInfo(oneOfCharacteristic.getId(),
@@ -205,15 +206,79 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return mainCharacteristic;
     }
     @Override
-    public PaginationInfo<Product> getAllProductsBySort(final String typeOfSort, final Long pageNumber, final Long size) {
+    public PaginationInfo<Product> getAllProductsBySort(final String typeOfSort,
+                                                        final Long subcategoryId,
+                                                        final Long filterColorId,
+                                                        final Long filterSizeId,
+                                                        final Long pageNumber,
+                                                        final Long size) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
         final Root<Product> product = cq.from(Product.class);
-        TypedQuery<Product> query;
 
-        if(typeOfSort == null) {
-            cq.where(cb.greaterThan(product.get("endDate"), LocalDate.now()));
-            query = em.createQuery(cq);
+        final Category subcategory = categoryRepository.findCategoryById(subcategoryId);
+        TypedQuery<Product> query;
+        String sqlQuery ="SELECT p FROM Product p";
+        query = em.createQuery(sqlQuery, Product.class);
+        if (filterColorId != null && filterSizeId !=null) {
+            sqlQuery += " WHERE p.id IN (SELECT p.id FROM Product p" +
+                    " JOIN p.characteristics c WHERE c.id IN (:color_id, :size_id)" +
+                    " GROUP BY p.id HAVING COUNT(c.id)=2)";
+        } else if (filterColorId != null || filterSizeId !=null) {
+            sqlQuery += " WHERE p.id IN (SELECT p.id FROM Product p" +
+                    " JOIN p.characteristics c WHERE c.id =:filter_id)";
+        }
+        if (subcategoryId != null && (filterColorId != null || filterSizeId !=null)) {
+            sqlQuery += " AND p.subcategory =:subcategory";
+        } else if (subcategoryId != null) {
+            sqlQuery += " WHERE p.subcategory =:subcategory";
+        }
+
+
+        if (typeOfSort.equals("default")) {
+            if (subcategory == null && filterSizeId == null && filterColorId == null) {
+                sqlQuery += " WHERE p.endDate >=:dateNow AND p.startDate <=:dateNow";
+            } else {
+                sqlQuery += " AND p.endDate >=:dateNow AND p.startDate <=:dateNow";
+            }
+                query = em.createQuery(sqlQuery, Product.class);
+                if (filterColorId != null && filterSizeId !=null) {
+                    query.setParameter("color_id", filterColorId);
+                    query.setParameter("size_id", filterSizeId);
+                } else if (filterColorId != null || filterSizeId !=null){
+                    query.setParameter("filter_id", filterColorId);
+                }
+                if (subcategory != null) {
+                    query.setParameter("subcategory", subcategory);
+                }
+                query.setParameter("dateNow", LocalDate.now());
+                if (query.getResultList().isEmpty()) {
+                    return null;
+                }
+                //set total number of last chance products
+                final Long totalNumberOfItems = new Long(query.getResultList().size());
+                //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
+                query.setFirstResult(Math.toIntExact(pageNumber * size));
+                query.setMaxResults(Math.toIntExact(size));
+                PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
+                return  paginationInfo;
+        } else if (typeOfSort.equals("newness")) {
+            if (subcategory == null && filterSizeId == null && filterColorId == null) {
+                sqlQuery += " WHERE p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startDate DESC";
+            } else {
+                sqlQuery += " AND p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startDate DESC";
+            }
+            query = em.createQuery(sqlQuery, Product.class);
+            if (filterColorId != null && filterSizeId !=null) {
+                query.setParameter("color_id", filterColorId);
+                query.setParameter("size_id", filterSizeId);
+            } else if (filterColorId != null || filterSizeId !=null){
+                query.setParameter("filter_id", filterColorId);
+            }
+            if (subcategory != null) {
+                query.setParameter("subcategory", subcategory);
+            }
+            query.setParameter("dateNow", LocalDate.now());
             if (query.getResultList().isEmpty()) {
                 return null;
             }
@@ -222,9 +287,64 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
             query.setFirstResult(Math.toIntExact(pageNumber * size));
             query.setMaxResults(Math.toIntExact(size));
-
             PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
             return  paginationInfo;
+        } else if (typeOfSort.equals("priceLowest")) {
+            if (subcategory == null && filterSizeId == null && filterColorId == null) {
+                sqlQuery += " WHERE p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startPrice ASC";
+            } else {
+                sqlQuery += " AND p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startPrice ASC";
+            }
+            query = em.createQuery(sqlQuery, Product.class);
+            if (filterColorId != null && filterSizeId !=null) {
+                query.setParameter("color_id", filterColorId);
+                query.setParameter("size_id", filterSizeId);
+            } else if (filterColorId != null || filterSizeId !=null){
+                query.setParameter("filter_id", filterColorId);
+            }
+            if (subcategory != null) {
+                query.setParameter("subcategory", subcategory);
+            }
+            query.setParameter("dateNow", LocalDate.now());
+            if (query.getResultList().isEmpty()) {
+                return null;
+            }
+            //set total number of last chance products
+            final Long totalNumberOfItems = new Long(query.getResultList().size());
+            //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
+            query.setFirstResult(Math.toIntExact(pageNumber * size));
+            query.setMaxResults(Math.toIntExact(size));
+            PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
+            return  paginationInfo;
+        } else if (typeOfSort.equals("priceHighest")) {
+            if (subcategory == null && filterSizeId == null && filterColorId == null) {
+                sqlQuery += " WHERE p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startPrice DESC";
+            } else {
+                sqlQuery += " AND p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startPrice DESC";
+            }
+            query = em.createQuery(sqlQuery, Product.class);
+            if (filterColorId != null && filterSizeId !=null) {
+                query.setParameter("color_id", filterColorId);
+                query.setParameter("size_id", filterSizeId);
+            } else if (filterColorId != null || filterSizeId !=null){
+                query.setParameter("filter_id", filterColorId);
+            }
+            if (subcategory != null) {
+                query.setParameter("subcategory", subcategory);
+            }
+            query.setParameter("dateNow", LocalDate.now());
+            if (query.getResultList().isEmpty()) {
+                return null;
+            }
+            //set total number of last chance products
+            final Long totalNumberOfItems = new Long(query.getResultList().size());
+            //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
+            query.setFirstResult(Math.toIntExact(pageNumber * size));
+            query.setMaxResults(Math.toIntExact(size));
+            PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
+            return  paginationInfo;
+        } else if (typeOfSort.equals("popularity")) {
+            return null;
         } else {
             return null;
         }

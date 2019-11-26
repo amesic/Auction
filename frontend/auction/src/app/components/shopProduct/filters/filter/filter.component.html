@@ -1,6 +1,6 @@
 <div *ngIf="filter != undefined && title != 'PRICE'" class="filter">
     <p>FILTER BY {{title}}</p>
     <div *ngFor="let item of filter.children">
-        <a>{{item.name}} ({{item.numberOfProducts}})</a>
+        <a (click)="sendFilterId(item.id)">{{item.name}} ({{item.numberOfProducts}})</a>
     </div>
 </div>

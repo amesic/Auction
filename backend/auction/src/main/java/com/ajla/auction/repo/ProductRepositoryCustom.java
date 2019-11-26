@@ -14,5 +14,10 @@ public interface ProductRepositoryCustom {
     Boolean userIsSellerOfProduct(final Long idUser, final Long idProduct);
     List<NumberOfProductsInfo> numberOfProductsBySubcategory(final List<Category> categories);
     NumberOfProductsInfo numberOfProductsByCharacteristic(final Characteristic characteristic);
-    PaginationInfo<Product> getAllProductsBySort(final String typeOfSort, final Long pageNumber, final Long size);
+    PaginationInfo<Product> getAllProductsBySort(final String typeOfSort,
+                                                 final Long subcategoryId,
+                                                 final Long filterColorId,
+                                                 final Long filterSizeId,
+                                                 final Long pageNumber,
+                                                 final Long size);
 }

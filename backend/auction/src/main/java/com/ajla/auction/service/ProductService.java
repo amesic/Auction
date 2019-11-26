@@ -67,7 +67,12 @@ public class ProductService implements IProductService{
         return productRepository.numberOfProductsBySubcategory(categoryRepository.findAll());
     }
     @Override
-    public PaginationInfo<Product> getAllProductsBySort(final String typeOfSort, final Long pageNumber, final Long size) {
-        return productRepository.getAllProductsBySort(typeOfSort, pageNumber, size);
+    public PaginationInfo<Product> getAllProductsBySort(final String typeOfSort,
+                                                        final Long subcategoryId,
+                                                        final Long filterColorId,
+                                                        final Long filterSizeId,
+                                                        final Long pageNumber,
+                                                        final Long size) {
+        return productRepository.getAllProductsBySort(typeOfSort, subcategoryId, filterColorId, filterSizeId, pageNumber, size);
     }
 }
