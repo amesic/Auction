@@ -74,3 +74,6 @@ p {
 .categoryIcon.show .minus {
   display: block;
 }
+.categories .subcategory > a.change {
+  color: #8367d8;
+}

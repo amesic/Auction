@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { faTh } from "@fortawesome/free-solid-svg-icons";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { PaginationInfo } from "src/app/models/PaginationInfo";
 import { ProductService } from "src/app/services/product.service";
 
 @Component({
@@ -13,6 +12,10 @@ import { ProductService } from "src/app/services/product.service";
 export class ShopProductsComponent implements OnInit {
   @Input() products;
   @Input() hide;
+  @Input() messageIfThereIsNoProducts;
+  @Input() filterColorId;
+  @Input() filterSizeId;
+  @Input() subcategoryId;
 
   faTh = faTh;
   faList = faList;
@@ -20,12 +23,14 @@ export class ShopProductsComponent implements OnInit {
 
   activeGrid = true;
   activeList = false;
+  clickOnSortList = false;
   className = "grid";
 
   pageNumber = 0;
   size = 9;
 
-  typeOfSorting;
+  typeOfSorting = "default";
+  sortingType = "Default sorting";
   @Output() messageEventSorting = new EventEmitter<string>();
 
   constructor(private productService: ProductService) {}
@@ -33,10 +38,8 @@ export class ShopProductsComponent implements OnInit {
   ngOnInit() {}
 
   checkIfThereIsNoItemsLeft(pageNumber, size, totalNumberOfItems) {
-    if (
-      totalNumberOfItems - pageNumber * size < 0 ||
-      totalNumberOfItems - pageNumber * size == 0
-    ) {
+    if (totalNumberOfItems - pageNumber * size < 0 ||
+      totalNumberOfItems - pageNumber * size == 0) {
       return true;
     }
     return false;
@@ -45,19 +48,16 @@ export class ShopProductsComponent implements OnInit {
   onClick() {
     this.pageNumber = this.pageNumber + 1;
     this.productService
-      .getSortedProducts("default", null, null, this.pageNumber, this.size)
+      .getSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.subcategoryId,this.pageNumber, this.size)
       .subscribe(products => {
         this.products.items = this.products.items.concat(products.items);
-        if (
-          this.checkIfThereIsNoItemsLeft(
+        if (this.checkIfThereIsNoItemsLeft(
             this.pageNumber + 1,
             this.size,
-            products.totalNumberOfItems
-          )
-        ) {
+            products.totalNumberOfItems)) {
           this.hide = true;
         }
-      });
+      })
   }
 
   grid() {
@@ -66,7 +66,7 @@ export class ShopProductsComponent implements OnInit {
     this.className = "grid";
     this.pageNumber = 0;
     this.size = 9;
-    this.productService.getSortedProducts("default", null, null, this.pageNumber, this.size).subscribe(products => {
+    this.productService.getSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.subcategoryId, this.pageNumber, this.size).subscribe(products => {
       this.products = products;
       if (this.checkIfThereIsNoItemsLeft(this.pageNumber + 1, this.size, products.totalNumberOfItems)) {
         this.hide = true;
@@ -81,7 +81,7 @@ export class ShopProductsComponent implements OnInit {
     this.className = "list";
     this.pageNumber = 0;
     this.size = 9;
-    this.productService.getSortedProducts("default", null, null, this.pageNumber, this.size).subscribe(products => {
+    this.productService.getSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.subcategoryId, this.pageNumber, this.size).subscribe(products => {
       this.products = products;
       if (this.checkIfThereIsNoItemsLeft(this.pageNumber + 1, this.size, products.totalNumberOfItems)) {
         this.hide = true;
@@ -90,9 +90,9 @@ export class ShopProductsComponent implements OnInit {
       }
     });
   }
-
-  sendTypeOfSorting(type) {
+  sendTypeOfSorting(type, sortingType) {
     this.typeOfSorting = type;
+    this.sortingType = sortingType;
     this.messageEventSorting.emit(this.typeOfSorting);
   }
 }

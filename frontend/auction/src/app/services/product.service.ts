@@ -44,12 +44,18 @@ export class ProductService {
     return this.http.get<Product[]>(this.urlRelatedProducts + 
       "?id=" + id);
   }
-  getSortedProducts(typeOfSort, filterId, categoryId, pageNumber, size): Observable<PaginationInfo> {
-    if(filterId == null && categoryId == null) {
-      return this.http.get<PaginationInfo>(this.urlSortedProducts + "?typeOfSort=" + typeOfSort +
-      "&pageNumber=" + pageNumber + "&size=" + size);
+  getSortedProducts(typeOfSort, filterColorId, filterSizeId, subcategoryId, pageNumber, size): Observable<PaginationInfo> {
+    let url = this.urlSortedProducts + "?typeOfSort=" + typeOfSort;
+    if(filterColorId != null) {
+      url += "&filterColorId=" + filterColorId;
     }
-    return this.http.get<PaginationInfo>(this.urlSortedProducts + "?typeOfSort=" + typeOfSort +
-    "&pageNumber=" + pageNumber + "&size=" + size);
+    if(filterSizeId != null) {
+      url += "&filterSizeId=" + filterSizeId;
+    }
+    if(subcategoryId != null) {
+      url += "&subcategoryId=" + subcategoryId;
+    }
+    url += "&pageNumber=" + pageNumber + "&size=" + size;
+    return this.http.get<PaginationInfo>(url);
   }
 }

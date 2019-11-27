@@ -13,7 +13,7 @@
             <li
               *ngFor="let subcategory of category.children"
               class="subcategory">
-              <a (click)="sendSubcategoryId(subcategory.id)">{{ subcategory.name }} ({{subcategory.numberOfProducts}})</a>
+              <a (click)="sendSubcategoryId(subcategory.id)" appChangeColorOnClick>{{ subcategory.name }} <label *ngIf="subcategory.numberOfProducts != 0">({{subcategory.numberOfProducts}})</label></a>
             </li>
           </ul>
         </li>

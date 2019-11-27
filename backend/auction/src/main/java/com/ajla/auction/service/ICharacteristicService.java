@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ICharacteristicService {
     List<Characteristic> listOfAllCharacteristic();
-    NumberOfProductsInfo characteristic(String name);
+    NumberOfProductsInfo characteristic(final String name, final Long subcategoryId);
 }

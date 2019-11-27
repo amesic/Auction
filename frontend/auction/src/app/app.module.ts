@@ -32,6 +32,8 @@ import { FilterComponent } from './components/shopProduct/filters/filter/filter.
 import { ShopProductComponent } from './components/shopProduct/products/shop-product/shop-product.component';
 import { ShopProductsComponent } from './components/shopProduct/products/shop-products/shop-products.component';
 import { ErrorComponent } from './components/error/error.component';
+import { ClickOutsideDirective } from './directives/click-outside.directive';
+import { ChangeColorOnClickDirective } from './directives/change-color-on-click.directive';
 
 @NgModule({
   declarations: [
@@ -59,7 +61,9 @@ import { ErrorComponent } from './components/error/error.component';
     FilterComponent,
     ShopProductComponent,
     ShopProductsComponent,
-    ErrorComponent
+    ErrorComponent,
+    ClickOutsideDirective,
+    ChangeColorOnClickDirective,
   ],
   imports: [
     BrowserModule,

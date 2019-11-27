@@ -1,8 +1,8 @@
 .container {
     display: flex;
-    justify-content: space-between;
     margin-top: 40px;
 }
 app-shop-products {
     margin-left: 25px;
+    width: 100%;
 }

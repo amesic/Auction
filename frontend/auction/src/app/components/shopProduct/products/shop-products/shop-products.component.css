@@ -54,7 +54,7 @@
   color: #252525;
   letter-spacing: 0.56px;
   height: 46px;
-  width: 320px;
+  width: 400px;
   padding-left: 18px;
   padding-top: 12px;
   padding-bottom: 15px;
@@ -80,8 +80,7 @@ ul > li {
   padding-left: 18px;
   padding-top: 12px;
   padding-bottom: 15px;
-  padding-right: 131px;
-  width: 315px;
+  width: 395px;
 }
 ul > li:hover {
   background: #8367d8;
