@@ -14,17 +14,18 @@ export class ShopComponent implements OnInit {
   allCategories;
   filterColor: Filter;
   filterSize: Filter;
-  products: PaginationInfo;
+  products;
 
   hide;
   pageNumber = 0;
   size = 9;
 
   //from children
-  filterColorId;
-  filterSizeId;
-  categoryId;
-  typeOfSorting;
+  filterColorId = null;
+  filterSizeId = null;
+  subcategoryId = null;
+  typeOfSorting = "default";
+  messageIfThereIsNoProducts = null;
 
   constructor(
     private categoriesService: CategoriesService,
@@ -38,43 +39,157 @@ export class ShopComponent implements OnInit {
       .subscribe(categories => {
         this.allCategories = categories;
       });
-    this.filterService.getFilterItemsByName("color").subscribe(items => {
+    this.filterService.getFilterItemsByName("color", this.subcategoryId).subscribe(items => {
       this.filterColor = items;
     });
-    this.filterService.getFilterItemsByName("size").subscribe(items => {
+    this.filterService.getFilterItemsByName("size", this.subcategoryId).subscribe(items => {
       this.filterSize = items;
     });
-    this.productService
-      .getSortedProducts("default", null, null, this.pageNumber, this.size)
-      .subscribe(products => {
+    this.productService.getSortedProducts(
+        this.typeOfSorting,
+        this.filterColorId,
+        this.filterSizeId,
+        this.subcategoryId,
+        this.pageNumber,
+        this.size).subscribe(products => {
         this.products = products;
         this.pageNumber++;
         if (this.products.totalNumberOfItems - this.pageNumber * this.size < 0 ||
           this.products.totalNumberOfItems - this.pageNumber * this.size == 0) {
           this.hide = true;
-        }
+        } else {
         this.hide = false;
+        }
       });
   }
 
   receiveMessageFromFilterColor($event) {
     if ($event != this.filterColorId) {
-    this.filterColorId = $event;
+      this.filterColorId = $event;
+      this.pageNumber = 0;
+      this.size = 9;
+      this.productService.getSortedProducts(
+          this.typeOfSorting,
+          this.filterColorId,
+          this.filterSizeId,
+          this.subcategoryId,
+          this.pageNumber,
+          this.size).subscribe(products => {
+          if (products != null) {
+          this.products = products;
+          this.pageNumber++;
+          if (this.products.totalNumberOfItems - this.pageNumber * this.size < 0 ||
+            this.products.totalNumberOfItems - this.pageNumber * this.size == 0) {
+            this.hide = true;
+          } else {
+          this.hide = false;
+          }
+        } else {
+          this.products = new PaginationInfo;
+          this.products.items = [];
+          this.hide = true;
+          this.messageIfThereIsNoProducts = "For this filter there is no items yet!";
+        }
+        });
     }
   }
   receiveMessageFromFilterSize($event) {
     if ($event != this.filterSizeId) {
-    this.filterSizeId = $event;
+      this.filterSizeId = $event;
+      this.pageNumber = 0;
+      this.size = 9;
+      this.productService.getSortedProducts(
+          this.typeOfSorting,
+          this.filterColorId,
+          this.filterSizeId,
+          this.subcategoryId,
+          this.pageNumber,
+          this.size).subscribe(products => {
+          if (products != null){
+          this.products = products;
+          this.pageNumber++;
+          if (this.products.totalNumberOfItems - this.pageNumber * this.size <0 ||
+            this.products.totalNumberOfItems - this.pageNumber * this.size == 0) {
+            this.hide = true;
+          } else {
+          this.hide = false;
+          }
+        } else {
+          this.products = new PaginationInfo;
+          this.products.items = [];
+          this.hide = true;
+          this.messageIfThereIsNoProducts = "For this filter there is no items yet!";
+        }
+        });
     }
   }
   receiveMessageFromCategories($event) {
-    if ($event != this.categoryId) {
-    this.categoryId = $event;
+    if ($event != this.subcategoryId) {
+      this.subcategoryId = $event;
+      this.pageNumber = 0;
+      this.size = 9;
+      this.filterService.getFilterItemsByName("color", this.subcategoryId).subscribe(items => {
+        this.filterColor = items;
+      });
+      this.filterService.getFilterItemsByName("size", this.subcategoryId).subscribe(items => {
+        this.filterSize = items;
+      });
+      this.productService.getSortedProducts(
+          this.typeOfSorting,
+          this.filterColorId,
+          this.filterSizeId,
+          this.subcategoryId,
+          this.pageNumber,
+          this.size).subscribe(products => {
+          if(products != null) {
+          this.products = products;
+          this.messageIfThereIsNoProducts = null;
+          this.pageNumber++;
+          if (this.products.totalNumberOfItems - this.pageNumber * this.size < 0 ||
+            this.products.totalNumberOfItems - this.pageNumber * this.size == 0) {
+            this.hide = true;
+          } else {
+          this.hide = false;
+          }
+        }
+        else {
+          this.products = new PaginationInfo;
+          this.products.items = [];
+          this.hide = true;
+          this.messageIfThereIsNoProducts = "This category has no items yet!";
+        }
+
+      });
     }
   }
   recieveMessageFromShopProducts($event) {
     if ($event != this.typeOfSorting) {
-    this.typeOfSorting = $event;
+      this.typeOfSorting = $event;
+      this.pageNumber = 0;
+      this.size = 9;
+      this.productService.getSortedProducts(
+          this.typeOfSorting,
+          this.filterColorId,
+          this.filterSizeId,
+          this.subcategoryId,
+          this.pageNumber,
+          this.size).subscribe(products => {
+          if(products != null) {
+          this.products = products;
+          this.pageNumber++;
+          if (this.products.totalNumberOfItems - this.pageNumber * this.size < 0 ||
+            this.products.totalNumberOfItems - this.pageNumber * this.size == 0) {
+            this.hide = true;
+          } else {
+            this.hide = false;
+          }
+        } else {
+          this.products = new PaginationInfo;
+          this.products.items = [];
+          this.hide = true;
+          this.messageIfThereIsNoProducts = "There are no items for sorting yet!";
+        }
+      });
     }
   }
 }

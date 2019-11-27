@@ -28,8 +28,9 @@ public class CharacteristicController {
         return new ResponseEntity<>(characteristicService.listOfAllCharacteristic(), HttpStatus.OK);
     }
     @GetMapping("/characteristic")
-    public ResponseEntity<NumberOfProductsInfo> characteristic(@RequestParam("name") final String name) {
-        return new ResponseEntity<>(characteristicService.characteristic(name), HttpStatus.OK);
+    public ResponseEntity<NumberOfProductsInfo> characteristic(@RequestParam("name") final String name,
+                                                               @RequestParam(required = false) final Long subcategoryId) {
+        return new ResponseEntity<>(characteristicService.characteristic(name, subcategoryId), HttpStatus.OK);
     }
 
 }

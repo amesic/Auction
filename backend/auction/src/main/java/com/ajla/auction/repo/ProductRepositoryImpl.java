@@ -169,7 +169,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 List<NumberOfProductsInfo> listOfSubcategoryInfo = new ArrayList<>();
                 Long numberOfProductsByCategory = (long) 0;
                 for (Category subcategory : category.getSubcategories()) {
-                    cq.where(cb.equal(product.get("subcategory"), subcategory.getId()));
+                    cq.where(cb.and(
+                            cb.equal(product.get("subcategory"), subcategory.getId()),
+                            cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now()),
+                            cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now())
+                    ));
                     query = em.createQuery(cq);
                     NumberOfProductsInfo subcategoryInfo = new NumberOfProductsInfo(subcategory.getId(), subcategory.getName(), Arrays.asList(), (long) query.getResultList().size());
                     listOfSubcategoryInfo.add(subcategoryInfo);
@@ -185,17 +189,28 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     @Override
-    public NumberOfProductsInfo numberOfProductsByCharacteristic(final Characteristic characteristic) {
+    public NumberOfProductsInfo numberOfProductsByCharacteristic(final Characteristic characteristic, final Long subcategoryId) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
         final Root<Product> product = cq.from(Product.class);
+        final Category subcategory = categoryRepository.findCategoryById(subcategoryId);
         TypedQuery<Long> query;
         NumberOfProductsInfo mainCharacteristic = new NumberOfProductsInfo(characteristic.getId(), characteristic.getName(), Arrays.asList(), null);
         List<NumberOfProductsInfo> allCategoriesOfMainCharacteristic = new ArrayList<>();
         Long numberOfProductsBelongToMainCharacteristic = (long) 0;
         for (Characteristic oneOfCharacteristic: characteristic.getAllCharacteristic()) {
-            query = em.createQuery("SELECT COUNT(p) FROM Characteristic c JOIN c.products p WHERE c.id =:characteristics_id", Long.class);
+            String sqlQuery = "SELECT COUNT(p) FROM Characteristic c JOIN c.products p" +
+                    " WHERE c.id =:characteristics_id" +
+                    " AND p.startDate <=:dateNow AND p.endDate >=:dateNow";
+            if (subcategoryId != null) {
+                sqlQuery += " AND p.subcategory =:subcategory";
+            }
+            query = em.createQuery(sqlQuery, Long.class);
             query.setParameter("characteristics_id", oneOfCharacteristic.getId());
+            if (subcategoryId != null) {
+                query.setParameter("subcategory", subcategory);
+            }
+            query.setParameter("dateNow", LocalDate.now());
             NumberOfProductsInfo categoryOfCharacteristic = new NumberOfProductsInfo(oneOfCharacteristic.getId(),
                     oneOfCharacteristic.getName(), Arrays.asList(), query.getSingleResult());
             allCategoriesOfMainCharacteristic.add(categoryOfCharacteristic);
@@ -236,7 +251,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
 
         if (typeOfSort.equals("default")) {
-            if (subcategory == null && filterSizeId == null && filterColorId == null) {
+            if (subcategoryId == null && filterSizeId == null && filterColorId == null) {
                 sqlQuery += " WHERE p.endDate >=:dateNow AND p.startDate <=:dateNow";
             } else {
                 sqlQuery += " AND p.endDate >=:dateNow AND p.startDate <=:dateNow";
@@ -245,8 +260,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 if (filterColorId != null && filterSizeId !=null) {
                     query.setParameter("color_id", filterColorId);
                     query.setParameter("size_id", filterSizeId);
-                } else if (filterColorId != null || filterSizeId !=null){
+                } else if (filterColorId != null) {
                     query.setParameter("filter_id", filterColorId);
+                } else if (filterSizeId !=null) {
+                    query.setParameter("filter_id", filterSizeId);
                 }
                 if (subcategory != null) {
                     query.setParameter("subcategory", subcategory);
@@ -272,8 +289,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             if (filterColorId != null && filterSizeId !=null) {
                 query.setParameter("color_id", filterColorId);
                 query.setParameter("size_id", filterSizeId);
-            } else if (filterColorId != null || filterSizeId !=null){
-                query.setParameter("filter_id", filterColorId);
+            } else if (filterColorId != null) {
+            query.setParameter("filter_id", filterColorId);
+            } else if (filterSizeId !=null) {
+            query.setParameter("filter_id", filterSizeId);
             }
             if (subcategory != null) {
                 query.setParameter("subcategory", subcategory);
@@ -299,8 +318,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             if (filterColorId != null && filterSizeId !=null) {
                 query.setParameter("color_id", filterColorId);
                 query.setParameter("size_id", filterSizeId);
-            } else if (filterColorId != null || filterSizeId !=null){
+            } else if (filterColorId != null) {
                 query.setParameter("filter_id", filterColorId);
+            } else if (filterSizeId !=null) {
+                query.setParameter("filter_id", filterSizeId);
             }
             if (subcategory != null) {
                 query.setParameter("subcategory", subcategory);
@@ -326,8 +347,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             if (filterColorId != null && filterSizeId !=null) {
                 query.setParameter("color_id", filterColorId);
                 query.setParameter("size_id", filterSizeId);
-            } else if (filterColorId != null || filterSizeId !=null){
+            } else if (filterColorId != null) {
                 query.setParameter("filter_id", filterColorId);
+            } else if (filterSizeId !=null) {
+                query.setParameter("filter_id", filterSizeId);
             }
             if (subcategory != null) {
                 query.setParameter("subcategory", subcategory);

@@ -24,3 +24,6 @@ p {
   height: 42px;
   padding-left: 20px;
 }
+a.change {
+  color: #8367d8;
+}

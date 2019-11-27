@@ -7,7 +7,12 @@
   (messageEventFilterColor)="receiveMessageFromFilterColor($event)"
   (messageEventFilterSize)="receiveMessageFromFilterSize($event)"
   (messageEventCategory)="receiveMessageFromCategories($event)"></app-all-filters>
-<app-shop-products [products]="products" 
-[hide]="hide" 
+<app-shop-products 
+[products]="products" 
+[hide]="hide"
+[filterColorId]="filterColorId"
+[filterSizeId]="filterSizeId"
+[subcategoryId]="subcategoryId"
+[messageIfThereIsNoProducts]="messageIfThereIsNoProducts" 
 (messageEventSorting)="recieveMessageFromShopProducts($event)"></app-shop-products>
 </div>
