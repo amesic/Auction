@@ -1,0 +1,11 @@
+<div *ngIf="filter != undefined" class="filter">
+  <p class="title">FILTER BY {{ title }}</p>
+  <igx-slider
+    [type]="sliderType.RANGE"
+    [minValue]="0"
+    [maxValue]="filter.priceNumber[filter.priceNumber.length - 1][0] + 1000"
+    [lowerBound]="filter.priceNumber[0][0]"
+    [upperBound]="filter.priceNumber[filter.priceNumber.length - 1][0]" (onValueChange)="send($event.value)"></igx-slider>
+    <p class="info">{{ lowerBound | currency: "USD" }} - {{ upperBound | currency: "USD" }}</p>
+    <p class="info">The average price is {{filter.avgPrice | number:'1.0-0' | currency: "USD" }}</p>
+</div>

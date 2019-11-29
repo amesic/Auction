@@ -14,7 +14,10 @@ export class ShopComponent implements OnInit {
   allCategories;
   filterColor: Filter;
   filterSize: Filter;
+  filterPrice;
   products;
+  lowerBound;
+  upperBound;
 
   hide;
   pageNumber = 0;
@@ -46,6 +49,11 @@ export class ShopComponent implements OnInit {
     this.filterService.getFilterItemsByName("size", this.subcategoryId, this.listOfFiltersClicked).subscribe(items => {
       this.filterSize = items;
     });
+    this.filterService.getFilterPriceInfo().subscribe(infoPriceProduct => {
+      this.filterPrice = infoPriceProduct;
+      this.lowerBound = this.filterPrice.priceNumber[0][0]
+      this.upperBound = this.filterPrice.priceNumber[this.filterPrice.priceNumber.length - 1][0];
+    })
     this.productService.getSortedProducts(
         this.typeOfSorting,
         this.filterColorId,

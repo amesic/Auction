@@ -2,6 +2,11 @@
   <app-filter-categories
     [allCategories]="allCategories"
     (messageEvent)="receiveMessageFromCategories($event)"></app-filter-categories>
+  <app-filter-price
+    [title]="'PRICE'"
+    [filter]="filterPrice"
+    [lowerBound]="lowerBound"
+    [upperBound]="upperBound"></app-filter-price>
   <app-filter
     [title]="'COLOR'"
     [filter]="filterColor"

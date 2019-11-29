@@ -38,7 +38,7 @@
 <p class="infoBid time">Time left: <label *ngIf = "timeLeft != undefined">{{timeLeft}}</label></p>
 
 <div class="watchlist">
-<input type="button" value="Watchlist">
+<input type="button" value="Watchlist" [ngClass]="{'disabledButton': !userIsLoged  || userIsSeller}">
 <fa-icon [icon]="faHeart"></fa-icon>
 </div>
 

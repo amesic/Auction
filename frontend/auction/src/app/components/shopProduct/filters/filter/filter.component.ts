@@ -1,5 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Filter } from 'src/app/models/Filter';
+import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
@@ -9,7 +8,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 })
 export class FilterComponent implements OnInit {
   @Input() title;
-  @Input() filter: Filter;
+  @Input() filter;
 
   constructor() { }
   message;
@@ -19,8 +18,8 @@ export class FilterComponent implements OnInit {
 
   @Output() messageEvent = new EventEmitter<string>();
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
+
   sendFilterId(id) {
     if (id == null) {
       this.showIcon = false;

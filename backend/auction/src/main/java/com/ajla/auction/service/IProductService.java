@@ -2,6 +2,7 @@ package com.ajla.auction.service;
 
 import com.ajla.auction.model.PaginationInfo;
 import com.ajla.auction.model.NumberOfProductsInfo;
+import com.ajla.auction.model.PriceProductInfo;
 import com.ajla.auction.model.Product;
 
 import java.util.List;
@@ -22,4 +23,5 @@ public interface IProductService {
                                                  final Long filterSizeId,
                                                  final Long pageNumber,
                                                  final Long size);
+    PriceProductInfo getNumberProductsByPrice();
 }

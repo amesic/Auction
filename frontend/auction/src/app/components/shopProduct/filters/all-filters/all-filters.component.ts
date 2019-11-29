@@ -10,6 +10,9 @@ export class AllFiltersComponent implements OnInit {
   @Input() allCategories;
   @Input() filterColor;
   @Input() filterSize;
+  @Input() filterPrice;
+  @Input() lowerBound;
+  @Input() upperBound;
 
   constructor() { }
 
