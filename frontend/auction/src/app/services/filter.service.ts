@@ -11,11 +11,15 @@ urlFilterItemsByName = "/characteristic/characteristic";
 
   constructor(private http: HttpClient) { }
 
-  getFilterItemsByName(name: string, subcategoryId): Observable<Filter> {
+  getFilterItemsByName(name: string, subcategoryId, listOfFiltersClicked): Observable<Filter> {
+    let url = this.urlFilterItemsByName;
+    url += "?name=" + name;
     if (subcategoryId != null) {
-    return this.http.get<Filter>(this.urlFilterItemsByName + "?name=" + name + "&subcategoryId=" + subcategoryId);
-  } else {
-    return this.http.get<Filter>(this.urlFilterItemsByName + "?name=" + name);
-  }
+      url += "&subcategoryId=" + subcategoryId;
+    } 
+    if(listOfFiltersClicked != null) {
+      url += "&listOfCharacteristicClicked=" + listOfFiltersClicked;
+    }
+    return this.http.get<Filter>(url);
 }
 }

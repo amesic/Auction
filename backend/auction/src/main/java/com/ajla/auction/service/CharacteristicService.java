@@ -28,7 +28,7 @@ public class CharacteristicService implements ICharacteristicService{
         return characteristicRepository.findAll();
     }
     @Override
-    public NumberOfProductsInfo characteristic(final String name, final Long subcategoryId) {
-        return productRepository.numberOfProductsByCharacteristic(characteristicRepository.findCharacteristicByName(name), subcategoryId);
+    public NumberOfProductsInfo characteristic(final String name, final Long subcategoryId, final List<Long> listOfCharacteristicClicked) {
+        return productRepository.numberOfProductsByCharacteristic(characteristicRepository.findCharacteristicByName(name), subcategoryId, listOfCharacteristicClicked);
     }
 }

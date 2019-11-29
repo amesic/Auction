@@ -16,6 +16,8 @@ export class ShopProductsComponent implements OnInit {
   @Input() filterColorId;
   @Input() filterSizeId;
   @Input() subcategoryId;
+  @Input() pageNumber;
+  @Input() size;
 
   faTh = faTh;
   faList = faList;
@@ -26,11 +28,8 @@ export class ShopProductsComponent implements OnInit {
   clickOnSortList = false;
   className = "grid";
 
-  pageNumber = 0;
-  size = 9;
-
   typeOfSorting = "default";
-  sortingType = "Default sorting";
+  sortingType = "Default Sorting";
   @Output() messageEventSorting = new EventEmitter<string>();
 
   constructor(private productService: ProductService) {}
@@ -46,9 +45,8 @@ export class ShopProductsComponent implements OnInit {
   }
 
   onClick() {
-    this.pageNumber = this.pageNumber + 1;
     this.productService
-      .getSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.subcategoryId,this.pageNumber, this.size)
+      .getSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.subcategoryId, this.pageNumber, this.size)
       .subscribe(products => {
         this.products.items = this.products.items.concat(products.items);
         if (this.checkIfThereIsNoItemsLeft(
@@ -56,6 +54,8 @@ export class ShopProductsComponent implements OnInit {
             this.size,
             products.totalNumberOfItems)) {
           this.hide = true;
+        } else {
+          this.hide = false;
         }
       })
   }

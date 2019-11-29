@@ -24,6 +24,7 @@ export class ShopComponent implements OnInit {
   filterColorId = null;
   filterSizeId = null;
   subcategoryId = null;
+  listOfFiltersClicked = null;
   typeOfSorting = "default";
   messageIfThereIsNoProducts = null;
 
@@ -39,10 +40,10 @@ export class ShopComponent implements OnInit {
       .subscribe(categories => {
         this.allCategories = categories;
       });
-    this.filterService.getFilterItemsByName("color", this.subcategoryId).subscribe(items => {
+    this.filterService.getFilterItemsByName("color", this.subcategoryId, this.listOfFiltersClicked).subscribe(items => {
       this.filterColor = items;
     });
-    this.filterService.getFilterItemsByName("size", this.subcategoryId).subscribe(items => {
+    this.filterService.getFilterItemsByName("size", this.subcategoryId, this.listOfFiltersClicked).subscribe(items => {
       this.filterSize = items;
     });
     this.productService.getSortedProducts(
@@ -68,6 +69,15 @@ export class ShopComponent implements OnInit {
       this.filterColorId = $event;
       this.pageNumber = 0;
       this.size = 9;
+      if (this.filterColorId != null) {
+      this.listOfFiltersClicked = new Array();
+      this.listOfFiltersClicked = [this.filterColorId];
+      } else {
+        this.listOfFiltersClicked = null;
+      }
+      this.filterService.getFilterItemsByName("size", this.subcategoryId, this.listOfFiltersClicked).subscribe(items => {
+        this.filterSize = items;
+      });
       this.productService.getSortedProducts(
           this.typeOfSorting,
           this.filterColorId,
@@ -77,6 +87,7 @@ export class ShopComponent implements OnInit {
           this.size).subscribe(products => {
           if (products != null) {
           this.products = products;
+          this.messageIfThereIsNoProducts = null;
           this.pageNumber++;
           if (this.products.totalNumberOfItems - this.pageNumber * this.size < 0 ||
             this.products.totalNumberOfItems - this.pageNumber * this.size == 0) {
@@ -91,6 +102,7 @@ export class ShopComponent implements OnInit {
           this.messageIfThereIsNoProducts = "For this filter there is no items yet!";
         }
         });
+        window.scrollTo(0, 0);
     }
   }
   receiveMessageFromFilterSize($event) {
@@ -98,6 +110,15 @@ export class ShopComponent implements OnInit {
       this.filterSizeId = $event;
       this.pageNumber = 0;
       this.size = 9;
+      if (this.filterSizeId != null) {
+        this.listOfFiltersClicked = new Array();
+        this.listOfFiltersClicked = [this.filterSizeId];
+        } else {
+          this.listOfFiltersClicked = null;
+        }
+        this.filterService.getFilterItemsByName("color", this.subcategoryId, this.listOfFiltersClicked).subscribe(items => {
+          this.filterColor = items;
+        });
       this.productService.getSortedProducts(
           this.typeOfSorting,
           this.filterColorId,
@@ -107,6 +128,7 @@ export class ShopComponent implements OnInit {
           this.size).subscribe(products => {
           if (products != null){
           this.products = products;
+          this.messageIfThereIsNoProducts = null;
           this.pageNumber++;
           if (this.products.totalNumberOfItems - this.pageNumber * this.size <0 ||
             this.products.totalNumberOfItems - this.pageNumber * this.size == 0) {
@@ -121,6 +143,7 @@ export class ShopComponent implements OnInit {
           this.messageIfThereIsNoProducts = "For this filter there is no items yet!";
         }
         });
+        window.scrollTo(0, 0);
     }
   }
   receiveMessageFromCategories($event) {
@@ -128,10 +151,10 @@ export class ShopComponent implements OnInit {
       this.subcategoryId = $event;
       this.pageNumber = 0;
       this.size = 9;
-      this.filterService.getFilterItemsByName("color", this.subcategoryId).subscribe(items => {
+      this.filterService.getFilterItemsByName("color", this.subcategoryId, this.listOfFiltersClicked).subscribe(items => {
         this.filterColor = items;
       });
-      this.filterService.getFilterItemsByName("size", this.subcategoryId).subscribe(items => {
+      this.filterService.getFilterItemsByName("size", this.subcategoryId, this.listOfFiltersClicked).subscribe(items => {
         this.filterSize = items;
       });
       this.productService.getSortedProducts(
@@ -151,8 +174,7 @@ export class ShopComponent implements OnInit {
           } else {
           this.hide = false;
           }
-        }
-        else {
+        } else {
           this.products = new PaginationInfo;
           this.products.items = [];
           this.hide = true;
@@ -160,6 +182,7 @@ export class ShopComponent implements OnInit {
         }
 
       });
+      window.scrollTo(0, 0);
     }
   }
   recieveMessageFromShopProducts($event) {
@@ -176,6 +199,7 @@ export class ShopComponent implements OnInit {
           this.size).subscribe(products => {
           if(products != null) {
           this.products = products;
+          this.messageIfThereIsNoProducts = null;
           this.pageNumber++;
           if (this.products.totalNumberOfItems - this.pageNumber * this.size < 0 ||
             this.products.totalNumberOfItems - this.pageNumber * this.size == 0) {
@@ -190,6 +214,7 @@ export class ShopComponent implements OnInit {
           this.messageIfThereIsNoProducts = "There are no items for sorting yet!";
         }
       });
+      window.scrollTo(0, 0);
     }
   }
 }
