@@ -189,7 +189,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     @Override
-    public NumberOfProductsInfo numberOfProductsByCharacteristic(final Characteristic characteristic, final Long subcategoryId) {
+    public NumberOfProductsInfo numberOfProductsByCharacteristic(final Characteristic characteristic,
+                                                                 final Long subcategoryId,
+                                                                 final List<Long> listOfCharacteristicClicked) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
         final Root<Product> product = cq.from(Product.class);
@@ -205,10 +207,18 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             if (subcategoryId != null) {
                 sqlQuery += " AND p.subcategory =:subcategory";
             }
+            if (listOfCharacteristicClicked != null) {
+                sqlQuery += " AND p.id IN (SELECT p.id FROM Product p JOIN p.characteristics c WHERE" +
+                        " c.id IN (:listOfCharacteristics) GROUP BY p.id HAVING COUNT(c.id)=:listLength)";
+            }
             query = em.createQuery(sqlQuery, Long.class);
             query.setParameter("characteristics_id", oneOfCharacteristic.getId());
             if (subcategoryId != null) {
                 query.setParameter("subcategory", subcategory);
+            }
+            if (listOfCharacteristicClicked != null) {
+                query.setParameter("listOfCharacteristics", listOfCharacteristicClicked);
+                query.setParameter("listLength", (long) listOfCharacteristicClicked.size());
             }
             query.setParameter("dateNow", LocalDate.now());
             NumberOfProductsInfo categoryOfCharacteristic = new NumberOfProductsInfo(oneOfCharacteristic.getId(),

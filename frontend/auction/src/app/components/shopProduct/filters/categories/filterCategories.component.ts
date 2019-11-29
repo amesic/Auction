@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { Router } from '@angular/router';
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-filter-categories',
@@ -13,6 +14,8 @@ export class FilterCategoriesComponent implements OnInit {
 
  faPlus = faPlus;
  faMinus = faMinus;
+ faTimes = faTimes;
+ sentCategoryId;
  message;
 
   @Output() messageEvent = new EventEmitter<string>();
@@ -20,8 +23,9 @@ export class FilterCategoriesComponent implements OnInit {
 
   ngOnInit() {
   }
-  sendSubcategoryId(id) {
-    this.message = id;
+  sendSubcategoryId(subcategoryId, categoryId) {
+    this.message = subcategoryId;
+    this.sentCategoryId = categoryId;
     this.messageEvent.emit(this.message);
   }
 

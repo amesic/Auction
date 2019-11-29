@@ -29,8 +29,9 @@ public class CharacteristicController {
     }
     @GetMapping("/characteristic")
     public ResponseEntity<NumberOfProductsInfo> characteristic(@RequestParam("name") final String name,
-                                                               @RequestParam(required = false) final Long subcategoryId) {
-        return new ResponseEntity<>(characteristicService.characteristic(name, subcategoryId), HttpStatus.OK);
+                                                               @RequestParam(required = false) final Long subcategoryId,
+                                                               @RequestParam(required = false) final List<Long> listOfCharacteristicClicked) {
+        return new ResponseEntity<>(characteristicService.characteristic(name, subcategoryId, listOfCharacteristicClicked), HttpStatus.OK);
     }
 
 }

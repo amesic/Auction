@@ -77,3 +77,32 @@ p {
 .categories .subcategory > a.change {
   color: #8367d8;
 }
+.categories .subcategory > a.changeColor {
+  color: #8367d8;
+}
+.categories .category .categoryIcon > a.changeColor {
+  font-weight: 700;
+}
+label {
+  cursor: pointer;
+}
+.categories .subcategory > a:hover {
+  color: #8367d8;
+}
+.categories .subcategory > fa-icon:hover {
+  cursor: pointer;
+}
+.categories .subcategory {
+  display: flex;
+  justify-content: space-between;
+}
+.categories .subcategory > fa-icon {
+  padding-right: 8px;
+  padding-bottom: 9px;
+  font-size: 11px;
+  color: #9b9b9b;
+  display: none;
+}
+.categories .subcategory > a.changeColor ~ fa-icon {
+  display: block;
+}

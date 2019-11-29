@@ -4,18 +4,12 @@ import { Directive, ElementRef, EventEmitter, Output, HostListener, HostBinding 
   selector: '[appClickOutside]'
 })
 export class ClickOutsideDirective {
+  @HostBinding('class.show') isOpen = false;
   constructor(private _elementRef : ElementRef) {
   }
 
-  @Output()
-  public appclickOutside = new EventEmitter();
-
-  @HostListener('document:click', ['$event.target'])
-  public onClick(targetElement) {
-      const clickedInside = this._elementRef.nativeElement.contains(targetElement);
-      if (!clickedInside) {
-          this.appclickOutside.emit(null);
-      }
+  @HostListener('document:click', ['$event']) onClick(e: Event) {
+      this.isOpen = this._elementRef.nativeElement.contains(e.target) ? !this.isOpen : false;
   }
 
 }

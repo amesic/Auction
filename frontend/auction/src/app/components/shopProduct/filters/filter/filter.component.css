@@ -5,25 +5,47 @@
   width: 265px;
   margin-bottom: 20px;
 }
-p {
+.filter > p {
   margin: 0;
   font: 700 14px "Lato", sans-serif;
   color: #8367d8;
   letter-spacing: 0.49px;
 }
-a {
+.filterInfo > a {
   font: 400 14px "Lato", sans-serif;
   color: #252525;
   letter-spacing: 0.49px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
-a,
-p {
+.filterInfo > a,
+.filter > p {
   display: flex;
   align-items: center;
   height: 42px;
   padding-left: 20px;
 }
-a.change {
+.filterInfo {
+  display: flex;
+  justify-content: space-between;
+}
+.filterInfo .closeIcon {
+  padding-right: 5px;
+  padding-top: 15px;
+  font-size: 15px;
+  cursor: pointer;
+  display: none;
+}
+.filterInfo > a.changeColor {
   color: #8367d8;
 }
+.filterInfo > a.changeColor ~ .closeIcon {
+  display: block;
+}
+.filterInfo > a:hover {
+  color: #8367d8;
+}
+
