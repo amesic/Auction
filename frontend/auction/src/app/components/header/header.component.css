@@ -101,11 +101,12 @@
   color: #8367d8;
   font-weight: 700;
 }
-
+.linksBelowHeader a:hover {
+  color: #8367d8;
+}
 .search {
   position: relative;
 }
-
 .search > .searchIcon {
   position: absolute;
   right: 10px;
@@ -117,4 +118,7 @@
 }
 .auction > label:hover {
   cursor: pointer;
+}
+.links > a:hover {
+  color: #8367d8;
 }

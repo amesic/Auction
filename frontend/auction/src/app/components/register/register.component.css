@@ -54,3 +54,9 @@ form a {
   font-family: "Lato", sans-serif;
   font-weight: 200;
 }
+form input[type="button"]:hover {
+  transform: translateY(5%) translateX(1%);
+}
+form a:hover {
+  font-weight: 700;
+}

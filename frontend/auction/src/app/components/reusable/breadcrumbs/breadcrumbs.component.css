@@ -32,4 +32,7 @@
   margin-left: 1.25em;
   cursor: pointer;
 }
+.container > label:hover, .container > div > label:hover {
+  color: #8367d8;
+}
 
