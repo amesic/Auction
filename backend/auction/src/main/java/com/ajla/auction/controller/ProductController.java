@@ -1,6 +1,7 @@
 package com.ajla.auction.controller;
 
 import com.ajla.auction.model.PaginationInfo;
+import com.ajla.auction.model.PriceProductInfo;
 import com.ajla.auction.model.Product;
 import com.ajla.auction.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,5 +65,9 @@ public class ProductController {
                                                                         @RequestParam("pageNumber") final Long pageNumber,
                                                                         @RequestParam("size") final Long size) {
         return new ResponseEntity<>(productService.getAllProductsBySort(typeOfSort, subcategoryId, filterColorId, filterSizeId, pageNumber, size), HttpStatus.OK);
+    }
+    @GetMapping("/numberOfProductsByPrice")
+    public ResponseEntity<PriceProductInfo> getAllProductsByPrice() {
+        return new ResponseEntity<>(productService.getNumberProductsByPrice(), HttpStatus.OK);
     }
 }

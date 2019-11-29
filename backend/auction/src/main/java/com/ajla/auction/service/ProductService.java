@@ -2,6 +2,7 @@ package com.ajla.auction.service;
 
 import com.ajla.auction.model.PaginationInfo;
 import com.ajla.auction.model.NumberOfProductsInfo;
+import com.ajla.auction.model.PriceProductInfo;
 import com.ajla.auction.model.Product;
 import com.ajla.auction.repo.BidRepository;
 import com.ajla.auction.repo.CategoryRepository;
@@ -74,5 +75,9 @@ public class ProductService implements IProductService{
                                                         final Long pageNumber,
                                                         final Long size) {
         return productRepository.getAllProductsBySort(typeOfSort, subcategoryId, filterColorId, filterSizeId, pageNumber, size);
+    }
+    @Override
+    public PriceProductInfo getNumberProductsByPrice() {
+        return productRepository.numberOfProductsByPrice();
     }
 }

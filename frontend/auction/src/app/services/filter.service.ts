@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
 import { Filter } from '../models/Filter';
+import { PriceProduct } from '../models/PriceProduct';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FilterService {
 urlFilterItemsByName = "/characteristic/characteristic";
+urlFilterPriceInfo = "/product/numberOfProductsByPrice";
 
   constructor(private http: HttpClient) { }
 
@@ -22,4 +24,7 @@ urlFilterItemsByName = "/characteristic/characteristic";
     }
     return this.http.get<Filter>(url);
 }
+ getFilterPriceInfo(): Observable<PriceProduct> {
+   return this.http.get<PriceProduct>(this.urlFilterPriceInfo);
+ }
 }

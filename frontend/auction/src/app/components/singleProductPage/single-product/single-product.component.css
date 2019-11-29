@@ -174,3 +174,7 @@
   font: 200 15px "Lato", sans-serif;
   color: red;
 }
+.allImages .smallImages div > img:hover {
+  transform: translateY(2%);
+
+}

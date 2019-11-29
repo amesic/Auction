@@ -16,6 +16,7 @@ public interface ProductRepositoryCustom {
     NumberOfProductsInfo numberOfProductsByCharacteristic(final Characteristic characteristic,
                                                           final Long subcategoryId,
                                                           final List<Long> listOfCharacteristicClicked);
+    PriceProductInfo numberOfProductsByPrice();
     PaginationInfo<Product> getAllProductsBySort(final String typeOfSort,
                                                  final Long subcategoryId,
                                                  final Long filterColorId,

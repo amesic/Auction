@@ -4,6 +4,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { BasicAuthHtppInterceptorServiceService } from './services/basic-auth-htpp-interceptor-service.service';
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import {FormsModule} from '@angular/forms';
+import { IgxSliderModule } from 'igniteui-angular';
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -34,6 +36,7 @@ import { ShopProductsComponent } from './components/shopProduct/products/shop-pr
 import { ErrorComponent } from './components/error/error.component';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
 import { ChangeColorOnClickDirective } from './directives/change-color-on-click.directive';
+import { FilterPriceComponent } from './components/shopProduct/filters/filter-price/filter-price.component';
 
 @NgModule({
   declarations: [
@@ -64,13 +67,16 @@ import { ChangeColorOnClickDirective } from './directives/change-color-on-click.
     ErrorComponent,
     ClickOutsideDirective,
     ChangeColorOnClickDirective,
+    FilterPriceComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    FormsModule,
+    IgxSliderModule
   ],
   providers: [
     LoginRegisterActivate,

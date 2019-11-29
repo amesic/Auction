@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 import java.time.LocalDate;
 import java.util.*;
@@ -64,7 +65,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 cb.equal(product.get("endDate"), LocalDate.now()),
                 cb.equal(product.get("endDate"), LocalDate.now().plusDays(1))
         ))
-                .orderBy( cb.asc(product.get("endDate")));
+                .orderBy(cb.asc(product.get("endDate")));
         final TypedQuery<Product> query = em.createQuery(cq);
         if (query.getResultList().isEmpty()) {
             return null;
@@ -231,6 +232,28 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return mainCharacteristic;
     }
     @Override
+    public PriceProductInfo numberOfProductsByPrice() {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Object> cq = cb.createQuery(Object.class);
+        final Root<Product> product = cq.from(Product.class);
+
+        cq.multiselect(product.get("startPrice"), cb.count(product));
+        cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
+
+        final TypedQuery<Object> query = em.createQuery(cq);
+
+        CriteriaQuery<Double> cq1 = cb.createQuery(Double.class);
+        final Root<Product> product1 = cq1.from(Product.class);
+        cq1.select(cb.avg(product1.get("startPrice")));
+
+        final TypedQuery<Double> query1 = em.createQuery(cq1);
+
+        PriceProductInfo priceProductInfo = new PriceProductInfo();
+        priceProductInfo.setAvgPrice(query1.getSingleResult());
+        priceProductInfo.setPriceNumber(query.getResultList());
+        return priceProductInfo;
+    }
+    @Override
     public PaginationInfo<Product> getAllProductsBySort(final String typeOfSort,
                                                         final Long subcategoryId,
                                                         final Long filterColorId,
@@ -376,8 +399,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             query.setMaxResults(Math.toIntExact(size));
             PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
             return  paginationInfo;
-        } else if (typeOfSort.equals("popularity")) {
-            return null;
         } else {
             return null;
         }
