@@ -1,9 +1,9 @@
 @import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
 .button {
   background: #ffffff;
-  border: 3px solid #f7f4fd;
+  border: 3px solid #8367d8;
   box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.05);
-  font: 200 1em "Lato", sans-serif;
+  font: 400 1em "Lato", sans-serif;
   padding-left: 2em;
   padding-right: 2em;
   padding-bottom: 0.5em;
@@ -27,6 +27,7 @@
 .container .button {
   margin-left: 910px;
   margin-bottom: 15px;
+
 }
 .noMoreItems {
   display: none;
@@ -36,4 +37,7 @@
   margin: 0;
   margin-bottom: 125px;
   text-align: center;
+}
+.container .button:hover {
+  transform: translateY(5%) translateX(1%);
 }

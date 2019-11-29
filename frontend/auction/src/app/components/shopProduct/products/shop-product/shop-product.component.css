@@ -38,6 +38,7 @@
   right: 25px;
   transform: translateY(9%);
   font-size: 20px;
+  cursor: pointer;
 }
 .grid .image .buttons .watchlist > input,
 .grid .image .buttons .bid > input {
@@ -58,16 +59,15 @@
   color: #252525;
   letter-spacing: 0.84px;
 }
-.grid .image:hover {
-  cursor: pointer;
-}
 .grid .image:hover .buttons {
-  cursor: pointer;
   display: flex;
   justify-content: space-around;
   align-items: center;
 }
-
+.grid .buttons .watchlist:hover, .grid .buttons .bid:hover {
+  transform: translateY(5%) translateX(1%);
+  color: #8367d8;
+}
 .list {
   display: flex;
 }
@@ -116,4 +116,17 @@
   position: absolute;
   right: 25px;
   transform: translateY(18%);
+  cursor: pointer;
+}
+.list .aboutAndButtons .buttons .watchlist:hover > input,
+.list .aboutAndButtons .buttons .bid:hover > input {
+  border: 3px solid #8367d8;
+}
+.list .aboutAndButtons .buttons .watchlist:hover,
+.list .aboutAndButtons .buttons .bid:hover {
+  transform: translateY(5%) translateX(1%);
+}
+.list .aboutAndButtons .buttons .watchlist:hover > fa-icon,
+.list .aboutAndButtons .buttons .bid:hover > fa-icon {
+  color: #8367d8;
 }

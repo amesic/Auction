@@ -56,6 +56,7 @@ export class ShopProductsComponent implements OnInit {
           this.hide = true;
         } else {
           this.hide = false;
+          this.pageNumber++;
         }
       })
   }
@@ -72,6 +73,7 @@ export class ShopProductsComponent implements OnInit {
         this.hide = true;
       } else {
         this.hide = false;
+        this.pageNumber++;
       }
     });
   }
@@ -87,6 +89,7 @@ export class ShopProductsComponent implements OnInit {
         this.hide = true;
       } else {
         this.hide = false;
+        this.pageNumber++;
       }
     });
   }

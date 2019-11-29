@@ -99,7 +99,7 @@ export class ShopComponent implements OnInit {
           this.products = new PaginationInfo;
           this.products.items = [];
           this.hide = true;
-          this.messageIfThereIsNoProducts = "For this filter there is no items yet!";
+          this.messageIfThereIsNoProducts = "Shop is empty!";
         }
         });
         window.scrollTo(0, 0);
@@ -140,7 +140,7 @@ export class ShopComponent implements OnInit {
           this.products = new PaginationInfo;
           this.products.items = [];
           this.hide = true;
-          this.messageIfThereIsNoProducts = "For this filter there is no items yet!";
+          this.messageIfThereIsNoProducts = "Shop is empty!";
         }
         });
         window.scrollTo(0, 0);
@@ -178,7 +178,7 @@ export class ShopComponent implements OnInit {
           this.products = new PaginationInfo;
           this.products.items = [];
           this.hide = true;
-          this.messageIfThereIsNoProducts = "This category has no items yet!";
+          this.messageIfThereIsNoProducts = "Shop is empty!";
         }
 
       });
@@ -211,7 +211,7 @@ export class ShopComponent implements OnInit {
           this.products = new PaginationInfo;
           this.products.items = [];
           this.hide = true;
-          this.messageIfThereIsNoProducts = "There are no items for sorting yet!";
+          this.messageIfThereIsNoProducts = "Shop is empty!";
         }
       });
       window.scrollTo(0, 0);

@@ -106,3 +106,6 @@ label {
 .categories .subcategory > a.changeColor ~ fa-icon {
   display: block;
 }
+.category .categoryIcon > a:hover {
+  color: #8367d8;
+}
