@@ -18,6 +18,7 @@ export class ShopComponent implements OnInit {
   products;
   lowerBound;
   upperBound;
+  priceProduct;
 
   hide;
   pageNumber = 0;
@@ -51,8 +52,9 @@ export class ShopComponent implements OnInit {
     });
     this.filterService.getFilterPriceInfo().subscribe(infoPriceProduct => {
       this.filterPrice = infoPriceProduct;
-      this.lowerBound = this.filterPrice.priceNumber[0][0]
-      this.upperBound = this.filterPrice.priceNumber[this.filterPrice.priceNumber.length - 1][0];
+      this.lowerBound = this.filterPrice.priceNumber[0].name;
+      this.upperBound = this.filterPrice.priceNumber[this.filterPrice.priceNumber.length - 1].name;
+      this.priceProduct = this.filterPrice.priceNumber;
     })
     this.productService.getSortedProducts(
         this.typeOfSorting,

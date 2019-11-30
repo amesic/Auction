@@ -27,6 +27,13 @@
   letter-spacing: 0.49px;
 }
 igx-slider {
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 23px;
+  margin-right: 23px;
+}
+.components {
+  display: flex;
+  flex-direction: column;
+}
+ngx-charts-bar-vertical {
+  margin-bottom: -34px;
 }
