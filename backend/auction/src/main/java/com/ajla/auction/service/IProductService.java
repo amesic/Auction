@@ -21,7 +21,9 @@ public interface IProductService {
                                                  final Long subcategoryId,
                                                  final Long filterColorId,
                                                  final Long filterSizeId,
+                                                 final Double lowerBound,
+                                                 final Double upperBound,
                                                  final Long pageNumber,
                                                  final Long size);
-    PriceProductInfo getNumberProductsByPrice();
+    PriceProductInfo getNumberProductsByPrice(final Long subcategoryId, final List<Long> listOfCharacteristicsClicked);
 }

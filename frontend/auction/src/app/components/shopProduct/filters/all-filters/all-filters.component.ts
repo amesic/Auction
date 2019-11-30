@@ -13,6 +13,7 @@ export class AllFiltersComponent implements OnInit {
   @Input() filterPrice;
   @Input() lowerBound;
   @Input() upperBound;
+  @Input() priceProduct;
 
   constructor() { }
 

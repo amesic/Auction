@@ -5,10 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -232,32 +230,115 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return mainCharacteristic;
     }
     @Override
-    public PriceProductInfo numberOfProductsByPrice() {
+    public PriceProductInfo numberOfProductsByPrice(final Long subcategoryId, final List<Long> listOfCharacteristicsClicked) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Object> cq = cb.createQuery(Object.class);
+        CriteriaQuery<PriceNumberProducts> cq = cb.createQuery(PriceNumberProducts.class);
         final Root<Product> product = cq.from(Product.class);
 
-        cq.multiselect(product.get("startPrice"), cb.count(product));
-        cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
+        if (subcategoryId == null && listOfCharacteristicsClicked == null) {
+            cq.multiselect(product.get("startPrice"), cb.count(product));
+            cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
 
-        final TypedQuery<Object> query = em.createQuery(cq);
+            CriteriaQuery<Double> cqForAvgPrice = cb.createQuery(Double.class);
+            final Root<Product> productForAvgPrice = cqForAvgPrice.from(Product.class);
+            cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")));
 
-        CriteriaQuery<Double> cq1 = cb.createQuery(Double.class);
-        final Root<Product> product1 = cq1.from(Product.class);
-        cq1.select(cb.avg(product1.get("startPrice")));
+            PriceProductInfo priceProductInfo = new PriceProductInfo();
+            priceProductInfo.setAvgPrice(em.createQuery(cqForAvgPrice).getSingleResult());
+            priceProductInfo.setPriceNumber(em.createQuery(cq).getResultList());
 
-        final TypedQuery<Double> query1 = em.createQuery(cq1);
+            return priceProductInfo;
 
-        PriceProductInfo priceProductInfo = new PriceProductInfo();
-        priceProductInfo.setAvgPrice(query1.getSingleResult());
-        priceProductInfo.setPriceNumber(query.getResultList());
-        return priceProductInfo;
+        } else if (subcategoryId != null && listOfCharacteristicsClicked == null) {
+            Category subcategory = categoryRepository.findCategoryById(subcategoryId);
+
+            cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
+                    .where(cb.equal(product.get("subcategory"), subcategory));
+            cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
+
+            CriteriaQuery<Double> cqForAvgPrice = cb.createQuery(Double.class);
+            final Root<Product> productForAvgPrice = cqForAvgPrice.from(Product.class);
+            cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
+                    .where(cb.equal(productForAvgPrice.get("subcategory"), subcategory));
+
+            PriceProductInfo priceProductInfo = new PriceProductInfo();
+            priceProductInfo.setAvgPrice(em.createQuery(cqForAvgPrice).getSingleResult());
+            priceProductInfo.setPriceNumber(em.createQuery(cq).getResultList());
+
+            return priceProductInfo;
+
+        } else if (subcategoryId == null) {
+            CriteriaQuery<Product> cqForProductId = cb.createQuery(Product.class);
+            final Root<Product> productForProductId = cqForProductId.from(Product.class);
+            Join<Product, Characteristic> characteristicForProductId = productForProductId.join("characteristics");
+
+            cqForProductId.select(productForProductId.get("id"))
+                    .where(cb.in(characteristicForProductId.get("id")).value(listOfCharacteristicsClicked));
+            cqForProductId.groupBy(productForProductId.get("id"))
+                    .having(cb.equal(cb.count(characteristicForProductId.get("id")), listOfCharacteristicsClicked.size()));
+
+            final TypedQuery<Product> listOfProductsIdWithCharacteristics = em.createQuery(cqForProductId);
+
+
+            cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
+                    .where(cb.in(product.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()));
+            cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
+
+            CriteriaQuery<Double> cqForAvgPrice = cb.createQuery(Double.class);
+            final Root<Product> productForAvgPrice = cqForAvgPrice.from(Product.class);
+            cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
+                    .where(cb.in(productForAvgPrice.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()));
+
+            PriceProductInfo priceProductInfo = new PriceProductInfo();
+            priceProductInfo.setAvgPrice(em.createQuery(cqForAvgPrice).getSingleResult());
+            priceProductInfo.setPriceNumber(em.createQuery(cq).getResultList());
+
+            return priceProductInfo;
+
+        } else {
+            Category subcategory = categoryRepository.findCategoryById(subcategoryId);
+
+            CriteriaQuery<Long> cqForProductId = cb.createQuery(Long.class);
+            final Root<Product> productForProductId = cqForProductId.from(Product.class);
+            Join<Product, Characteristic> characteristicForProductId = productForProductId.join("characteristics");
+
+            cqForProductId.select(productForProductId.get("id"))
+                    .where(cb.in(characteristicForProductId.get("id")).value(listOfCharacteristicsClicked));
+            cqForProductId.groupBy(productForProductId.get("id"))
+                    .having(cb.equal(cb.count(characteristicForProductId.get("id")), listOfCharacteristicsClicked.size()));
+
+            final TypedQuery<Long> listOfProductsIdWithCharacteristics = em.createQuery(cqForProductId);
+
+            cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
+                    .where(cb.and(
+                            cb.equal(product.get("subcategory"), subcategory),
+                            cb.in(product.get("id")).value(listOfProductsIdWithCharacteristics.getResultList())
+                            )
+                    );
+            cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
+
+            CriteriaQuery<Double> cqForAvgPrice = cb.createQuery(Double.class);
+            final Root<Product> productForAvgPrice = cqForAvgPrice.from(Product.class);
+            cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
+                    .where(cb.and(
+                            cb.equal(productForAvgPrice.get("subcategory"), subcategory),
+                            cb.in(productForAvgPrice.get("id")).value(listOfProductsIdWithCharacteristics.getResultList())
+                    ));
+
+            PriceProductInfo priceProductInfo = new PriceProductInfo();
+            priceProductInfo.setAvgPrice(em.createQuery(cqForAvgPrice).getSingleResult());
+            priceProductInfo.setPriceNumber(em.createQuery(cq).getResultList());
+
+            return priceProductInfo;
+        }
     }
     @Override
     public PaginationInfo<Product> getAllProductsBySort(final String typeOfSort,
                                                         final Long subcategoryId,
                                                         final Long filterColorId,
                                                         final Long filterSizeId,
+                                                        final Double lowerBound,
+                                                        final Double upperBound,
                                                         final Long pageNumber,
                                                         final Long size) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -281,10 +362,15 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         } else if (subcategoryId != null) {
             sqlQuery += " WHERE p.subcategory =:subcategory";
         }
+        if (lowerBound != null && upperBound != null && (subcategoryId != null || (filterColorId != null || filterSizeId !=null))) {
+            sqlQuery += " AND p.startPrice >=:lowerBound AND p.startPrice <=:upperBound";
+        } else if (lowerBound != null && upperBound != null && subcategoryId == null) {
+            sqlQuery += " WHERE p.startPrice >=:lowerBound AND p.startPrice <=:upperBound";
+        }
 
 
         if (typeOfSort.equals("default")) {
-            if (subcategoryId == null && filterSizeId == null && filterColorId == null) {
+            if (subcategoryId == null && filterSizeId == null && filterColorId == null && lowerBound == null && upperBound == null) {
                 sqlQuery += " WHERE p.endDate >=:dateNow AND p.startDate <=:dateNow";
             } else {
                 sqlQuery += " AND p.endDate >=:dateNow AND p.startDate <=:dateNow";
@@ -301,6 +387,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 if (subcategory != null) {
                     query.setParameter("subcategory", subcategory);
                 }
+                if (lowerBound != null && upperBound != null) {
+                    query.setParameter("lowerBound", lowerBound);
+                    query.setParameter("upperBound", upperBound);
+                }
                 query.setParameter("dateNow", LocalDate.now());
                 if (query.getResultList().isEmpty()) {
                     return null;
@@ -313,7 +403,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
                 return  paginationInfo;
         } else if (typeOfSort.equals("newness")) {
-            if (subcategory == null && filterSizeId == null && filterColorId == null) {
+            if (subcategory == null && filterSizeId == null && filterColorId == null && lowerBound == null && upperBound == null) {
                 sqlQuery += " WHERE p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startDate DESC";
             } else {
                 sqlQuery += " AND p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startDate DESC";
@@ -330,6 +420,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             if (subcategory != null) {
                 query.setParameter("subcategory", subcategory);
             }
+            if (lowerBound != null && upperBound != null) {
+                query.setParameter("lowerBound", lowerBound);
+                query.setParameter("upperBound", upperBound);
+            }
             query.setParameter("dateNow", LocalDate.now());
             if (query.getResultList().isEmpty()) {
                 return null;
@@ -342,7 +436,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
             return  paginationInfo;
         } else if (typeOfSort.equals("priceLowest")) {
-            if (subcategory == null && filterSizeId == null && filterColorId == null) {
+            if (subcategory == null && filterSizeId == null && filterColorId == null && lowerBound == null && upperBound == null) {
                 sqlQuery += " WHERE p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startPrice ASC";
             } else {
                 sqlQuery += " AND p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startPrice ASC";
@@ -359,6 +453,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             if (subcategory != null) {
                 query.setParameter("subcategory", subcategory);
             }
+            if (lowerBound != null && upperBound != null) {
+                query.setParameter("lowerBound", lowerBound);
+                query.setParameter("upperBound", upperBound);
+            }
             query.setParameter("dateNow", LocalDate.now());
             if (query.getResultList().isEmpty()) {
                 return null;
@@ -371,7 +469,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
             return  paginationInfo;
         } else if (typeOfSort.equals("priceHighest")) {
-            if (subcategory == null && filterSizeId == null && filterColorId == null) {
+            if (subcategory == null && filterSizeId == null && filterColorId == null && lowerBound == null && upperBound == null) {
                 sqlQuery += " WHERE p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startPrice DESC";
             } else {
                 sqlQuery += " AND p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startPrice DESC";
@@ -387,6 +485,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             }
             if (subcategory != null) {
                 query.setParameter("subcategory", subcategory);
+            }
+            if (lowerBound != null && upperBound != null) {
+                query.setParameter("lowerBound", lowerBound);
+                query.setParameter("upperBound", upperBound);
             }
             query.setParameter("dateNow", LocalDate.now());
             if (query.getResultList().isEmpty()) {

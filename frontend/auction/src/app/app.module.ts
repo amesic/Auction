@@ -4,8 +4,10 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { BasicAuthHtppInterceptorServiceService } from './services/basic-auth-htpp-interceptor-service.service';
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import {FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { IgxSliderModule } from 'igniteui-angular';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -76,7 +78,9 @@ import { FilterPriceComponent } from './components/shopProduct/filters/filter-pr
     HttpClientModule,
     FontAwesomeModule,
     FormsModule,
-    IgxSliderModule
+    IgxSliderModule,
+    NgxChartsModule,
+    BrowserAnimationsModule
   ],
   providers: [
     LoginRegisterActivate,

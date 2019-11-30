@@ -1,11 +1,10 @@
 package com.ajla.auction.model;
 
 import java.util.List;
-import java.util.Map;
 
 public class PriceProductInfo {
     private Double avgPrice;
-    private List<Object> priceNumber;
+    private List<PriceNumberProducts> priceNumber;
 
     public Double getAvgPrice() {
         return avgPrice;
@@ -15,11 +14,11 @@ public class PriceProductInfo {
         this.avgPrice = avgPrice;
     }
 
-    public List<Object> getPriceNumber() {
+    public List<PriceNumberProducts> getPriceNumber() {
         return priceNumber;
     }
 
-    public void setPriceNumber(List<Object> priceNumber) {
+    public void setPriceNumber(List<PriceNumberProducts> priceNumber) {
         this.priceNumber = priceNumber;
     }
 }

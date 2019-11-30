@@ -16,11 +16,13 @@ public interface ProductRepositoryCustom {
     NumberOfProductsInfo numberOfProductsByCharacteristic(final Characteristic characteristic,
                                                           final Long subcategoryId,
                                                           final List<Long> listOfCharacteristicClicked);
-    PriceProductInfo numberOfProductsByPrice();
+    PriceProductInfo numberOfProductsByPrice(final Long subcategoryId, final List<Long> listOfCharacteristicsClicked);
     PaginationInfo<Product> getAllProductsBySort(final String typeOfSort,
                                                  final Long subcategoryId,
                                                  final Long filterColorId,
                                                  final Long filterSizeId,
+                                                 final Double lowerBound,
+                                                 final Double upperBound,
                                                  final Long pageNumber,
                                                  final Long size);
 }
