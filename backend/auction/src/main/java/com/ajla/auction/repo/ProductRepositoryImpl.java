@@ -164,9 +164,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         List<NumberOfProductsInfo> allCategories = new ArrayList<>();
         for (Category category: categories) {
             if(category.getSubcategories().size() != 0) {
-                NumberOfProductsInfo categoryInfo = new NumberOfProductsInfo(category.getId(), category.getName(), Arrays.asList(), null);
+                NumberOfProductsInfo categoryInfo = new NumberOfProductsInfo(category.getId(), category.getName(), Collections.emptyList(), null);
                 List<NumberOfProductsInfo> listOfSubcategoryInfo = new ArrayList<>();
-                Long numberOfProductsByCategory = (long) 0;
+                long numberOfProductsByCategory = 0;
                 for (Category subcategory : category.getSubcategories()) {
                     cq.where(cb.and(
                             cb.equal(product.get("subcategory"), subcategory.getId()),
@@ -174,15 +174,14 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                             cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now())
                     ));
                     query = em.createQuery(cq);
-                    NumberOfProductsInfo subcategoryInfo = new NumberOfProductsInfo(subcategory.getId(), subcategory.getName(), Arrays.asList(), (long) query.getResultList().size());
+                    NumberOfProductsInfo subcategoryInfo = new NumberOfProductsInfo(subcategory.getId(), subcategory.getName(), Collections.emptyList(), (long) query.getResultList().size());
                     listOfSubcategoryInfo.add(subcategoryInfo);
-                    numberOfProductsByCategory += (long) query.getResultList().size();
+                    numberOfProductsByCategory += query.getResultList().size();
                 }
                 categoryInfo.setChildren(listOfSubcategoryInfo);
                 categoryInfo.setNumberOfProducts(numberOfProductsByCategory);
                 allCategories.add(categoryInfo);
             }
-            continue;
         }
         return allCategories;
     }
@@ -190,13 +189,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     @Override
     public NumberOfProductsInfo numberOfProductsByCharacteristic(final Characteristic characteristic,
                                                                  final Long subcategoryId,
-                                                                 final List<Long> listOfCharacteristicClicked) {
-        final CriteriaBuilder cb = em.getCriteriaBuilder();
-        final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
-        final Root<Product> product = cq.from(Product.class);
+                                                                 final List<Long> listOfCharacteristicClicked,
+                                                                 final String searchUser) {
         final Category subcategory = categoryRepository.findCategoryById(subcategoryId);
         TypedQuery<Long> query;
-        NumberOfProductsInfo mainCharacteristic = new NumberOfProductsInfo(characteristic.getId(), characteristic.getName(), Arrays.asList(), null);
+        NumberOfProductsInfo mainCharacteristic = new NumberOfProductsInfo(characteristic.getId(), characteristic.getName(), Collections.emptyList(), null);
         List<NumberOfProductsInfo> allCategoriesOfMainCharacteristic = new ArrayList<>();
         Long numberOfProductsBelongToMainCharacteristic = (long) 0;
         for (Characteristic oneOfCharacteristic: characteristic.getAllCharacteristic()) {
@@ -210,6 +207,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 sqlQuery += " AND p.id IN (SELECT p.id FROM Product p JOIN p.characteristics c WHERE" +
                         " c.id IN (:listOfCharacteristics) GROUP BY p.id HAVING COUNT(c.id)=:listLength)";
             }
+            if (searchUser != null) {
+                sqlQuery += " AND lower(p.title) LIKE lower(:searchFromUser)";
+            }
             query = em.createQuery(sqlQuery, Long.class);
             query.setParameter("characteristics_id", oneOfCharacteristic.getId());
             if (subcategoryId != null) {
@@ -219,9 +219,13 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 query.setParameter("listOfCharacteristics", listOfCharacteristicClicked);
                 query.setParameter("listLength", (long) listOfCharacteristicClicked.size());
             }
+            if (searchUser != null) {
+                String searchFromUser = "%" + searchUser + "%";
+                query.setParameter("searchFromUser", searchFromUser);
+            }
             query.setParameter("dateNow", LocalDate.now());
             NumberOfProductsInfo categoryOfCharacteristic = new NumberOfProductsInfo(oneOfCharacteristic.getId(),
-                    oneOfCharacteristic.getName(), Arrays.asList(), query.getSingleResult());
+                    oneOfCharacteristic.getName(), Collections.emptyList(), query.getSingleResult());
             allCategoriesOfMainCharacteristic.add(categoryOfCharacteristic);
             numberOfProductsBelongToMainCharacteristic += query.getSingleResult();
         }
@@ -230,18 +234,47 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return mainCharacteristic;
     }
     @Override
-    public PriceProductInfo numberOfProductsByPrice(final Long subcategoryId, final List<Long> listOfCharacteristicsClicked) {
+    public PriceProductInfo numberOfProductsByPrice(final Long subcategoryId,
+                                                    final List<Long> listOfCharacteristicsClicked,
+                                                    final String searchUser) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<PriceNumberProducts> cq = cb.createQuery(PriceNumberProducts.class);
         final Root<Product> product = cq.from(Product.class);
 
-        if (subcategoryId == null && listOfCharacteristicsClicked == null) {
-            cq.multiselect(product.get("startPrice"), cb.count(product));
-            cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
+        CriteriaQuery<Double> cqForAvgPrice = cb.createQuery(Double.class);
+        final Root<Product> productForAvgPrice = cqForAvgPrice.from(Product.class);
 
-            CriteriaQuery<Double> cqForAvgPrice = cb.createQuery(Double.class);
-            final Root<Product> productForAvgPrice = cqForAvgPrice.from(Product.class);
-            cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")));
+        if (subcategoryId == null && listOfCharacteristicsClicked == null) {
+            if (searchUser == null) {
+                cq.multiselect(product.get("startPrice"), cb.count(product))
+                .where(cb.and(
+                        cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
+                        cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
+                ));
+                cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
+
+                cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
+                        .where(cb.and(
+                                cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
+                                cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now())
+                        ));
+            } else {
+                String searchValue = "%" + searchUser.toLowerCase() + "%";
+                cq.multiselect(product.get("startPrice"), cb.count(product))
+                .where(cb.and(
+                        cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
+                        cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now()),
+                        cb.like(cb.lower(product.get("title")), searchValue)
+                ));
+                cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
+
+                cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
+                        .where(cb.and(
+                                cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
+                                cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now()),
+                                cb.like(cb.lower(productForAvgPrice.get("title")), searchValue)
+                        ));
+            }
 
             PriceProductInfo priceProductInfo = new PriceProductInfo();
             priceProductInfo.setAvgPrice(em.createQuery(cqForAvgPrice).getSingleResult());
@@ -252,19 +285,51 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         } else if (subcategoryId != null && listOfCharacteristicsClicked == null) {
             Category subcategory = categoryRepository.findCategoryById(subcategoryId);
 
-            cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
-                    .where(cb.equal(product.get("subcategory"), subcategory));
-            cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
+            if (subcategory != null) {
+                if (searchUser == null) {
+                    cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
+                            .where(cb.and(
+                                    cb.equal(product.get("subcategory"), subcategory),
+                                    cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
+                                    cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
+                            ));
+                    cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
 
-            CriteriaQuery<Double> cqForAvgPrice = cb.createQuery(Double.class);
-            final Root<Product> productForAvgPrice = cqForAvgPrice.from(Product.class);
-            cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
-                    .where(cb.equal(productForAvgPrice.get("subcategory"), subcategory));
+                    cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
+                    .where(cb.and(
+                            cb.equal(productForAvgPrice.get("subcategory"), subcategory),
+                            cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
+                            cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now())
+                    ));
+                } else {
+                    String searchValue = "%" + searchUser.toLowerCase() + "%";
+                    cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
+                            .where(cb.and(
+                                    cb.equal(product.get("subcategory"), subcategory),
+                                    cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
+                                    cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now()),
+                                    cb.like(cb.lower(product.get("title")), searchValue)
+                            ));
+                    cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
 
+                    cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
+                            .where(cb.and(
+                                    cb.equal(productForAvgPrice.get("subcategory"), subcategory),
+                                    cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
+                                    cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now()),
+                                    cb.like(cb.lower(productForAvgPrice.get("title")), searchValue)
+                            ));
+                }
+
+                PriceProductInfo priceProductInfo = new PriceProductInfo();
+                priceProductInfo.setAvgPrice(em.createQuery(cqForAvgPrice).getSingleResult());
+                priceProductInfo.setPriceNumber(em.createQuery(cq).getResultList());
+
+                return priceProductInfo;
+            }
             PriceProductInfo priceProductInfo = new PriceProductInfo();
-            priceProductInfo.setAvgPrice(em.createQuery(cqForAvgPrice).getSingleResult());
-            priceProductInfo.setPriceNumber(em.createQuery(cq).getResultList());
-
+            priceProductInfo.setAvgPrice(null);
+            priceProductInfo.setPriceNumber(Collections.emptyList());
             return priceProductInfo;
 
         } else if (subcategoryId == null) {
@@ -279,20 +344,51 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
             final TypedQuery<Product> listOfProductsIdWithCharacteristics = em.createQuery(cqForProductId);
 
+            if (!listOfProductsIdWithCharacteristics.getResultList().isEmpty()) {
+                if (searchUser == null) {
+                    cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
+                            .where(cb.and(
+                                    cb.in(product.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()),
+                                    cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
+                                    cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
+                            ));
+                    cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
 
-            cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
-                    .where(cb.in(product.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()));
-            cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
+                    cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
+                            .where(cb.and(
+                                    cb.in(productForAvgPrice.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()),
+                                    cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
+                                    cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now())
+                            ));
+                } else {
+                    String searchValue = "%" + searchUser.toLowerCase() + "%";
+                    cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
+                            .where(cb.and(
+                                    cb.in(product.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()),
+                                    cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
+                                    cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now()),
+                                    cb.like(cb.lower(product.get("title")), searchValue)
+                            ));
+                    cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
 
-            CriteriaQuery<Double> cqForAvgPrice = cb.createQuery(Double.class);
-            final Root<Product> productForAvgPrice = cqForAvgPrice.from(Product.class);
-            cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
-                    .where(cb.in(productForAvgPrice.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()));
+                    cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
+                            .where(cb.and(
+                                    cb.in(productForAvgPrice.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()),
+                                    cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
+                                    cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now()),
+                                    cb.like(cb.lower(productForAvgPrice.get("title")), searchValue)
+                            ));
+                }
 
+                PriceProductInfo priceProductInfo = new PriceProductInfo();
+                priceProductInfo.setAvgPrice(em.createQuery(cqForAvgPrice).getSingleResult());
+                priceProductInfo.setPriceNumber(em.createQuery(cq).getResultList());
+
+                return priceProductInfo;
+            }
             PriceProductInfo priceProductInfo = new PriceProductInfo();
-            priceProductInfo.setAvgPrice(em.createQuery(cqForAvgPrice).getSingleResult());
-            priceProductInfo.setPriceNumber(em.createQuery(cq).getResultList());
-
+            priceProductInfo.setAvgPrice(null);
+            priceProductInfo.setPriceNumber(Collections.emptyList());
             return priceProductInfo;
 
         } else {
@@ -309,26 +405,55 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
             final TypedQuery<Long> listOfProductsIdWithCharacteristics = em.createQuery(cqForProductId);
 
-            cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
-                    .where(cb.and(
-                            cb.equal(product.get("subcategory"), subcategory),
-                            cb.in(product.get("id")).value(listOfProductsIdWithCharacteristics.getResultList())
-                            )
-                    );
-            cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
+            if (!listOfProductsIdWithCharacteristics.getResultList().isEmpty()) {
+                if (searchUser == null) {
+                cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
+                        .where(cb.and(
+                                cb.equal(product.get("subcategory"), subcategory),
+                                cb.in(product.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()),
+                                cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
+                                cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
+                                ));
+                cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
 
-            CriteriaQuery<Double> cqForAvgPrice = cb.createQuery(Double.class);
-            final Root<Product> productForAvgPrice = cqForAvgPrice.from(Product.class);
-            cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
-                    .where(cb.and(
-                            cb.equal(productForAvgPrice.get("subcategory"), subcategory),
-                            cb.in(productForAvgPrice.get("id")).value(listOfProductsIdWithCharacteristics.getResultList())
-                    ));
+                cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
+                        .where(cb.and(
+                                cb.equal(productForAvgPrice.get("subcategory"), subcategory),
+                                cb.in(productForAvgPrice.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()),
+                                cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
+                                cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now())
+                        ));
+            } else {
+                String searchValue = "%" + searchUser.toLowerCase() + "%";
+                cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
+                        .where(cb.and(
+                                cb.equal(product.get("subcategory"), subcategory),
+                                cb.in(product.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()),
+                                cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
+                                cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now()),
+                                cb.like(cb.lower(product.get("title")), searchValue)
+                        ));
+                cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
 
+                cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
+                        .where(cb.and(
+                                cb.equal(productForAvgPrice.get("subcategory"), subcategory),
+                                cb.in(productForAvgPrice.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()),
+                                cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
+                                cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now()),
+                                cb.like(cb.lower(productForAvgPrice.get("title")), searchValue)
+                        ));
+            }
+
+                PriceProductInfo priceProductInfo = new PriceProductInfo();
+                priceProductInfo.setAvgPrice(em.createQuery(cqForAvgPrice).getSingleResult());
+                priceProductInfo.setPriceNumber(em.createQuery(cq).getResultList());
+
+                return priceProductInfo;
+            }
             PriceProductInfo priceProductInfo = new PriceProductInfo();
-            priceProductInfo.setAvgPrice(em.createQuery(cqForAvgPrice).getSingleResult());
-            priceProductInfo.setPriceNumber(em.createQuery(cq).getResultList());
-
+            priceProductInfo.setAvgPrice(null);
+            priceProductInfo.setPriceNumber(Collections.emptyList());
             return priceProductInfo;
         }
     }
@@ -339,6 +464,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                                                         final Long filterSizeId,
                                                         final Double lowerBound,
                                                         final Double upperBound,
+                                                        final String searchUser,
                                                         final Long pageNumber,
                                                         final Long size) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -364,13 +490,18 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         }
         if (lowerBound != null && upperBound != null && (subcategoryId != null || (filterColorId != null || filterSizeId !=null))) {
             sqlQuery += " AND p.startPrice >=:lowerBound AND p.startPrice <=:upperBound";
-        } else if (lowerBound != null && upperBound != null && subcategoryId == null) {
+        } else if (lowerBound != null && upperBound != null) {
             sqlQuery += " WHERE p.startPrice >=:lowerBound AND p.startPrice <=:upperBound";
         }
-
+        if (searchUser != null && ((lowerBound != null && upperBound != null) || (subcategoryId != null || (filterColorId != null || filterSizeId !=null)))) {
+            sqlQuery += " AND lower(p.title) LIKE lower(:searchFromUser)";
+        } else if (searchUser != null) {
+            sqlQuery += " WHERE lower(p.title) LIKE lower(:searchFromUser)";
+        }
+        boolean parametersAreNull = (subcategoryId == null && filterSizeId == null && filterColorId == null && lowerBound == null && upperBound == null && searchUser == null);
 
         if (typeOfSort.equals("default")) {
-            if (subcategoryId == null && filterSizeId == null && filterColorId == null && lowerBound == null && upperBound == null) {
+            if (parametersAreNull) {
                 sqlQuery += " WHERE p.endDate >=:dateNow AND p.startDate <=:dateNow";
             } else {
                 sqlQuery += " AND p.endDate >=:dateNow AND p.startDate <=:dateNow";
@@ -391,19 +522,22 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                     query.setParameter("lowerBound", lowerBound);
                     query.setParameter("upperBound", upperBound);
                 }
+                if (searchUser != null) {
+                    String searchFromUser = "%" + searchUser + "%";
+                    query.setParameter("searchFromUser", searchFromUser);
+                }
                 query.setParameter("dateNow", LocalDate.now());
                 if (query.getResultList().isEmpty()) {
                     return null;
                 }
                 //set total number of last chance products
-                final Long totalNumberOfItems = new Long(query.getResultList().size());
+                final Long totalNumberOfItems = (long) query.getResultList().size();
                 //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
                 query.setFirstResult(Math.toIntExact(pageNumber * size));
                 query.setMaxResults(Math.toIntExact(size));
-                PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
-                return  paginationInfo;
+            return new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
         } else if (typeOfSort.equals("newness")) {
-            if (subcategory == null && filterSizeId == null && filterColorId == null && lowerBound == null && upperBound == null) {
+            if (subcategory == null && filterSizeId == null && filterColorId == null && lowerBound == null && upperBound == null && searchUser == null) {
                 sqlQuery += " WHERE p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startDate DESC";
             } else {
                 sqlQuery += " AND p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startDate DESC";
@@ -424,19 +558,22 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 query.setParameter("lowerBound", lowerBound);
                 query.setParameter("upperBound", upperBound);
             }
+            if (searchUser != null) {
+                String searchFromUser = "%" + searchUser + "%";
+                query.setParameter("searchFromUser", searchFromUser);
+            }
             query.setParameter("dateNow", LocalDate.now());
             if (query.getResultList().isEmpty()) {
                 return null;
             }
             //set total number of last chance products
-            final Long totalNumberOfItems = new Long(query.getResultList().size());
+            final Long totalNumberOfItems = (long) query.getResultList().size();
             //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
             query.setFirstResult(Math.toIntExact(pageNumber * size));
             query.setMaxResults(Math.toIntExact(size));
-            PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
-            return  paginationInfo;
+            return new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
         } else if (typeOfSort.equals("priceLowest")) {
-            if (subcategory == null && filterSizeId == null && filterColorId == null && lowerBound == null && upperBound == null) {
+            if (parametersAreNull) {
                 sqlQuery += " WHERE p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startPrice ASC";
             } else {
                 sqlQuery += " AND p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startPrice ASC";
@@ -457,19 +594,22 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 query.setParameter("lowerBound", lowerBound);
                 query.setParameter("upperBound", upperBound);
             }
+            if (searchUser != null) {
+                String searchFromUser = "%" + searchUser + "%";
+                query.setParameter("searchFromUser", searchFromUser);
+            }
             query.setParameter("dateNow", LocalDate.now());
             if (query.getResultList().isEmpty()) {
                 return null;
             }
             //set total number of last chance products
-            final Long totalNumberOfItems = new Long(query.getResultList().size());
+            final Long totalNumberOfItems = (long) query.getResultList().size();
             //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
             query.setFirstResult(Math.toIntExact(pageNumber * size));
             query.setMaxResults(Math.toIntExact(size));
-            PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
-            return  paginationInfo;
+            return new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
         } else if (typeOfSort.equals("priceHighest")) {
-            if (subcategory == null && filterSizeId == null && filterColorId == null && lowerBound == null && upperBound == null) {
+            if (parametersAreNull) {
                 sqlQuery += " WHERE p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startPrice DESC";
             } else {
                 sqlQuery += " AND p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startPrice DESC";
@@ -490,17 +630,20 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 query.setParameter("lowerBound", lowerBound);
                 query.setParameter("upperBound", upperBound);
             }
+            if (searchUser != null) {
+                String searchFromUser = "%" + searchUser + "%";
+                query.setParameter("searchFromUser", searchFromUser);
+            }
             query.setParameter("dateNow", LocalDate.now());
             if (query.getResultList().isEmpty()) {
                 return null;
             }
             //set total number of last chance products
-            final Long totalNumberOfItems = new Long(query.getResultList().size());
+            final Long totalNumberOfItems = (long) query.getResultList().size();
             //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
             query.setFirstResult(Math.toIntExact(pageNumber * size));
             query.setMaxResults(Math.toIntExact(size));
-            PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
-            return  paginationInfo;
+            return new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
         } else {
             return null;
         }

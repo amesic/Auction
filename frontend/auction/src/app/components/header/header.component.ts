@@ -7,6 +7,7 @@ import { faGooglePlus } from "@fortawesome/free-brands-svg-icons";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 import { LoginService } from "../../services/login.service";
+import { MessageService } from 'src/app/services/message.service';
 
 @Component({
   selector: "app-header",
@@ -23,7 +24,10 @@ export class HeaderComponent implements OnInit {
   @Input() userName = "";
   @Input() userLoged;
 
-  constructor(public loginService: LoginService) {}
+  constructor(public loginService: LoginService, public messageService: MessageService) {}
 
   ngOnInit() {}
+  sendMessage(valueFromSearch) {
+    this.messageService.changeMessage(valueFromSearch);
+  }
 }

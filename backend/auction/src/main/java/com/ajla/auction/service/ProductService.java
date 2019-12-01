@@ -74,13 +74,16 @@ public class ProductService implements IProductService{
                                                         final Long filterSizeId,
                                                         final Double lowerBound,
                                                         final Double upperBound,
+                                                        final String searchUser,
                                                         final Long pageNumber,
                                                         final Long size) {
         return productRepository.getAllProductsBySort(typeOfSort,
-                subcategoryId, filterColorId, filterSizeId, lowerBound, upperBound, pageNumber, size);
+                subcategoryId, filterColorId, filterSizeId, lowerBound, upperBound, searchUser, pageNumber, size);
     }
     @Override
-    public PriceProductInfo getNumberProductsByPrice(final Long subcategoryId, final List<Long> listOfCharacteristicsClicked) {
-        return productRepository.numberOfProductsByPrice(subcategoryId, listOfCharacteristicsClicked);
+    public PriceProductInfo getNumberProductsByPrice(final Long subcategoryId,
+                                                     final List<Long> listOfCharacteristicsClicked,
+                                                     final String searchUser) {
+        return productRepository.numberOfProductsByPrice(subcategoryId, listOfCharacteristicsClicked, searchUser);
     }
 }

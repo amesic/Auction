@@ -4,7 +4,7 @@
   <label [routerLink]="routerLinkTitle1">{{ title1 }}</label>
 
   <div>
-    <label *ngIf="title1 != 'LOGIN' && title1 != 'REGISTER'" [routerLink]="routerLinkTitle2">{{ title2 }}/</label>
+    <a *ngIf="title1 != 'LOGIN' && title1 != 'REGISTER'" href="{{routerLinkTitle2}}">{{ title2 }}/</a>
     <label *ngIf="title1 != 'LOGIN' && title1 != 'REGISTER'" [routerLink]="routerLinkTitle1">{{ title1 }}</label>
   </div>
 

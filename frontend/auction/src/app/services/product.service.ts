@@ -16,7 +16,7 @@ export class ProductService {
   urlLastChance = "/product/lastChance";
   urlSingleProduct = "/product/singleProduct";
   urlRelatedProducts = "/product/relatedProducts";
-  urlSortedProducts = "/product/sortProducts"
+  urlSortedProducts = "/product/sortProducts";
 
   getAdvertisementProduct(): Observable<Product> {
     return this.http.get<Product>(this.urlAdvertisement);
@@ -41,19 +41,29 @@ export class ProductService {
     return this.http.get<Product>(this.urlSingleProduct + "?id=" + id);
   }
   getRelatedProducts(id): Observable<Product[]> {
-    return this.http.get<Product[]>(this.urlRelatedProducts + 
-      "?id=" + id);
+    return this.http.get<Product[]>(this.urlRelatedProducts + "?id=" + id);
   }
-  getSortedProducts(typeOfSort, filterColorId, filterSizeId, subcategoryId, pageNumber, size): Observable<PaginationInfo> {
+  getSortedProducts(
+    typeOfSort,
+    filterColorId,
+    filterSizeId,
+    subcategoryId,
+    searchValue,
+    pageNumber,
+    size
+  ): Observable<PaginationInfo> {
     let url = this.urlSortedProducts + "?typeOfSort=" + typeOfSort;
-    if(filterColorId != null) {
+    if (filterColorId != null) {
       url += "&filterColorId=" + filterColorId;
     }
-    if(filterSizeId != null) {
+    if (filterSizeId != null) {
       url += "&filterSizeId=" + filterSizeId;
     }
-    if(subcategoryId != null) {
+    if (subcategoryId != null) {
       url += "&subcategoryId=" + subcategoryId;
+    }
+    if (searchValue != null) {
+      url += "&searchUser=" + searchValue;
     }
     url += "&pageNumber=" + pageNumber + "&size=" + size;
     return this.http.get<PaginationInfo>(url);

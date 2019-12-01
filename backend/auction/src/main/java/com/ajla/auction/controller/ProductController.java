@@ -64,14 +64,16 @@ public class ProductController {
                                                                         @RequestParam(required = false) final Long filterSizeId,
                                                                         @RequestParam(required = false) final Double lowerBound,
                                                                         @RequestParam(required = false) final Double upperBound,
+                                                                        @RequestParam(required = false) final String searchUser,
                                                                         @RequestParam("pageNumber") final Long pageNumber,
                                                                         @RequestParam("size") final Long size) {
         return new ResponseEntity<>(productService.getAllProductsBySort(typeOfSort, subcategoryId,
-                filterColorId, filterSizeId, lowerBound, upperBound, pageNumber, size), HttpStatus.OK);
+                filterColorId, filterSizeId, lowerBound, upperBound, searchUser, pageNumber, size), HttpStatus.OK);
     }
     @GetMapping("/numberOfProductsByPrice")
     public ResponseEntity<PriceProductInfo> getAllProductsByPrice(@RequestParam(required = false) final Long subcategoryId,
-                                                                  @RequestParam(required = false) final List<Long> listOfCharacteristicsClicked) {
-        return new ResponseEntity<>(productService.getNumberProductsByPrice(subcategoryId, listOfCharacteristicsClicked), HttpStatus.OK);
+                                                                  @RequestParam(required = false) final List<Long> listOfCharacteristicsClicked,
+                                                                  @RequestParam(required = false) final String searchUser) {
+        return new ResponseEntity<>(productService.getNumberProductsByPrice(subcategoryId, listOfCharacteristicsClicked, searchUser), HttpStatus.OK);
     }
 }
