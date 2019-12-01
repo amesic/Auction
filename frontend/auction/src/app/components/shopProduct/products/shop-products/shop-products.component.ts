@@ -16,6 +16,7 @@ export class ShopProductsComponent implements OnInit {
   @Input() filterColorId;
   @Input() filterSizeId;
   @Input() subcategoryId;
+  @Input() valueFromUserSearch;
   @Input() pageNumber;
   @Input() size;
 
@@ -37,8 +38,10 @@ export class ShopProductsComponent implements OnInit {
   ngOnInit() {}
 
   checkIfThereIsNoItemsLeft(pageNumber, size, totalNumberOfItems) {
-    if (totalNumberOfItems - pageNumber * size < 0 ||
-      totalNumberOfItems - pageNumber * size == 0) {
+    if (
+      totalNumberOfItems - pageNumber * size < 0 ||
+      totalNumberOfItems - pageNumber * size == 0
+    ) {
       return true;
     }
     return false;
@@ -46,19 +49,30 @@ export class ShopProductsComponent implements OnInit {
 
   onClick() {
     this.productService
-      .getSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.subcategoryId, this.pageNumber, this.size)
+      .getSortedProducts(
+        this.typeOfSorting,
+        this.filterColorId,
+        this.filterSizeId,
+        this.subcategoryId,
+        this.valueFromUserSearch,
+        this.pageNumber,
+        this.size
+      )
       .subscribe(products => {
         this.products.items = this.products.items.concat(products.items);
-        if (this.checkIfThereIsNoItemsLeft(
+        if (
+          this.checkIfThereIsNoItemsLeft(
             this.pageNumber + 1,
             this.size,
-            products.totalNumberOfItems)) {
+            products.totalNumberOfItems
+          )
+        ) {
           this.hide = true;
         } else {
           this.hide = false;
           this.pageNumber++;
         }
-      })
+      });
   }
 
   grid() {
@@ -67,15 +81,31 @@ export class ShopProductsComponent implements OnInit {
     this.className = "grid";
     this.pageNumber = 0;
     this.size = 9;
-    this.productService.getSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.subcategoryId, this.pageNumber, this.size).subscribe(products => {
-      this.products = products;
-      if (this.checkIfThereIsNoItemsLeft(this.pageNumber + 1, this.size, products.totalNumberOfItems)) {
-        this.hide = true;
-      } else {
-        this.hide = false;
-        this.pageNumber++;
-      }
-    });
+    this.productService
+      .getSortedProducts(
+        this.typeOfSorting,
+        this.filterColorId,
+        this.filterSizeId,
+        this.subcategoryId,
+        this.valueFromUserSearch,
+        this.pageNumber,
+        this.size
+      )
+      .subscribe(products => {
+        this.products = products;
+        if (
+          this.checkIfThereIsNoItemsLeft(
+            this.pageNumber + 1,
+            this.size,
+            products.totalNumberOfItems
+          )
+        ) {
+          this.hide = true;
+        } else {
+          this.hide = false;
+          this.pageNumber++;
+        }
+      });
   }
   list() {
     this.activeGrid = false;
@@ -83,15 +113,31 @@ export class ShopProductsComponent implements OnInit {
     this.className = "list";
     this.pageNumber = 0;
     this.size = 9;
-    this.productService.getSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.subcategoryId, this.pageNumber, this.size).subscribe(products => {
-      this.products = products;
-      if (this.checkIfThereIsNoItemsLeft(this.pageNumber + 1, this.size, products.totalNumberOfItems)) {
-        this.hide = true;
-      } else {
-        this.hide = false;
-        this.pageNumber++;
-      }
-    });
+    this.productService
+      .getSortedProducts(
+        this.typeOfSorting,
+        this.filterColorId,
+        this.filterSizeId,
+        this.subcategoryId,
+        this.valueFromUserSearch,
+        this.pageNumber,
+        this.size
+      )
+      .subscribe(products => {
+        this.products = products;
+        if (
+          this.checkIfThereIsNoItemsLeft(
+            this.pageNumber + 1,
+            this.size,
+            products.totalNumberOfItems
+          )
+        ) {
+          this.hide = true;
+        } else {
+          this.hide = false;
+          this.pageNumber++;
+        }
+      });
   }
   sendTypeOfSorting(type, sortingType) {
     this.typeOfSorting = type;

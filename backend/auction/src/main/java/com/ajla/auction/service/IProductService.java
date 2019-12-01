@@ -23,7 +23,10 @@ public interface IProductService {
                                                  final Long filterSizeId,
                                                  final Double lowerBound,
                                                  final Double upperBound,
+                                                 final String searchUser,
                                                  final Long pageNumber,
                                                  final Long size);
-    PriceProductInfo getNumberProductsByPrice(final Long subcategoryId, final List<Long> listOfCharacteristicsClicked);
+    PriceProductInfo getNumberProductsByPrice(final Long subcategoryId,
+                                              final List<Long> listOfCharacteristicsClicked,
+                                              final String searchUser);
 }

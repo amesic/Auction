@@ -1,4 +1,4 @@
-<div *ngIf="filter != undefined" class="filter">
+<div *ngIf="filter != undefined && priceProduct.length != 0" class="filter">
   <p class="title">FILTER BY {{ title }}</p>
   <div class="components">
   <ngx-charts-bar-vertical
@@ -10,17 +10,22 @@
   <igx-slider
     [type]="sliderType.RANGE"
     [minValue]="0"
-    [maxValue]="filter.priceNumber[filter.priceNumber.length - 1].name + 1000"
-    [lowerBound]="filter.priceNumber[0].name"
-    [upperBound]="filter.priceNumber[filter.priceNumber.length - 1].name"
-    [(ngModel)]="priceRange"
-    (onValueChange)="send($event.value)" #slider></igx-slider>
+    [maxValue]="priceProduct[priceProduct.length - 1].name"
+    [lowerBound]="priceProduct[0].name"
+    [upperBound]="priceProduct[priceProduct.length - 1].name"
+    (onValueChange)="send($event.value)"></igx-slider>
 </div>
   <p class="info">
     {{ lowerBound | currency: "USD" }} - {{ upperBound | currency: "USD" }}
   </p>
   <p class="info">
+    <label *ngIf="filter.avgPrice % 1 != 0">
     The average price is
     {{ filter.avgPrice | number: "1.0-0" | currency: "USD" }}
+  </label>
+  <label *ngIf="filter.avgPrice % 1 == 0">
+      The average price is
+      {{ filter.avgPrice | currency: "USD" }}
+    </label>
   </p>
 </div>

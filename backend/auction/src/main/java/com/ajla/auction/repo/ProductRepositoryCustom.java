@@ -15,14 +15,18 @@ public interface ProductRepositoryCustom {
     List<NumberOfProductsInfo> numberOfProductsBySubcategory(final List<Category> categories);
     NumberOfProductsInfo numberOfProductsByCharacteristic(final Characteristic characteristic,
                                                           final Long subcategoryId,
-                                                          final List<Long> listOfCharacteristicClicked);
-    PriceProductInfo numberOfProductsByPrice(final Long subcategoryId, final List<Long> listOfCharacteristicsClicked);
+                                                          final List<Long> listOfCharacteristicClicked,
+                                                          final String searchUser);
+    PriceProductInfo numberOfProductsByPrice(final Long subcategoryId,
+                                             final List<Long> listOfCharacteristicsClicked,
+                                             final String searchUser);
     PaginationInfo<Product> getAllProductsBySort(final String typeOfSort,
                                                  final Long subcategoryId,
                                                  final Long filterColorId,
                                                  final Long filterSizeId,
                                                  final Double lowerBound,
                                                  final Double upperBound,
+                                                 final String searchUser,
                                                  final Long pageNumber,
                                                  final Long size);
 }

@@ -32,7 +32,7 @@
       </div>
 
       <div class="search">
-        <input type="search" placeholder="Try enter: Shoes" />
+        <input type="search" placeholder="Try enter: Shoes" (change)="sendMessage($event.target.value)"/>
         <fa-icon [icon]="faSearch" class="searchIcon"></fa-icon>
       </div>
   

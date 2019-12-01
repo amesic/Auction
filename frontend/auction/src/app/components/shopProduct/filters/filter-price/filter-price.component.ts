@@ -17,8 +17,6 @@ export class FilterPriceComponent implements OnInit {
   @Input() upperBound;
   @Input() priceProduct;
 
-  public priceRange: PriceRange = new PriceRange(200, 800);
-
   sliderType = SliderType;
 
   view: any[] = [250, 150];
@@ -27,11 +25,6 @@ export class FilterPriceComponent implements OnInit {
   send(valueLowerUpper) {
     this.lowerBound = valueLowerUpper.lower;
     this.upperBound = valueLowerUpper.upper;
-    console.log("prestalo");
-  }
-  tu() {
-    console.log("prestaloooo");
-
   }
 
   ngOnInit() {}
@@ -41,10 +34,4 @@ export class FilterPriceComponent implements OnInit {
     domain: ["#E4E5EC"]
   };
 }
-class PriceRange {
-  constructor(
-    public lower: number,
-    public upper: number,
-  ) {
-  }
-}
+
