@@ -47,20 +47,25 @@ export class ProductService {
     typeOfSort,
     filterColorId,
     filterSizeId,
+    lowerBound,
+    upperBound,
     subcategoryId,
     searchValue,
     pageNumber,
     size
   ): Observable<PaginationInfo> {
     let url = this.urlSortedProducts + "?typeOfSort=" + typeOfSort;
+    if (subcategoryId != null) {
+      url += "&subcategoryId=" + subcategoryId;
+    }
     if (filterColorId != null) {
       url += "&filterColorId=" + filterColorId;
     }
     if (filterSizeId != null) {
       url += "&filterSizeId=" + filterSizeId;
     }
-    if (subcategoryId != null) {
-      url += "&subcategoryId=" + subcategoryId;
+    if (lowerBound != null && upperBound != null) {
+      url += "&lowerBound=" + lowerBound +  "&upperBound=" + upperBound;
     }
     if (searchValue != null) {
       url += "&searchUser=" + searchValue;

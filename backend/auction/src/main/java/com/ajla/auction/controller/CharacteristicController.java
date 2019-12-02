@@ -31,8 +31,10 @@ public class CharacteristicController {
     public ResponseEntity<NumberOfProductsInfo> characteristic(@RequestParam("name") final String name,
                                                                @RequestParam(required = false) final Long subcategoryId,
                                                                @RequestParam(required = false) final List<Long> listOfCharacteristicClicked,
-                                                               @RequestParam(required = false) final String searchUser) {
-        return new ResponseEntity<>(characteristicService.characteristic(name, subcategoryId, listOfCharacteristicClicked, searchUser), HttpStatus.OK);
+                                                               @RequestParam(required = false) final String searchUser,
+                                                               @RequestParam(required = false) final Double lowerBound,
+                                                               @RequestParam(required = false) final Double upperBound) {
+        return new ResponseEntity<>(characteristicService.characteristic(name, subcategoryId, listOfCharacteristicClicked, searchUser, lowerBound, upperBound), HttpStatus.OK);
     }
 
 }

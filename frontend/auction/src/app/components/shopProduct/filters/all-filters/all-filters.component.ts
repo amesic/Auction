@@ -20,9 +20,11 @@ export class AllFiltersComponent implements OnInit {
   messageFilterColor:string;
   messageFilterSize:string;
   messageCategory:string;
+  messageFilterPrice;
   @Output() messageEventFilterColor = new EventEmitter<string>();
   @Output() messageEventFilterSize = new EventEmitter<string>();
   @Output() messageEventCategory = new EventEmitter<string>();
+  @Output() messageEventFilterPrice = new EventEmitter<string>();
 
   receiveMessageFromFilterColor($event) {
     this.messageFilterColor = $event;
@@ -35,6 +37,10 @@ export class AllFiltersComponent implements OnInit {
   receiveMessageFromCategories($event) {
     this.messageCategory = $event;
     this.messageEventCategory.emit(this.messageCategory);
+  }
+  receiveMessageFromFilterPrice($event) {
+    this.messageFilterPrice = $event;
+    this.messageEventFilterPrice.emit(this.messageFilterPrice);
   }
 
   ngOnInit() {

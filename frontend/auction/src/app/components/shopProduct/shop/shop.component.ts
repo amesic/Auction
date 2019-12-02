@@ -5,6 +5,8 @@ import { Filter } from "src/app/models/Filter";
 import { ProductService } from "src/app/services/product.service";
 import { PaginationInfo } from "src/app/models/PaginationInfo";
 import { MessageService } from "src/app/services/message.service";
+import { colorSets } from '@swimlane/ngx-charts/release/utils';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: "app-shop",
@@ -33,6 +35,8 @@ export class ShopComponent implements OnInit {
   listOfFiltersClicked = new Array();
   typeOfSorting = "default";
   messageIfThereIsNoProducts = null;
+  lowerBoundPrice = null;
+  upperBoundPrice = null;
 
   valueFromUserSearch: any = null;
 
@@ -40,20 +44,23 @@ export class ShopComponent implements OnInit {
     private categoriesService: CategoriesService,
     private filterService: FilterService,
     private productService: ProductService,
-    private messageService: MessageService
-  ) {}
+    private messageService: MessageService,
+    private router : ActivatedRoute) {}
 
   ngOnInit() {
-    this.messageService.currentMessage.subscribe(searchValue => {
+    this.messageService.currentMessageSearch.subscribe(searchValue => {
      this.recieveMessageFromSearchInput(searchValue);
-    });
+      });
+      this.messageService.currentMessageSubcategory.subscribe(subcategoryValue => {
+        this.receiveMessageFromCategories(subcategoryValue);
+      });
     this.categoriesService.getCategoriesAndNumberOfProducts().subscribe(categories => {
         this.allCategories = categories;
       });
-    this.filterService.getFilterItemsByName("color", this.subcategoryId, null, this.valueFromUserSearch).subscribe(items => {
+    this.filterService.getFilterItemsByName("color", this.subcategoryId, null, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
         this.filterColor = items;
       });
-    this.filterService.getFilterItemsByName("size", this.subcategoryId, null, this.valueFromUserSearch).subscribe(items => {
+    this.filterService.getFilterItemsByName("size", this.subcategoryId, null, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
         this.filterSize = items;
       });
     this.filterService.getFilterPriceInfo(this.subcategoryId, null, this.valueFromUserSearch).subscribe(infoPriceProduct => {
@@ -67,6 +74,8 @@ export class ShopComponent implements OnInit {
         this.typeOfSorting,
         this.filterColorId,
         this.filterSizeId,
+        this.lowerBoundPrice,
+        this.upperBoundPrice,
         this.subcategoryId,
         this.valueFromUserSearch,
         this.pageNumber,
@@ -104,13 +113,15 @@ export class ShopComponent implements OnInit {
         }
         this.priceProduct = this.filterPrice.priceNumber;
       });
-      this.filterService.getFilterItemsByName("size", this.subcategoryId, this.filterColorId, this.valueFromUserSearch).subscribe(items => {
+      this.filterService.getFilterItemsByName("size", this.subcategoryId, this.filterColorId, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
           this.filterSize = items;
         });
       this.productService.getSortedProducts(
           this.typeOfSorting,
           this.filterColorId,
           this.filterSizeId,
+          this.lowerBoundPrice,
+          this.upperBoundPrice,
           this.subcategoryId,
           this.valueFromUserSearch,
           this.pageNumber,
@@ -157,13 +168,15 @@ export class ShopComponent implements OnInit {
         }
         this.priceProduct = this.filterPrice.priceNumber;
       });
-      this.filterService.getFilterItemsByName("color", this.subcategoryId, this.filterSizeId, this.valueFromUserSearch).subscribe(items => {
+      this.filterService.getFilterItemsByName("color", this.subcategoryId, this.filterSizeId, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
           this.filterColor = items;
         });
       this.productService.getSortedProducts(
           this.typeOfSorting,
           this.filterColorId,
           this.filterSizeId,
+          this.lowerBoundPrice,
+          this.upperBoundPrice,
           this.subcategoryId,
           this.valueFromUserSearch,
           this.pageNumber,
@@ -193,10 +206,10 @@ export class ShopComponent implements OnInit {
       this.subcategoryId = $event;
       this.pageNumber = 0;
       this.size = 9;
-      this.filterService.getFilterItemsByName("color", this.subcategoryId, null, this.valueFromUserSearch).subscribe(items => {
+      this.filterService.getFilterItemsByName("color", this.subcategoryId, null, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
           this.filterColor = items;
         });
-      this.filterService.getFilterItemsByName("size", this.subcategoryId, null, this.valueFromUserSearch).subscribe(items => {
+      this.filterService.getFilterItemsByName("size", this.subcategoryId, null, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
           this.filterSize = items;
         });
       this.filterService.getFilterPriceInfo(this.subcategoryId, this.listOfFiltersClicked, this.valueFromUserSearch)
@@ -215,6 +228,8 @@ export class ShopComponent implements OnInit {
           this.typeOfSorting,
           this.filterColorId,
           this.filterSizeId,
+          this.lowerBoundPrice,
+          this.upperBoundPrice,
           this.subcategoryId,
           this.valueFromUserSearch,
           this.pageNumber,
@@ -248,6 +263,8 @@ export class ShopComponent implements OnInit {
           this.typeOfSorting,
           this.filterColorId,
           this.filterSizeId,
+          this.lowerBoundPrice,
+          this.upperBoundPrice,
           this.subcategoryId,
           this.valueFromUserSearch,
           this.pageNumber,
@@ -276,10 +293,10 @@ export class ShopComponent implements OnInit {
     this.valueFromUserSearch = searchValue;
     this.pageNumber = 0;
     this.size = 9;
-    this.filterService.getFilterItemsByName("color", this.subcategoryId, null, this.valueFromUserSearch).subscribe(items => {
+    this.filterService.getFilterItemsByName("color", this.subcategoryId, null, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
       this.filterColor = items;
     });
-    this.filterService.getFilterItemsByName("size", this.subcategoryId, null, this.valueFromUserSearch).subscribe(items => {
+    this.filterService.getFilterItemsByName("size", this.subcategoryId, null, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
       this.filterSize = items;
     });
     this.filterService.getFilterPriceInfo(this.subcategoryId, this.listOfFiltersClicked, this.valueFromUserSearch)
@@ -298,6 +315,8 @@ export class ShopComponent implements OnInit {
         this.typeOfSorting,
         this.filterColorId,
         this.filterSizeId,
+        this.lowerBoundPrice,
+        this.upperBoundPrice,
         this.subcategoryId,
         this.valueFromUserSearch,
         this.pageNumber,
@@ -319,5 +338,48 @@ export class ShopComponent implements OnInit {
           this.messageIfThereIsNoProducts = "Shop is empty!";
         }
       });
+  }
+  receiveMessageFromFilterPrice($event) {
+    if ($event.lowerBound != this.lowerBoundPrice || $event.upperBound != this.upperBoundPrice) {
+      this.lowerBoundPrice = $event.lowerBound;
+      this.upperBoundPrice = $event.upperBound;
+      this.pageNumber = 0;
+      this.size = 9;
+      this.filterService.getFilterItemsByName("color", this.subcategoryId, null, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
+        this.filterColor = items;
+      });
+      this.filterService.getFilterItemsByName("size", this.subcategoryId, null, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
+        this.filterSize = items;
+      });
+      this.productService.getSortedProducts(
+          this.typeOfSorting,
+          this.filterColorId,
+          this.filterSizeId,
+          this.lowerBoundPrice,
+          this.upperBoundPrice,
+          this.subcategoryId,
+          this.valueFromUserSearch,
+          this.pageNumber,
+          this.size).subscribe(products => {
+          if (products != null) {
+            this.products = products;
+            this.messageIfThereIsNoProducts = null;
+            this.pageNumber++;
+            if (this.products.totalNumberOfItems - this.pageNumber * this.size < 0 ||
+              this.products.totalNumberOfItems - this.pageNumber * this.size ==0) {
+              this.hide = true;
+            } else {
+              this.hide = false;
+            }
+          } else {
+            this.products = new PaginationInfo();
+            this.products.items = [];
+            this.hide = true;
+            this.messageIfThereIsNoProducts = "Shop is empty!";
+          }
+        });
+      window.scrollTo(0, 0);
+    }
+    
   }
 }

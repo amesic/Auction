@@ -31,7 +31,9 @@ public class CharacteristicService implements ICharacteristicService{
     public NumberOfProductsInfo characteristic(final String name,
                                                final Long subcategoryId,
                                                final List<Long> listOfCharacteristicClicked,
-                                               final String searchUser) {
-        return productRepository.numberOfProductsByCharacteristic(characteristicRepository.findCharacteristicByName(name), subcategoryId, listOfCharacteristicClicked, searchUser);
+                                               final String searchUser,
+                                               final Double lowerBound,
+                                               final Double upperBound) {
+        return productRepository.numberOfProductsByCharacteristic(characteristicRepository.findCharacteristicByName(name), subcategoryId, listOfCharacteristicClicked, searchUser, lowerBound, upperBound);
     }
 }

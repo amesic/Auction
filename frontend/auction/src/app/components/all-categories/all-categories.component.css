@@ -22,7 +22,7 @@
   margin-bottom: 20px;
   margin-top: 20px;
 }
-.category > a:hover, .subcategory > a:hover {
+.subcategory > a:hover {
   cursor: pointer;
   color: #8367d8;
 }

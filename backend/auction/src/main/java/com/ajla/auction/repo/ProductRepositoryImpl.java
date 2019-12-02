@@ -1,18 +1,31 @@
 package com.ajla.auction.repo;
 
-import com.ajla.auction.model.*;
+import com.ajla.auction.model.Product;
+import com.ajla.auction.model.Category;
+import com.ajla.auction.model.PriceNumberProducts;
+import com.ajla.auction.model.PriceProductInfo;
+import com.ajla.auction.model.PaginationInfo;
+import com.ajla.auction.model.Characteristic;
+import com.ajla.auction.model.NumberOfProductsInfo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
-import java.lang.reflect.Array;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Join;
+
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Objects;
+import java.util.List;
+import java.util.Collections;
+import java.util.ArrayList;
 
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
-    final EntityManager em;
-    final CategoryRepository categoryRepository;
+    private final EntityManager em;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
     public ProductRepositoryImpl(final EntityManager em, final CategoryRepository categoryRepository) {
@@ -32,9 +45,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         final TypedQuery<Product> query = em.createQuery(cq);
         query.setMaxResults(4);
-        if (query.getResultList().isEmpty()) {
-            return null;
-        }
         return  query.getResultList();
     }
     @Override
@@ -48,9 +58,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         final TypedQuery<Product> query = em.createQuery(cq);
         query.setMaxResults(3);
 
-        if (query.getResultList().isEmpty()) {
-            return null;
-        }
         return  query.getResultList();
     }
     @Override
@@ -59,23 +66,30 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
         final Root<Product> product = cq.from(Product.class);
 
+        final CriteriaQuery<Long> cqForProductsSize = cb.createQuery(Long.class);
+        final Root<Product> productForProductsSize = cqForProductsSize.from(Product.class);
+
+        cqForProductsSize.select(cb.count(productForProductsSize))
+                .where(cb.or(
+                        cb.equal(productForProductsSize.get("endDate"), LocalDate.now()),
+                        cb.equal(productForProductsSize.get("endDate"), LocalDate.now().plusDays(1))
+                ));
+
         cq.where(cb.or(
                 cb.equal(product.get("endDate"), LocalDate.now()),
                 cb.equal(product.get("endDate"), LocalDate.now().plusDays(1))
         ))
                 .orderBy(cb.asc(product.get("endDate")));
-        final TypedQuery<Product> query = em.createQuery(cq);
-        if (query.getResultList().isEmpty()) {
-            return null;
-        }
-        //set total number of last chance products
-        final Long totalNumberOfItems = new Long(query.getResultList().size());
+        final TypedQuery<Product> queryForListProducts = em.createQuery(cq);
         //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
-        query.setFirstResult(Math.toIntExact(pageNumber * size));
-        query.setMaxResults(Math.toIntExact(size));
+        queryForListProducts.setFirstResult(Math.toIntExact(pageNumber * size));
+        queryForListProducts.setMaxResults(Math.toIntExact(size));
+        final List<Product> listOfProducts = queryForListProducts.getResultList();
+        //set total number of last chance products
+        final TypedQuery<Long> queryForSizeOfListProducts = em.createQuery(cqForProductsSize);
+        final Long totalNumberOfItems = queryForSizeOfListProducts.getSingleResult();
 
-        PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
-        return  paginationInfo;
+        return new PaginationInfo<>(size, pageNumber, totalNumberOfItems, listOfProducts);
     }
     @Override
     public PaginationInfo<Product> getAllNewArrivalProducts(final Long pageNumber, final Long size) {
@@ -83,24 +97,31 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
         final Root<Product> product = cq.from(Product.class);
 
+        final CriteriaQuery<Long> cqForSizeOfProducts = cb.createQuery(Long.class);
+        final Root<Product> productForSizeOfProducts = cqForSizeOfProducts.from(Product.class);
+
+        cqForSizeOfProducts.select(cb.count(productForSizeOfProducts))
+                .where(cb.and(
+                        cb.greaterThanOrEqualTo(productForSizeOfProducts.get("endDate"), LocalDate.now()),
+                        cb.lessThanOrEqualTo(productForSizeOfProducts.get("startDate"), LocalDate.now())
+                ));
         cq.where(cb.and(
                 cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
                 cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
         ))
                 .orderBy( cb.desc(product.get("startDate")));
 
-        final TypedQuery<Product> query = em.createQuery(cq);
-        if (query.getResultList().isEmpty()) {
-            return null;
-        }
-        //set total number of last chance products
-        final Long totalNumberOfItems = new Long(query.getResultList().size());
+        final TypedQuery<Product> queryForListOfProducts = em.createQuery(cq);
         //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
-        query.setFirstResult(Math.toIntExact(pageNumber * size));
-        query.setMaxResults(Math.toIntExact(size));
+        queryForListOfProducts.setFirstResult(Math.toIntExact(pageNumber * size));
+        queryForListOfProducts.setMaxResults(Math.toIntExact(size));
+        final List<Product> listOfProducts = queryForListOfProducts.getResultList();
 
-        PaginationInfo<Product> paginationInfo = new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
-        return  paginationInfo;
+        //set total number of last chance products
+        final TypedQuery<Long> queryForSizeListOfProducts = em.createQuery(cqForSizeOfProducts);
+        final Long totalNumberOfItems = queryForSizeListOfProducts.getSingleResult();
+
+        return new PaginationInfo<>(size, pageNumber, totalNumberOfItems, listOfProducts);
     }
     @Override
     public Long getSubcategoryIdOfProduct (final Long idProduct) {
@@ -131,9 +152,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         final TypedQuery<Product> query = em.createQuery(cq);
         query.setMaxResults(3);
-        if (query.getResultList().isEmpty()) {
-            return null;
-        }
         return query.getResultList();
     }
     @Override
@@ -148,10 +166,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 cb.equal(product.get("seller"), idUser)));
 
         final TypedQuery<Product> query = em.createQuery(cq);
-        if(query.getResultList().isEmpty()) {
-            return false;
-        }
-        return true;
+        return !query.getResultList().isEmpty();
     }
     @Override
     public List<NumberOfProductsInfo> numberOfProductsBySubcategory(final List<Category> categories) {
@@ -190,7 +205,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     public NumberOfProductsInfo numberOfProductsByCharacteristic(final Characteristic characteristic,
                                                                  final Long subcategoryId,
                                                                  final List<Long> listOfCharacteristicClicked,
-                                                                 final String searchUser) {
+                                                                 final String searchUser,
+                                                                 final Double lowerBound,
+                                                                 final Double upperBound) {
         final Category subcategory = categoryRepository.findCategoryById(subcategoryId);
         TypedQuery<Long> query;
         NumberOfProductsInfo mainCharacteristic = new NumberOfProductsInfo(characteristic.getId(), characteristic.getName(), Collections.emptyList(), null);
@@ -210,6 +227,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             if (searchUser != null) {
                 sqlQuery += " AND lower(p.title) LIKE lower(:searchFromUser)";
             }
+            if (lowerBound != null && upperBound !=null) {
+                sqlQuery += " AND p.startPrice >=:lowerBound AND p.startPrice <=:upperBound";
+            }
             query = em.createQuery(sqlQuery, Long.class);
             query.setParameter("characteristics_id", oneOfCharacteristic.getId());
             if (subcategoryId != null) {
@@ -222,6 +242,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             if (searchUser != null) {
                 String searchFromUser = "%" + searchUser + "%";
                 query.setParameter("searchFromUser", searchFromUser);
+            }
+            if (lowerBound != null && upperBound !=null) {
+                query.setParameter("lowerBound", lowerBound);
+                query.setParameter("upperBound", upperBound);
             }
             query.setParameter("dateNow", LocalDate.now());
             NumberOfProductsInfo categoryOfCharacteristic = new NumberOfProductsInfo(oneOfCharacteristic.getId(),
@@ -343,12 +367,13 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                     .having(cb.equal(cb.count(characteristicForProductId.get("id")), listOfCharacteristicsClicked.size()));
 
             final TypedQuery<Product> listOfProductsIdWithCharacteristics = em.createQuery(cqForProductId);
+            final List<Product> productsIdWithCharacteristics = listOfProductsIdWithCharacteristics.getResultList();
 
-            if (!listOfProductsIdWithCharacteristics.getResultList().isEmpty()) {
+            if (productsIdWithCharacteristics.size() != 0) {
                 if (searchUser == null) {
                     cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
                             .where(cb.and(
-                                    cb.in(product.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()),
+                                    cb.in(product.get("id")).value(productsIdWithCharacteristics),
                                     cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
                                     cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
                             ));
@@ -356,7 +381,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
                     cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
                             .where(cb.and(
-                                    cb.in(productForAvgPrice.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()),
+                                    cb.in(productForAvgPrice.get("id")).value(productsIdWithCharacteristics),
                                     cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
                                     cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now())
                             ));
@@ -364,7 +389,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                     String searchValue = "%" + searchUser.toLowerCase() + "%";
                     cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
                             .where(cb.and(
-                                    cb.in(product.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()),
+                                    cb.in(product.get("id")).value(productsIdWithCharacteristics),
                                     cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
                                     cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now()),
                                     cb.like(cb.lower(product.get("title")), searchValue)
@@ -373,7 +398,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
                     cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
                             .where(cb.and(
-                                    cb.in(productForAvgPrice.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()),
+                                    cb.in(productForAvgPrice.get("id")).value(productsIdWithCharacteristics),
                                     cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
                                     cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now()),
                                     cb.like(cb.lower(productForAvgPrice.get("title")), searchValue)
@@ -404,13 +429,14 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                     .having(cb.equal(cb.count(characteristicForProductId.get("id")), listOfCharacteristicsClicked.size()));
 
             final TypedQuery<Long> listOfProductsIdWithCharacteristics = em.createQuery(cqForProductId);
+            final List<Long> productsIdWithCharacteristics = listOfProductsIdWithCharacteristics.getResultList();
 
-            if (!listOfProductsIdWithCharacteristics.getResultList().isEmpty()) {
+            if (productsIdWithCharacteristics.size() != 0) {
                 if (searchUser == null) {
                 cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
                         .where(cb.and(
                                 cb.equal(product.get("subcategory"), subcategory),
-                                cb.in(product.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()),
+                                cb.in(product.get("id")).value(productsIdWithCharacteristics),
                                 cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
                                 cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
                                 ));
@@ -419,7 +445,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
                         .where(cb.and(
                                 cb.equal(productForAvgPrice.get("subcategory"), subcategory),
-                                cb.in(productForAvgPrice.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()),
+                                cb.in(productForAvgPrice.get("id")).value(productsIdWithCharacteristics),
                                 cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
                                 cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now())
                         ));
@@ -428,7 +454,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
                         .where(cb.and(
                                 cb.equal(product.get("subcategory"), subcategory),
-                                cb.in(product.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()),
+                                cb.in(product.get("id")).value(productsIdWithCharacteristics),
                                 cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
                                 cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now()),
                                 cb.like(cb.lower(product.get("title")), searchValue)
@@ -438,7 +464,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
                         .where(cb.and(
                                 cb.equal(productForAvgPrice.get("subcategory"), subcategory),
-                                cb.in(productForAvgPrice.get("id")).value(listOfProductsIdWithCharacteristics.getResultList()),
+                                cb.in(productForAvgPrice.get("id")).value(productsIdWithCharacteristics),
                                 cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
                                 cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now()),
                                 cb.like(cb.lower(productForAvgPrice.get("title")), searchValue)

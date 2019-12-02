@@ -1,29 +1,35 @@
 <div *ngIf="filter != undefined && priceProduct.length != 0" class="filter">
   <p class="title">FILTER BY {{ title }}</p>
   <div class="components">
-  <ngx-charts-bar-vertical
-  [view]="view"
-    [scheme]="colorScheme"
-    [results]="priceProduct"
-    (select)="onSelect($event)">
-  </ngx-charts-bar-vertical>
-  <igx-slider
-    [type]="sliderType.RANGE"
-    [minValue]="0"
-    [maxValue]="priceProduct[priceProduct.length - 1].name"
-    [lowerBound]="priceProduct[0].name"
-    [upperBound]="priceProduct[priceProduct.length - 1].name"
-    (onValueChange)="send($event.value)"></igx-slider>
-</div>
-  <p class="info">
-    {{ lowerBound | currency: "USD" }} - {{ upperBound | currency: "USD" }}
-  </p>
+    <ngx-charts-bar-vertical
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="priceProduct"
+      (select)="onSelect($event)"
+    >
+    </ngx-charts-bar-vertical>
+    <igx-slider
+      [type]="sliderType.RANGE"
+      [minValue]="0"
+      [maxValue]="priceProduct[priceProduct.length - 1].name"
+      [lowerBound]="priceProduct[0].name"
+      [upperBound]="priceProduct[priceProduct.length - 1].name"
+      (onValueChange)="change($event)"></igx-slider>
+  </div>
+  <div class="infoButton">
+    <p class="info">
+      {{ lowerBound | currency: "USD" }} - {{ upperBound | currency: "USD" }}
+    </p>
+    <div class="button">
+      <input type="button" value="SEARCH BY PRICE" (click)="sendInfoAboutPrice()"/>
+    </div>
+  </div>
   <p class="info">
     <label *ngIf="filter.avgPrice % 1 != 0">
-    The average price is
-    {{ filter.avgPrice | number: "1.0-0" | currency: "USD" }}
-  </label>
-  <label *ngIf="filter.avgPrice % 1 == 0">
+      The average price is
+      {{ filter.avgPrice | number: "1.0-0" | currency: "USD" }}
+    </label>
+    <label *ngIf="filter.avgPrice % 1 == 0">
       The average price is
       {{ filter.avgPrice | currency: "USD" }}
     </label>

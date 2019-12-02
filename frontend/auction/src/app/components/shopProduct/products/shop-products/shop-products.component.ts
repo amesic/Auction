@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
 import { faTh } from "@fortawesome/free-solid-svg-icons";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
@@ -11,10 +11,12 @@ import { ProductService } from "src/app/services/product.service";
 })
 export class ShopProductsComponent implements OnInit {
   @Input() products;
-  @Input() hide;
+  @Input() hide: boolean;
   @Input() messageIfThereIsNoProducts;
   @Input() filterColorId;
   @Input() filterSizeId;
+  @Input() lowerBoundPrice;
+  @Input() upperBoundPrice;
   @Input() subcategoryId;
   @Input() valueFromUserSearch;
   @Input() pageNumber;
@@ -37,6 +39,9 @@ export class ShopProductsComponent implements OnInit {
 
   ngOnInit() {}
 
+  ngOnChanges(changes: SimpleChanges) {
+    var x = 1;
+  }
   checkIfThereIsNoItemsLeft(pageNumber, size, totalNumberOfItems) {
     if (
       totalNumberOfItems - pageNumber * size < 0 ||
@@ -53,6 +58,8 @@ export class ShopProductsComponent implements OnInit {
         this.typeOfSorting,
         this.filterColorId,
         this.filterSizeId,
+        this.lowerBoundPrice,
+        this.upperBoundPrice,
         this.subcategoryId,
         this.valueFromUserSearch,
         this.pageNumber,
@@ -86,6 +93,8 @@ export class ShopProductsComponent implements OnInit {
         this.typeOfSorting,
         this.filterColorId,
         this.filterSizeId,
+        this.lowerBoundPrice,
+        this.upperBoundPrice,
         this.subcategoryId,
         this.valueFromUserSearch,
         this.pageNumber,
@@ -118,6 +127,8 @@ export class ShopProductsComponent implements OnInit {
         this.typeOfSorting,
         this.filterColorId,
         this.filterSizeId,
+        this.lowerBoundPrice,
+        this.upperBoundPrice,
         this.subcategoryId,
         this.valueFromUserSearch,
         this.pageNumber,

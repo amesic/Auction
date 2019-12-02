@@ -13,7 +13,7 @@ urlFilterPriceInfo = "/product/numberOfProductsByPrice";
 
   constructor(private http: HttpClient) { }
 
-  getFilterItemsByName(name: string, subcategoryId, filterClicked, searchValue): Observable<Filter> {
+  getFilterItemsByName(name: string, subcategoryId, filterClicked, searchValue, lowerBound, upperBound): Observable<Filter> {
     let url = this.urlFilterItemsByName;
     url += "?name=" + name;
     if (subcategoryId != null) {
@@ -24,6 +24,9 @@ urlFilterPriceInfo = "/product/numberOfProductsByPrice";
     }
     if (searchValue != null) {
       url += "&searchUser=" + searchValue;
+    }
+    if (lowerBound != null && upperBound != null) {
+      url +="&lowerBound=" + lowerBound + "&upperBound=" + upperBound;
     }
     return this.http.get<Filter>(url);
 }

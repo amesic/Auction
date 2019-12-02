@@ -10,5 +10,7 @@ public interface ICharacteristicService {
     NumberOfProductsInfo characteristic(final String name,
                                         final Long subcategoryId,
                                         final List<Long> listOfCharacteristicClicked,
-                                        final String searchUser);
+                                        final String searchUser,
+                                        final Double lowerBound,
+                                        final Double upperBound);
 }

@@ -7,7 +7,8 @@
     [filter]="filterPrice"
     [lowerBound]="lowerBound"
     [upperBound]="upperBound"
-    [priceProduct]="priceProduct"></app-filter-price>
+    [priceProduct]="priceProduct"
+    (messageEvent)="receiveMessageFromFilterPrice($event)"></app-filter-price>
   <app-filter
     [title]="'COLOR'"
     [filter]="filterColor"
