@@ -17,7 +17,6 @@ export class PaginationComponent implements OnInit {
   @Input() className;
 
   activeLinkNewArrivals = true;
-  activeLinkLastChance = false;
 
   constructor(private productService: ProductService) {}
 
@@ -32,19 +31,11 @@ export class PaginationComponent implements OnInit {
     return false;
   }
   getNewArrivals(pageNumber, size) {
-    this.productService
-      .getNewArrivals(pageNumber, size)
-      .subscribe(paginationInfo => {
-        if (paginationInfo != null) {
+    this.productService.getNewArrivals(pageNumber, size).subscribe(paginationInfo => {
+        if (paginationInfo.items.length != 0) {
           this.messageIfProductsIsNull = "";
           this.products = this.products.concat(paginationInfo.items);
-          if (
-            this.checkIfThereIsNoItemsLeft(
-              pageNumber + 1,
-              size,
-              paginationInfo.totalNumberOfItems
-            )
-          ) {
+          if (this.checkIfThereIsNoItemsLeft(pageNumber + 1, size, paginationInfo.totalNumberOfItems)) {
             this.hide = true;
           }
         } else {
@@ -56,18 +47,11 @@ export class PaginationComponent implements OnInit {
   }
   getLastChance(pageNumber, size) {
     this.productService
-      .getLastChance(pageNumber, size)
-      .subscribe(paginationInfo => {
-        if (paginationInfo != null) {
+      .getLastChance(pageNumber, size).subscribe(paginationInfo => {
+        if (paginationInfo.items.length != 0) {
           this.messageIfProductsIsNull = "";
           this.products = this.products.concat(paginationInfo.items);
-          if (
-            this.checkIfThereIsNoItemsLeft(
-              pageNumber + 1,
-              size,
-              paginationInfo.totalNumberOfItems
-            )
-          ) {
+          if (this.checkIfThereIsNoItemsLeft(pageNumber + 1, size, paginationInfo.totalNumberOfItems)) {
             this.hide = true;
           }
         } else {
@@ -91,7 +75,6 @@ export class PaginationComponent implements OnInit {
     this.hide = false;
     this.getNewArrivals(this.pageNumber, this.size);
     this.activeLinkNewArrivals = true;
-    this.activeLinkLastChance = false;
   }
   lastChance() {
     this.pageNumber = 0;
@@ -99,6 +82,5 @@ export class PaginationComponent implements OnInit {
     this.hide = false;
     this.getLastChance(this.pageNumber, this.size);
     this.activeLinkNewArrivals = false;
-    this.activeLinkLastChance = true;
   }
 }

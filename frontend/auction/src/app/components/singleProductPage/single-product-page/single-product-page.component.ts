@@ -80,8 +80,7 @@ export class SingleProductPageComponent implements OnInit {
     this.userIsLoged = this.loginService.isUserLoggedIn();
     this.activatedRoute.params.subscribe(routeParams => {
       this.productService
-        .getSingleProduct(routeParams.idProduct)
-        .subscribe(singleProduct => {
+        .getSingleProduct(routeParams.idProduct).subscribe(singleProduct => {
           this.productInfo = singleProduct;
           let date = new Date(Date.parse(this.productInfo.endDate));
           this.timeLeft = this.dhms(
@@ -89,8 +88,7 @@ export class SingleProductPageComponent implements OnInit {
           );
         });
       this.bidService
-        .getBidsInfoOfProduct(routeParams.idProduct, this.pageNumber, this.size)
-        .subscribe(
+        .getBidsInfoOfProduct(routeParams.idProduct, this.pageNumber, this.size).subscribe(
           bidInfo => {
             if (bidInfo == null) {
               this.bidsOfProduct = [];
@@ -125,9 +123,7 @@ export class SingleProductPageComponent implements OnInit {
             this.usersProduct = null;
           }
         );
-      this.productService
-        .getRelatedProducts(routeParams.idProduct)
-        .subscribe(relatedProducts => {
+      this.productService.getRelatedProducts(routeParams.idProduct).subscribe(relatedProducts => {
           this.relatedProducts = relatedProducts;
         });
     });

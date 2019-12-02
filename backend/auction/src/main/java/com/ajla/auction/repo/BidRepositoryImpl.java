@@ -2,7 +2,6 @@ package com.ajla.auction.repo;
 
 import com.ajla.auction.model.Bid;
 import com.ajla.auction.model.BidInfo;
-import com.ajla.auction.model.PaginationInfo;
 import com.ajla.auction.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,11 +10,11 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class BidRepositoryImpl implements BidRepositoryCustom {
-    final EntityManager em;
+    private final EntityManager em;
 
     @Autowired
     public BidRepositoryImpl(final EntityManager em) {
@@ -37,10 +36,7 @@ public class BidRepositoryImpl implements BidRepositoryCustom {
         }
         cq.where(cb.and(cb.equal(bid.get("product"), product.getId()), cb.greaterThanOrEqualTo(bid.get("value"), valueFromUser)));
         query = em.createQuery(cq);
-        if (query.getResultList().isEmpty()) {
-            return false;
-        }
-        return true;
+        return !query.getResultList().isEmpty();
     }
     @Override
     public BidInfo getBidsOfPage(final Long pageNumber, final Long size, final Long idProduct) {
@@ -48,22 +44,31 @@ public class BidRepositoryImpl implements BidRepositoryCustom {
         final CriteriaQuery<Bid> cq = cb.createQuery(Bid.class);
         final Root<Bid> bid = cq.from(Bid.class);
 
+        final CriteriaQuery<Long> cqForBidSize = cb.createQuery(Long.class);
+        final Root<Bid> bidForBidSize = cqForBidSize.from(Bid.class);
+
+        cqForBidSize.select(cb.count(bidForBidSize.get("product")))
+                .where(cb.equal(bidForBidSize.get("product"), idProduct))
+                .groupBy(bidForBidSize.get("product"));
+
         cq.where(cb.equal(bid.get("product"), idProduct))
                 .orderBy(cb.desc(bid.get("value")));
 
-        final TypedQuery<Bid> query = em.createQuery(cq);
-        if (query.getResultList().isEmpty()) {
+        final TypedQuery<Bid> queryForListBids = em.createQuery(cq);
+        //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
+        queryForListBids.setFirstResult(Math.toIntExact(pageNumber * size));
+        queryForListBids.setMaxResults(Math.toIntExact(size));
+        final List<Bid> listOfBids = queryForListBids.getResultList();
+        if (listOfBids.size() == 0) {
             return null;
         }
-        //set total number of last chance products
-        final Long totalNumberOfItems = new Long(query.getResultList().size());
-        final Bid highestBid = query.getResultList().get(0);
-        //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
-        query.setFirstResult(Math.toIntExact(pageNumber * size));
-        query.setMaxResults(Math.toIntExact(size));
+        //set total number of bids
+        final TypedQuery<Long> queryForNumberOfBids = em.createQuery(cqForBidSize);
+        final Long totalNumberOfItems = queryForNumberOfBids.getSingleResult();
+        final Bid highestBid = listOfBids.get(0);
 
             return new BidInfo(size, pageNumber, totalNumberOfItems,
-                    query.getResultList(), highestBid);
+                    listOfBids, highestBid);
 
     }
 }

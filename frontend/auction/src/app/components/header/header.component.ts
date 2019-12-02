@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 
 import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { faInstagram } from "@fortawesome/free-brands-svg-icons";
@@ -23,11 +23,18 @@ export class HeaderComponent implements OnInit {
 
   @Input() userName = "";
   @Input() userLoged;
+  
+  message;
+  @Output() messageEvent = new EventEmitter<string>();
 
   constructor(public loginService: LoginService, public messageService: MessageService) {}
 
   ngOnInit() {}
   sendMessage(valueFromSearch) {
-    this.messageService.changeMessage(valueFromSearch);
+    this.messageService.changeMessageSearch(valueFromSearch);
   }
+ /* sendMessage(valueFromSearch) {
+    this.message = valueFromSearch;
+    this.messageEvent.emit(this.message);
+  }*/
 }

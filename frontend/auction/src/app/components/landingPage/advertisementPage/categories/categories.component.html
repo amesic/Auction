@@ -9,7 +9,7 @@
             <li
               *ngFor="let subcategory of category.subcategories"
               class="subcategory" >
-              <a [routerLink]="['/home']">{{ subcategory.name }}</a>
+              <a [routerLink]="['/home']" (click)="sendInfoAboutSubcategory(subcategory.id)">{{ subcategory.name }}</a>
             </li>
           </ul>
         </li>

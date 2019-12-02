@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, Input, ViewEncapsulation, Output, EventEmitter } from "@angular/core";
 import { SliderType } from "igniteui-angular";
 
 @Component({
@@ -22,11 +22,20 @@ export class FilterPriceComponent implements OnInit {
   view: any[] = [250, 150];
   constructor() {}
 
-  send(valueLowerUpper) {
-    this.lowerBound = valueLowerUpper.lower;
-    this.upperBound = valueLowerUpper.upper;
+  change(valueLowerUpper) {
+    this.lowerBound = valueLowerUpper.value.lower;
+    this.upperBound = valueLowerUpper.value.upper;
   }
+  @Output() messageEvent = new EventEmitter<string>();
+  message;
 
+  sendInfoAboutPrice() {
+    this.message = {
+      lowerBound: this.lowerBound,
+      upperBound: this.upperBound
+    };
+    this.messageEvent.emit(this.message);
+  }
   ngOnInit() {}
   // options for the chart
   timeline = true;

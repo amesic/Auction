@@ -16,7 +16,9 @@ public interface ProductRepositoryCustom {
     NumberOfProductsInfo numberOfProductsByCharacteristic(final Characteristic characteristic,
                                                           final Long subcategoryId,
                                                           final List<Long> listOfCharacteristicClicked,
-                                                          final String searchUser);
+                                                          final String searchUser,
+                                                          final Double lowerBound,
+                                                          final Double upperBound);
     PriceProductInfo numberOfProductsByPrice(final Long subcategoryId,
                                              final List<Long> listOfCharacteristicsClicked,
                                              final String searchUser);
