@@ -1,42 +1,56 @@
-import { Component, OnInit, Input, ViewEncapsulation, Output, EventEmitter } from "@angular/core";
-import { SliderType } from "igniteui-angular";
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewEncapsulation } from "@angular/core";
+import { Options } from 'ng5-slider';
 
 @Component({
   selector: "app-filter-price",
   templateUrl: "./filter-price.component.html",
-  styleUrls: [
-    "./filter-price.component.css",
-    "../../../../../../node_modules/igniteui-angular/styles/igniteui-angular.css"
-  ],
-  encapsulation: ViewEncapsulation.ShadowDom
+  styleUrls: ["./filter-price.component.css",],
+  encapsulation: ViewEncapsulation.None
 })
-export class FilterPriceComponent implements OnInit {
+export class FilterPriceComponent implements OnChanges {
   @Input() title;
   @Input() filter;
   @Input() lowerBound;
   @Input() upperBound;
   @Input() priceProduct;
 
-  sliderType = SliderType;
-
   view: any[] = [250, 150];
   constructor() {}
 
-  change(valueLowerUpper) {
-    this.lowerBound = valueLowerUpper.value.lower;
-    this.upperBound = valueLowerUpper.value.upper;
+  value: number;
+  highValue: number;
+  options: Options;
+
+  lower;
+  upper;
+  
+  ngOnChanges() {
+    if (this.lowerBound != null && this.upperBound != null) {
+    this.value = this.lowerBound;
+    this.highValue = this.upperBound;
+    this.lower = this.lowerBound;
+    this.upper = this.upperBound;
+    this.options = {
+      floor: this.lowerBound,
+      ceil: this.upperBound,
+      step: 0.1
+    };
   }
+  }
+
   @Output() messageEvent = new EventEmitter<string>();
   message;
 
-  sendInfoAboutPrice() {
+  sendInfoAboutPrice(event) {
     this.message = {
-      lowerBound: this.lowerBound,
-      upperBound: this.upperBound
+      lowerBound: event.value,
+      upperBound: event.highValue
     };
+    this.lower = event.value;
+    this.upper = event.highValue;
     this.messageEvent.emit(this.message);
   }
-  ngOnInit() {}
+
   // options for the chart
   timeline = true;
   colorScheme = {
