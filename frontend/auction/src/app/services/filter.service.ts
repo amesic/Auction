@@ -22,7 +22,7 @@ urlFilterPriceInfo = "/product/numberOfProductsByPrice";
     if (filterClicked != null && filterClicked.length != 0) {
       url += "&listOfCharacteristicClicked=" + filterClicked;
     }
-    if (searchValue != null) {
+    if (searchValue != null && searchValue != "") {
       url += "&searchUser=" + searchValue;
     }
     if (lowerBound != null && upperBound != null) {
@@ -40,11 +40,9 @@ urlFilterPriceInfo = "/product/numberOfProductsByPrice";
    } else if (listOfCharacteristicClicked != null && listOfCharacteristicClicked.length != 0) {
      url += "?listOfCharacteristicsClicked=" + listOfCharacteristicClicked;
    }
-   if (searchValue != null && listOfCharacteristicClicked != null && listOfCharacteristicClicked.length != 0) {
+   if ((searchValue != null  && searchValue != "") && ((listOfCharacteristicClicked != null && listOfCharacteristicClicked.length != 0) || subcategoryId != null )) {
      url += "&searchUser=" + searchValue;
-   } else if (searchValue != null && subcategoryId != null) {
-     url += "&searchUser=" + searchValue;
-   } else if (searchValue != null && subcategoryId == null) {
+   } else if (searchValue != null && searchValue != "") {
     url += "?searchUser=" + searchValue;
    }
    return this.http.get<PriceProduct>(url);

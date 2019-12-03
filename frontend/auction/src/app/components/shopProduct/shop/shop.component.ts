@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, OnChanges, ɵConsole } from "@angular/core";
 import { CategoriesService } from "src/app/services/categories.service";
 import { FilterService } from "src/app/services/filter.service";
 import { Filter } from "src/app/models/Filter";
@@ -12,7 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: "./shop.component.html",
   styleUrls: ["./shop.component.css"]
 })
-export class ShopComponent implements OnInit {
+export class ShopComponent implements OnInit{
   allCategories;
   filterColor: Filter;
   filterSize: Filter;
@@ -21,10 +21,12 @@ export class ShopComponent implements OnInit {
   lowerBound;
   upperBound;
   priceProduct;
+  activeSubcategoryId;
+  activeCategoryId;
 
   hide;
-  pageNumber = 0;
-  size = 9;
+  pageNumber;
+  size;
 
   //from children
   filterColorId = null;
@@ -37,22 +39,70 @@ export class ShopComponent implements OnInit {
   lowerBoundPrice = null;
   upperBoundPrice = null;
 
-  valueFromUserSearch: any = null;
+  valueFromUserSearch = null;
+
+  callgetFilterPriceInfo(subcategoryId, listOfFiltersClicked, valueFromUserSearch) {
+    this.filterService.getFilterPriceInfo(subcategoryId, listOfFiltersClicked, valueFromUserSearch)
+      .subscribe(infoPriceProduct => {
+        this.filterPrice = infoPriceProduct;
+        if (this.filterPrice.priceNumber.length != 0) {
+        this.lowerBound = this.filterPrice.priceNumber[0].name;
+        this.upperBound = this.filterPrice.priceNumber[this.filterPrice.priceNumber.length - 1].name;
+        } else {
+        this.lowerBound = null;
+        this.upperBound = null;
+        }
+        this.priceProduct = this.filterPrice.priceNumber;
+      });
+  }
+  callgetSortedProducts(typeOfSorting, filterColorId, filterSizeId, lowerBoundPrice, upperBoundPrice, 
+    subcategoryId, valueFromUserSearch, pageNumber, size) {
+      this.productService.getSortedProducts(
+        typeOfSorting, filterColorId, filterSizeId, lowerBoundPrice, upperBoundPrice,
+        subcategoryId, valueFromUserSearch, pageNumber, size).subscribe(products => {
+        if (products != null) {
+          this.products = products;
+          this.messageIfThereIsNoProducts = null;
+          this.pageNumber++;
+          if (this.products.totalNumberOfItems - this.pageNumber * this.size < 0 ||
+            this.products.totalNumberOfItems - this.pageNumber * this.size == 0) {
+            this.hide = true;
+          } else {
+            this.hide = false;
+          }
+        } else {
+          this.products = new PaginationInfo();
+          this.products.items = [];
+          this.hide = true;
+          this.messageIfThereIsNoProducts = "Shop is empty!";
+        }
+      });
+
+  }
 
   constructor(
     private categoriesService: CategoriesService,
     private filterService: FilterService,
     private productService: ProductService,
-    private messageService: MessageService,
-    private router : ActivatedRoute) {}
+    private activatedRoute : ActivatedRoute,
+    private router: Router) {}
 
   ngOnInit() {
-    this.messageService.currentMessageSearch.subscribe(searchValue => {
-     this.recieveMessageFromSearchInput(searchValue);
-      });
-      this.messageService.currentMessageSubcategory.subscribe(subcategoryValue => {
-        this.receiveMessageFromCategories(subcategoryValue);
-      });
+    this.activatedRoute.params.subscribe(routeParams => {
+      if (routeParams.searchValue == undefined) {
+        this.valueFromUserSearch = null;
+      } else {
+        this.valueFromUserSearch = routeParams.searchValue;
+      }
+      if (routeParams.subcategoryId == undefined) {
+        this.subcategoryId = null;
+      } else {
+        this.subcategoryId = routeParams.subcategoryId;
+        this.activeSubcategoryId = this.subcategoryId;
+        this.activeCategoryId = routeParams.categoryId;
+      }
+      this.pageNumber = 0;
+      this.size = 9;
     this.categoriesService.getCategoriesAndNumberOfProducts().subscribe(categories => {
         this.allCategories = categories;
       });
@@ -62,35 +112,11 @@ export class ShopComponent implements OnInit {
     this.filterService.getFilterItemsByName("size", this.subcategoryId, null, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
         this.filterSize = items;
       });
-    this.filterService.getFilterPriceInfo(this.subcategoryId, null, this.valueFromUserSearch).subscribe(infoPriceProduct => {
-      this.filterPrice = infoPriceProduct;
-      
-      this.lowerBound = this.filterPrice.priceNumber[0].name;
-      this.upperBound = this.filterPrice.priceNumber[
-      this.filterPrice.priceNumber.length - 1].name;
-      this.priceProduct = this.filterPrice.priceNumber;
+    this.callgetFilterPriceInfo(this.subcategoryId, null, this.valueFromUserSearch);
+    this.callgetSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId,this.lowerBoundPrice,
+        this.upperBoundPrice, this.subcategoryId, this.valueFromUserSearch, this.pageNumber, this.size);
     });
-    this.productService.getSortedProducts(
-        this.typeOfSorting,
-        this.filterColorId,
-        this.filterSizeId,
-        this.lowerBoundPrice,
-        this.upperBoundPrice,
-        this.subcategoryId,
-        this.valueFromUserSearch,
-        this.pageNumber,
-        this.size).subscribe(products => {
-        this.products = products;
-        this.pageNumber++;
-        if (this.products.totalNumberOfItems - this.pageNumber * this.size < 0 ||
-          this.products.totalNumberOfItems - this.pageNumber * this.size == 0) {
-          this.hide = true;
-        } else {
-          this.hide = false;
-        }
-      });
   }
-
   receiveMessageFromFilterColor($event) {
     if ($event != this.filterColorId) {
       this.listOfFiltersClicked = this.listOfFiltersClicked.filter(item => item !== this.filterColorId);
@@ -108,46 +134,9 @@ export class ShopComponent implements OnInit {
     this.filterService.getFilterItemsByName("size", this.subcategoryId, this.filterColorId, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
         this.filterSize = items;
       });
-    this.productService.getSortedProducts(
-        this.typeOfSorting,
-        this.filterColorId,
-        this.filterSizeId,
-        this.lowerBoundPrice,
-        this.upperBoundPrice,
-        this.subcategoryId,
-        this.valueFromUserSearch,
-        this.pageNumber,
-        this.size).subscribe(products => {
-        if (products != null) {
-          this.products = products;
-          this.messageIfThereIsNoProducts = null;
-          this.pageNumber++;
-          if (this.products.totalNumberOfItems - this.pageNumber * this.size < 0 ||
-            this.products.totalNumberOfItems - this.pageNumber * this.size == 0) {
-            this.hide = true;
-          } else {
-            this.hide = false;
-          }
-        } else {
-          this.products = new PaginationInfo();
-          this.products.items = [];
-          this.hide = true;
-          this.messageIfThereIsNoProducts = "Shop is empty!";
-        }
-      });
-      this.filterService.getFilterPriceInfo(this.subcategoryId, this.listOfFiltersClicked, this.valueFromUserSearch)
-      .subscribe(infoPriceProduct => {
-        this.filterPrice = infoPriceProduct;
-        if (this.filterPrice.priceNumber.length != 0) {
-        this.lowerBound = this.filterPrice.priceNumber[0].name;
-        this.upperBound = this.filterPrice.priceNumber[this.filterPrice.priceNumber.length - 1].name;
-        } else {
-        this.lowerBound = null;
-        this.upperBound = null;
-        }
-        this.priceProduct = this.filterPrice.priceNumber;
-      });
-      
+    this.callgetSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.lowerBoundPrice,
+        this.upperBoundPrice, this.subcategoryId, this.valueFromUserSearch, this.pageNumber, this.size);
+      this.callgetFilterPriceInfo(this.subcategoryId, this.listOfFiltersClicked, this.valueFromUserSearch);
       window.scrollTo(0, 0);
     }
   }
@@ -165,105 +154,12 @@ export class ShopComponent implements OnInit {
         this.lowerBoundPrice = null;
         this.upperBoundPrice = null;
       }
-      this.filterService.getFilterPriceInfo(this.subcategoryId, this.listOfFiltersClicked, this.valueFromUserSearch)
-      .subscribe(infoPriceProduct => {
-        this.filterPrice = infoPriceProduct;
-        if (this.filterPrice.priceNumber.length != 0) {
-        this.lowerBound = this.filterPrice.priceNumber[0].name;
-        this.upperBound = this.filterPrice.priceNumber[this.filterPrice.priceNumber.length - 1].name;
-        } else {
-        this.lowerBound = null;
-        this.upperBound = null;
-        }
-        this.priceProduct = this.filterPrice.priceNumber;
-      });
       this.filterService.getFilterItemsByName("color", this.subcategoryId, this.filterSizeId, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
           this.filterColor = items;
         });
-      this.productService.getSortedProducts(
-          this.typeOfSorting,
-          this.filterColorId,
-          this.filterSizeId,
-          this.lowerBoundPrice,
-          this.upperBoundPrice,
-          this.subcategoryId,
-          this.valueFromUserSearch,
-          this.pageNumber,
-          this.size).subscribe(products => {
-          if (products != null) {
-            this.products = products;
-            this.messageIfThereIsNoProducts = null;
-            this.pageNumber++;
-            if (this.products.totalNumberOfItems - this.pageNumber * this.size < 0 ||
-              this.products.totalNumberOfItems - this.pageNumber * this.size == 0) {
-              this.hide = true;
-            } else {
-              this.hide = false;
-            }
-          } else {
-            this.products = new PaginationInfo();
-            this.products.items = [];
-            this.hide = true;
-            this.messageIfThereIsNoProducts = "Shop is empty!";
-          }
-        });
-      window.scrollTo(0, 0);
-    }
-  }
-  receiveMessageFromCategories($event) {
-    if ($event != this.subcategoryId) {
-      this.subcategoryId = $event;
-      this.pageNumber = 0;
-      this.size = 9;
-      if (this.subcategoryId == null) {
-        this.lowerBoundPrice = null;
-        this.upperBoundPrice = null;
-      }
-      this.filterService.getFilterItemsByName("color", this.subcategoryId, null, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
-          this.filterColor = items;
-        });
-      this.filterService.getFilterItemsByName("size", this.subcategoryId, null, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
-          this.filterSize = items;
-        });
-      this.filterService.getFilterPriceInfo(this.subcategoryId, this.listOfFiltersClicked, this.valueFromUserSearch)
-      .subscribe(infoPriceProduct => {
-        this.filterPrice = infoPriceProduct;
-        if (this.filterPrice.priceNumber.length != 0) {
-        this.lowerBound = this.filterPrice.priceNumber[0].name;
-        this.upperBound = this.filterPrice.priceNumber[this.filterPrice.priceNumber.length - 1].name;
-        } else {
-        this.lowerBound = null;
-        this.upperBound = null;
-        }
-        this.priceProduct = this.filterPrice.priceNumber;
-      });
-      this.productService.getSortedProducts(
-          this.typeOfSorting,
-          this.filterColorId,
-          this.filterSizeId,
-          this.lowerBoundPrice,
-          this.upperBoundPrice,
-          this.subcategoryId,
-          this.valueFromUserSearch,
-          this.pageNumber,
-          this.size).subscribe(products => {
-          if (products != null) {
-            this.products = products;
-            this.messageIfThereIsNoProducts = null;
-            this.pageNumber++;
-            if (this.products.totalNumberOfItems - this.pageNumber * this.size < 0 ||
-              this.products.totalNumberOfItems - this.pageNumber * this.size == 0) {
-              this.hide = true;
-            } else {
-              this.hide = false;
-            }
-          } else {
-            this.products = new PaginationInfo();
-            this.products.items = [];
-            this.hide = true;
-            this.messageIfThereIsNoProducts = "Shop is empty!";
-          }
-        });
+      this.callgetSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.lowerBoundPrice,
+        this.upperBoundPrice, this.subcategoryId, this.valueFromUserSearch, this.pageNumber, this.size);
+      this.callgetFilterPriceInfo(this.subcategoryId, this.listOfFiltersClicked, this.valueFromUserSearch);
       window.scrollTo(0, 0);
     }
   }
@@ -272,89 +168,10 @@ export class ShopComponent implements OnInit {
       this.typeOfSorting = $event;
       this.pageNumber = 0;
       this.size = 9;
-      this.productService.getSortedProducts(
-          this.typeOfSorting,
-          this.filterColorId,
-          this.filterSizeId,
-          this.lowerBoundPrice,
-          this.upperBoundPrice,
-          this.subcategoryId,
-          this.valueFromUserSearch,
-          this.pageNumber,
-          this.size).subscribe(products => {
-          if (products != null) {
-            this.products = products;
-            this.messageIfThereIsNoProducts = null;
-            this.pageNumber++;
-            if (this.products.totalNumberOfItems - this.pageNumber * this.size < 0 ||
-              this.products.totalNumberOfItems - this.pageNumber * this.size ==0) {
-              this.hide = true;
-            } else {
-              this.hide = false;
-            }
-          } else {
-            this.products = new PaginationInfo();
-            this.products.items = [];
-            this.hide = true;
-            this.messageIfThereIsNoProducts = "Shop is empty!";
-          }
-        });
+      this.callgetSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.lowerBoundPrice,
+        this.upperBoundPrice, this.subcategoryId, this.valueFromUserSearch, this.pageNumber, this.size);
       window.scrollTo(0, 0);
     }
-  }
-  recieveMessageFromSearchInput(searchValue) {
-    this.valueFromUserSearch = searchValue;
-    this.pageNumber = 0;
-    this.size = 9;
-    if (this.valueFromUserSearch == "") {
-      this.lowerBoundPrice = null;
-      this.upperBoundPrice = null;
-    }
-    this.filterService.getFilterItemsByName("color", this.subcategoryId, null, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
-      this.filterColor = items;
-    });
-    this.filterService.getFilterItemsByName("size", this.subcategoryId, null, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
-      this.filterSize = items;
-    });
-    this.filterService.getFilterPriceInfo(this.subcategoryId, this.listOfFiltersClicked, this.valueFromUserSearch)
-      .subscribe(infoPriceProduct => {
-        this.filterPrice = infoPriceProduct;
-        if (this.filterPrice.priceNumber.length != 0) {
-        this.lowerBound = this.filterPrice.priceNumber[0].name;
-        this.upperBound = this.filterPrice.priceNumber[this.filterPrice.priceNumber.length - 1].name;
-        } else {
-        this.lowerBound = null;
-        this.upperBound = null;
-        }
-        this.priceProduct = this.filterPrice.priceNumber;
-      });
-    this.productService.getSortedProducts(
-        this.typeOfSorting,
-        this.filterColorId,
-        this.filterSizeId,
-        this.lowerBoundPrice,
-        this.upperBoundPrice,
-        this.subcategoryId,
-        this.valueFromUserSearch,
-        this.pageNumber,
-        this.size).subscribe(products => {
-        if (products != null) {
-          this.products = products;
-          this.messageIfThereIsNoProducts = null;
-          this.pageNumber++;
-          if (this.products.totalNumberOfItems - this.pageNumber * this.size < 0 ||
-            this.products.totalNumberOfItems - this.pageNumber * this.size == 0) {
-            this.hide = true;
-          } else {
-            this.hide = false;
-          }
-        } else {
-          this.products = new PaginationInfo();
-          this.products.items = [];
-          this.hide = true;
-          this.messageIfThereIsNoProducts = "Shop is empty!";
-        }
-      });
   }
   receiveMessageFromFilterPrice($event) {
     if ($event.lowerBound != this.lowerBoundPrice || $event.upperBound != this.upperBoundPrice) {
@@ -368,35 +185,9 @@ export class ShopComponent implements OnInit {
       this.filterService.getFilterItemsByName("size", this.subcategoryId, null, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
         this.filterSize = items;
       });
-      this.productService.getSortedProducts(
-          this.typeOfSorting,
-          this.filterColorId,
-          this.filterSizeId,
-          this.lowerBoundPrice,
-          this.upperBoundPrice,
-          this.subcategoryId,
-          this.valueFromUserSearch,
-          this.pageNumber,
-          this.size).subscribe(products => {
-          if (products != null) {
-            this.products = products;
-            this.messageIfThereIsNoProducts = null;
-            this.pageNumber++;
-            if (this.products.totalNumberOfItems - this.pageNumber * this.size < 0 ||
-              this.products.totalNumberOfItems - this.pageNumber * this.size ==0) {
-              this.hide = true;
-            } else {
-              this.hide = false;
-            }
-          } else {
-            this.products = new PaginationInfo();
-            this.products.items = [];
-            this.hide = true;
-            this.messageIfThereIsNoProducts = "Shop is empty!";
-          }
-        });
+      this.callgetSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.lowerBoundPrice,
+        this.upperBoundPrice, this.subcategoryId, this.valueFromUserSearch, this.pageNumber, this.size);
       window.scrollTo(0, 0);
     }
-    
   }
 }

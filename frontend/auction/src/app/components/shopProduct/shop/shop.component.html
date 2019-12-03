@@ -8,13 +8,14 @@
   [lowerBound]="lowerBound"
   [upperBound]="upperBound"
   [priceProduct]="priceProduct"
+  [activeSubcategoryId]="activeSubcategoryId"
+  [activeCategoryId]="activeCategoryId"
   (messageEventFilterColor)="receiveMessageFromFilterColor($event)"
   (messageEventFilterSize)="receiveMessageFromFilterSize($event)"
-  (messageEventCategory)="receiveMessageFromCategories($event)"
   (messageEventFilterPrice)="receiveMessageFromFilterPrice($event)"></app-all-filters>
 <app-shop-products 
 [products]="products" 
-[(hide)]="hide"
+[hide]="hide"
 [filterColorId]="filterColorId"
 [filterSizeId]="filterSizeId"
 [subcategoryId]="subcategoryId"

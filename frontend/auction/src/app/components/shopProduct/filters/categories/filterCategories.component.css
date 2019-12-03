@@ -82,6 +82,7 @@ p {
 }
 .categories .category .categoryIcon > a.changeColor {
   font-weight: 700;
+  color: #8367d8;
 }
 label {
   cursor: pointer;

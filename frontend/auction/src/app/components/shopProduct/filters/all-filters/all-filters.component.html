@@ -1,7 +1,8 @@
 <div class="filters">
   <app-filter-categories
     [allCategories]="allCategories"
-    (messageEvent)="receiveMessageFromCategories($event)"></app-filter-categories>
+    [activeSubcategoryId]="activeSubcategoryId"
+    [activeCategoryId]="activeCategoryId"></app-filter-categories>
   <app-filter-price
     [title]="'PRICE'"
     [filter]="filterPrice"

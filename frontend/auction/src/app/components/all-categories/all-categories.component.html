@@ -8,7 +8,7 @@
       </p>
       <div *ngFor="let subcategory of category.subcategories">
         <p class="subcategory">
-          <a [routerLink]="['/home/allCategories']" (click)="sendInfoAboutSubcategory(subcategory.id)">{{ subcategory.name }}</a>
+          <a [routerLink]="['/home/allCategories']" (click)="sendInfoAboutSubcategory(category.id, subcategory.id)">{{ subcategory.name }}</a>
         </p>
       </div>
     </div>

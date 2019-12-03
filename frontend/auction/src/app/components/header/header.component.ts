@@ -8,6 +8,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 import { LoginService } from "../../services/login.service";
 import { MessageService } from 'src/app/services/message.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-header",
@@ -23,18 +24,12 @@ export class HeaderComponent implements OnInit {
 
   @Input() userName = "";
   @Input() userLoged;
-  
-  message;
-  @Output() messageEventSearchValue = new EventEmitter<string>();
 
-  constructor(public loginService: LoginService, public messageService: MessageService) {}
+  constructor(public loginService: LoginService, public router: Router) {}
 
   ngOnInit() {}
-  /*sendMessage(valueFromSearch) {
-    this.messageService.changeMessageSearch(valueFromSearch);
-  }*/
-  sendMessage(valueFromSearch) {
-    this.message = valueFromSearch;
-    this.messageEventSearchValue.emit(this.message);
+  sendSearchValue(valueFromSearch) {
+    this.router.navigate(['/shop/search/' + valueFromSearch]);
   }
+  
 }
