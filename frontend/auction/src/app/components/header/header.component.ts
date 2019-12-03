@@ -25,16 +25,16 @@ export class HeaderComponent implements OnInit {
   @Input() userLoged;
   
   message;
-  @Output() messageEvent = new EventEmitter<string>();
+  @Output() messageEventSearchValue = new EventEmitter<string>();
 
   constructor(public loginService: LoginService, public messageService: MessageService) {}
 
   ngOnInit() {}
-  sendMessage(valueFromSearch) {
+  /*sendMessage(valueFromSearch) {
     this.messageService.changeMessageSearch(valueFromSearch);
-  }
- /* sendMessage(valueFromSearch) {
-    this.message = valueFromSearch;
-    this.messageEvent.emit(this.message);
   }*/
+  sendMessage(valueFromSearch) {
+    this.message = valueFromSearch;
+    this.messageEventSearchValue.emit(this.message);
+  }
 }

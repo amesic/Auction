@@ -15,7 +15,7 @@
   height: 42px;
   padding-left: 20px;
 }
-.filter > .info, .filter > .infoButton > .info {
+.filter > .info {
   margin: 0;
   padding: 0;
   display: flex;
@@ -26,10 +26,6 @@
   color: #9b9b9b;
   letter-spacing: 0.49px;
 }
-igx-slider {
-  margin-left: 20px;
-  margin-right: 38px;
-}
 .components {
   display: flex;
   flex-direction: column;
@@ -37,29 +33,14 @@ igx-slider {
 ngx-charts-bar-vertical {
   margin-bottom: -34px;
 }
-.button > input {
-  background: #8367d8;
-  font: 700 9px "Lato", sans-serif;
-  color: #ffffff;
-  letter-spacing: 0.63px;
-  border: none;
-  padding-right: 5px;
-  padding-left: 5px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+.ng5-slider .ng5-slider-selection {
+  background: #8367d8 !important;
 }
-.infoButton {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.ng5-slider .ng5-slider-pointer {
+  background: #8367d8 !important;
 }
-.filter > .infoButton > .info { 
-  padding-left: 16px;
-}
-.infoButton > .button { 
-  padding-right: 16px;
-}
-.button > input:hover {
-  cursor: pointer;
-  transform: translateX(1%) translateY(5%);
+.ng5-slider {
+  margin-left: 20px !important;
+  width: 80% !important;
+  margin-top: 23px !important;
 }
