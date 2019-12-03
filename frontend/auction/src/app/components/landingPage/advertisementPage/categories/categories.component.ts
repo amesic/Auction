@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { CategoriesService } from "../../../../services/categories.service";
 import { Category } from "../../../../models/Category";
-import { MessageService } from 'src/app/services/message.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-categories",
@@ -9,7 +9,7 @@ import { MessageService } from 'src/app/services/message.service';
   styleUrls: ["./categories.component.css"]
 })
 export class CategoriesComponent implements OnInit {
-  constructor(private categoriesService: CategoriesService, public messageService: MessageService) {}
+  constructor(private categoriesService: CategoriesService, private router: Router) {}
   categories: Array<Category>;
 
   ngOnInit() {
@@ -17,8 +17,8 @@ export class CategoriesComponent implements OnInit {
       this.categories = allCategories;
     });
   }
-  sendInfoAboutSubcategory(subcategoryId) {
-    this.messageService.changeMessageSubcategory(subcategoryId);
-  }  
+  sendSubcategoryId(subcategoryId, categoryId) {
+    this.router.navigate(['/shop/category/' + categoryId + "/" + subcategoryId]);
+  }
 
 }

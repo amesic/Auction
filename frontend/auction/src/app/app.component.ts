@@ -9,8 +9,4 @@ import { LoginService } from "./services/login.service";
 })
 export class AppComponent {
   constructor(public loginService: LoginService) {}
-  recieveMessageFromSearch($event) {
-    console.log($event);
-  
-  }
 }

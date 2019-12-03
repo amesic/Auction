@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { Router } from '@angular/router';
@@ -11,22 +11,19 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 })
 export class FilterCategoriesComponent implements OnInit {
  @Input() allCategories;
+ @Input() activeSubcategoryId;
+ @Input() activeCategoryId;
 
  faPlus = faPlus;
  faMinus = faMinus;
  faTimes = faTimes;
- sentCategoryId;
- message;
 
-  @Output() messageEvent = new EventEmitter<string>();
   constructor(private router: Router) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
+
   sendSubcategoryId(subcategoryId, categoryId) {
-    this.message = subcategoryId;
-    this.sentCategoryId = categoryId;
-    this.messageEvent.emit(this.message);
+    this.router.navigate(['/shop/category/' + categoryId + "/" + subcategoryId]);
   }
 
 }

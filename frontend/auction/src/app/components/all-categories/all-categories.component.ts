@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { CategoriesService } from "../../services/categories.service";
 import { Category } from "../../models/Category";
 import { MessageService } from 'src/app/services/message.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-all-categories",
@@ -9,7 +10,7 @@ import { MessageService } from 'src/app/services/message.service';
   styleUrls: ["./all-categories.component.css"]
 })
 export class AllCategoriesComponent implements OnInit {
-  constructor(private categoriesService: CategoriesService, private messageService :MessageService) {}
+  constructor(private categoriesService: CategoriesService, private router: Router) {}
   categories: Category[] = [];
 
   ngOnInit() {
@@ -18,7 +19,7 @@ export class AllCategoriesComponent implements OnInit {
       this.categories = allCategories;
     });
   }
-  sendInfoAboutSubcategory(subcategoryId) {
-    this.messageService.changeMessageSubcategory(subcategoryId);
+  sendInfoAboutSubcategory(categoryId, subcategoryId) {
+    this.router.navigate(['/shop/category/' + categoryId + "/" + subcategoryId])
   } 
 }

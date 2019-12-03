@@ -5,7 +5,7 @@
       <div>
         <li class="category">
         <div class="categoryIcon" appShowHide>
-          <a [ngClass]="{ changeColor : category.id == sentCategoryId}">{{ category.name }}</a>
+          <a [ngClass]="{ changeColor : category.id == activeCategoryId}">{{ category.name }}</a>
           <fa-icon class="plus" [icon]="faPlus"></fa-icon>
           <fa-icon class="minus" [icon]="faMinus"></fa-icon>
         </div>
@@ -13,11 +13,11 @@
             <li
               *ngFor="let subcategory of category.children"
               class="subcategory">
-              <a (click)="sendSubcategoryId(subcategory.id, category.id)" [ngClass]="{ changeColor : subcategory.id == message}">{{ subcategory.name }} 
+              <a (click)="sendSubcategoryId(subcategory.id, category.id)" [ngClass]="{ changeColor : subcategory.id == activeSubcategoryId}">{{ subcategory.name }} 
                 <label *ngIf="subcategory.numberOfProducts != 0">({{subcategory.numberOfProducts}})</label></a>
                 <fa-icon class="closeIcon" 
                 [icon]="faTimes" 
-                (click)="sendSubcategoryId(null, null)"></fa-icon>
+                (click)="sendSubcategoryId('', '')"></fa-icon>
             </li>
           </ul>
         </li>

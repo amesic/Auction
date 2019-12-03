@@ -67,7 +67,7 @@ export class ProductService {
     if (lowerBound != null && upperBound != null) {
       url += "&lowerBound=" + lowerBound +  "&upperBound=" + upperBound;
     }
-    if (searchValue != null) {
+    if (searchValue != null && searchValue != "") {
       url += "&searchUser=" + searchValue;
     }
     url += "&pageNumber=" + pageNumber + "&size=" + size;

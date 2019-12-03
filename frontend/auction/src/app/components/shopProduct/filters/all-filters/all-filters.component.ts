@@ -14,6 +14,8 @@ export class AllFiltersComponent implements OnInit {
   @Input() lowerBound;
   @Input() upperBound;
   @Input() priceProduct;
+  @Input() activeSubcategoryId;
+  @Input() activeCategoryId;
 
   constructor() { }
 

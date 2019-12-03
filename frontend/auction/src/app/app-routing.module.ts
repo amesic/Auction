@@ -32,6 +32,8 @@ export class LoginRegisterActivate implements CanActivate {
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
+  { path: "shop/search", redirectTo: "/shop", pathMatch: "full" },
+  { path: "shop/category", redirectTo: "/shop", pathMatch: "full" },
   {
     path: "home",
     data: {
@@ -72,6 +74,20 @@ const routes: Routes = [
     children: [
       {
         path: "",
+        component: ShopComponent,
+        data: {
+          breadcrumb: "ALL CATEGORIES"
+        }
+      },
+      {
+        path: "search/:searchValue",
+        component: ShopComponent,
+        data: {
+          breadcrumb: "ALL CATEGORIES"
+        }
+      },
+      {
+        path: "category/:categoryId/:subcategoryId",
         component: ShopComponent,
         data: {
           breadcrumb: "ALL CATEGORIES"
