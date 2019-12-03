@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { LoginService } from "../../services/login.service"; //servis za login
 import { FormGroup, FormControl, Validators } from "@angular/forms"; //da pokupimo podatke sa forme
-import { Router } from "@angular/router";
+import { Router, NavigationEnd, ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-login",
@@ -23,7 +23,6 @@ export class LoginComponent implements OnInit {
     )
   });
 
-  url = "http://localhost:8080/users/login";
   userToken;
   userName;
   errorMessageEmail = "";
@@ -31,9 +30,11 @@ export class LoginComponent implements OnInit {
   color;
   message;
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private loginService: LoginService, private router: Router, private activatedRoute: ActivatedRoute) {}
+  previousUrl: string;
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   get email() {
     return this.loginForm.get("email");
@@ -63,7 +64,6 @@ export class LoginComponent implements OnInit {
     if (this.email.valid && this.password.valid) {
       this.loginService
         .authenticate(
-          this.url,
           this.loginForm.value.email,
           this.loginForm.value.password
         )
@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
           userData => {
             this.userName = userData.username;
             this.userToken = userData.token;
-            this.router.navigate(["/home"], { queryParams: this.userName });
+            this.router.navigate(["/home"]);
           },
           err => {
             this.color = "red";

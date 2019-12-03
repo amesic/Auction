@@ -1,113 +1,79 @@
 @import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
-#footer {
+.footer {
   background: #252525;
   border: 1px solid #979797;
-  margin-left: -8.5px;
-  margin-right: -8.5px;
-  margin-bottom: -8px;
-  display: flex;
-  justify-content: center;
 }
-#about,
-#contact,
-#email {
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 130px;
+}
+.about,
+.contact,
+.email {
   display: flex;
   flex-direction: column;
   letter-spacing: 0.56px;
-  font: 400 14px "Lato", sans-serif;
+  font: 400 16px "Lato", sans-serif;
   color: #ffffff;
-  margin-top: 35px;
+  margin-top: 62px;
 }
-#about {
-  margin-left: 214px;
-  margin-right: 41px;
-  flex-basis: 327px;
-}
-#contact {
-  margin-right: 16px;
-  flex-basis: 471px;
-}
-#email {
-  margin-right: 191px;
-  margin-bottom: 50px;
-}
-#about label,
-#contact :nth-child(1),
-#email #news {
+.title {
   opacity: 0.5;
   color: #ffffff;
   margin-bottom: 10px;
 }
-#about a,
-#contact :nth-child(2),
-#contact :nth-child(3),
-#contact :nth-child(4),
-#email :nth-child(2) {
-  margin-bottom: 5px;
-}
-#about a {
+.about > a {
   color: #ffffff;
   text-decoration: none;
+  margin-bottom: 11px;
 }
-#icons fa-icon {
+.icons > fa-icon {
   margin: 5px;
   color: #ffffff;
-  width: 25px;
-  height: 25px;
+  font-size: 20px;
   opacity: 0.6;
 }
-#enterEmail input[type="email"] {
+.enterEmail input[type="email"] {
   font: 400 14px "Lato", sans-serif;
   background: #3b3b3b;
   color: #ffffff;
   border: none;
-  width: 200px;
-  height: 35px;
+  width: 245px;
+  height: 45px;
   padding-left: 15px;
-  margin-right: 5px;
+  margin-right: 7px;
 }
 ::placeholder {
   opacity: 0.2;
   letter-spacing: 0.56px;
 }
-#enterEmail #button input[type="button"] {
+.enterEmail .button input[type="button"] {
   border: 3px solid #8367d8;
   background: #252525;
   color: #d8d8d8;
   letter-spacing: 0.63px;
-  font: 700 15px "Lato", sans-serif;
-  width: 95px;
-  height: 36px;
+  font: 700 16px "Lato", sans-serif;
+  width: 120px;
+  height: 45px;
 }
-#enterEmail #button #buttonIcon span {
-  background-color: #d8d8d8;
-  display: inline-block;
-  border-radius: 1px;
-  height: 12px;
-  width: 2.7px;
-}
-#enterEmail #button #buttonIcon :nth-child(1) {
-  transform: rotate(125deg);
-}
-#enterEmail #button #buttonIcon :nth-child(2) {
-  transform: rotate(-125deg) translateY(-8px) translateX(-7px);
-}
-#button {
+.button {
   display: flex;
 }
-#enterEmail {
+.enterEmail {
   display: flex;
 }
-#button {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-area: "a b";
+.button {
+  position: relative;
 }
-#button input[type="button"] {
-  grid-area: a;
+.button > fa-icon {
+  position: absolute;
+  right: 20px;
+  font-size: 20px;
+  transform: translateY(39%);
+  color: #d8d8d8;
 }
-#button #buttonIcon {
-  grid-area: b;
-  margin-left: 70px;
-  margin-top: 3px;
+.email > label ~ label {
+  margin-bottom: 35px;
 }

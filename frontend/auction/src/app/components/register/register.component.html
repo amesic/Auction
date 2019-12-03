@@ -1,5 +1,5 @@
 <div>
-  <app-below-header [title1]="'REGISTER'"></app-below-header>
+  <app-breadcrumbs></app-breadcrumbs>
   <div id="registerMess" [style.color]="color">{{ message }}</div>
   <div id="formRegister">
     <form [formGroup]="registerForm">
@@ -30,7 +30,7 @@
         [errorMessage]="errorMessagePass"></app-input>
       <input type="button" value="REGISTER" (click)="onSubmit()" /> <br />
       <label>Already have an account?</label>
-      <a href="http://localhost:4200/login">Login</a>
+      <a [routerLink]="['/home/login']">Login</a>
     </form>
   </div>
 </div>

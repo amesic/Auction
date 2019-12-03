@@ -1,54 +1,42 @@
 @import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
-#upHeader {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+.upHeader {
   background: #252525;
-  height: 25px;
-  font: 700 15px "Lato", sans-serif;
-  margin-right: -8px;
-  margin-left: -8px;
-  margin-top: -8px;
+  height: 30px;
 }
-#links {
-  font-size: 10px;
-  letter-spacing: 0.49px;
+.upHeader > .container {
+  display: flex;
+  justify-content: space-between;
+  height: 1.5625em;
+  font: 700 0.9375em "Lato", sans-serif;
 }
-#links a {
-  margin: 15px;
+.icons {
+  margin-top: 3px;
+}
+.icons > fa-icon {
+  margin: 0.3125em;
+  color: #ffffff;
+  opacity: 0.6;
+  font-size: 20px;
+}
+.links {
+  font-size: 0.625em;
+  letter-spacing: 0.030625em;
+  margin-top: 8px;
+}
+.links a {
+  margin-left: 0.9375em;
   color: #ffffff;
   text-decoration: none;
 }
-#links label {
+.links label {
   color: #9b9b9b;
+  margin-left: 0.9375em;
 }
-#icons fa-icon {
-  margin: 5px;
-  color: #ffffff;
-  width: 25px;
-  height: 25px;
-  opacity: 0.6;
+.searchHeader {
+  display: flex;
+  justify-content: space-between;
 }
-#searchHeader {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-areas: "a a b b b c d d";
-}
-#searchHeader #auction {
-  grid-area: a;
-}
-#searchHeader input[type="search"] {
-  grid-area: b;
-  margin-left: 45px;
-}
-#searchHeader fa-icon {
-  grid-area: c;
-  margin-left: 50px;
-}
-#searchHeader div {
-  grid-area: d;
-}
-#searchHeader input[type="search"] {
+.searchHeader input[type="search"] {
   background: #ffffff;
   border: 1px solid #e3e3e3;
   box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
@@ -58,6 +46,7 @@
   padding-right: 45px;
   margin-top: 10px;
   font: 400 17px "Lato", sans-serif;
+  margin-left: 131px;
 }
 ::placeholder {
   font-size: 15px;
@@ -66,55 +55,66 @@
   width: 137px;
   height: 22px;
 }
-.searchIcon {
-  margin-top: 23px;
-  width: 20px;
-  height: 20px;
-  margin-left: 13px;
-}
-#searchHeader #auction {
+.searchHeader .auction {
   font: 300 24px "Lato", sans-serif;
   color: #8367d8;
   letter-spacing: 0.84px;
   height: 29px;
   width: 140px;
   margin-top: 19px;
-  margin-left: 100px;
 }
-#searchHeader #auction #auctionIcon span {
+.searchHeader .auction .auctionIcon span {
   background: #c4bfd6;
   display: inline-block;
   border-radius: 1px;
   height: 16px;
   width: 4px;
 }
-#auction {
+.auction {
   display: flex;
 }
-#auction label {
+.auction label {
   margin-left: 14px;
 }
-#searchHeader #auction #auctionIcon :nth-child(1) {
+.searchHeader .auction .auctionIcon :nth-child(1) {
   transform: rotate(45deg);
 }
-#searchHeader #auction #auctionIcon :nth-child(2) {
+.searchHeader .auction .auctionIcon :nth-child(2) {
   transform: rotate(-45deg) translateX(7px) translateY(-2px);
 }
-#searchHeader #auction #auctionIcon :nth-child(3) {
+.searchHeader .auction .auctionIcon :nth-child(3) {
   transform: rotate(90deg) translateX(5px) translateY(-4px);
 }
-#linksBelowHeader a {
+.linksBelowHeader {
+  margin-top: 20px;
+  display: flex;
+  justify-content: end;
+}
+.linksBelowHeader a {
   text-decoration: none;
   font: 300 16px "Lato", sans-serif;
   color: #252525;
   letter-spacing: 0.56px;
-  margin-right: 28px;
+  margin-left: 28px;
 }
-#linksBelowHeader {
-  margin-top: 20px;
-  margin-left: -31px;
-}
-#linksBelowHeader .active {
+.linksBelowHeader .active {
   color: #8367d8;
   font-weight: 700;
+}
+
+.search {
+  position: relative;
+}
+
+.search > .searchIcon {
+  position: absolute;
+  right: 10px;
+  top: 51%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  font-size: 17px;
+}
+.auction > label:hover {
+  cursor: pointer;
 }

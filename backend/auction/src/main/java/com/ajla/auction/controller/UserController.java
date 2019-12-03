@@ -5,6 +5,9 @@ import com.ajla.auction.model.JwtResponse;
 import com.ajla.auction.model.User;
 import com.ajla.auction.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,40 +22,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Objects;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "https://atlantbh-auction.herokuapp.com"}, allowCredentials = "true")
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    //properties
     private final UserService userService;
     // Using the Spring Authentication Manager, we authenticate the username and password.
     private final AuthenticationManager authenticationManager;
     //for generate or validate token
     private final JwtTokenUtil jwtTokenUtil;
 
-    //dependency injection
     @Autowired
     public UserController(final UserService userService,
                           final AuthenticationManager authenticationManager,
                           final JwtTokenUtil jwtTokenUtil) {
         Objects.requireNonNull(userService, "userService must not be null.");
-        this.userService = userService;
         Objects.requireNonNull(authenticationManager, "authenticationManager must not be null.");
-        this.authenticationManager = authenticationManager;
         Objects.requireNonNull(jwtTokenUtil, "jwtTokenUtil must not be null.");
+        this.userService = userService;
+        this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody User authenticationRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody final User authenticationRequest) throws Exception {
         authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
         final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
+        final  String userName = userService.findByEmail(authenticationRequest.getEmail()).getUserName();
         //when we have 3 arg, first is response, second is headers, and third is status
-       return ResponseEntity.ok(new JwtResponse(userDetails.getUsername(), token));
+       return ResponseEntity.ok(new JwtResponse(userName, token, userDetails.getUsername()));
     }
 
-    private void authenticate(String email, String password) throws Exception {
+    private void authenticate(final String email, final String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         } catch (DisabledException e) {
@@ -64,7 +66,16 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> saveUserData(@RequestBody final User user) {
-        return userService.saveDataFromUser(user);
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        Boolean emailExist = userService.saveDataFromUser(user);
+        if(emailExist == null) {
+            return new ResponseEntity<>("Your data is not valid!", headers, HttpStatus.BAD_REQUEST);
+        }
+        if(!emailExist) {
+            return new ResponseEntity<>("You are successfully registered " + user.getUserName() + "!", headers, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("You are already registered with " + user.getEmail() + " email!", headers, HttpStatus.BAD_REQUEST);
     }
 }
 

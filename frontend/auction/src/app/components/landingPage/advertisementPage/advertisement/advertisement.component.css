@@ -1,0 +1,60 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
+#container {
+  height: 563px;
+  background: #fafafa;
+  margin-top: 13px;
+  margin-bottom: 100px;
+}
+#container > .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#aboutPro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 0px;
+}
+#aboutPro #title {
+  font: 400 30px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 1.61px;
+}
+#aboutPro #price {
+  font: 400 20px "Lato", sans-serif;
+  color: #8367d8;
+  letter-spacing: 0.84px;
+}
+#aboutPro #desc {
+  font: 400 14px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.56px;
+  line-height: 22px;
+  width: 323px;
+  height: 88px;
+}
+img {
+  height: 294px;
+  width: 484;
+}
+.wrap-input {
+  position: relative;
+  margin-top: 40px;
+  width: 192px;
+}
+.wrap-input input {
+  width: 100%;
+  background: #ffffff;
+  border: 3px solid #8367d8;
+  box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+  height: 45px;
+  font: 700 14px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.63px;
+}
+.wrap-input fa-icon {
+  position: absolute;
+  right: 30px;
+  top: 10px;
+}

@@ -1,5 +1,7 @@
 package com.ajla.auction.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Target;
 
 import javax.persistence.Entity;
@@ -10,12 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -28,38 +29,45 @@ public class Product {
     private Long id;
 
     private String title;
+    @Column(length = 65535, columnDefinition = "text")
     private String description;
-    private Number totalProducts;
-    private Date datePublishing;
+    @JsonIgnore
+    private LocalDate datePublishing;
 
     @ManyToOne
     @Target(User.class)
-    @JoinColumn(name = "idSeller", referencedColumnName = "id")
+    @JoinColumn(name = "idSeller")
+    @JsonIgnoreProperties({"password", "gender", "birthDate", "phoneNumber", "address"})
     private User seller;
 
-    private Date startDate;
-    private Date endDate;
-    private Number startPrice;
+    @JsonIgnore
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private double startPrice;
 
-    //bids table
-    @OneToMany(mappedBy = "product")
-    private List<Bid> bids= new ArrayList();
 
     //ImageProduct table
-    @OneToMany(mappedBy = "product")
-    private List<Bid> images= new ArrayList();
+    @OneToMany(cascade = {CascadeType.ALL})
+    private List<Image> images = new ArrayList();
 
-    //inter-table product_category
-    @ManyToMany
-    @JoinTable(
-            name = "product_category",
-            joinColumns = { @JoinColumn(name = "idProduct") },
-            inverseJoinColumns = { @JoinColumn(name = "idCategory") }
-    )
-    private List<Category> productCategories = new ArrayList();
-    //List<Category> subcategories;
+    @ManyToOne
+    @Target(Category.class)
+    @JoinColumn(name = "idCategory")
+    @JsonIgnoreProperties({"name", "subcategories"})
+    private Category category;
+
+    @ManyToOne
+    @Target(Category.class)
+    @JoinColumn(name = "idSubcategory")
+    @JsonIgnoreProperties({"name", "subcategories"})
+    private Category subcategory;
+
+    @JsonIgnore
+    private Boolean feature;
+
 
     //getter setter
+
     public Long getId() {
         return id;
     }
@@ -84,19 +92,11 @@ public class Product {
         this.description = description;
     }
 
-    public Number getTotalProducts() {
-        return totalProducts;
-    }
-
-    public void setTotalProducts(Number totalProducts) {
-        this.totalProducts = totalProducts;
-    }
-
-    public Date getDatePublishing() {
+    public LocalDate getDatePublishing() {
         return datePublishing;
     }
 
-    public void setDatePublishing(Date datePublishing) {
+    public void setDatePublishing(LocalDate datePublishing) {
         this.datePublishing = datePublishing;
     }
 
@@ -108,51 +108,59 @@ public class Product {
         this.seller = seller;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
-    public Number getStartPrice() {
+    public double getStartPrice() {
         return startPrice;
     }
 
-    public void setStartPrice(Number startPrice) {
+    public void setStartPrice(double startPrice) {
         this.startPrice = startPrice;
     }
 
-    public List<Bid> getBids() {
-        return bids;
-    }
-
-    public void setBids(List<Bid> bids) {
-        this.bids = bids;
-    }
-
-    public List<Bid> getImages() {
+   public List<Image> getImages() {
         return images;
     }
 
-    public void setImages(List<Bid> images) {
+    public void setImages(List<Image> images) {
         this.images = images;
     }
 
-    public List<Category> getProductCategories() {
-        return productCategories;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setProductCategories(List<Category> productCategories) {
-        this.productCategories = productCategories;
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Category getSubcategory() {
+        return subcategory;
+    }
+
+    public void setSubcategory(Category subcategory) {
+        this.subcategory = subcategory;
+    }
+
+    public Boolean getFeature() {
+        return feature;
+    }
+
+    public void setFeature(Boolean feature) {
+        this.feature = feature;
     }
 }

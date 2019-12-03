@@ -1,19 +1,21 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { map } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
 })
 export class LoginService {
+  url = "/users/login";
   constructor(private http: HttpClient) {}
 
-  authenticate(url: string, email: string, password: string) {
-    return this.http.post<any>(url, { email, password }).pipe(
+  authenticate(email: string, password: string) {
+    return this.http.post<any>(this.url, { email, password }).pipe(
       map(userData => {
         sessionStorage.setItem("username", userData.username);
         let tokenStr = "Bearer " + userData.token;
         sessionStorage.setItem("token", tokenStr);
+        sessionStorage.setItem("email", email);
         return userData;
       })
     );
@@ -24,11 +26,21 @@ export class LoginService {
   }
   logOut() {
     sessionStorage.removeItem("username");
+    sessionStorage.removeItem("email");
+    sessionStorage.removeItem("token");
   }
   getUserName() {
     if (this.isUserLoggedIn) {
       return sessionStorage.getItem("username");
     } else {
+      return "";
+    }
+  }
+  getUserEmail() {
+    if(this.isUserLoggedIn) {
+      return sessionStorage.getItem("email");
+    }
+    else {
       return "";
     }
   }

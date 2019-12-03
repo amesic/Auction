@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.OneToOne;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,13 +35,14 @@ public class User {
     private String phoneNumber;
 
     //address table
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     @Target(Address.class)
-    @JoinColumn(name = "idAddress", referencedColumnName = "id")
+    @JoinColumn(name = "idAddress")
     private Address address;
 
     //bids table
-    @OneToMany(mappedBy = "user") //@Target(Bid.class)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
+    @Target(Bid.class)
     private List<Bid> bids = new ArrayList();
 
     //getter setter

@@ -13,15 +13,13 @@ export class RegisterComponent implements OnInit {
     firstName: new FormControl(
       "",
       Validators.compose([
-        Validators.required,
-        Validators.pattern("^[A-Z][a-z]+$")
+        Validators.required
       ])
     ),
     lastName: new FormControl(
       "",
       Validators.compose([
-        Validators.required,
-        Validators.pattern("^[A-Z][a-z]+$")
+        Validators.required
       ])
     ),
     email: new FormControl(
@@ -36,8 +34,6 @@ export class RegisterComponent implements OnInit {
       Validators.compose([Validators.required, Validators.minLength(8)])
     )
   });
-
-  url = "http://localhost:8080/users/register";
   errorMessageFirst = "";
   errorMessageLast = "";
   errorMessageEmail = "";
@@ -65,23 +61,19 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     //first name errors
     if (this.firstName.errors != null && this.firstName.errors.required) {
-      this.errorMessageFirst = "First Name is requierd!";
-    } else if (this.firstName.errors != null && this.firstName.errors.pattern) {
-      this.errorMessageFirst = "First Name is not valid!";
+      this.errorMessageFirst = "First Name is required!";
     } else {
       this.errorMessageFirst = "";
     }
     //last name errors
     if (this.lastName.errors != null && this.lastName.errors.required) {
-      this.errorMessageLast = "Last Name is requierd!";
-    } else if (this.lastName.errors != null && this.lastName.errors.pattern) {
-      this.errorMessageLast = "Last Name is not valid!";
+      this.errorMessageLast = "Last Name is required!";
     } else {
       this.errorMessageLast = "";
     }
     //email errors
     if (this.email.errors != null && this.email.errors.required) {
-      this.errorMessageEmail = "Email is requierd!";
+      this.errorMessageEmail = "Email is required!";
     } else if (this.email.errors != null && this.email.errors.pattern) {
       this.errorMessageEmail = "Email is not valid!";
     } else {
@@ -89,13 +81,13 @@ export class RegisterComponent implements OnInit {
     }
     //password errors
     if (this.password.errors != null && this.password.errors.required) {
-      this.errorMessagePass = "Password is requierd!";
+      this.errorMessagePass = "Password is required!";
     } else if (!this.password.valid) {
       this.errorMessagePass = "Password must be minimum 8 character!";
     } else {
       this.errorMessagePass = "";
     }
-    //valid both
+    //valid everything
     if (
       this.email.valid &&
       this.password.valid &&
@@ -109,15 +101,17 @@ export class RegisterComponent implements OnInit {
       this.user.email = this.registerForm.value.email;
       this.user.password = this.registerForm.value.password;
 
-      this.registerService.saveUserData(this.url, this.user).subscribe(
+      this.registerService.saveUserData(this.user).subscribe(
         message => {
           this.color = "green";
           this.message = message;
           this.registerForm.reset();
+          window.scrollTo(0, 0);
         },
         err => {
           this.color = "red";
           this.message = err.error;
+          window.scrollTo(0, 0);
         }
       );
     }

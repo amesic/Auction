@@ -1,11 +1,9 @@
 <div>
-  <app-below-header [title1]="'LOGIN'"></app-below-header>
-  <div id="loginMess" [style.color]="color">{{ message }}</div>
+  <app-breadcrumbs></app-breadcrumbs>
+  <div class="loginMess" [style.color]="color">{{ message }}</div>
   <div id="formLogin">
     <form [formGroup]="loginForm">
       <div>LOGIN</div>
-      <!--ako koristimo [] onda ono što mu se dodijeli 
-        gleda kao objekat, a bez '' bio bi niz charova-->
       <app-input
         [title]="'Enter Email'"
         type="email"

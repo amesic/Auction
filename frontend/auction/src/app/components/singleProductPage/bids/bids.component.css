@@ -1,0 +1,88 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
+.container {
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  padding: 0;
+  margin-bottom: 50px;
+}
+.info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  background: #f0f0f0;
+  height: 60px;
+}
+.infoDateBid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.biders .dateBid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.biders .user {
+  display: flex;
+  align-items: center;
+}
+.info > p,
+.info .infoDateBid > p {
+  font: 400 18px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.63px;
+  margin: 0;
+}
+.info > p {
+  margin-left: 45px;
+}
+.biders .user > p {
+  margin-left: 30px;
+}
+.biders {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  height: 60px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.biders .user > p,
+.biders .dateBid > p,
+.biders .user > img {
+  margin-bottom: 0;
+}
+.biders .user .img > img {
+  border-radius: 50%;
+  height: 60px;
+  width: 100%;
+}
+.biders .user .img {
+  height: 60px;
+  width: 60px;
+  margin-left: 35px;
+}
+.green {
+  color: #6cc047;
+}
+.biders .dateBid > p ~ p,
+.biders .user > p {
+  font-weight: 700;
+}
+.noMoreItems {
+  display: none;
+}
+.button {
+  background: #ffffff;
+  border: 3px solid #f7f4fd;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.05);
+  font: 200 1em "Lato", sans-serif;
+  padding-left: 2em;
+  padding-right: 2em;
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
+}
+.containerButton {
+  padding-right: 62px;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 200px;
+}

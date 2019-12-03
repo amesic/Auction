@@ -32,6 +32,7 @@ form label {
   font: 400 16px "Lato", sans-serif;
   color: #252525;
   letter-spacing: 0.63px;
+  margin-left: 5px;
 }
 form input[type="button"] {
   margin-left: 30px;
@@ -54,7 +55,7 @@ form a {
   margin-left: 240px;
   margin-bottom: 30px;
 }
-#loginMess {
+.loginMess {
   display: block;
   text-align: center;
   margin-top: 10px;

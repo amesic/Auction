@@ -1,0 +1,27 @@
+<div *ngIf="productInfo != undefined && bidsOfProduct != undefined">
+  <app-breadcrumbs></app-breadcrumbs>
+
+  <app-single-product
+    [productInfo]="productInfo"
+    [clickedImage]="productInfo.images[0].link"
+    [bidsOfProduct]="bidsOfProduct"
+    [highestBid]="highestBid"
+    [numberOfBids]="numberOfBids"
+    [userIsLoged]="userIsLoged"
+    [userIsSeller]="userIsSeller"
+    [usersProduct]="usersProduct"
+    [timeLeft]="timeLeft"></app-single-product>
+
+  <app-set-products
+    [title]="'Related Products'"
+    [products]="relatedProducts"
+    [className]="'featureCollection'"></app-set-products>
+
+  <app-bids
+    [bids]="bidsOfProduct"
+    [userIsSeller]="userIsSeller"
+    [highestBid]="highestBid"
+    [idProduct]="productInfo.id"
+    [numberOfBids]="numberOfBids"
+    [hide]="hide"></app-bids>
+</div>

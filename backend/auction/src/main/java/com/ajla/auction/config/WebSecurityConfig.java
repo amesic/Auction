@@ -32,11 +32,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public WebSecurityConfig(final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
                              final UserService userService,
                              final JwtRequestFilter jwtRequestFilter) {
-        Objects.requireNonNull(jwtAuthenticationEntryPoint, "userService must not be null.");
+        Objects.requireNonNull(jwtAuthenticationEntryPoint, "jwtAuthenticationEntryPoint must not be null.");
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         Objects.requireNonNull(userService, "userService must not be null.");
         this.userService = userService;
-        Objects.requireNonNull(jwtRequestFilter, "userService must not be null.");
+        Objects.requireNonNull(jwtRequestFilter, "jwtRequestFilter must not be null.");
         this.jwtRequestFilter = jwtRequestFilter;
     }
 
@@ -62,9 +62,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
     // We don't need CSRF for this example
+        httpSecurity.cors();
         httpSecurity.csrf().disable()
-    // dont authenticate this particular request, allow requests on /users/**
-                .authorizeRequests().antMatchers("/users/**").permitAll().
+    // dont authenticate this particular request, allow requests on /users/** /category/**
+                .authorizeRequests().antMatchers("/users/**", "/category/**", "/product/**", "/bid/**").permitAll().
     // all other requests need to be authenticated
         anyRequest().authenticated().and().
     // make sure we use stateless session; session won't be used to
