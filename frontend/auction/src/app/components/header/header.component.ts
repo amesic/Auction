@@ -29,7 +29,20 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {}
   sendSearchValue(valueFromSearch) {
-    this.router.navigate(['/shop/search/' + valueFromSearch]);
+    if (valueFromSearch == "") {
+      if (this.router.url.indexOf("category") != -1) {
+        this.router.navigate(['/shop/' + this.router.url.substr(this.router.url.indexOf("category"), this.router.url.length)]);
+      } else {
+        this.router.navigate(['/shop']);
+      }
+    } else {
+    if ((this.router.url == "/shop" || this.router.url == "/home" || this.router.url.substr(0, 13) == "/shop/search/") && this.router.url.indexOf("category") == -1) {
+      this.router.navigate(['/shop/search/' + valueFromSearch]);
+    }
+    else if (this.router.url.indexOf("category") != -1) {
+      this.router.navigate(['/shop/search/' + valueFromSearch + '/' + this.router.url.substr(this.router.url.indexOf("category"), this.router.url.length)]);
+    }
   }
+}
   
 }
