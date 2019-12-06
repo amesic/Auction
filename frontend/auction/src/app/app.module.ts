@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { Ng5SliderModule } from 'ng5-slider';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { WebSocketService } from "./services/web-socket.service";
+
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -84,6 +86,7 @@ import { FilterPriceComponent } from './components/shopProduct/filters/filter-pr
   ],
   providers: [
     LoginRegisterActivate,
+    WebSocketService,
   {
       provide: HTTP_INTERCEPTORS,
       useClass: BasicAuthHtppInterceptorServiceService,

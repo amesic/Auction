@@ -6,6 +6,12 @@
 <div class="allImages"> 
     <div class="bigImage">
     <img src="{{clickedImage}}">
+    <div class="views">
+        <div>
+          users watching
+            <p>{{ numberOfViewers }}</p>
+        </div>
+    </div>
 </div>
 <div class="smallImages" > 
     <div *ngFor="let image of productInfo.images; let i = index" >
@@ -47,5 +53,6 @@
 <p>{{productInfo.description}}</p>
 </div>
 </div>
+
 </div>
 

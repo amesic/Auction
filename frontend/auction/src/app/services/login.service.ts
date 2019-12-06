@@ -30,14 +30,14 @@ export class LoginService {
     sessionStorage.removeItem("token");
   }
   getUserName() {
-    if (this.isUserLoggedIn) {
+    if (this.isUserLoggedIn()) {
       return sessionStorage.getItem("username");
     } else {
       return "";
     }
   }
   getUserEmail() {
-    if(this.isUserLoggedIn) {
+    if(this.isUserLoggedIn()) {
       return sessionStorage.getItem("email");
     }
     else {

@@ -17,6 +17,7 @@ export class ProductService {
   urlSingleProduct = "/product/singleProduct";
   urlRelatedProducts = "/product/relatedProducts";
   urlSortedProducts = "/product/sortProducts";
+  urlNumberViewers = "/product/numberViewers";
 
   getAdvertisementProduct(): Observable<Product> {
     return this.http.get<Product>(this.urlAdvertisement);
@@ -72,5 +73,8 @@ export class ProductService {
     }
     url += "&pageNumber=" + pageNumber + "&size=" + size;
     return this.http.get<PaginationInfo>(url);
+  }
+  getNumberViewers(id): Observable<number> {
+    return this.http.get<number>(this.urlNumberViewers + "?id=" + id);
   }
 }

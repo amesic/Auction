@@ -1,15 +1,16 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
 import { ProductService } from "src/app/services/product.service";
 import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { LoginService } from "src/app/services/login.service";
 import { BidsService } from "src/app/services/bids.service";
+import { WebSocketService } from 'src/app/services/web-socket.service';
 
 @Component({
   selector: "app-single-product-page",
   templateUrl: "./single-product-page.component.html",
   styleUrls: ["./single-product-page.component.css"]
 })
-export class SingleProductPageComponent implements OnInit {
+export class SingleProductPageComponent implements OnInit, OnDestroy {
   productInfo;
   bidsOfProduct;
   numberOfBids;
@@ -68,17 +69,37 @@ export class SingleProductPageComponent implements OnInit {
     return [years, months, days, hours].join(" ");
   }
 
+  numberOfViewers = 0;
+
   constructor(
     private productService: ProductService,
     private activatedRoute: ActivatedRoute,
     private loginService: LoginService,
     private bidService: BidsService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private webSocketService: WebSocketService
+  ) {
 
+  }
   ngOnInit() {
     this.userIsLoged = this.loginService.isUserLoggedIn();
     this.activatedRoute.params.subscribe(routeParams => {
+      if (this.loginService.isUserLoggedIn()) {
+        // Open connection with server socket
+        let stompClient = this.webSocketService.connect();
+        stompClient.connect({}, frame => {
+        // Subscribe to notification topic
+            stompClient.subscribe('/topic/view', notifications => {
+        // Update notifications attribute with the recent messsage sent from the server
+                this.numberOfViewers = JSON.parse(notifications.body).numberOfCurrentViewers;
+            })
+            let object = {
+              "email": this.loginService.getUserEmail(),
+              "productId" : routeParams.idProduct
+            }
+            stompClient.send("/app/send/message/connect" , {}, JSON.stringify(object));
+        });
+      }
       this.productService
         .getSingleProduct(routeParams.idProduct).subscribe(singleProduct => {
           this.productInfo = singleProduct;
@@ -87,8 +108,10 @@ export class SingleProductPageComponent implements OnInit {
             Math.floor((<any>date - new Date().getTime()) / 1000)
           );
         });
-      this.bidService
-        .getBidsInfoOfProduct(routeParams.idProduct, this.pageNumber, this.size).subscribe(
+      this.productService.getNumberViewers(routeParams.idProduct).subscribe(number => {
+        this.numberOfViewers = number;
+      });
+      this.bidService.getBidsInfoOfProduct(routeParams.idProduct, this.pageNumber, this.size).subscribe(
           bidInfo => {
             if (bidInfo == null) {
               this.bidsOfProduct = [];
@@ -134,4 +157,12 @@ export class SingleProductPageComponent implements OnInit {
       window.scrollTo(0, 0);
     });
   }
+  ngOnDestroy() {
+    this.webSocketService._disconnect(this.productInfo.id, this.loginService.getUserEmail());
+  }
+  @HostListener("window:beforeunload", ["$event"]) 
+  unloadHandler(event: Event) {
+    this.webSocketService._disconnect(this.productInfo.id, this.loginService.getUserEmail());
+}
+  
 }

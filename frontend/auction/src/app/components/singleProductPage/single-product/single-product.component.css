@@ -59,6 +59,29 @@
   height: 503px;
   background: #ececec;
   margin-bottom: 10px;
+  position: relative;
+}
+.bigImage .views {
+  display: none;
+  background: rgba(17, 17, 17, 0.9);
+  font: 200 18px "Lato", sans-serif;
+  color: #8367d8;
+  width: 389px;
+  height: 503px;
+  text-align: center;
+  position: absolute;
+  transform: translateY(-100%);
+}
+.bigImage .views div > p{
+  font: 200 150px "Lato", sans-serif;
+  color: #8367d8;
+  opacity: 0.8;
+}
+.bigImage .views div {
+ transform: translateY(50%);
+}
+.bigImage:hover .views {
+  display: block;
 }
 .allImages .bigImage > img {
   width: 100%;

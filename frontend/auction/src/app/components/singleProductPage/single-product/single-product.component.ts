@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, OnDestroy, OnChanges } from "@angular/core";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { LoginService } from 'src/app/services/login.service';
 import { BidsService } from 'src/app/services/bids.service';
+import { WebSocketService } from "src/app/services/web-socket.service";
 
 @Component({
   selector: "app-single-product",
@@ -19,6 +20,7 @@ export class SingleProductComponent implements OnInit {
   @Input() numberOfBids;
   @Input() usersProduct;
   @Input() timeLeft;
+  @Input() numberOfViewers;
   
   messStatusAboutBids;
   faChevronRight = faChevronRight;
@@ -26,8 +28,8 @@ export class SingleProductComponent implements OnInit {
   valueFromUser;
   errorMess = null;
 
-  constructor(private loginService: LoginService, 
-    private bidService: BidsService) {}
+
+  constructor(private loginService: LoginService, private bidService: BidsService) {} 
 
   ngOnInit() {
     if(this.userIsLoged != true) {
