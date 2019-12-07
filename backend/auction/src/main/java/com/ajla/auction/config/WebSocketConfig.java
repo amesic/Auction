@@ -14,7 +14,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         // client app will subscribe messages at endpoints starting with these configured endpoint
-        config.enableSimpleBroker("/topic/", "/queue/");
+        config.enableSimpleBroker("/queue", "/topic");
         // client will send messages at this endpoint
         // if client sends message at /app/message, the endpoint configured at /message in the spring controller will be invoked
         // @MessageMapping-annotated methods in controller class

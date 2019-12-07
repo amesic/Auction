@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
 import { ProductService } from "src/app/services/product.service";
-import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
+import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from "@angular/router";
 import { LoginService } from "src/app/services/login.service";
 import { BidsService } from "src/app/services/bids.service";
 import { WebSocketService } from 'src/app/services/web-socket.service';
@@ -24,6 +24,10 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
 
   pageNumber = 0;
   size = 5;
+  message;
+
+  stompClient;
+  sessionId;
 
   dhms(t) {
     var years, months, days, hours;
@@ -86,18 +90,24 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
     this.activatedRoute.params.subscribe(routeParams => {
       if (this.loginService.isUserLoggedIn()) {
         // Open connection with server socket
-        let stompClient = this.webSocketService.connect();
-        stompClient.connect({}, frame => {
+        this.stompClient = this.webSocketService.connect();
+        this.stompClient.connect({}, frame => {
+          let urlarray = this.stompClient.ws._transport.url.split('/');
+          this.sessionId = urlarray[urlarray.length-2];
         // Subscribe to notification topic
-            stompClient.subscribe('/topic/view', notifications => {
+            this.stompClient.subscribe('/topic/view', notifications => {
         // Update notifications attribute with the recent messsage sent from the server
                 this.numberOfViewers = JSON.parse(notifications.body).numberOfCurrentViewers;
-            })
+            });
             let object = {
               "email": this.loginService.getUserEmail(),
-              "productId" : routeParams.idProduct
+              "productId" : routeParams.idProduct,
+              "sessionId": this.sessionId
             }
-            stompClient.send("/app/send/message/connect" , {}, JSON.stringify(object));
+            this.stompClient.subscribe('/user/queue/notify', notifications => {
+              this.numberOfViewers = JSON.parse(notifications.body).numberOfCurrentViewers;
+            });
+            this.stompClient.send("/app/send/message/connect" , {}, JSON.stringify(object));
         });
       }
       this.productService
@@ -158,11 +168,11 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
     });
   }
   ngOnDestroy() {
-    this.webSocketService._disconnect(this.productInfo.id, this.loginService.getUserEmail());
+    this.webSocketService._disconnect(this.productInfo.id, this.loginService.getUserEmail(), this.sessionId);
   }
   @HostListener("window:beforeunload", ["$event"]) 
   unloadHandler(event: Event) {
-    this.webSocketService._disconnect(this.productInfo.id, this.loginService.getUserEmail());
+    this.webSocketService._disconnect(this.productInfo.id, this.loginService.getUserEmail(), this.sessionId);
 }
   
 }

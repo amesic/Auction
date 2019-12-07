@@ -15,11 +15,12 @@ connect() {
   this.stompClient = Stomp.over(webSocket);
   return this.stompClient;
 }
-_disconnect(id, email) {
+_disconnect(id, email, sessionId) {
   try {
     let object = {
       "email": email,
-      "productId" : id
+      "productId" : id,
+      "sessionId": sessionId
     }
     console.log("fired")
     this.stompClient.send("/app/send/message/disconnect" , {}, JSON.stringify(object));

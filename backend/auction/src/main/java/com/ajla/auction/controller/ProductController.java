@@ -7,11 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.socket.config.WebSocketMessageBrokerStats;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,21 +25,20 @@ import java.util.stream.Collectors;
 public class ProductController {
     private final ProductService productService;
     private List<ProductViewers> numberOfViewersByProduct = new ArrayList<>();
-    private Map<String, String> userSessionId = new HashMap<>();
+    private List<UserWatchProductId> usersWatchingProduct = new ArrayList<>();
 
     private final SimpMessagingTemplate template;
-    private final SimpUserRegistry simpUserRegistry;
+
+
 
 
     @Autowired
     public ProductController(final ProductService productService,
-                             final SimpMessagingTemplate template,
-                             final SimpUserRegistry simpUserRegistry) {
+                             final SimpMessagingTemplate template) {
         Objects.requireNonNull(productService, "productService must not be null.");
         Objects.requireNonNull(template, "template must not be null.");
         this.productService = productService;
         this.template = template;
-        this.simpUserRegistry = simpUserRegistry;
     }
 
     @GetMapping("/featureProduct")
@@ -77,21 +79,32 @@ public class ProductController {
     public void onDisconnectMessage(final UserWatchProductId idEmail, final SimpMessageHeaderAccessor headerAccessor) throws JSONException {
         String sessionId = headerAccessor.getSessionAttributes().get("sessionId").toString();
         headerAccessor.setSessionId(sessionId);
-        if (!idEmail.getEmail().equals("") && userSessionId.containsKey(idEmail.getEmail())) {
-            userSessionId.remove(idEmail.getEmail(), sessionId);
+
+        if (!idEmail.getEmail().equals("") && this.usersWatchingProduct.stream().anyMatch(uw -> uw.getSessionId().equals(idEmail.getSessionId()))) {
+            this.usersWatchingProduct.removeIf(uw ->  uw.getSessionId().equals(idEmail.getSessionId()));
         }
         this.numberOfViewersByProduct.stream()
                 .filter(pv -> pv.getProductId().equals(idEmail.getProductId())).findFirst().get().decrement();
-        this.template.convertAndSend("/topic/view", this.numberOfViewersByProduct.stream()
-                .filter(pv -> pv.getProductId().equals(idEmail.getProductId())).findFirst().get());
+
+        this.usersWatchingProduct.forEach(uw -> {
+            if (uw.getProductId().equals(idEmail.getProductId())) {
+                SimpMessageHeaderAccessor headerAcc = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
+                headerAcc.setSessionId(uw.getSessionId());
+                headerAcc.setLeaveMutable(true);
+                this.template.convertAndSendToUser(uw.getSessionId(), "/queue/notify", this.numberOfViewersByProduct.stream()
+                        .filter(pv -> pv.getProductId().equals(idEmail.getProductId())).findFirst().get(), headerAcc.getMessageHeaders());
+            }
+        });
+
     }
     @MessageMapping("/send/message/connect")
-    public void onConnectMessage(final UserWatchProductId idEmail, final SimpMessageHeaderAccessor headerAccessor) {
+    @SendToUser
+    public void onConnectMessage(@Payload final UserWatchProductId idEmail, final SimpMessageHeaderAccessor headerAccessor) {
         if (!idEmail.getEmail().equals("")) {
             String sessionId = headerAccessor.getSessionAttributes().get("sessionId").toString();
             headerAccessor.setSessionId(sessionId);
-            if (!userSessionId.containsKey(idEmail.getEmail())) {
-                userSessionId.put(idEmail.getEmail(), sessionId);
+            if (this.usersWatchingProduct.stream().noneMatch(uw -> uw.getSessionId().equals(idEmail.getSessionId()))) {
+                this.usersWatchingProduct.add(idEmail);
             }
             List<ProductViewers> result = this.numberOfViewersByProduct.stream()
                     .filter(pv -> pv.getProductId().equals(idEmail.getProductId()))
@@ -103,17 +116,25 @@ public class ProductController {
                 productViewers.setProductId(idEmail.getProductId());
                 productViewers.increment();
                 this.numberOfViewersByProduct.add(productViewers);
-                // Push notifications to front-end
-                this.template.convertAndSend("/topic/view", productViewers);
             } else {
-                // product already exist, just increment number of views
+                // Push notifications to front-end
+                //this.template.convertAndSend("/topic/view", this.numberOfViewersByProduct.stream()
+                  //      .filter(pv -> pv.getProductId().equals(idEmail.getProductId())).findFirst().get());
+                this.usersWatchingProduct.forEach(uw -> {
+                    if (!uw.getSessionId().equals(idEmail.getSessionId()) && uw.getProductId().equals(idEmail.getProductId())) {
+                        SimpMessageHeaderAccessor headerAcc = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
+                        headerAcc.setSessionId(uw.getSessionId());
+                        headerAcc.setLeaveMutable(true);
+                        this.template.convertAndSendToUser(uw.getSessionId(), "/queue/notify", this.numberOfViewersByProduct.stream()
+                                .filter(pv -> pv.getProductId().equals(idEmail.getProductId())).findFirst().get(), headerAcc.getMessageHeaders());
+                    }
+                });
+                // product already exist, just increment number of views, after sending message
                 this.numberOfViewersByProduct.stream()
                         .filter(pv -> pv.getProductId().equals(idEmail.getProductId())).findFirst().get().increment();
-                // Push notifications to front-end
-                this.template.convertAndSend("/topic/view", this.numberOfViewersByProduct.stream()
-                        .filter(pv -> pv.getProductId().equals(idEmail.getProductId())).findFirst().get());
             }
         }
+
     }
     @GetMapping("/relatedProducts")
     public ResponseEntity<List<Product>> getRelatedProducts(@RequestParam("id") final Long idProduct) {
