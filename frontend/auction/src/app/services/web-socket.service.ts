@@ -16,21 +16,15 @@ connect() {
   return this.stompClient;
 }
 _disconnect(id, email, sessionId) {
-  try {
-    let object = {
+   /* let object = {
       "email": email,
       "productId" : id,
       "sessionId": sessionId
     }
-    console.log("fired")
-    this.stompClient.send("/app/send/message/disconnect" , {}, JSON.stringify(object));
-  } catch (error) {
-    console.log(error);
-  }
+    this.stompClient.send("/app/send/message/disconnect" , {}, JSON.stringify(object));*/
   if (this.stompClient != null) {
     this.stompClient.disconnect();
   }
-  console.log("Disconnected");
 }
 
 }

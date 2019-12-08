@@ -24,7 +24,6 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
 
   pageNumber = 0;
   size = 5;
-  message;
 
   stompClient;
   sessionId;
@@ -94,19 +93,16 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
         this.stompClient.connect({}, frame => {
           let urlarray = this.stompClient.ws._transport.url.split('/');
           this.sessionId = urlarray[urlarray.length-2];
-        // Subscribe to notification topic
-            this.stompClient.subscribe('/topic/view', notifications => {
-        // Update notifications attribute with the recent messsage sent from the server
-                this.numberOfViewers = JSON.parse(notifications.body).numberOfCurrentViewers;
-            });
+        // Subscribe to notification queue/notify
+        this.stompClient.subscribe('/user/queue/notify', notifications => {
+          // Update notifications attribute with the recent messsage sent from the server
+          this.numberOfViewers = JSON.parse(notifications.body);
+        });
             let object = {
               "email": this.loginService.getUserEmail(),
               "productId" : routeParams.idProduct,
               "sessionId": this.sessionId
             }
-            this.stompClient.subscribe('/user/queue/notify', notifications => {
-              this.numberOfViewers = JSON.parse(notifications.body).numberOfCurrentViewers;
-            });
             this.stompClient.send("/app/send/message/connect" , {}, JSON.stringify(object));
         });
       }
@@ -161,18 +157,42 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
         });
     });
     this.router.events.subscribe(evt => {
-      if (!(evt instanceof NavigationEnd)) {
-        return;
+     if (evt instanceof NavigationStart) {
+      if(evt.url.substr(0,14) == "/shop/product/") {
+      let object = {
+        "email": this.loginService.getUserEmail(),
+        "productId" : this.productInfo.id,
+        "sessionId": this.sessionId
       }
-      window.scrollTo(0, 0);
+      this.stompClient.send("/app/send/message/disconnect" , {}, JSON.stringify(object));
+    this.webSocketService._disconnect(this.productInfo.id, this.loginService.getUserEmail(), this.sessionId);
+    window.scrollTo(0, 0);
+     }
+    }
     });
   }
   ngOnDestroy() {
+    if (this.loginService.isUserLoggedIn()) {
+      let object = {
+        "email": this.loginService.getUserEmail(),
+        "productId" : this.productInfo.id,
+        "sessionId": this.sessionId
+      }
+      this.stompClient.send("/app/send/message/disconnect" , {}, JSON.stringify(object));
     this.webSocketService._disconnect(this.productInfo.id, this.loginService.getUserEmail(), this.sessionId);
+    }
   }
   @HostListener("window:beforeunload", ["$event"]) 
   unloadHandler(event: Event) {
+    if (this.loginService.isUserLoggedIn()) {
+      let object = {
+        "email": this.loginService.getUserEmail(),
+        "productId" : this.productInfo.id,
+        "sessionId": this.sessionId
+      }
+      this.stompClient.send("/app/send/message/disconnect" , {}, JSON.stringify(object));
     this.webSocketService._disconnect(this.productInfo.id, this.loginService.getUserEmail(), this.sessionId);
+    }
 }
   
 }
