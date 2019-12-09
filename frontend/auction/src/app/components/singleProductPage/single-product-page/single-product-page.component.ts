@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
+import { Component, OnInit, OnDestroy, HostListener, OnChanges } from "@angular/core";
 import { ProductService } from "src/app/services/product.service";
-import { ActivatedRoute, Router, NavigationStart } from "@angular/router";
+import { ActivatedRoute, Router, NavigationStart, NavigationEnd } from "@angular/router";
 import { LoginService } from "src/app/services/login.service";
 import { BidsService } from "src/app/services/bids.service";
 import { WebSocketService } from 'src/app/services/web-socket.service';
@@ -11,7 +11,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
   templateUrl: "./single-product-page.component.html",
   styleUrls: ["./single-product-page.component.css"]
 })
-export class SingleProductPageComponent implements OnInit, OnDestroy {
+export class SingleProductPageComponent implements OnInit, OnDestroy{
   productInfo;
   bidsOfProduct;
   numberOfBids;
@@ -26,11 +26,10 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
   pageNumber = 0;
   size = 5;
 
-  stompClient;
+  stompClient = null;
   sessionId;
   showNotification = false;
   faTimes = faTimes;
-  messStatusAboutBids;
 
   dhms(t) {
     var years, months, days, hours;
@@ -92,6 +91,15 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
     this.userIsLoged = this.loginService.isUserLoggedIn();
     this.showNotification = false;
     this.activatedRoute.params.subscribe(routeParams => {
+     if(this.stompClient != null) {
+      let object = {
+        "email": this.loginService.getUserEmail(),
+        "productId" : this.productInfo.id,
+        "sessionId": this.sessionId
+      }
+       this.stompClient.send("/app/send/message/disconnect" , {}, JSON.stringify(object));
+       this.webSocketService._disconnect();
+     }
       if (this.loginService.isUserLoggedIn()) {
         // Open connection with server socket
         this.stompClient = this.webSocketService.connect();
@@ -106,11 +114,9 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
         // Subscribe to notification queue/highestBid
         this.stompClient.subscribe('/user/queue/highestBid', notifications => {
           // Update notifications attribute with the recent messsage sent from the server
-          //this.numberOfViewers = JSON.parse(notifications.body);
           this.highestBid = JSON.parse(notifications.body).highestBid;
           this.numberOfBids = JSON.parse(notifications.body).totalNumberOfItems;
           this.showNotification = true;
-          this.messStatusAboutBids = null;
         });
             let object = {
               "email": this.loginService.getUserEmail(),
@@ -171,18 +177,10 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
         });
     });
     this.router.events.subscribe(evt => {
-     if (evt instanceof NavigationStart) {
-      if (evt.url.substr(0,14) == "/shop/product/" && this.userIsLoged) {
-      let object = {
-        "email": this.loginService.getUserEmail(),
-        "productId" : this.productInfo.id,
-        "sessionId": this.sessionId
-      }
-      this.stompClient.send("/app/send/message/disconnect" , {}, JSON.stringify(object));
-    this.webSocketService._disconnect();
-    window.scrollTo(0, 0);
+     if (!(evt instanceof NavigationEnd)) {
+        return;
      }
-    }
+     window.scrollTo(0, 0);
     });
   }
   ngOnDestroy() {
@@ -211,6 +209,10 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
 
 closeNotification() {
   this.showNotification = false;
+}
+
+recieveMessageFromSingleProduct(show) {
+  this.showNotification = show;
 }
   
 }

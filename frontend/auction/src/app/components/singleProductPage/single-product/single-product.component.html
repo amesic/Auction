@@ -6,7 +6,7 @@
 <div class="allImages"> 
     <div class="bigImage">
     <img src="{{clickedImage}}">
-    <div class="views">
+    <div *ngIf="userIsLoged" class="views">
         <div>
           users watching
             <p>{{ numberOfViewers }}</p>

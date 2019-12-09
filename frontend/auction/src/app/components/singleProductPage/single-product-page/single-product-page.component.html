@@ -1,10 +1,10 @@
 <div *ngIf="productInfo != undefined && bidsOfProduct != undefined">
   <app-breadcrumbs></app-breadcrumbs>
-  <div class="notification" *ngIf="highestBid != null && !userIsSeller && showNotification">
-      <div class="alert-area">
+  <div *ngIf="highestBid != null && showNotification" class="notification">
+      <div class="alert-area" [ngClass]="{'sellerNotif' : userIsSeller}">
         <fa-icon class="closeIcon" [icon]="faTimes" (click)="closeNotification()"></fa-icon>
         <p class="info">{{highestBid.user.userName}} just became highest bidder.</p>
-        <p class="bid">Bid now!</p>
+        <p *ngIf="!userIsSeller" class="bid">Bid now!</p>
       </div>
     </div>
 
@@ -21,7 +21,7 @@
     [timeLeft]="timeLeft"
     [stompClient]="stompClient"
     [sessionId]="sessionId"
-    [messStatusAboutBids]="messStatusAboutBids"></app-single-product>
+    (messageEvent)="recieveMessageFromSingleProduct(show)"></app-single-product>
 
   <app-set-products
     [title]="'Related Products'"

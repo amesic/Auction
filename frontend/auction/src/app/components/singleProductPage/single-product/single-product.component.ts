@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges} from "@angular/core";
+import { Component, OnInit, Input, OnChanges, EventEmitter, Output} from "@angular/core";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { LoginService } from 'src/app/services/login.service';
@@ -9,7 +9,7 @@ import { BidsService } from 'src/app/services/bids.service';
   templateUrl: "./single-product.component.html",
   styleUrls: ["./single-product.component.css"]
 })
-export class SingleProductComponent implements OnInit {
+export class SingleProductComponent implements OnInit, OnChanges {
   @Input() productInfo;
   @Input() bidsOfProduct;
   @Input() userIsLoged;
@@ -22,15 +22,23 @@ export class SingleProductComponent implements OnInit {
   @Input() numberOfViewers;
   @Input() stompClient;
   @Input() sessionId;
-  
-  @Input() messStatusAboutBids;
+ 
+  messStatusAboutBids;
   faChevronRight = faChevronRight;
   faHeart = faHeart;
   valueFromUser;
   errorMess = null;
 
+  @Output() messageEvent = new EventEmitter<boolean>();
+
 
   constructor(private loginService: LoginService, private bidService: BidsService) {} 
+  
+  ngOnChanges() {
+    if (this.messStatusAboutBids != null) {
+      this.messStatusAboutBids = null;
+    }
+  }
 
   ngOnInit() {
     if(this.userIsLoged != true) {
@@ -48,6 +56,7 @@ export class SingleProductComponent implements OnInit {
       this.bidService.saveBidFromUser(this.productInfo, this.loginService.getUserEmail(), 
       this.valueFromUser).subscribe(
         bid => {
+          this.messageEvent.emit(false);
           let object = {
             "email": this.loginService.getUserEmail(),
             "productId" : this.productInfo.id,
