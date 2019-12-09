@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -29,8 +28,8 @@ public class ProductController {
     private final ProductService productService;
     private final SimpMessagingTemplate template;
 
-    private List<ProductViewers> numberOfViewersByProduct = new ArrayList<>();
-    private List<UserWatchProductId> usersWatchingProduct = new ArrayList<>();
+    List<ProductViewers> numberOfViewersByProduct = new ArrayList<>();
+    List<UserWatchProductId> usersWatchingProduct = new ArrayList<>();
 
     @Autowired
     public ProductController(final ProductService productService,

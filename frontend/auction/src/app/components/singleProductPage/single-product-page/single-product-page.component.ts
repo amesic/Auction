@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
 import { ProductService } from "src/app/services/product.service";
-import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from "@angular/router";
+import { ActivatedRoute, Router, NavigationStart } from "@angular/router";
 import { LoginService } from "src/app/services/login.service";
 import { BidsService } from "src/app/services/bids.service";
 import { WebSocketService } from 'src/app/services/web-socket.service';
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: "app-single-product-page",
@@ -27,6 +28,9 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
 
   stompClient;
   sessionId;
+  showNotification = false;
+  faTimes = faTimes;
+  messStatusAboutBids;
 
   dhms(t) {
     var years, months, days, hours;
@@ -86,6 +90,7 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.userIsLoged = this.loginService.isUserLoggedIn();
+    this.showNotification = false;
     this.activatedRoute.params.subscribe(routeParams => {
       if (this.loginService.isUserLoggedIn()) {
         // Open connection with server socket
@@ -97,6 +102,15 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
         this.stompClient.subscribe('/user/queue/notify', notifications => {
           // Update notifications attribute with the recent messsage sent from the server
           this.numberOfViewers = JSON.parse(notifications.body);
+        });
+        // Subscribe to notification queue/highestBid
+        this.stompClient.subscribe('/user/queue/highestBid', notifications => {
+          // Update notifications attribute with the recent messsage sent from the server
+          //this.numberOfViewers = JSON.parse(notifications.body);
+          this.highestBid = JSON.parse(notifications.body).highestBid;
+          this.numberOfBids = JSON.parse(notifications.body).totalNumberOfItems;
+          this.showNotification = true;
+          this.messStatusAboutBids = null;
         });
             let object = {
               "email": this.loginService.getUserEmail(),
@@ -158,14 +172,14 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
     });
     this.router.events.subscribe(evt => {
      if (evt instanceof NavigationStart) {
-      if(evt.url.substr(0,14) == "/shop/product/") {
+      if (evt.url.substr(0,14) == "/shop/product/" && this.userIsLoged) {
       let object = {
         "email": this.loginService.getUserEmail(),
         "productId" : this.productInfo.id,
         "sessionId": this.sessionId
       }
       this.stompClient.send("/app/send/message/disconnect" , {}, JSON.stringify(object));
-    this.webSocketService._disconnect(this.productInfo.id, this.loginService.getUserEmail(), this.sessionId);
+    this.webSocketService._disconnect();
     window.scrollTo(0, 0);
      }
     }
@@ -179,7 +193,7 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
         "sessionId": this.sessionId
       }
       this.stompClient.send("/app/send/message/disconnect" , {}, JSON.stringify(object));
-    this.webSocketService._disconnect(this.productInfo.id, this.loginService.getUserEmail(), this.sessionId);
+    this.webSocketService._disconnect();
     }
   }
   @HostListener("window:beforeunload", ["$event"]) 
@@ -191,8 +205,12 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
         "sessionId": this.sessionId
       }
       this.stompClient.send("/app/send/message/disconnect" , {}, JSON.stringify(object));
-    this.webSocketService._disconnect(this.productInfo.id, this.loginService.getUserEmail(), this.sessionId);
+    this.webSocketService._disconnect();
     }
+}
+
+closeNotification() {
+  this.showNotification = false;
 }
   
 }

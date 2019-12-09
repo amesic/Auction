@@ -7,4 +7,5 @@ import com.ajla.auction.model.Product;
 public interface BidRepositoryCustom {
     Boolean checkIfThereIsGreaterValue(final Long valueFromUser, final Product product);
     BidInfo getBidsOfPage(final Long pageNumber, final Long size, final Long idProduct);
+    Long numberOfBidsByProduct(final Long productId);
 }

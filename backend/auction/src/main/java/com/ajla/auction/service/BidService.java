@@ -60,4 +60,7 @@ public class BidService implements IBidService{
             }
             return null;
     }
+    public Long numberOfBidsByProduct(Long productId) {
+        return bidRepository.numberOfBidsByProduct(productId);
+    }
 }

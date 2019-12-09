@@ -1,9 +1,8 @@
-import { Component, OnInit, Input, OnDestroy, OnChanges } from "@angular/core";
+import { Component, OnInit, Input, OnChanges} from "@angular/core";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { LoginService } from 'src/app/services/login.service';
 import { BidsService } from 'src/app/services/bids.service';
-import { WebSocketService } from "src/app/services/web-socket.service";
 
 @Component({
   selector: "app-single-product",
@@ -21,8 +20,10 @@ export class SingleProductComponent implements OnInit {
   @Input() usersProduct;
   @Input() timeLeft;
   @Input() numberOfViewers;
+  @Input() stompClient;
+  @Input() sessionId;
   
-  messStatusAboutBids;
+  @Input() messStatusAboutBids;
   faChevronRight = faChevronRight;
   faHeart = faHeart;
   valueFromUser;
@@ -47,6 +48,12 @@ export class SingleProductComponent implements OnInit {
       this.bidService.saveBidFromUser(this.productInfo, this.loginService.getUserEmail(), 
       this.valueFromUser).subscribe(
         bid => {
+          let object = {
+            "email": this.loginService.getUserEmail(),
+            "productId" : this.productInfo.id,
+            "sessionId": this.sessionId
+          }
+          this.stompClient.send("/app/send/message/highestBid" , {}, JSON.stringify(object));
           this.errorMess = null;
           this.highestBid = bid;
           this.numberOfBids = this.numberOfBids + 1;

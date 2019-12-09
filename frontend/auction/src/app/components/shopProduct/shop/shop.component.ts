@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild, OnChanges, ɵConsole } from "@angular/core";
+import { Component, OnInit} from "@angular/core";
 import { CategoriesService } from "src/app/services/categories.service";
 import { FilterService } from "src/app/services/filter.service";
 import { Filter } from "src/app/models/Filter";
 import { ProductService } from "src/app/services/product.service";
 import { PaginationInfo } from "src/app/models/PaginationInfo";
-import { MessageService } from "src/app/services/message.service";
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
