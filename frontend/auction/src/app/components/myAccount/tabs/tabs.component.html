@@ -1,0 +1,18 @@
+<div class="tabs">
+  <div class="tab-profile" (click)="profile()" [ngClass]="{ activeTab: activeProfile }">
+    <fa-icon [icon]="faUser"></fa-icon>
+    <input class="tab" type="button" value="Profile" />
+  </div>
+  <div class="tab-products" (click)="products()" [ngClass]="{ activeTab: activeProducts }">
+    <fa-icon [icon]="faList"></fa-icon>
+    <input class="tab" type="button" value="Products" />
+  </div>
+  <div class="tab-bids" (click)="bids()" [ngClass]="{ activeTab: activeBids }">
+    <fa-icon [icon]="faGavel"></fa-icon>
+    <input class="tab" type="button" value="Bids" />
+  </div>
+  <div class="tab-watchlist" (click)="watchlist()" [ngClass]="{ activeTab: activeWatchlist }">
+    <fa-icon [icon]="faGift"></fa-icon>
+    <input class="tab" type="button" value="Watchlist" />
+  </div>
+</div>

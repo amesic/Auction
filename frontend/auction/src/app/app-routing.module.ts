@@ -13,6 +13,7 @@ import { LandingPageComponent } from "./components/landingPage/landing-page/land
 import { AllCategoriesComponent } from "./components/all-categories/all-categories.component";
 import { SingleProductPageComponent } from "./components/singleProductPage/single-product-page/single-product-page.component";
 import { ShopComponent } from "./components/shopProduct/shop/shop.component";
+import { MyAccountComponent } from "./components/myAccount/my-account/my-account.component"
 import { LoginService } from "./services/login.service";
 import { ErrorComponent } from "./components/error/error.component";
 
@@ -77,20 +78,6 @@ const routes: Routes = [
           breadcrumb: "ALL CATEGORIES"
         }
       },
-      /*{
-        path: "search/:searchValue",
-        component: ShopComponent,
-        data: {
-          breadcrumb: "ALL CATEGORIES"
-        }
-      },
-      {
-        path: "category/:categoryId/:subcategoryId",
-        component: ShopComponent,
-        data: {
-          breadcrumb: "ALL CATEGORIES"
-        }
-      },*/
       {
         path: "search/:searchValue/category/:categoryId/:subcategoryId",
         component: ShopComponent,
@@ -119,6 +106,21 @@ const routes: Routes = [
           breadcrumb: "SINGLE PRODUCT"
         }
       }
+    ]
+  },
+  {
+    path: "my-account",
+    data: {
+      breadcrumb: "MY ACCOUNT"
+    },
+    children: [
+      {
+        path: "",
+        component: MyAccountComponent,
+        data: {
+          breadcrumb: "PROFILE"
+        }
+      },
     ]
   },
   {

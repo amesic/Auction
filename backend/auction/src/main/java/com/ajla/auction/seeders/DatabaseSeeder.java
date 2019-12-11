@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.List;
 
 
 @Component
@@ -26,6 +25,7 @@ public class DatabaseSeeder {
     private final ImageRepository imageProductRepo;
     private final BidRepository bidRepository;
     private final CharacteristicRepository characteristicRepository;
+    private final AddressRepository addressRepository;
     Logger logger = LoggerFactory.getLogger(DatabaseSeeder.class);
 
     //dependency injection
@@ -35,17 +35,20 @@ public class DatabaseSeeder {
                           final UserRepository userRepo,
                           final ImageRepository imageProductRepo,
                           final BidRepository bidRepository,
-                          final CharacteristicRepository characteristicRepository) {
+                          final CharacteristicRepository characteristicRepository,
+                          final AddressRepository addressRepository) {
         this.categoryRepo = categoryRepo;
         this.productRepo = productRepo;
         this.userRepo = userRepo;
         this.imageProductRepo = imageProductRepo;
         this.bidRepository = bidRepository;
         this.characteristicRepository = characteristicRepository;
+        this.addressRepository = addressRepository;
     }
 
     @EventListener
     public void seed(ContextRefreshedEvent event) {
+        seedAddress();
         seedUser();
         seedCategories();
         seedCharacteristics();
@@ -53,31 +56,90 @@ public class DatabaseSeeder {
         seedImagesForProducts();
         seedBids();
     }
+    private void seedAddress() {
+        Address address = addressRepository.findAddressById((long) 1);
+        if (address == null) {
+            Address a = new Address();
+            a.setCity("Sarajevo");
+            a.setCountry("Bosnia and Herzegovina");
+            a.setStreet("Olimpijska 8");
+            a.setZipCode("71000");
+            a.setState("");
+
+            Address a1 = new Address();
+            a1.setCity("Sarajevo");
+            a1.setCountry("Bosnia and Herzegovina");
+            a1.setStreet("Olimpijska 10");
+            a1.setZipCode("71000");
+            a1.setState("");
+
+            Address a2 = new Address();
+            a2.setCity("Sarajevo");
+            a2.setCountry("Bosnia and Herzegovina");
+            a2.setStreet("Olimpijska 12");
+            a2.setZipCode("71000");
+            a2.setState("");
+
+            Address a3 = new Address();
+            a3.setCity("Sarajevo");
+            a3.setCountry("Bosnia and Herzegovina");
+            a3.setStreet("Olimpijska 17");
+            a3.setZipCode("71000");
+            a3.setState("");
+
+            addressRepository.saveAll(Arrays.asList(a, a1, a2, a3));
+            logger.info("Address table seeded");
+        }
+        else {
+            logger.trace("Address Seeding Not Required");
+        }
+
+    }
     private void seedUser() {
         User user = userRepo.findUserById((long) 1);
         if(user == null) {
             final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d.MM.yyyy");
 
             User u = new User();
             u.setUserName("Huso Husic");
             u.setPassword(passwordEncoder.encode("12345678"));
+            u.setImage("https://myrealdomain.com/images/male-images-7.jpg");
+            u.setGender("male");
+            u.setPhoneNumber("+38762333444");
+            u.setBirthDate((LocalDate.parse("2.11.1970", formatter)));
             u.setEmail("huso@gmail.com");
+            u.setAddress(addressRepository.findAddressById((long) 1));
 
             User u1 = new User();
             u1.setUserName("Mujo Mujic");
             u1.setPassword(passwordEncoder.encode("12345678"));
             u1.setEmail("mujo@gmail.com");
             u1.setImage("https://assets.nrdc.org/sites/default/files/styles/headshot/public/brendan-guy-450.jpg?itok=MK85ttfr");
+            u1.setGender("male");
+            u1.setPhoneNumber("+38762222444");
+            u1.setBirthDate((LocalDate.parse("1.12.1980", formatter)));
+            u1.setAddress(addressRepository.findAddressById((long) 2));
 
             User u2 = new User();
             u2.setUserName("Fata Fatic");
             u2.setPassword(passwordEncoder.encode("12345678"));
             u2.setEmail("fata@gmail.com");
+            u2.setImage("https://images.fastcompany.net/image/upload/w_596,c_limit,q_auto:best,f_auto/wp-cms/uploads/2019/09/i-1-inside-bumble-ceo-whitney-wolfe-herds-mission-to-build-the-female-internet-FA1019BUMB002.jpg");
+            u2.setGender("female");
+            u2.setPhoneNumber("+38762222444");
+            u2.setBirthDate((LocalDate.parse("10.07.1971", formatter)));
+            u2.setAddress(addressRepository.findAddressById((long) 3));
 
             User u3 = new User();
             u3.setUserName("Suljo Suljic");
             u3.setPassword(passwordEncoder.encode("12345678"));
             u3.setEmail("suljo@gmail.com");
+            u3.setImage("https://cdn-prod.medicalnewstoday.com/content/images/hero/266/266749/266749_1100.jpg");
+            u3.setGender("male");
+            u3.setPhoneNumber("+38762222444");
+            u3.setBirthDate((LocalDate.parse("10.07.1961", formatter)));
+            u3.setAddress(addressRepository.findAddressById((long) 4));
 
             userRepo.saveAll(Arrays.asList(u, u1, u2, u3));
             logger.info("User table seeded");

@@ -39,9 +39,14 @@
       <div class="linksBelowHeader">
         <a [routerLink]="['/home']" routerLinkActive="active">HOME</a>
         <a [routerLink]="['/shop']" routerLinkActive="active">SHOP</a>
-        <a
-          *ngIf="userLoged"
-          [routerLink]="['/myacc']"
-          routerLinkActive="active">MY ACCOUNT</a>
+        <a class="linkAcc" *ngIf="userLoged" appClickOutside>MY ACCOUNT</a>
+        <div class="my-account">
+            <div class="my-account-choice">
+                <a [routerLink]="['/my-account']" routerLinkActive="active">Profile</a>
+                <a [routerLink]="['/my-account/products']" routerLinkActive="active">Your products</a>
+                <a [routerLink]="['/my-account/bids']" routerLinkActive="active">Your bids</a>
+                <a [routerLink]="['/my-account/watchlist']" routerLinkActive="active">Watchlist</a>
+              </div>
+            </div>
       </div>
-    </div>
+  </div>

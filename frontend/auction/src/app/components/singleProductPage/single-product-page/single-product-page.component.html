@@ -1,5 +1,6 @@
-<div *ngIf="productInfo != undefined && bidsOfProduct != undefined">
+<div *ngIf="productInfo != undefined && bidsOfProduct != undefined" class="shop">
   <app-breadcrumbs></app-breadcrumbs>
+  
   <div *ngIf="highestBid != null && showNotification" class="notification">
       <div class="alert-area" [ngClass]="{'sellerNotif' : userIsSeller}">
         <fa-icon class="closeIcon" [icon]="faTimes" (click)="closeNotification()"></fa-icon>
@@ -21,7 +22,7 @@
     [timeLeft]="timeLeft"
     [stompClient]="stompClient"
     [sessionId]="sessionId"
-    (messageEvent)="recieveMessageFromSingleProduct(show)"></app-single-product>
+    (messageEvent)="recieveMessageFromSingleProduct($event)"></app-single-product>
 
   <app-set-products
     [title]="'Related Products'"

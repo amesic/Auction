@@ -6,7 +6,8 @@ import * as Stomp from 'stompjs';
   providedIn: 'root'
 })
 export class WebSocketService {
-  webSocketEndPoint: string ="http://localhost:8080/socket";
+ webSocketEndPoint: string ="http://localhost:8080/socket";
+ //webSocketEndPoint: string ="https://atlantbh-auction-api.herokuapp.com/socket";
   stompClient: any;
 // Open connection with the back-end socket
  

@@ -1,5 +1,6 @@
 package com.ajla.auction.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Target;
 
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.CascadeType;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +26,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id", unique = true, nullable = false)
+    @JsonIgnore
     private Long id;
 
     private String userName; //first and last name
@@ -31,11 +34,11 @@ public class User {
     private String password;
     private String gender;
     private String image; //path for image
-    private Date birthDate;
+    private LocalDate birthDate;
     private String phoneNumber;
 
     //address table
-    @OneToOne(cascade = {CascadeType.ALL})
+    @OneToOne
     @Target(Address.class)
     @JoinColumn(name = "idAddress")
     private Address address;
@@ -79,10 +82,10 @@ public class User {
     public void setImage(String image) {
         this.image = image;
     }
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
     public String getPhoneNumber() {

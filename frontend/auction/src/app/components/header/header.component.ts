@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from "@angular/core";
 
 import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { faInstagram } from "@fortawesome/free-brands-svg-icons";
@@ -44,5 +44,6 @@ export class HeaderComponent implements OnInit {
     }
   }
 }
+
   
 }

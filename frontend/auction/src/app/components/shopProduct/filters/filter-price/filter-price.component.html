@@ -4,8 +4,7 @@
     <ngx-charts-bar-vertical
       [view]="view"
       [scheme]="colorScheme"
-      [results]="priceProduct"
-      (select)="onSelect($event)">
+      [results]="priceProduct">
     </ngx-charts-bar-vertical>
       <ng5-slider [value]="value" [highValue]="highValue" [options]="options" (userChangeEnd)="sendInfoAboutPrice($event)"></ng5-slider>
   </div>

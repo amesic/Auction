@@ -1,5 +1,7 @@
 package com.ajla.auction.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -20,11 +22,13 @@ public class Address {
     private Long id;
 
     private String street;
-    private String  city;
+    private String city;
+    private String state;
     private String zipCode;
     private String country;
 
-    @OneToOne(mappedBy = "address", cascade = {CascadeType.ALL})
+    @JsonIgnore
+    @OneToOne
     private User user;
 
     //getter setter
@@ -74,5 +78,13 @@ public class Address {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }
