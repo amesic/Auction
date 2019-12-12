@@ -107,8 +107,13 @@ public class AuthController {
     }
     @PostMapping(value = "/save/watchlist")
     public ResponseEntity<Watchlist> saveNewProductFromUserIntoWatchlist(@RequestBody final Watchlist watchlist) {
-        return new ResponseEntity<>(watchlistService.saveNewProductInfoWatchlistOfUser(watchlist.getUser().getEmail(),
-                watchlist.getProduct().getId()), HttpStatus.OK);
+        Watchlist w = watchlistService.saveNewProductInfoWatchlistOfUser(watchlist.getUser().getEmail(),
+                watchlist.getProduct().getId());
+        if (w != null) {
+            return new ResponseEntity<>(w , HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
     @GetMapping("/watchlistFromUser")
     public ResponseEntity<PaginationInfo<ProductInfoBid>> getWatchlistOfProduct(@RequestParam("email") final String email,

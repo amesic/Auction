@@ -32,7 +32,7 @@ public class BidRepositoryImpl implements BidRepositoryCustom {
         TypedQuery<Bid> query = em.createQuery(cq);
 
         if (query.getResultList().isEmpty()) {
-            return (product.getId() > valueFromUser);
+            return (product.getStartPrice() > valueFromUser);
         }
         cq.where(cb.and(cb.equal(bid.get("product"), product.getId()), cb.greaterThanOrEqualTo(bid.get("value"), valueFromUser)));
         query = em.createQuery(cq);

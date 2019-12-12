@@ -166,6 +166,9 @@
 }
 .container .watchlist {
   position: relative;
+  width: 140px;
+  height: 36px;
+  margin-bottom: 20px;
 }
 .container .details .titleOfDetails {
   font: 400 18px "Lato", sans-serif;
@@ -200,4 +203,11 @@
 .allImages .smallImages div > img:hover {
   transform: translateY(2%);
 
+}
+.watchlist fa-icon {
+  cursor: pointer;
+}
+
+.onHover:hover{
+  transform: translateY(5%) translateX(1%);
 }

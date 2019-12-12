@@ -69,4 +69,21 @@ public class WatchlistRepositoryImpl implements WatchlistRepositoryCustom {
         return new PaginationInfo<>(size, pageNumber, totalNumberOfItems, listOfProductsInfoBid);
 
     }
+    @Override
+    public Watchlist getWatchlistByProductIdAndUserId(final Long idUser, final Long idProduct) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Watchlist> cq = cb.createQuery(Watchlist.class);
+        final Root<Watchlist> watchlist = cq.from(Watchlist.class);
+
+        cq.where(cb.and(
+                cb.equal(watchlist.get("user"), idUser),
+                cb.equal(watchlist.get("product"), idProduct)));
+        TypedQuery<Watchlist> query = em.createQuery(cq);
+
+        if (!query.getResultList().isEmpty()) {
+            return query.getResultList().get(0);
+        }
+
+        return null;
+    }
 }

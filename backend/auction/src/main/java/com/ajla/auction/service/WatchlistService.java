@@ -34,11 +34,15 @@ public class WatchlistService implements IWatchlistService{
     public Watchlist saveNewProductInfoWatchlistOfUser(final String email, final Long idProduct) {
         final Product product = productRepository.findProductById(idProduct);
         final User user = userRepository.findByEmail(email);
-        Watchlist w = new Watchlist();
-        w.setUser(user);
-        w.setProduct(product);
-        watchlistRepository.save(w);
-        return w;
+        if (watchlistRepository.getWatchlistByProductIdAndUserId(user.getId(), product.getId()) == null) {
+            Watchlist w = new Watchlist();
+            w.setUser(user);
+            w.setProduct(product);
+            watchlistRepository.save(w);
+            return w;
+        } else {
+            return null;
+        }
     }
     @Override
     public PaginationInfo<ProductInfoBid> findWatchlistByUser(final String email, final Long pageNumber, final Long size) {

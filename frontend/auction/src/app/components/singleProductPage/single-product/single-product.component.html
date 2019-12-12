@@ -1,5 +1,6 @@
 <div class="messStatusAboutBids" *ngIf="messStatusAboutBids != null">{{messStatusAboutBids}}</div>
 <div class="usersProduct" *ngIf="usersProduct != null">{{usersProduct}}</div>
+<div class="usersProduct" *ngIf="messStatusAboutWatchList != null">{{messStatusAboutWatchList}}</div>
 <div class="messError" *ngIf="errorMess != null" >{{errorMess}}</div>
 <div class="container">
     
@@ -43,8 +44,9 @@
 </p>
 <p class="infoBid time">Time left: <label *ngIf = "timeLeft != undefined">{{timeLeft}}</label></p>
 
-<div class="watchlist">
-<input type="button" value="Watchlist" [ngClass]="{'disabledButton': !userIsLoged  || userIsSeller}">
+<div *ngIf="!userIsSeller" class="watchlist" [ngClass]="{'onHover': userIsLoged}" (click)="saveToWatchlist()">
+<input type="button" value="Watchlist" 
+[ngClass]="{'disabledButton': !userIsLoged}">
 <fa-icon [icon]="faHeart"></fa-icon>
 </div>
 

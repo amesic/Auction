@@ -3,6 +3,7 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { LoginService } from 'src/app/services/login.service';
 import { BidsService } from 'src/app/services/bids.service';
+import { WatchlistService } from 'src/app/services/watchlist.service';
 
 @Component({
   selector: "app-single-product",
@@ -24,6 +25,7 @@ export class SingleProductComponent implements OnInit, OnChanges {
   @Input() sessionId;
  
   messStatusAboutBids;
+  messStatusAboutWatchList;
   faChevronRight = faChevronRight;
   faHeart = faHeart;
   valueFromUser;
@@ -32,14 +34,21 @@ export class SingleProductComponent implements OnInit, OnChanges {
   @Output() messageEvent = new EventEmitter<boolean>();
 
 
-  constructor(private loginService: LoginService, private bidService: BidsService) {} 
+  constructor(private loginService: LoginService, 
+    private bidService: BidsService,
+    private watchlistService: WatchlistService) {} 
   
   ngOnChanges() {
     if (this.messStatusAboutBids != null) {
       this.messStatusAboutBids = null;
     }
-  }
-
+    if (this.messStatusAboutWatchList != null) {
+      this.messStatusAboutWatchList = null;
+    }
+    if (this.errorMess != null) {
+      this.errorMess = null;
+    }
+   }
   ngOnInit() {
     if(this.userIsLoged != true) {
       this.errorMess = "Please login for bidding!"
@@ -64,6 +73,7 @@ export class SingleProductComponent implements OnInit, OnChanges {
           }
           this.stompClient.send("/app/send/message/highestBid" , {}, JSON.stringify(object));
           this.errorMess = null;
+          this.messStatusAboutWatchList = null;
           this.highestBid = bid;
           this.numberOfBids = this.numberOfBids + 1;
           this.messStatusAboutBids = "Congrats! You are the highest bider!"
@@ -71,6 +81,7 @@ export class SingleProductComponent implements OnInit, OnChanges {
       },
       err => {
         this.messStatusAboutBids = null;
+        this.messStatusAboutWatchList = null;
         if(this.highestBid != null) {
         this.errorMess = "Please enter greater number than " + this.highestBid.value + "!";
         } else {
@@ -84,5 +95,20 @@ export class SingleProductComponent implements OnInit, OnChanges {
       this.errorMess = "Please enter valid number!";
       window.scrollTo(0, 0);
     }
+  }
+  saveToWatchlist() {
+    this.watchlistService.saveItemFromUserToWatchlist(this.productInfo.id, this.loginService.getUserEmail())
+    .subscribe(savedItem => {
+      this.messStatusAboutWatchList = "Item added to your watchlist!";
+      this.messStatusAboutBids = null;
+      this.errorMess = null;
+      window.scrollTo(0, 0);
+    },
+    err => {
+      this.errorMess = "Item already added to your watchlist!";
+      this.messStatusAboutWatchList = null;
+      this.messStatusAboutBids = null;
+      window.scrollTo(0, 0);
+    })
   }
 }
