@@ -90,15 +90,16 @@ public class AuthController {
     }
 
     @GetMapping("/product/sold")
-    public void getSoldProductsByUserSeller(@RequestParam("email") final String email) {
-
+    public ResponseEntity<PaginationInfo<ProductInfoBid>> getSoldProductsByUserSeller(@RequestParam("email") final String email,
+                                                                                      @RequestParam("pageNumber") final Long pageNumber,
+                                                                                      @RequestParam("size") final Long size) {
+        return new ResponseEntity<>(productService.getAllSoldProductsOfSeller(email, pageNumber, size), HttpStatus.OK);
     }
     @GetMapping("/product/active")
     public ResponseEntity<PaginationInfo<ProductInfoBid>> getActiveProductsByUserSeller(@RequestParam("email") final String email,
                                                                                  @RequestParam("pageNumber") final Long pageNumber,
                                                                                  @RequestParam("size") final Long size) {
         return new ResponseEntity<>(productService.getAllActiveProductsOfSeller(email, pageNumber, size), HttpStatus.OK);
-
     }
 }
 

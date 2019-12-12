@@ -38,4 +38,5 @@ public interface ProductRepositoryCustom {
                                                  final Long pageNumber,
                                                  final Long size);
     PaginationInfo<ProductInfoBid> getAllActiveProductsOfSeller(final Long idSeller, final Long page, final Long size);
+    PaginationInfo<ProductInfoBid> getAllSoldProductsOfSeller(final Long idSeller, final Long page, final Long size);
 }

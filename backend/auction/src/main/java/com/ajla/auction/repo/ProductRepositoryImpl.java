@@ -732,4 +732,56 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         return new PaginationInfo<>(size, pageNumber, totalNumberOfItems, listOfProductsInfoBid);
     }
+    @Override
+    public PaginationInfo<ProductInfoBid> getAllSoldProductsOfSeller(final Long idSeller, final Long pageNumber, final Long size) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+        final Root<Product> product = cq.from(Product.class);
+
+        final CriteriaQuery<Long> cqForProductsSize = cb.createQuery(Long.class);
+        final Root<Product> productForProductsSize = cqForProductsSize.from(Product.class);
+
+
+        cqForProductsSize.select(cb.count(productForProductsSize))
+                .where(cb.and(
+                        cb.lessThan(product.get("endDate"), LocalDate.now()),
+                        cb.equal(product.get("seller"), idSeller)
+                ));
+
+        cq.where(cb.and(
+                cb.lessThan(product.get("endDate"), LocalDate.now()),
+                cb.equal(product.get("seller"), idSeller)
+        ))
+                .orderBy(cb.desc(product.get("endDate")));
+
+        final TypedQuery<Product> queryForListProducts = em.createQuery(cq);
+        //pageNumber starts from 0, return list of size number elements, starting from pageNumber*size index of element
+        queryForListProducts.setFirstResult(Math.toIntExact(pageNumber * size));
+        queryForListProducts.setMaxResults(Math.toIntExact(size));
+        final List<Product> listOfProducts = queryForListProducts.getResultList();
+        final List<ProductInfoBid> listOfProductsInfoBid = new ArrayList<>();
+        listOfProducts.forEach(p -> {
+            final List<Bid> bidsOfProduct = bidRepository.bidsByProduct(p.getId());
+            ProductInfoBid pib = new ProductInfoBid();
+            if (!bidsOfProduct.isEmpty()) {
+                pib.setHighestBid(bidsOfProduct.get(0).getValue());
+                pib.setNumberOfBids((long) bidsOfProduct.size());
+            } else {
+                pib.setHighestBid(null);
+                pib.setNumberOfBids(null);
+            }
+            pib.setEndDate(p.getEndDate());
+            pib.setImages(p.getImages());
+            pib.setId(p.getId());
+            pib.setTitle(p.getTitle());
+            pib.setStartPrice(p.getStartPrice());
+            listOfProductsInfoBid.add(pib);
+        });
+        //set total number of last chance products
+        final TypedQuery<Long> queryForSizeOfListProducts = em.createQuery(cqForProductsSize);
+        final Long totalNumberOfItems = queryForSizeOfListProducts.getSingleResult();
+
+        return new PaginationInfo<>(size, pageNumber, totalNumberOfItems, listOfProductsInfoBid);
+
+    }
 }

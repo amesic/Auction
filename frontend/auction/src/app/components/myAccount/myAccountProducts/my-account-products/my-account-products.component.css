@@ -21,4 +21,20 @@
 }
 .load {
   margin-bottom: 201px;
+  background: #ffffff;
+  border: 3px solid #e3e3e3;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.05);
+  font: 700 16px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.56px;
+  height: 49px;
+  padding-right: 30px;
+  padding-left: 30px;
+}
+.load-button {
+  display: flex;
+  justify-content: flex-end;
+}
+.hide {
+  display: none;
 }

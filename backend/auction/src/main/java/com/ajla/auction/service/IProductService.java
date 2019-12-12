@@ -31,4 +31,5 @@ public interface IProductService {
                                               final List<Long> listOfCharacteristicsClicked,
                                               final String searchUser);
     PaginationInfo<ProductInfoBid> getAllActiveProductsOfSeller(final String email, final Long page, final Long size);
+    PaginationInfo<ProductInfoBid> getAllSoldProductsOfSeller(final String email, final Long page, final Long size);
 }

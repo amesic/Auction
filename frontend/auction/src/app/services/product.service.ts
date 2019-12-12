@@ -79,12 +79,12 @@ export class ProductService {
   getNumberViewers(id): Observable<number> {
     return this.http.get<number>(this.urlNumberViewers + "?id=" + id);
   }
-  getSoldProductsByUser(email, pageNumber, size): Observable<Product[]> {
-    return this.http.get<Product[]>(this.urlSoldProducts + "?email=" + email +
+  getSoldProductsByUser(email, pageNumber, size): Observable<PaginationInfo> {
+    return this.http.get<PaginationInfo>(this.urlSoldProducts + "?email=" + email +
      "&pageNumber=" + pageNumber + "&size=" + size);
   }
-  getActiveProductsByUser(email, pageNumber, size): Observable<Product[]> {
-    return this.http.get<Product[]>(this.urlActiveProducts + "?email=" + email +
+  getActiveProductsByUser(email, pageNumber, size): Observable<PaginationInfo> {
+    return this.http.get<PaginationInfo>(this.urlActiveProducts + "?email=" + email +
     "&pageNumber=" + pageNumber + "&size=" + size);
   }
 }

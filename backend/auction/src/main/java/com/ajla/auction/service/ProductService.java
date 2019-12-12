@@ -94,4 +94,8 @@ public class ProductService implements IProductService{
     public PaginationInfo<ProductInfoBid> getAllActiveProductsOfSeller(final String email, final Long page, final Long size) {
         return productRepository.getAllActiveProductsOfSeller(userService.findByEmail(email).getId(), page, size);
     }
+    @Override
+    public PaginationInfo<ProductInfoBid> getAllSoldProductsOfSeller(final String email, final Long page, final Long size) {
+        return  productRepository.getAllSoldProductsOfSeller(userService.findByEmail(email).getId(), page, size);
+    }
 }

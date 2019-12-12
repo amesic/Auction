@@ -5,6 +5,8 @@
 <input class="tab" [ngClass]="{'activeTab' : activeActiveProducts}" type="button" value="Active" (click)="activeProducts()">
 <input class="tab" [ngClass]="{'activeTab' : !activeActiveProducts}" type="button" value="Sold" (click)="soldProducts()">
 </div>
-<app-my-account-products-list [items]="items.items"></app-my-account-products-list>
-<input type="button" value="LOAD MORE" class="load" (click)="loadMore()">
+<app-my-account-products-list [items]="items" [activeActiveProducts]="activeActiveProducts"></app-my-account-products-list>
+<div class="load-button">
+<input [ngClass]="{'hide' : hide}" type="button" value="LOAD MORE" class="load" (click)="loadMore()">
+</div>
 </div>
