@@ -84,4 +84,16 @@ public class BidRepositoryImpl implements BidRepositoryCustom {
         final Long totalNumberOfItems = queryForNumberOfBids.getSingleResult();
         return  totalNumberOfItems;
     }
+    @Override
+    public List<Bid> bidsByProduct(final Long productId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Bid> cqForBid = cb.createQuery(Bid.class);
+        final Root<Bid> bidForBid = cqForBid.from(Bid.class);
+
+        cqForBid.where(cb.equal(bidForBid.get("product"), productId))
+                .orderBy(cb.desc(bidForBid.get("value")));
+        final TypedQuery<Bid> queryForNumberOfBids = em.createQuery(cqForBid);
+
+        return  queryForNumberOfBids.getResultList();
+    }
 }

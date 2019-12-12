@@ -1,6 +1,7 @@
 package com.ajla.auction.service;
 
 import com.ajla.auction.model.PaginationInfo;
+import com.ajla.auction.model.ProductInfoBid;
 import com.ajla.auction.model.NumberOfProductsInfo;
 import com.ajla.auction.model.PriceProductInfo;
 import com.ajla.auction.model.Product;
@@ -18,17 +19,20 @@ public class ProductService implements IProductService{
     private final ProductRepository productRepository;
     private final BidRepository bidRepository;
     private final CategoryRepository categoryRepository;
+    private final UserService userService;
 
     @Autowired
     public ProductService(final ProductRepository productRepository,
                           final BidRepository bidRepository,
-                          final CategoryRepository categoryRepository) {
+                          final CategoryRepository categoryRepository, UserService userService) {
         Objects.requireNonNull(productRepository, "productRepository must not be null.");
         Objects.requireNonNull(bidRepository, "bidRepository must not be null.");
         Objects.requireNonNull(categoryRepository, "categoryRepository must not be null.");
+        Objects.requireNonNull(userService, "userService must not be null.");
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.bidRepository = bidRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -85,5 +89,9 @@ public class ProductService implements IProductService{
                                                      final List<Long> listOfCharacteristicsClicked,
                                                      final String searchUser) {
         return productRepository.numberOfProductsByPrice(subcategoryId, listOfCharacteristicsClicked, searchUser);
+    }
+    @Override
+    public PaginationInfo<ProductInfoBid> getAllActiveProductsOfSeller(final String email, final Long page, final Long size) {
+        return productRepository.getAllActiveProductsOfSeller(userService.findByEmail(email).getId(), page, size);
     }
 }

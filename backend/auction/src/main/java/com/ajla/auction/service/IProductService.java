@@ -4,6 +4,7 @@ import com.ajla.auction.model.PaginationInfo;
 import com.ajla.auction.model.NumberOfProductsInfo;
 import com.ajla.auction.model.PriceProductInfo;
 import com.ajla.auction.model.Product;
+import com.ajla.auction.model.ProductInfoBid;
 
 import java.util.List;
 
@@ -29,4 +30,5 @@ public interface IProductService {
     PriceProductInfo getNumberProductsByPrice(final Long subcategoryId,
                                               final List<Long> listOfCharacteristicsClicked,
                                               final String searchUser);
+    PaginationInfo<ProductInfoBid> getAllActiveProductsOfSeller(final String email, final Long page, final Long size);
 }

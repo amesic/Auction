@@ -18,6 +18,8 @@ export class ProductService {
   urlRelatedProducts = "/product/relatedProducts";
   urlSortedProducts = "/product/sortProducts";
   urlNumberViewers = "/product/numberViewers";
+  urlActiveProducts = "/auth/product/active";
+  urlSoldProducts = "/auth/product/sold";
 
   getAdvertisementProduct(): Observable<Product> {
     return this.http.get<Product>(this.urlAdvertisement);
@@ -76,5 +78,13 @@ export class ProductService {
   }
   getNumberViewers(id): Observable<number> {
     return this.http.get<number>(this.urlNumberViewers + "?id=" + id);
+  }
+  getSoldProductsByUser(email, pageNumber, size): Observable<Product[]> {
+    return this.http.get<Product[]>(this.urlSoldProducts + "?email=" + email +
+     "&pageNumber=" + pageNumber + "&size=" + size);
+  }
+  getActiveProductsByUser(email, pageNumber, size): Observable<Product[]> {
+    return this.http.get<Product[]>(this.urlActiveProducts + "?email=" + email +
+    "&pageNumber=" + pageNumber + "&size=" + size);
   }
 }

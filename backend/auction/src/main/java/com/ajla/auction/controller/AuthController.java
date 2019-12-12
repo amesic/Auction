@@ -1,11 +1,9 @@
 package com.ajla.auction.controller;
 
 import com.ajla.auction.config.JwtTokenUtil;
-import com.ajla.auction.model.Bid;
-import com.ajla.auction.model.BidInfo;
-import com.ajla.auction.model.User;
-import com.ajla.auction.model.UserWatchProductId;
+import com.ajla.auction.model.*;
 import com.ajla.auction.service.BidService;
+import com.ajla.auction.service.ProductService;
 import com.ajla.auction.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +28,7 @@ public class AuthController {
     private final SimpMessagingTemplate template;
     private final ProductController productController;
     private final UserService userService;
+    private final ProductService productService;
 
     private Bid highestBid;
 
@@ -38,17 +37,19 @@ public class AuthController {
                           final JwtTokenUtil jwtTokenUtil,
                           final SimpMessagingTemplate template,
                           final ProductController productController,
-                          final UserService userService) {
+                          final UserService userService, ProductService productService) {
         Objects.requireNonNull(template, "template must not be null.");
         Objects.requireNonNull(jwtTokenUtil, "jwtTokenUtil must not be null.");
         Objects.requireNonNull(bidService, "bidService must not be null.");
         Objects.requireNonNull(productController, "productController must not be null.");
         Objects.requireNonNull(userService, "userService must not be null.");
+        Objects.requireNonNull(productService, "productService must not be null.");
         this.jwtTokenUtil = jwtTokenUtil;
         this.bidService = bidService;
         this.template = template;
         this.productController = productController;
         this.userService = userService;
+        this.productService = productService;
     }
 
     @PostMapping("/bid/newBid")
@@ -86,6 +87,17 @@ public class AuthController {
                 this.template.convertAndSendToUser(uw.getSessionId(), "/queue/highestBid", bidInfo, headerAcc.getMessageHeaders());
             }
         });
+    }
+
+    @GetMapping("/product/sold")
+    public void getSoldProductsByUserSeller(@RequestParam("email") final String email) {
+
+    }
+    @GetMapping("/product/active")
+    public ResponseEntity<PaginationInfo<ProductInfoBid>> getActiveProductsByUserSeller(@RequestParam("email") final String email,
+                                                                                 @RequestParam("pageNumber") final Long pageNumber,
+                                                                                 @RequestParam("size") final Long size) {
+        return new ResponseEntity<>(productService.getAllActiveProductsOfSeller(email, pageNumber, size), HttpStatus.OK);
 
     }
 }

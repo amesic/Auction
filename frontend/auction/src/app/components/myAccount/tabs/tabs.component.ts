@@ -16,40 +16,7 @@ export class TabsComponent implements OnInit {
   faGavel = faGavel;
   faGift = faGift;
 
-  activeProfile = true;
-  activeProducts = false;
-  activeBids = false;
-  activeWatchlist = false;
-
   constructor(private router: Router) {}
 
   ngOnInit() {}
-  profile() {
-    this.activeProfile = true;
-    this.activeProducts = false;
-    this.activeBids = false;
-    this.activeWatchlist = false;
-    this.router.navigate(['/my-account']);
-  }
-  products() {
-    this.activeProfile = false;
-    this.activeProducts = true;
-    this.activeBids = false;
-    this.activeWatchlist = false;
-    this.router.navigate(['/my-account/products']);
-  }
-  bids() {
-    this.activeProfile = false;
-    this.activeProducts = false;
-    this.activeBids = true;
-    this.activeWatchlist = false;
-    this.router.navigate(['/my-account/bids']);
-  }
-  watchlist() {
-    this.activeProfile = false;
-    this.activeProducts = false;
-    this.activeBids = false;
-    this.activeWatchlist = true;
-    this.router.navigate(['/my-account/watchlist']);
-  }
 }

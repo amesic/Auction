@@ -1,0 +1,10 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div *ngIf="items != undefined" class="container">
+<app-tabs></app-tabs>
+<div class="tabs">
+<input class="tab" [ngClass]="{'activeTab' : activeActiveProducts}" type="button" value="Active" (click)="activeProducts()">
+<input class="tab" [ngClass]="{'activeTab' : !activeActiveProducts}" type="button" value="Sold" (click)="soldProducts()">
+</div>
+<app-my-account-products-list [items]="items.items"></app-my-account-products-list>
+<input type="button" value="LOAD MORE" class="load" (click)="loadMore()">
+</div>

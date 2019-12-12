@@ -1,17 +1,17 @@
 <div class="tabs">
-  <div class="tab-profile" (click)="profile()" [ngClass]="{ activeTab: activeProfile }">
+  <div class="tab-profile" [routerLink]="['/my-account/profile']" routerLinkActive="activeTab">
     <fa-icon [icon]="faUser"></fa-icon>
     <input class="tab" type="button" value="Profile" />
   </div>
-  <div class="tab-products" (click)="products()" [ngClass]="{ activeTab: activeProducts }">
+  <div class="tab-products" [routerLink]="['/my-account/products']" routerLinkActive="activeTab">
     <fa-icon [icon]="faList"></fa-icon>
     <input class="tab" type="button" value="Products" />
   </div>
-  <div class="tab-bids" (click)="bids()" [ngClass]="{ activeTab: activeBids }">
+  <div class="tab-bids" [routerLink]="['/my-account/bids']" routerLinkActive="activeTab">
     <fa-icon [icon]="faGavel"></fa-icon>
     <input class="tab" type="button" value="Bids" />
   </div>
-  <div class="tab-watchlist" (click)="watchlist()" [ngClass]="{ activeTab: activeWatchlist }">
+  <div class="tab-watchlist" [routerLink]="['/my-account/watchlist']" routerLinkActive="activeTab">
     <fa-icon [icon]="faGift"></fa-icon>
     <input class="tab" type="button" value="Watchlist" />
   </div>

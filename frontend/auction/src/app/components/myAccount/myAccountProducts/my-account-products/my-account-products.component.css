@@ -1,0 +1,24 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
+.tab {
+  background: #f0f0f0;
+  font: 400 18px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.63px;
+  border: none;
+  height: 48px;
+  width: 111px;
+}
+.tab:hover {
+  background: #c3b0ff;
+  color: #ffffff;
+}
+.tabs {
+  margin-top: 46px;
+}
+.tab.activeTab {
+  background: #8367d8;
+  color: #ffffff;
+}
+.load {
+  margin-bottom: 201px;
+}

@@ -68,7 +68,6 @@ public class Product {
     @JsonIgnore
     private Boolean feature;
 
-
     //getter setter
 
     public Long getId() {

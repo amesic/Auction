@@ -14,6 +14,9 @@ import { AllCategoriesComponent } from "./components/all-categories/all-categori
 import { SingleProductPageComponent } from "./components/singleProductPage/single-product-page/single-product-page.component";
 import { ShopComponent } from "./components/shopProduct/shop/shop.component";
 import { MyAccountComponent } from "./components/myAccount/my-account/my-account.component"
+import { MyAccountProductsComponent } from "./components/myAccount/myAccountProducts/my-account-products/my-account-products.component"
+import { MyAccountBidsComponent } from "./components/myAccount/my-account-bids/my-account-bids.component"
+import { MyAccountWatchlistComponent } from "./components/myAccount/my-account-watchlist/my-account-watchlist.component"
 import { LoginService } from "./services/login.service";
 import { ErrorComponent } from "./components/error/error.component";
 
@@ -115,10 +118,31 @@ const routes: Routes = [
     },
     children: [
       {
-        path: "",
+        path: "profile",
         component: MyAccountComponent,
         data: {
           breadcrumb: "PROFILE"
+        }
+      },
+      {
+        path: "products",
+        component: MyAccountProductsComponent,
+        data: {
+          breadcrumb: "PRODUCTS"
+        }
+      },
+      {
+        path: "bids",
+        component: MyAccountBidsComponent,
+        data: {
+          breadcrumb: "BIDS"
+        }
+      },
+      {
+        path: "watchlist",
+        component: MyAccountWatchlistComponent,
+        data: {
+          breadcrumb: "WATCHLIST"
         }
       },
     ]
