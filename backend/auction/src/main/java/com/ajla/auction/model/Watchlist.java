@@ -1,7 +1,5 @@
 package com.ajla.auction.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
@@ -12,11 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 
-import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "bids")
-public class Bid {
+@Table(name = "watchlist")
+public class Watchlist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -30,11 +28,8 @@ public class Bid {
 
     @ManyToOne
     @JoinColumn(name = "idProduct")
-    @JsonIgnoreProperties({"title", "description", "datePublishing", "seller", "startDate", "endDate", "startPrice", "images", "category", "subcategory", "feature"})
+    @JsonIgnoreProperties({"description", "datePublishing", "seller", "startDate", "startPrice", "category", "subcategory", "feature"})
     private Product product;
-
-    private Long value;
-    private LocalDate date;
 
     public Long getId() {
         return id;
@@ -59,21 +54,4 @@ public class Bid {
     public void setProduct(Product product) {
         this.product = product;
     }
-
-    public long getValue() {
-        return value;
-    }
-
-    public void setValue(long value) {
-        this.value = value;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
 }
-

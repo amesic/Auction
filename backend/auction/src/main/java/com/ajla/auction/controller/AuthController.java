@@ -5,6 +5,7 @@ import com.ajla.auction.model.*;
 import com.ajla.auction.service.BidService;
 import com.ajla.auction.service.ProductService;
 import com.ajla.auction.service.UserService;
+import com.ajla.auction.service.WatchlistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ public class AuthController {
     private final ProductController productController;
     private final UserService userService;
     private final ProductService productService;
+    private final WatchlistService watchlistService;
 
     private Bid highestBid;
 
@@ -37,19 +39,21 @@ public class AuthController {
                           final JwtTokenUtil jwtTokenUtil,
                           final SimpMessagingTemplate template,
                           final ProductController productController,
-                          final UserService userService, ProductService productService) {
+                          final UserService userService, ProductService productService, WatchlistService watchlistService) {
         Objects.requireNonNull(template, "template must not be null.");
         Objects.requireNonNull(jwtTokenUtil, "jwtTokenUtil must not be null.");
         Objects.requireNonNull(bidService, "bidService must not be null.");
         Objects.requireNonNull(productController, "productController must not be null.");
         Objects.requireNonNull(userService, "userService must not be null.");
         Objects.requireNonNull(productService, "productService must not be null.");
+        Objects.requireNonNull(watchlistService, "watchlistService must not be null.");
         this.jwtTokenUtil = jwtTokenUtil;
         this.bidService = bidService;
         this.template = template;
         this.productController = productController;
         this.userService = userService;
         this.productService = productService;
+        this.watchlistService = watchlistService;
     }
 
     @PostMapping("/bid/newBid")
@@ -100,6 +104,17 @@ public class AuthController {
                                                                                  @RequestParam("pageNumber") final Long pageNumber,
                                                                                  @RequestParam("size") final Long size) {
         return new ResponseEntity<>(productService.getAllActiveProductsOfSeller(email, pageNumber, size), HttpStatus.OK);
+    }
+    @PostMapping(value = "/save/watchlist")
+    public ResponseEntity<Watchlist> saveNewProductFromUserIntoWatchlist(@RequestBody final Watchlist watchlist) {
+        return new ResponseEntity<>(watchlistService.saveNewProductInfoWatchlistOfUser(watchlist.getUser().getEmail(),
+                watchlist.getProduct().getId()), HttpStatus.OK);
+    }
+    @GetMapping("/watchlistFromUser")
+    public ResponseEntity<PaginationInfo<ProductInfoBid>> getWatchlistOfProduct(@RequestParam("email") final String email,
+                                                                                        @RequestParam("pageNumber") final Long pageNumber,
+                                                                                        @RequestParam("size") final Long size) {
+        return new ResponseEntity<>(watchlistService.findWatchlistByUser(email, pageNumber, size), HttpStatus.OK);
     }
 }
 
