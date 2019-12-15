@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnChanges } from "@angular/core";
 import { faTh } from "@fortawesome/free-solid-svg-icons";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
@@ -11,7 +11,7 @@ import { ProductService } from "src/app/services/product.service";
 })
 export class ShopProductsComponent implements OnInit {
   @Input() products;
-  @Input() hide: boolean;
+  @Input() hide;
   @Input() messageIfThereIsNoProducts;
   @Input() filterColorId;
   @Input() filterSizeId;
@@ -39,9 +39,6 @@ export class ShopProductsComponent implements OnInit {
 
   ngOnInit() {}
 
-  ngOnChanges(changes: SimpleChanges) {
-    var x = 1;
-  }
   checkIfThereIsNoItemsLeft(pageNumber, size, totalNumberOfItems) {
     if (
       totalNumberOfItems - pageNumber * size < 0 ||

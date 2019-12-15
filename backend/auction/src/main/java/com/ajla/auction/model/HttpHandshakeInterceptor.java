@@ -18,7 +18,9 @@ import org.springframework.web.socket.server.HandshakeInterceptor;
 public class HttpHandshakeInterceptor implements HandshakeInterceptor {
 
     @Override
-    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
+    public boolean beforeHandshake(ServerHttpRequest request,
+                                   ServerHttpResponse response,
+                                   WebSocketHandler wsHandler,
                                    Map attributes) throws Exception {
         if (request instanceof ServletServerHttpRequest) {
             ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
@@ -27,7 +29,7 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor {
         }
         return true;
     }
-
+    //because interceptor has this method bellow, so it needs to be implemented
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
                                Exception ex) {
     }

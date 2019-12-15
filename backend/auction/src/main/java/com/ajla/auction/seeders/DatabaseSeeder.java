@@ -1,7 +1,20 @@
 package com.ajla.auction.seeders;
 
-import com.ajla.auction.model.*;
-import com.ajla.auction.repo.*;
+import com.ajla.auction.model.User;
+import com.ajla.auction.model.Address;
+import com.ajla.auction.model.Product;
+import com.ajla.auction.model.Category;
+import com.ajla.auction.model.Characteristic;
+import com.ajla.auction.model.Image;
+import com.ajla.auction.model.Bid;
+
+import com.ajla.auction.repo.UserRepository;
+import com.ajla.auction.repo.ProductRepository;
+import com.ajla.auction.repo.CategoryRepository;
+import com.ajla.auction.repo.CharacteristicRepository;
+import com.ajla.auction.repo.ImageRepository;
+import com.ajla.auction.repo.BidRepository;
+import com.ajla.auction.repo.AddressRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1143,6 +1156,4 @@ public class DatabaseSeeder {
 
 
     }
-
 }
-

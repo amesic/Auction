@@ -38,6 +38,7 @@ public class BidRepositoryImpl implements BidRepositoryCustom {
         query = em.createQuery(cq);
         return !query.getResultList().isEmpty();
     }
+
     @Override
     public BidInfo getBidsOfPage(final Long pageNumber, final Long size, final Long idProduct) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -71,6 +72,7 @@ public class BidRepositoryImpl implements BidRepositoryCustom {
                     listOfBids, highestBid);
 
     }
+
     @Override
     public Long numberOfBidsByProduct(final Long productId) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -81,9 +83,9 @@ public class BidRepositoryImpl implements BidRepositoryCustom {
                 .where(cb.equal(bidForBidSize.get("product"), productId))
                 .groupBy(bidForBidSize.get("product"));
         final TypedQuery<Long> queryForNumberOfBids = em.createQuery(cqForBidSize);
-        final Long totalNumberOfItems = queryForNumberOfBids.getSingleResult();
-        return  totalNumberOfItems;
+        return queryForNumberOfBids.getSingleResult();
     }
+
     @Override
     public List<Bid> bidsByProduct(final Long productId) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();

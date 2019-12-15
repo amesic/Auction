@@ -23,11 +23,6 @@ public class ProductViewers {
         this.numberOfCurrentViewers++;
     }
     public void decrement() {
-        /*if (this.numberOfCurrentViewers == 1) {
-            this.numberOfCurrentViewers--;
-        } else if (this.numberOfCurrentViewers != 0) {
-            this.numberOfCurrentViewers -= 2;
-        }*/
         this.numberOfCurrentViewers--;
     }
 }

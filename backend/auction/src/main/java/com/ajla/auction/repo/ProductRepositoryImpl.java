@@ -54,6 +54,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         query.setMaxResults(4);
         return  query.getResultList();
     }
+
     @Override
     public List<Product> getAllFeatureCollection() {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -67,6 +68,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         return  query.getResultList();
     }
+
     @Override
     public PaginationInfo<Product> getAllLastChanceProducts(final Long pageNumber, final Long size) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -98,6 +100,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         return new PaginationInfo<>(size, pageNumber, totalNumberOfItems, listOfProducts);
     }
+
     @Override
     public PaginationInfo<Product> getAllNewArrivalProducts(final Long pageNumber, final Long size) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -130,6 +133,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         return new PaginationInfo<>(size, pageNumber, totalNumberOfItems, listOfProducts);
     }
+
     @Override
     public Long getSubcategoryIdOfProduct (final Long idProduct) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -141,6 +145,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         return query.getSingleResult().getSubcategory().getId();
     }
+
     @Override
     public List<Product> getRelatedProducts(final Long idProduct) {
         final Long idSubcategory = getSubcategoryIdOfProduct(idProduct);
@@ -161,6 +166,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         query.setMaxResults(3);
         return query.getResultList();
     }
+
     @Override
     public Boolean userIsSellerOfProduct(final Long idUser, final Long idProduct) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -175,6 +181,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         final TypedQuery<Product> query = em.createQuery(cq);
         return !query.getResultList().isEmpty();
     }
+
     @Override
     public List<NumberOfProductsInfo> numberOfProductsBySubcategory(final List<Category> categories) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -186,7 +193,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         List<NumberOfProductsInfo> allCategories = new ArrayList<>();
         for (Category category: categories) {
             if(category.getSubcategories().size() != 0) {
-                NumberOfProductsInfo categoryInfo = new NumberOfProductsInfo(category.getId(), category.getName(), Collections.emptyList(), null);
+                NumberOfProductsInfo categoryInfo = new NumberOfProductsInfo(
+                        category.getId(),
+                        category.getName(),
+                        Collections.emptyList(),
+                        null
+                );
                 List<NumberOfProductsInfo> listOfSubcategoryInfo = new ArrayList<>();
                 long numberOfProductsByCategory = 0;
                 for (Category subcategory : category.getSubcategories()) {
@@ -196,7 +208,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                             cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now())
                     ));
                     query = em.createQuery(cq);
-                    NumberOfProductsInfo subcategoryInfo = new NumberOfProductsInfo(subcategory.getId(), subcategory.getName(), Collections.emptyList(), (long) query.getResultList().size());
+                    NumberOfProductsInfo subcategoryInfo = new NumberOfProductsInfo(
+                            subcategory.getId(),
+                            subcategory.getName(),
+                            Collections.emptyList(),
+                            (long) query.getResultList().size()
+                    );
                     listOfSubcategoryInfo.add(subcategoryInfo);
                     numberOfProductsByCategory += query.getResultList().size();
                 }
@@ -217,7 +234,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                                                                  final Double upperBound) {
         final Category subcategory = categoryRepository.findCategoryById(subcategoryId);
         TypedQuery<Long> query;
-        NumberOfProductsInfo mainCharacteristic = new NumberOfProductsInfo(characteristic.getId(), characteristic.getName(), Collections.emptyList(), null);
+        NumberOfProductsInfo mainCharacteristic = new NumberOfProductsInfo(
+                characteristic.getId(),
+                characteristic.getName(),
+                Collections.emptyList(),
+                null
+        );
         List<NumberOfProductsInfo> allCategoriesOfMainCharacteristic = new ArrayList<>();
         Long numberOfProductsBelongToMainCharacteristic = (long) 0;
         for (Characteristic oneOfCharacteristic: characteristic.getAllCharacteristic()) {
@@ -371,7 +393,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             cqForProductId.select(productForProductId.get("id"))
                     .where(cb.in(characteristicForProductId.get("id")).value(listOfCharacteristicsClicked));
             cqForProductId.groupBy(productForProductId.get("id"))
-                    .having(cb.equal(cb.count(characteristicForProductId.get("id")), listOfCharacteristicsClicked.size()));
+                    .having(cb.equal(
+                            cb.count(characteristicForProductId.get("id")), listOfCharacteristicsClicked.size())
+                    );
 
             final TypedQuery<Product> listOfProductsIdWithCharacteristics = em.createQuery(cqForProductId);
             final List<Product> productsIdWithCharacteristics = listOfProductsIdWithCharacteristics.getResultList();
@@ -433,7 +457,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             cqForProductId.select(productForProductId.get("id"))
                     .where(cb.in(characteristicForProductId.get("id")).value(listOfCharacteristicsClicked));
             cqForProductId.groupBy(productForProductId.get("id"))
-                    .having(cb.equal(cb.count(characteristicForProductId.get("id")), listOfCharacteristicsClicked.size()));
+                    .having(cb.equal(cb.count(
+                            characteristicForProductId.get("id")), listOfCharacteristicsClicked.size())
+                    );
 
             final TypedQuery<Long> listOfProductsIdWithCharacteristics = em.createQuery(cqForProductId);
             final List<Long> productsIdWithCharacteristics = listOfProductsIdWithCharacteristics.getResultList();
@@ -521,17 +547,33 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         } else if (subcategoryId != null) {
             sqlQuery += " WHERE p.subcategory =:subcategory";
         }
-        if (lowerBound != null && upperBound != null && (subcategoryId != null || (filterColorId != null || filterSizeId !=null))) {
+        if (lowerBound != null && upperBound != null &&
+                (subcategoryId != null || (filterColorId != null || filterSizeId !=null))
+        ) {
             sqlQuery += " AND p.startPrice >=:lowerBound AND p.startPrice <=:upperBound";
         } else if (lowerBound != null && upperBound != null) {
             sqlQuery += " WHERE p.startPrice >=:lowerBound AND p.startPrice <=:upperBound";
         }
-        if (searchUser != null && ((lowerBound != null && upperBound != null) || (subcategoryId != null || (filterColorId != null || filterSizeId !=null)))) {
+        if (searchUser != null &&
+                (
+                        (lowerBound != null && upperBound != null)
+                                || (subcategoryId != null
+                                || (filterColorId != null || filterSizeId !=null)
+                        )
+                )
+        ) {
             sqlQuery += " AND lower(p.title) LIKE lower(:searchFromUser)";
         } else if (searchUser != null) {
             sqlQuery += " WHERE lower(p.title) LIKE lower(:searchFromUser)";
         }
-        boolean parametersAreNull = (subcategoryId == null && filterSizeId == null && filterColorId == null && lowerBound == null && upperBound == null && searchUser == null);
+        boolean parametersAreNull = (
+                subcategoryId == null &&
+                        filterSizeId == null &&
+                        filterColorId == null &&
+                        lowerBound == null &&
+                        upperBound == null &&
+                        searchUser == null
+        );
 
         if (typeOfSort.equals("default")) {
             if (parametersAreNull) {
@@ -570,7 +612,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 query.setMaxResults(Math.toIntExact(size));
             return new PaginationInfo<>(size, pageNumber, totalNumberOfItems, query.getResultList());
         } else if (typeOfSort.equals("newness")) {
-            if (subcategory == null && filterSizeId == null && filterColorId == null && lowerBound == null && upperBound == null && searchUser == null) {
+            if (subcategory == null &&
+                    filterSizeId == null &&
+                    filterColorId == null &&
+                    lowerBound == null &&
+                    upperBound == null &&
+                    searchUser == null) {
                 sqlQuery += " WHERE p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startDate DESC";
             } else {
                 sqlQuery += " AND p.endDate >=:dateNow AND p.startDate <=:dateNow ORDER BY p.startDate DESC";
@@ -682,7 +729,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         }
     }
     @Override
-    public PaginationInfo<ProductInfoBid> getAllActiveProductsOfSeller(final Long idSeller, final Long pageNumber, final Long size) {
+    public PaginationInfo<ProductInfoBid> getAllActiveProductsOfSeller(final Long idSeller,
+                                                                       final Long pageNumber,
+                                                                       final Long size) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
         final Root<Product> product = cq.from(Product.class);
@@ -732,8 +781,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         return new PaginationInfo<>(size, pageNumber, totalNumberOfItems, listOfProductsInfoBid);
     }
+
     @Override
-    public PaginationInfo<ProductInfoBid> getAllSoldProductsOfSeller(final Long idSeller, final Long pageNumber, final Long size) {
+    public PaginationInfo<ProductInfoBid> getAllSoldProductsOfSeller(final Long idSeller,
+                                                                     final Long pageNumber,
+                                                                     final Long size) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
         final CriteriaQuery<Product> cq = cb.createQuery(Product.class);
         final Root<Product> product = cq.from(Product.class);

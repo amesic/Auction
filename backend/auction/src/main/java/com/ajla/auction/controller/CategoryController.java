@@ -37,9 +37,11 @@ public class CategoryController {
     //http://localhost:8080/category/all
     @GetMapping("/all")
     @ResponseBody
-    public ResponseEntity<List<Category>> getAllCategories(@RequestParam(required = false) final Long numberOfCategories) {
+    public ResponseEntity<List<Category>> getAllCategories(
+            @RequestParam(required = false) final Long numberOfCategories) {
         return new ResponseEntity<>(categoryService.getAllCategories(numberOfCategories), HttpStatus.OK);
     }
+
     @GetMapping("/numberOfProductsBySubcategory")
     public ResponseEntity<List<NumberOfProductsInfo>> getNumberOfProducts() {
         return new ResponseEntity<>(productService.numberOfProductsBySubcategories(), HttpStatus.OK);

@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -20,18 +19,14 @@ public class BidService implements IBidService{
     private final BidRepository bidRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
-    private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     public BidService(final BidRepository bidRepository,
                       final ProductRepository productRepository,
-                      final UserRepository userRepository,
-                      final JwtTokenUtil jwtTokenUtil) {
-        Objects.requireNonNull(jwtTokenUtil, "jwtTokenUtil must not be null.");
+                      final UserRepository userRepository) {
         Objects.requireNonNull(bidRepository, "bidRepository must not be null.");
         Objects.requireNonNull(productRepository, "productRepository must not be null.");
         Objects.requireNonNull(userRepository, "userRepository must not be null.");
-        this.jwtTokenUtil = jwtTokenUtil;
         this.bidRepository = bidRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
@@ -39,9 +34,9 @@ public class BidService implements IBidService{
 
     @Override
     public BidInfo bidsOfProduct(final Long pageNumber, final Long size, final Long idProduct) {
-        BidInfo bidInfo = bidRepository.getBidsOfPage(pageNumber, size, idProduct);
-        return bidInfo;
+        return bidRepository.getBidsOfPage(pageNumber, size, idProduct);
     }
+
     @Override
     public Bid saveBidFromUser(final Long idProduct, final String emailUser, final Long value) {
         final Product product = productRepository.findProductById(idProduct);
@@ -60,6 +55,7 @@ public class BidService implements IBidService{
             }
             return null;
     }
+
     public Long numberOfBidsByProduct(Long productId) {
         return bidRepository.numberOfBidsByProduct(productId);
     }

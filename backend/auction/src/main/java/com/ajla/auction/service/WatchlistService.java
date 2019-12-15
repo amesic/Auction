@@ -44,11 +44,15 @@ public class WatchlistService implements IWatchlistService{
             return null;
         }
     }
+
     @Override
-    public PaginationInfo<ProductInfoBid> findWatchlistByUser(final String email, final Long pageNumber, final Long size) {
+    public PaginationInfo<ProductInfoBid> findWatchlistByUser(final String email,
+                                                              final Long pageNumber,
+                                                              final Long size) {
         final Long idUser = userRepository.findByEmail(email).getId();
        return watchlistRepository.findWatchlistByUser(idUser, pageNumber, size);
     }
+
     @Override
     public PaginationInfo<ProductInfoBid> deleteItemFromWatchlist(final String email,
                                                                   final Long idProduct,

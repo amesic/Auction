@@ -1,6 +1,9 @@
 package com.ajla.auction.repo;
 
-import com.ajla.auction.model.*;
+import com.ajla.auction.model.Watchlist;
+import com.ajla.auction.model.Bid;
+import com.ajla.auction.model.ProductInfoBid;
+import com.ajla.auction.model.PaginationInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -30,7 +33,9 @@ public class WatchlistRepositoryImpl implements WatchlistRepositoryCustom {
     }
 
     @Override
-    public PaginationInfo<ProductInfoBid> findWatchlistByUser(final Long idUser, final Long pageNumber, final Long size) {
+    public PaginationInfo<ProductInfoBid> findWatchlistByUser(final Long idUser,
+                                                              final Long pageNumber,
+                                                              final Long size) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
         final CriteriaQuery<Watchlist> cq = cb.createQuery(Watchlist.class);
         final Root<Watchlist> watchlist = cq.from(Watchlist.class);
@@ -72,6 +77,7 @@ public class WatchlistRepositoryImpl implements WatchlistRepositoryCustom {
         return new PaginationInfo<>(size, pageNumber, totalNumberOfItems, listOfProductsInfoBid);
 
     }
+
     @Override
     public Watchlist getWatchlistByProductIdAndUserId(final Long idUser, final Long idProduct) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -89,8 +95,8 @@ public class WatchlistRepositoryImpl implements WatchlistRepositoryCustom {
 
         return null;
     }
-    @Override
 
+    @Override
     public PaginationInfo<ProductInfoBid> deleteItemFromWatchlist(final Long idUser,
                                                                   final Long idProduct,
                                                                   final Long pageNumber,
