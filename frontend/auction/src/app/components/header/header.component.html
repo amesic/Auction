@@ -39,7 +39,10 @@
       <div class="linksBelowHeader">
         <a [routerLink]="['/home']" routerLinkActive="active">HOME</a>
         <a [routerLink]="['/shop']" routerLinkActive="active">SHOP</a>
-        <a class="linkAcc" *ngIf="userLoged" appClickOutside>MY ACCOUNT</a>
+        <a *ngIf="userLoged" 
+        class="linkAcc" 
+        [ngClass]="{ 'active' : router.url.substr(0, 11) == '/my-account'}"
+        appClickOutside>MY ACCOUNT</a>
         <div class="my-account">
             <div class="my-account-choice">
                 <a [routerLink]="['/my-account/profile']" routerLinkActive="active">Profile</a>

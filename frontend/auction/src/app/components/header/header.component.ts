@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit {
         this.router.navigate(['/shop']);
       }
     } else {
-    if ((this.router.url == "/shop" || this.router.url == "/home" || this.router.url.substr(0, 13) == "/shop/search/") && this.router.url.indexOf("category") == -1) {
+    if ((this.router.url == "/shop" || this.router.url == "/home" || this.router.url.substr(0, 11) == "/my-account" || this.router.url.substr(0, 13) == "/shop/search/") && this.router.url.indexOf("category") == -1) {
       this.router.navigate(['/shop/search/' + valueFromSearch]);
     }
     else if (this.router.url.indexOf("category") != -1) {
