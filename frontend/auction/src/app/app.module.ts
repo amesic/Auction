@@ -44,8 +44,9 @@ import { MyAccountComponent } from './components/myAccount/my-account/my-account
 import { TabsComponent } from './components/myAccount/tabs/tabs.component';
 import { MyAccountProductsComponent } from './components/myAccount/myAccountProducts/my-account-products/my-account-products.component';
 import { MyAccountBidsComponent } from './components/myAccount/my-account-bids/my-account-bids.component';
-import { MyAccountWatchlistComponent } from './components/myAccount/my-account-watchlist/my-account-watchlist.component';
+import { MyAccountWatchlistComponent } from './components/myAccount/myAccountWatchlist/my-account-watchlist/my-account-watchlist.component';
 import { MyAccountProductsListComponent } from './components/myAccount/myAccountProducts/my-account-products-list/my-account-products-list.component';
+import { MyAccountWatchlistListComponent } from './components/myAccount/myAccountWatchlist/my-account-watchlist-list/my-account-watchlist-list.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { MyAccountProductsListComponent } from './components/myAccount/myAccount
     MyAccountBidsComponent,
     MyAccountWatchlistComponent,
     MyAccountProductsListComponent,
+    MyAccountWatchlistListComponent,
   ],
   imports: [
     BrowserModule,

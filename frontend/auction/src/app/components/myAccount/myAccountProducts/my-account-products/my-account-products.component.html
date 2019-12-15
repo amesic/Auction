@@ -1,7 +1,7 @@
 <app-breadcrumbs></app-breadcrumbs>
 <div *ngIf="items != undefined" class="container">
 <app-tabs></app-tabs>
-<div class="tabs" *ngIf="items.length != 0">
+<div class="tabs">
 <input class="tab" [ngClass]="{'activeTab' : activeActiveProducts}" type="button" value="Active" (click)="activeProducts()">
 <input class="tab" [ngClass]="{'activeTab' : !activeActiveProducts}" type="button" value="Sold" (click)="soldProducts()">
 </div>
@@ -11,7 +11,7 @@
 </div>
 </div>
 
-<div class="container" *ngIf="items.length == 0">
+<div class="container" *ngIf="items != undefined && items.length == 0">
 <div class="message">
      No products yet!
 </div>

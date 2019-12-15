@@ -7,4 +7,8 @@ import com.ajla.auction.model.Watchlist;
 public interface IWatchlistService {
     Watchlist saveNewProductInfoWatchlistOfUser(final String email, final Long idProduct);
     PaginationInfo<ProductInfoBid> findWatchlistByUser(final String email, final Long pageNumber, final Long size);
+    PaginationInfo<ProductInfoBid> deleteItemFromWatchlist(final String email,
+                                                           final Long idProduct,
+                                                           final Long pageNumber,
+                                                           final Long size);
 }

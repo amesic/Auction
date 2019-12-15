@@ -121,5 +121,13 @@ public class AuthController {
                                                                                         @RequestParam("size") final Long size) {
         return new ResponseEntity<>(watchlistService.findWatchlistByUser(email, pageNumber, size), HttpStatus.OK);
     }
+    @DeleteMapping("/deleteItemFromWatchlist")
+    public ResponseEntity<PaginationInfo<ProductInfoBid>> deleteItemFromWatchlist(@RequestParam("email") final String email,
+                                                                                  @RequestParam("idProduct") final Long idProduct,
+                                                                                @RequestParam("pageNumber") final Long pageNumber,
+                                                                                @RequestParam("size") final Long size) {
+        return new ResponseEntity<>(watchlistService.deleteItemFromWatchlist(email, idProduct, pageNumber, size), HttpStatus.OK);
+    }
+
 }
 

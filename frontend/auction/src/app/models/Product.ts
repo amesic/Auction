@@ -15,4 +15,5 @@ export class Product {
     seller: User;
     images: Array<ImageProduct>;
     timeLeft;
+    active;
   }
