@@ -1,8 +1,7 @@
 package com.ajla.auction.service;
 
-import com.ajla.auction.config.JwtTokenUtil;
 import com.ajla.auction.model.Bid;
-import com.ajla.auction.model.BidInfo;
+import com.ajla.auction.model.PaginationInfo;
 import com.ajla.auction.model.Product;
 import com.ajla.auction.model.User;
 import com.ajla.auction.repo.BidRepository;
@@ -33,8 +32,8 @@ public class BidService implements IBidService{
     }
 
     @Override
-    public BidInfo bidsOfProduct(final Long pageNumber, final Long size, final Long idProduct) {
-        return bidRepository.getBidsOfPage(pageNumber, size, idProduct);
+    public PaginationInfo<Bid> bidsOfProduct(final Long pageNumber, final Long size, final Long idProduct) {
+        return bidRepository.getProductBids(pageNumber, size, idProduct);
     }
 
     @Override
@@ -57,6 +56,6 @@ public class BidService implements IBidService{
     }
 
     public Long numberOfBidsByProduct(Long productId) {
-        return bidRepository.numberOfBidsByProduct(productId);
+        return bidRepository.numberOfBidsForProduct(productId);
     }
 }

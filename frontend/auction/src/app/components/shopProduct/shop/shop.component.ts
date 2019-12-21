@@ -40,21 +40,27 @@ export class ShopComponent implements OnInit{
 
   valueFromUserSearch = null;
 
-  callgetFilterPriceInfo(subcategoryId, listOfFiltersClicked, valueFromUserSearch) {
+  getFilterPriceInfo(subcategoryId, listOfFiltersClicked, valueFromUserSearch) {
     this.filterService.getFilterPriceInfo(subcategoryId, listOfFiltersClicked, valueFromUserSearch)
       .subscribe(infoPriceProduct => {
         this.filterPrice = infoPriceProduct;
         if (this.filterPrice.priceNumber.length != 0) {
-        this.lowerBound = this.filterPrice.priceNumber[0].name;
-        this.upperBound = this.filterPrice.priceNumber[this.filterPrice.priceNumber.length - 1].name;
+        this.lowerBound = this.filterPrice.priceNumber[0].price;
+        this.upperBound = this.filterPrice.priceNumber[this.filterPrice.priceNumber.length - 1].price;
         } else {
         this.lowerBound = null;
         this.upperBound = null;
         }
-        this.priceProduct = this.filterPrice.priceNumber;
+        this.priceProduct = this.filterPrice.priceNumber.map(element => 
+          { 
+            return { 
+              name: element.price, 
+              value: element.numberOfProductsByPrice 
+            };
+      });
       });
   }
-  callgetSortedProducts(typeOfSorting, filterColorId, filterSizeId, lowerBoundPrice, upperBoundPrice, 
+  getSortedProducts(typeOfSorting, filterColorId, filterSizeId, lowerBoundPrice, upperBoundPrice, 
     subcategoryId, valueFromUserSearch, pageNumber, size) {
       this.productService.getSortedProducts(
         typeOfSorting, filterColorId, filterSizeId, lowerBoundPrice, upperBoundPrice,
@@ -111,8 +117,8 @@ export class ShopComponent implements OnInit{
     this.filterService.getFilterItemsByName("size", this.subcategoryId, null, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
         this.filterSize = items;
       });
-    this.callgetFilterPriceInfo(this.subcategoryId, null, this.valueFromUserSearch);
-    this.callgetSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId,this.lowerBoundPrice,
+    this.getFilterPriceInfo(this.subcategoryId, null, this.valueFromUserSearch);
+    this.getSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId,this.lowerBoundPrice,
         this.upperBoundPrice, this.subcategoryId, this.valueFromUserSearch, this.pageNumber, this.size);
     });
   }
@@ -133,9 +139,9 @@ export class ShopComponent implements OnInit{
     this.filterService.getFilterItemsByName("size", this.subcategoryId, this.filterColorId, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
         this.filterSize = items;
       });
-    this.callgetSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.lowerBoundPrice,
+    this.getSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.lowerBoundPrice,
         this.upperBoundPrice, this.subcategoryId, this.valueFromUserSearch, this.pageNumber, this.size);
-      this.callgetFilterPriceInfo(this.subcategoryId, this.listOfFiltersClicked, this.valueFromUserSearch);
+      this.getFilterPriceInfo(this.subcategoryId, this.listOfFiltersClicked, this.valueFromUserSearch);
       window.scrollTo(0, 0);
     }
   }
@@ -156,9 +162,9 @@ export class ShopComponent implements OnInit{
       this.filterService.getFilterItemsByName("color", this.subcategoryId, this.filterSizeId, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
           this.filterColor = items;
         });
-      this.callgetSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.lowerBoundPrice,
+      this.getSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.lowerBoundPrice,
         this.upperBoundPrice, this.subcategoryId, this.valueFromUserSearch, this.pageNumber, this.size);
-      this.callgetFilterPriceInfo(this.subcategoryId, this.listOfFiltersClicked, this.valueFromUserSearch);
+      this.getFilterPriceInfo(this.subcategoryId, this.listOfFiltersClicked, this.valueFromUserSearch);
       window.scrollTo(0, 0);
     }
   }
@@ -167,7 +173,7 @@ export class ShopComponent implements OnInit{
       this.typeOfSorting = $event;
       this.pageNumber = 0;
       this.size = 9;
-      this.callgetSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.lowerBoundPrice,
+      this.getSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.lowerBoundPrice,
         this.upperBoundPrice, this.subcategoryId, this.valueFromUserSearch, this.pageNumber, this.size);
       window.scrollTo(0, 0);
     }
@@ -184,7 +190,7 @@ export class ShopComponent implements OnInit{
       this.filterService.getFilterItemsByName("size", this.subcategoryId, null, this.valueFromUserSearch, this.lowerBoundPrice, this.upperBoundPrice).subscribe(items => {
         this.filterSize = items;
       });
-      this.callgetSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.lowerBoundPrice,
+      this.getSortedProducts(this.typeOfSorting, this.filterColorId, this.filterSizeId, this.lowerBoundPrice,
         this.upperBoundPrice, this.subcategoryId, this.valueFromUserSearch, this.pageNumber, this.size);
       window.scrollTo(0, 0);
     }

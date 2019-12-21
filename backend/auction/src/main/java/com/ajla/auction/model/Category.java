@@ -13,8 +13,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.ManyToMany;
 import javax.persistence.JoinColumn;
 import javax.persistence.CascadeType;
-import javax.persistence.JoinTable;
-import javax.persistence.FetchType;
 import java.util.ArrayList;
 import java.util.List;
 

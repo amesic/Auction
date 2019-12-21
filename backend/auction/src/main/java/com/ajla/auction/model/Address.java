@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.CascadeType;
 
 @Entity
 @Table(name = "addresses")

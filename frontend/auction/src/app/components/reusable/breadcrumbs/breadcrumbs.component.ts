@@ -2,11 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { isNullOrUndefined } from "util";
 import {
   ActivatedRoute,
-  NavigationEnd,
-  Router,
-  NavigationStart
+  Router
 } from "@angular/router";
-import { filter } from "rxjs/operators";
 
 @Component({
   selector: "app-breadcrumbs",
@@ -28,8 +25,7 @@ export class BreadcrumbsComponent implements OnInit {
     this.createBreadcrumbs(this.activatedRoute.root);
     if (this.breadcrumbs[0] != undefined) {
       this.title2 = this.breadcrumbs[0].label;
-      //this.routerLinkTitle2 = [this.breadcrumbs[0].url];
-      this.routerLinkTitle2 = "http://localhost:4200" + this.breadcrumbs[0].url;
+      this.routerLinkTitle2 = [this.breadcrumbs[0].url];
     }
     if (this.breadcrumbs[1] != undefined) {
       this.title1 = this.breadcrumbs[1].label;

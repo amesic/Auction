@@ -2,9 +2,17 @@ package com.ajla.auction.model;
 
 import org.hibernate.annotations.Target;
 
-import javax.persistence.*;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.JoinColumn;
 import java.util.List;
 
 

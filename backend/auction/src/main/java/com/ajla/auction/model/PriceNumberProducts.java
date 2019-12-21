@@ -1,27 +1,27 @@
 package com.ajla.auction.model;
 
 public class PriceNumberProducts {
-    Double name;
-    Long value;
+    private Double price;
+    private Long numberOfProductsByPrice;
 
-    public PriceNumberProducts(Double name, Long value) {
-        this.name = name;
-        this.value = value;
+    public PriceNumberProducts(Double price, Long numberOfProductsByPrice) {
+        this.price = price;
+        this.numberOfProductsByPrice = numberOfProductsByPrice;
     }
 
-    public Double getName() {
-        return name;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setName(Double name) {
-        this.name = name;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
-    public Long getValue() {
-        return value;
+    public Long getNumberOfProductsByPrice() {
+        return numberOfProductsByPrice;
     }
 
-    public void setValue(Long value) {
-        this.value = value;
+    public void setNumberOfProductsByPrice(Long numberOfProductsByPrice) {
+        this.numberOfProductsByPrice = numberOfProductsByPrice;
     }
 }

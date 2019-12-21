@@ -1,6 +1,5 @@
 package com.ajla.auction.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Target;
 
 import javax.persistence.Entity;
@@ -16,7 +15,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.CascadeType;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity

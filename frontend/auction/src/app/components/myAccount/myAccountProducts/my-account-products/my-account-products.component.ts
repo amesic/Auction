@@ -26,14 +26,10 @@ export class MyAccountProductsComponent implements OnInit {
     });
   }
   checkIfThereIsNoItemsLeft(pageNumber, size, totalNumberOfItems) {
-    if (totalNumberOfItems - pageNumber * size < 0 || totalNumberOfItems - pageNumber * size == 0) {
-      return true;
-    }
-    return false;
+    return totalNumberOfItems - pageNumber * size <= 0;
   }
   activeProducts() {
     this.pageNumber = 0;
-    this.size = 5;
     this.activeActiveProducts = true;
     this.productService.getActiveProductsByUser(this.loginService.getUserEmail(), this.pageNumber, this.size).subscribe(active => {
       this.items = active.items;
@@ -43,7 +39,6 @@ export class MyAccountProductsComponent implements OnInit {
   }
   soldProducts() {
     this.pageNumber = 0;
-    this.size = 5;
     this.activeActiveProducts = false;
     this.productService.getSoldProductsByUser(this.loginService.getUserEmail(), this.pageNumber, this.size).subscribe(sold => {
       this.items = sold.items;

@@ -1,7 +1,7 @@
 package com.ajla.auction.repo;
 
 import com.ajla.auction.model.Bid;
-import com.ajla.auction.model.BidInfo;
+import com.ajla.auction.model.PaginationInfo;
 import com.ajla.auction.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -40,7 +40,7 @@ public class BidRepositoryImpl implements BidRepositoryCustom {
     }
 
     @Override
-    public BidInfo getBidsOfPage(final Long pageNumber, final Long size, final Long idProduct) {
+    public PaginationInfo<Bid> getProductBids(final Long pageNumber, final Long size, final Long idProduct) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
         final CriteriaQuery<Bid> cq = cb.createQuery(Bid.class);
         final Root<Bid> bid = cq.from(Bid.class);
@@ -68,13 +68,12 @@ public class BidRepositoryImpl implements BidRepositoryCustom {
         final Long totalNumberOfItems = queryForNumberOfBids.getSingleResult();
         final Bid highestBid = listOfBids.get(0);
 
-            return new BidInfo(size, pageNumber, totalNumberOfItems,
-                    listOfBids, highestBid);
+            return new PaginationInfo<Bid>(size, pageNumber, totalNumberOfItems, listOfBids);
 
     }
 
     @Override
-    public Long numberOfBidsByProduct(final Long productId) {
+    public Long numberOfBidsForProduct(final Long productId) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
         final CriteriaQuery<Long> cqForBidSize = cb.createQuery(Long.class);
         final Root<Bid> bidForBidSize = cqForBidSize.from(Bid.class);

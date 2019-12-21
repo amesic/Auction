@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface CharacteristicRepository extends JpaRepository<Characteristic, Long> {
     Characteristic findCharacteristicById(Long id);
+
     Characteristic findCharacteristicByName(String name);
 }

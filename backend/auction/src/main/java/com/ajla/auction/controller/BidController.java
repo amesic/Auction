@@ -1,7 +1,8 @@
 package com.ajla.auction.controller;
 
 import com.ajla.auction.config.JwtTokenUtil;
-import com.ajla.auction.model.BidInfo;
+import com.ajla.auction.model.Bid;
+import com.ajla.auction.model.PaginationInfo;
 import com.ajla.auction.service.BidService;
 import com.ajla.auction.service.ProductService;
 import com.ajla.auction.service.UserService;
@@ -42,7 +43,7 @@ public class BidController {
     }
 
     @GetMapping("/bidsOfProduct")
-    public ResponseEntity<BidInfo> getBidsOfProduct (@RequestParam("pageNumber") final Long pageNumber,
+    public ResponseEntity<PaginationInfo<Bid>> getBidsOfProduct (@RequestParam("pageNumber") final Long pageNumber,
                                                      @RequestParam("size") final Long size,
                                                      @RequestParam("id") final Long idProduct,
                                                      final HttpServletRequest request) {
@@ -55,7 +56,7 @@ public class BidController {
                     idProduct
             )
             ) {
-                final BidInfo bidInfoOfUser = bidService.bidsOfProduct(pageNumber, size, idProduct);
+                final PaginationInfo<Bid> bidInfoOfUser = bidService.bidsOfProduct(pageNumber, size, idProduct);
                 if(bidInfoOfUser != null) {
                     bidInfoOfUser.setItems(null);
                 }

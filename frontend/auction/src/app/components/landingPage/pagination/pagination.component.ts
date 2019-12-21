@@ -25,10 +25,7 @@ export class PaginationComponent implements OnInit {
     this.getNewArrivals(this.pageNumber, this.size);
   }
   checkIfThereIsNoItemsLeft(pageNumber, size, totalNumberOfItems) {
-    if (totalNumberOfItems - pageNumber * size < 0 || totalNumberOfItems - pageNumber * size == 0) {
-      return true;
-    }
-    return false;
+    return totalNumberOfItems - pageNumber * size <= 0;
   }
   getNewArrivals(pageNumber, size) {
     this.productService.getNewArrivals(pageNumber, size).subscribe(paginationInfo => {

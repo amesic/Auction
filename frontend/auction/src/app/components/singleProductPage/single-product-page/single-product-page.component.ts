@@ -147,7 +147,7 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
             } else {
               this.bidsOfProduct = bidInfo.items;
               this.numberOfBids = bidInfo.totalNumberOfItems;
-              this.highestBid = bidInfo.highestBid;
+              this.highestBid = bidInfo.items[0];
               this.pageNumber++;
               if (this.numberOfBids - this.pageNumber * this.size < 0 ||
                 this.numberOfBids - this.pageNumber * this.size == 0) {
