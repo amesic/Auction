@@ -4,13 +4,11 @@
   <div class="required" *ngIf="userInfo != undefined">
     <div class="title">REQUIRED</div>
     <div class="profile-info">
-      <div class="profile-img">
         <img
+        class="profile-img"
           *ngIf="userInfo.image == null"
-          src="https://www.marketingmuses.com/wp-content/uploads/2018/01/invis-user.png"
-        />
-        <img *ngIf="userInfo.image != null" src="{{ userInfo.image }}" />
-      </div>
+          src="https://www.marketingmuses.com/wp-content/uploads/2018/01/invis-user.png"/>
+        <img class="profile-img" *ngIf="userInfo.image != null" src="{{ userInfo.image }}" />
       <div class="user-info">
         <p>Your Name</p>
         <input

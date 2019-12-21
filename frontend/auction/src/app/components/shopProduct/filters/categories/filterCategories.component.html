@@ -9,11 +9,13 @@
           <fa-icon class="plus" [icon]="faPlus"></fa-icon>
           <fa-icon class="minus" [icon]="faMinus"></fa-icon>
         </div>
-          <ul>
+          <ul [ngClass]="{ showUl : category.id == activeCategoryId}">
             <li
               *ngFor="let subcategory of category.children"
               class="subcategory">
-              <a (click)="sendSubcategoryId(subcategory.id, category.id)" [ngClass]="{ changeColor : subcategory.id == activeSubcategoryId}">{{ subcategory.name }} 
+              <a (click)="sendSubcategoryId(subcategory.id, category.id)" 
+              [ngClass]="{ changeColor : subcategory.id == activeSubcategoryId}">
+              {{ subcategory.name }} 
                 <label *ngIf="subcategory.numberOfProducts != 0">({{subcategory.numberOfProducts}})</label></a>
                 <fa-icon class="closeIcon" 
                 [icon]="faTimes" 

@@ -50,8 +50,9 @@ p {
 }
 .product-list-row-item-info-2 > img {
   width: 80px;
-  height: 100%;
+  height: 80px;
   margin-right: 20px;
+  object-fit: cover;
 }
 .product-list-row-item-info-4 {
   display: grid;

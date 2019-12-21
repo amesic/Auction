@@ -55,9 +55,10 @@
   padding-top: 13px;
   padding-bottom: 13px;
 }
-.required .profile-img img {
+.required .profile-img {
   height: 246px;
   width: 198px;
+  object-fit: cover;
 }
 .profile-info-name,
 .profile-info-gender,

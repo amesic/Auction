@@ -1,18 +1,12 @@
-<div class="messStatusAboutBids" *ngIf="messStatusAboutBids != null">{{messStatusAboutBids}}</div>
-<div class="usersProduct" *ngIf="usersProduct != null">{{usersProduct}}</div>
-<div class="usersProduct" *ngIf="messStatusAboutWatchList != null">{{messStatusAboutWatchList}}</div>
-<div class="messError" *ngIf="errorMess != null" >{{errorMess}}</div>
+<div class="messStatusAboutBids" *ngIf="messStatusAboutBids != null">{{ messStatusAboutBids }}</div>
+<div class="usersProduct" *ngIf="usersProduct != null">{{ usersProduct }}</div>
+<div class="usersProduct" *ngIf="messStatusAboutWatchList != null">{{ messStatusAboutWatchList }}</div>
+<div class="messError" *ngIf="errorMess != null" >{{ errorMess }}</div>
 <div class="container">
     
 <div class="allImages"> 
     <div class="bigImage">
     <img src="{{clickedImage}}">
-    <div *ngIf="userIsLoged" class="views">
-        <div>
-          users watching
-            <p>{{ numberOfViewers }}</p>
-        </div>
-    </div>
 </div>
 <div class="smallImages" > 
     <div *ngFor="let image of productInfo.images; let i = index" >
@@ -22,14 +16,14 @@
 </div>
 
 <div class="aboutProduct">
-<p class="title">{{productInfo.title}}</p>
-<p class="price">Start from -{{productInfo.startPrice | currency:'USD'}}</p>
+<p class="title">{{ productInfo.title }}</p>
+<p class="price">Start from -{{ productInfo.startPrice | currency:'USD' }}</p>
 
 <div *ngIf="!userIsSeller" class="bid">
 <div class="enterBid">
 <input type="number" [ngClass]="{'disabledInput': !userIsLoged || userIsSeller}" (change)="saveValue($event.target.value)" #reference>
-<p class="enter"><label *ngIf="highestBid != null">Enter {{highestBid.value + 1 | currency:'USD'}} or more</label>
-<label *ngIf="highestBid == null">Enter {{productInfo.startPrice | currency:'USD'}} or more</label> <br>
+<p class="enter"><label *ngIf="highestBid != null">Enter {{ highestBid.value + 1 | currency:'USD' }} or more</label>
+<label *ngIf="highestBid == null">Enter {{ productInfo.startPrice | currency:'USD' }} or more</label> <br>
 </p>
 </div>
 
@@ -38,11 +32,15 @@
 <fa-icon [icon]="faChevronRight"></fa-icon>
 </div>
 </div>
-<p class="infoBid">Highest bid: <label class="high" *ngIf="highestBid != null">{{highestBid.value | currency:'USD'}}</label>
+<p class="infoBid">Highest bid: <label class="high" *ngIf="highestBid != null">{{ highestBid.value | currency:'USD' }}</label>
 <label *ngIf="highestBid == null">There are not bids yet!</label></p>
-<p class="infoBid"><label *ngIf="numberOfBids != null">No bids: {{numberOfBids}}</label> 
+<p class="infoBid">
+    <label *ngIf="numberOfBids != null">No bids: {{ numberOfBids }}</label> 
 </p>
-<p class="infoBid time">Time left: <label *ngIf = "timeLeft != undefined">{{timeLeft}}</label></p>
+<div *ngIf="userIsLoged" class="views">
+      Users watching: <label>{{ numberOfViewers }}</label>
+</div>
+<p class="infoBid time">Time left: <label *ngIf = "timeLeft != undefined">{{ timeLeft }}</label></p>
 
 <div *ngIf="!userIsSeller" class="watchlist" [ngClass]="{'onHover': userIsLoged}" (click)="saveToWatchlist()">
 <input type="button" value="Watchlist" 
@@ -52,7 +50,7 @@
 
 <div class="details">
 <p class="titleOfDetails">Details</p>
-<p>{{productInfo.description}}</p>
+<p>{{ productInfo.description }}</p>
 </div>
 </div>
 

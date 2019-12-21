@@ -6,7 +6,7 @@
   margin-bottom: 20px;
 }
 .categories > ul {
-  height: 576px;
+  height: 620px;
   overflow-y: auto;
   scrollbar-color: rgb(213, 211, 214) rgb(236, 238, 236);
   scrollbar-width: thin;
@@ -109,4 +109,7 @@ label {
 }
 .category .categoryIcon > a:hover {
   color: #8367d8;
+}
+.category > ul.showUl {
+  display: block;
 }
