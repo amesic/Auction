@@ -9,7 +9,7 @@
 .tabs {
   display: flex;
   justify-content: space-between;
-  width: 37%;
+  width: 50%;
   margin-top: 40px;
 }
 .tab-profile,

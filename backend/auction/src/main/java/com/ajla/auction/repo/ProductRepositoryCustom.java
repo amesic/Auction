@@ -7,6 +7,7 @@ import com.ajla.auction.model.PriceProductInfo;
 import com.ajla.auction.model.PaginationInfo;
 import com.ajla.auction.model.Characteristic;
 import com.ajla.auction.model.NumberOfProductsInfo;
+import com.ajla.auction.model.UserProductInfoBid;
 
 import java.util.List;
 
@@ -51,4 +52,5 @@ public interface ProductRepositoryCustom {
     PaginationInfo<ProductInfoBid> getAllActiveProductsOfSeller(final Long idSeller, final Long page, final Long size);
 
     PaginationInfo<ProductInfoBid> getAllSoldProductsOfSeller(final Long idSeller, final Long page, final Long size);
+
 }

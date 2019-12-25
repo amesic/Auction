@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Objects;
 
 @CrossOrigin(origins = {"http://localhost:4200", "https://atlantbh-auction.herokuapp.com"}, allowCredentials = "true")
@@ -49,16 +52,15 @@ public class BidController {
                                                      final HttpServletRequest request) {
         final String requestTokenHeader = request.getHeader("Authorization");
         String jwtToken = null;
-        if(requestTokenHeader != "") {
+        if(!requestTokenHeader.equals("")) {
             jwtToken = requestTokenHeader.substring(7);
             if (!productService.userIsSellerOfProduct(
                     userService.findByEmail(jwtTokenUtil.getUsernameFromToken(jwtToken)).getId(),
-                    idProduct
-            )
+                    idProduct)
             ) {
                 final PaginationInfo<Bid> bidInfoOfUser = bidService.bidsOfProduct(pageNumber, size, idProduct);
                 if(bidInfoOfUser != null) {
-                    bidInfoOfUser.setItems(null);
+                    bidInfoOfUser.setItems(Collections.singletonList(bidInfoOfUser.getItems().get(0)));
                 }
                 return new ResponseEntity<>(bidInfoOfUser, HttpStatus.UNAUTHORIZED);
             }

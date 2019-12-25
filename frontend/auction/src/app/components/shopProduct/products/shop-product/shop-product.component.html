@@ -2,7 +2,7 @@
   <div *ngIf="className == 'grid'" class="image">
     <img src="{{ product.images[0].link }}" />
     <div class="buttons">
-      <div class="watchlist">
+      <div class="watchlist" (click)="saveToWatchlist()">
         <input type="button" value="Watchlist" />
         <fa-icon [icon]="faHeart"></fa-icon>
       </div>

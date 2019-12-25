@@ -30,10 +30,10 @@ public class Bid {
 
     @ManyToOne
     @JoinColumn(name = "idProduct")
-    @JsonIgnoreProperties({"title", "description", "datePublishing", "seller", "startDate", "endDate", "startPrice", "images", "category", "subcategory", "feature"})
+    @JsonIgnoreProperties({"description", "datePublishing", "seller", "startDate", "category", "subcategory", "feature", "characteristics"})
     private Product product;
 
-    private Long value;
+    private Double value;
     private LocalDate date;
 
     public Long getId() {
@@ -60,11 +60,11 @@ public class Bid {
         this.product = product;
     }
 
-    public long getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setValue(long value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 

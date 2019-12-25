@@ -9,6 +9,7 @@ import com.ajla.auction.model.PriceProductInfo;
 import com.ajla.auction.model.PaginationInfo;
 import com.ajla.auction.model.Characteristic;
 import com.ajla.auction.model.NumberOfProductsInfo;
+import com.ajla.auction.model.UserProductInfoBid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -829,11 +830,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             pib.setStartPrice(p.getStartPrice());
             listOfProductsInfoBid.add(pib);
         });
-        //set total number of last chance products
+        //set total number
         final TypedQuery<Long> queryForSizeOfListProducts = em.createQuery(cqForProductsSize);
         final Long totalNumberOfItems = queryForSizeOfListProducts.getSingleResult();
 
         return new PaginationInfo<>(size, pageNumber, totalNumberOfItems, listOfProductsInfoBid);
 
     }
+
 }

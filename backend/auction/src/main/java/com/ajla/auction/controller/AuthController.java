@@ -6,6 +6,7 @@ import com.ajla.auction.model.User;
 import com.ajla.auction.model.ProductInfoBid;
 import com.ajla.auction.model.UserWatchProductId;
 import com.ajla.auction.model.Watchlist;
+import com.ajla.auction.model.UserProductInfoBid;
 import com.ajla.auction.model.PaginationInfo;
 import com.ajla.auction.model.BidInfo;
 import com.ajla.auction.service.BidService;
@@ -166,6 +167,14 @@ public class AuthController {
                 watchlistService.deleteItemFromWatchlist(email, idProduct, pageNumber, size),
                 HttpStatus.OK
         );
+    }
+
+    @GetMapping("/bid/user")
+    public ResponseEntity<PaginationInfo<UserProductInfoBid>> getSoldProductsByUserSeller(
+            @RequestParam("pageNumber") final Long pageNumber,
+            @RequestParam("size") final Long size,
+            @RequestParam("email") final String email) {
+        return new ResponseEntity<>(bidService.bidsOfUser(pageNumber, size, email), HttpStatus.OK);
     }
 
 }

@@ -4,14 +4,14 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ProductInfoBid extends Product {
-    private Long highestBid;
+    private Double highestBid;
     private Long numberOfBids;
 
-    public Long getHighestBid() {
+    public Double getHighestBid() {
         return highestBid;
     }
 
-    public void setHighestBid(Long highestBid) {
+    public void setHighestBid(Double highestBid) {
         this.highestBid = highestBid;
     }
 

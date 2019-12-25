@@ -1,0 +1,36 @@
+<div class="list" *ngIf="items.length != 0">
+    <div class="product-list-columns">
+      <div class="product-list-columns-2">
+        <p>Item</p>
+        <p>Name</p>
+      </div>
+      <div class="product-list-columns-4">
+      <p class="time">Time Left</p>
+      <p class="start-price">Your Value</p>
+      <p class="number-bids">No. Bids</p>
+      <p class="highest-bid">Highest bid</p>
+    </div>
+    </div>
+    
+    <div class="product-list-rows">
+      <div *ngFor="let item of items" class="product-list-row-item">
+        <div class="product-list-row-item-info-2">
+          <img src="{{ item.images[0].link }}" />
+          <div>
+          <p>{{ item.title }}</p>
+          <p class="id">#{{ item.id }}</p>
+        </div>
+        </div>
+        <div class="product-list-row-item-info-4">
+        <div class="time">{{ item.timeLeft }}</div>
+        <div class="start-price" [ngClass]="{ highestValue : item.highestBid == item.valueOfBid}">{{ item.valueOfBid | currency: "USD" }}</div>
+        <div class="number-bids" *ngIf="item.numberOfBids != null">{{ item.numberOfBids }}</div>
+        <div class="number-bids" *ngIf="item.numberOfBids == null">0</div>
+        <div class="highest-bid color-highest-bid" *ngIf="item.highestBid != null" [ngClass]="{ highestValue : item.highestBid == item.valueOfBid}">{{ item.highestBid | currency: "USD" }}</div>
+        <div class="highest-bid" *ngIf="item.highestBid == null">/</div>
+        <input type="button" value="VIEW" class="view" (click)="sendInfoOfProduct(item.title, item.id)">
+    </div>
+      </div>
+    </div>
+    </div>
+    

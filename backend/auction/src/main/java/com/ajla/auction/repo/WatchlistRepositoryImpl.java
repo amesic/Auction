@@ -70,7 +70,7 @@ public class WatchlistRepositoryImpl implements WatchlistRepositoryCustom {
             pib.setTitle(w.getProduct().getTitle());
             listOfProductsInfoBid.add(pib);
         });
-        //set total number of last chance products
+        //set total number
         final TypedQuery<Long> queryForWatchlistSize = em.createQuery(cqForWatchlistSize);
         final Long totalNumberOfItems = queryForWatchlistSize.getSingleResult();
 

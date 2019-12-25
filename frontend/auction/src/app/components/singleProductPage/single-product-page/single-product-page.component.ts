@@ -137,8 +137,8 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
       this.productService.getNumberViewers(routeParams.idProduct).subscribe(number => {
         this.numberOfViewers = number;
       });
-      this.bidService.getBidsInfoOfProduct(routeParams.idProduct, this.pageNumber, this.size).subscribe(
-          bidInfo => {
+      this.bidService.getBidsInfoOfProduct(routeParams.idProduct, this.pageNumber, this.size)
+      .subscribe(bidInfo => {
             if (bidInfo == null) {
               this.bidsOfProduct = [];
               this.numberOfBids = null;
@@ -162,7 +162,7 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
             this.bidsOfProduct = [];
             if (err.error != null) {
               this.numberOfBids = err.error.totalNumberOfItems;
-              this.highestBid = err.error.highestBid;
+              this.highestBid = err.error.items[0];
             } else {
               this.numberOfBids = null;
               this.highestBid = null;

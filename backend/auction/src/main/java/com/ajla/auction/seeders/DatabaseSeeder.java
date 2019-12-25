@@ -1104,7 +1104,7 @@ public class DatabaseSeeder {
             b.setProduct(p);
             User u = userRepo.findUserById((long) 2);
             b.setUser(u);
-            b.setValue(1600);
+            b.setValue((double) 1600);
 
             Bid b1 = new Bid();
             b1.setDate((LocalDate.parse("5.11.2019", formatter)));
@@ -1112,7 +1112,7 @@ public class DatabaseSeeder {
             b1.setProduct(p);
             u = userRepo.findUserById((long) 3);
             b1.setUser(u);
-            b1.setValue(1700);
+            b1.setValue((double) 1700);
 
             Bid b2 = new Bid();
             b2.setDate((LocalDate.parse("5.11.2019", formatter)));
@@ -1120,7 +1120,7 @@ public class DatabaseSeeder {
             b2.setProduct(p);
             u = userRepo.findUserById((long) 4);
             b2.setUser(u);
-            b2.setValue(1800);
+            b2.setValue((double) 1800);
 
             Bid b3 = new Bid();
             b3.setDate((LocalDate.parse("5.11.2019", formatter)));
@@ -1128,7 +1128,7 @@ public class DatabaseSeeder {
             b3.setProduct(p);
             u = userRepo.findUserById((long) 4);
             b3.setUser(u);
-            b3.setValue(1900);
+            b3.setValue((double) 1900);
 
             Bid b4 = new Bid();
             b4.setDate((LocalDate.parse("5.11.2019", formatter)));
@@ -1136,7 +1136,7 @@ public class DatabaseSeeder {
             b4.setProduct(p);
             u = userRepo.findUserById((long) 4);
             b4.setUser(u);
-            b4.setValue(2000);
+            b4.setValue((double) 2000);
 
             Bid b5 = new Bid();
             b5.setDate((LocalDate.parse("5.11.2019", formatter)));
@@ -1144,7 +1144,7 @@ public class DatabaseSeeder {
             b5.setProduct(p);
             u = userRepo.findUserById((long) 4);
             b5.setUser(u);
-            b5.setValue(3000);
+            b5.setValue((double) 3000);
 
             bidRepository.saveAll(Arrays.asList(b, b1, b2, b3, b4, b5));
 

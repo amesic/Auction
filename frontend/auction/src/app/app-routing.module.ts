@@ -15,7 +15,7 @@ import { SingleProductPageComponent } from "./components/singleProductPage/singl
 import { ShopComponent } from "./components/shopProduct/shop/shop.component";
 import { MyAccountComponent } from "./components/myAccount/my-account/my-account.component"
 import { MyAccountProductsComponent } from "./components/myAccount/myAccountProducts/my-account-products/my-account-products.component"
-import { MyAccountBidsComponent } from "./components/myAccount/my-account-bids/my-account-bids.component"
+import { MyAccountBidsComponent } from "./components/myAccount/myAccountBids/my-account-bids/my-account-bids.component"
 import { MyAccountWatchlistComponent } from "./components/myAccount/myAccountWatchlist/my-account-watchlist/my-account-watchlist.component"
 import { LoginService } from "./services/login.service";
 import { ErrorComponent } from "./components/error/error.component";

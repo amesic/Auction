@@ -1,9 +1,6 @@
 package com.ajla.auction.service;
 
-import com.ajla.auction.model.Bid;
-import com.ajla.auction.model.PaginationInfo;
-import com.ajla.auction.model.Product;
-import com.ajla.auction.model.User;
+import com.ajla.auction.model.*;
 import com.ajla.auction.repo.BidRepository;
 import com.ajla.auction.repo.ProductRepository;
 import com.ajla.auction.repo.UserRepository;
@@ -37,25 +34,35 @@ public class BidService implements IBidService{
     }
 
     @Override
-    public Bid saveBidFromUser(final Long idProduct, final String emailUser, final Long value) {
+    public Bid saveBidFromUser(final Long idProduct, final String emailUser, final Double value) {
         final Product product = productRepository.findProductById(idProduct);
         final User user = userRepository.findByEmail(emailUser);
         if(user != null && productRepository.userIsSellerOfProduct(user.getId(), product.getId())) {
             return null;
         }
             if(user != null && !bidRepository.checkIfThereIsGreaterValue(value, product)) {
-                Bid savedBid = new Bid();
-                savedBid.setUser(user);
-                savedBid.setProduct(product);
-                savedBid.setValue(value);
-                savedBid.setDate(LocalDate.now());
-                bidRepository.save(savedBid);
-                return savedBid;
+               final Bid savedBid = bidRepository.saveBidFromUser(user, product, value);
+               if (savedBid != null) {
+                   bidRepository.save(savedBid);
+                   return savedBid;
+               } else {
+                   Bid saved = new Bid();
+                   saved.setUser(user);
+                   saved.setProduct(product);
+                   saved.setValue(value);
+                   saved.setDate(LocalDate.now());
+                   return saved;
+               }
             }
             return null;
     }
 
     public Long numberOfBidsByProduct(Long productId) {
         return bidRepository.numberOfBidsForProduct(productId);
+    }
+
+    @Override
+    public PaginationInfo<UserProductInfoBid> bidsOfUser(final Long pageNumber, final Long size, final String email) {
+        return bidRepository.getUserBids(pageNumber, size, userRepository.findByEmail(email).getId());
     }
 }

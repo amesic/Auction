@@ -7,6 +7,10 @@
     <fa-icon [icon]="faList"></fa-icon>
     <input class="tab" type="button" value="Products" />
   </div>
+  <div class="tab-bids" [routerLink]="['/my-account/bids']" routerLinkActive="activeTab">
+    <fa-icon [icon]="faGavel"></fa-icon>
+    <input class="tab" type="button" value="Bids" />
+  </div>
   <div class="tab-watchlist" [routerLink]="['/my-account/watchlist']" routerLinkActive="activeTab">
     <fa-icon [icon]="faGift"></fa-icon>
     <input class="tab" type="button" value="Watchlist" />
