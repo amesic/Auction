@@ -22,7 +22,11 @@
         </div>
         </div>
         <div class="product-list-row-item-info-4">
-        <div class="time">{{ item.timeLeft }}</div>
+        <div *ngIf="timeToCount > 3600" class="time">{{ item.timeLeft }}</div>
+        <div *ngIf="timeToCount < 0" class="time">expired</div>
+        <div *ngIf="timeToCount <= 3600 && timeToCount > 0" class="counter">
+        <countdown #cd [config]="{leftTime: timeToCount}"></countdown>
+      </div>
         <div class="start-price" [ngClass]="{ highestValue : item.highestBid == item.valueOfBid}">{{ item.valueOfBid | currency: "USD" }}</div>
         <div class="number-bids" *ngIf="item.numberOfBids != null">{{ item.numberOfBids }}</div>
         <div class="number-bids" *ngIf="item.numberOfBids == null">0</div>

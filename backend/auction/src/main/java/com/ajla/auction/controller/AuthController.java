@@ -8,6 +8,7 @@ import com.ajla.auction.model.UserWatchProductId;
 import com.ajla.auction.model.Watchlist;
 import com.ajla.auction.model.UserProductInfoBid;
 import com.ajla.auction.model.PaginationInfo;
+import com.ajla.auction.model.UserBidList;
 import com.ajla.auction.model.BidInfo;
 import com.ajla.auction.service.BidService;
 import com.ajla.auction.service.ProductService;
@@ -90,6 +91,23 @@ public class AuthController {
     @GetMapping("/user/info")
     public ResponseEntity<User> getUserInformation(@RequestParam("email") final String email) {
         return new ResponseEntity<>(userService.findByEmail(email), HttpStatus.OK);
+    }
+
+    @MessageMapping("/send/message/bidsOfUser")
+    @SendToUser
+    public void onMyAccountBidsList(final UserBidList userBidList) {
+        /*SimpMessageHeaderAccessor headerAcc = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
+        headerAcc.setSessionId(userBidList.getSessionId());
+        headerAcc.setLeaveMutable(true);
+        userBidList.getBids().forEach(bid -> {
+
+        });
+        this.template.convertAndSendToUser(
+                userBidList.getSessionId(),
+                "/notify/timeLeft",
+                bidInfo,
+                headerAcc.getMessageHeaders()
+                );*/
     }
 
     @MessageMapping("/send/message/highestBid")

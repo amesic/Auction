@@ -9,6 +9,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { Ng5SliderModule } from 'ng5-slider';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WebSocketService } from "./services/web-socket.service";
+import { CountdownModule } from 'ngx-countdown';
 
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -96,7 +97,8 @@ import { MyAccountBidsListComponent } from './components/myAccount/myAccountBids
     FormsModule,
     NgxChartsModule,
     BrowserAnimationsModule,
-    Ng5SliderModule
+    Ng5SliderModule,
+    CountdownModule
   ],
   providers: [
     LoginRegisterActivate,

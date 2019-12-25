@@ -37,6 +37,7 @@
     "net": "^1.0.2",
     "ng5-slider": "^1.2.4",
     "ngx-bootstrap": "^5.2.0",
+    "ngx-countdown": "^8.0.3",
     "resize-observer-polyfill": "^1.5.1",
     "rxjs": "~6.5.3",
     "sockjs-client": "^1.4.0",
