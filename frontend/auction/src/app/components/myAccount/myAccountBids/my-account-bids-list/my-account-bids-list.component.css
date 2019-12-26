@@ -62,7 +62,8 @@ p {
 .start-price,
 .highest-bid,
 .number-bids,
-.time {
+.time,
+countdown {
   text-align: center;
   margin-top: 15px;
 }
@@ -89,8 +90,19 @@ p {
   color: #8367d8;
 }
 .color-highest-bid {
- color: #5b9ed6;
+  color: #5b9ed6;
 }
 .highestValue {
-  color: #6CC047;
+  color: #6cc047;
+}
+countdown,
+.timeLeft,
+.timeExpired {
+  display: none;
+}
+.showCounter,
+.showTimeLeft,
+.showTimeExpired,
+.hideLabel {
+  display: block;
 }

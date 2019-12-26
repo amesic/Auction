@@ -16,4 +16,7 @@ export class Product {
     images: Array<ImageProduct>;
     timeLeft;
     active;
+    timeToCount;
+    hideCounter: boolean;
+    statusOfCounter;
   }
