@@ -129,6 +129,7 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
       this.productService
         .getSingleProduct(routeParams.idProduct).subscribe(singleProduct => {
           this.productInfo = singleProduct;
+          console.log(this.productInfo);
           let date = new Date(Date.parse(this.productInfo.endDate));
           this.timeLeft = this.dhms(
             Math.floor((<any>date - new Date().getTime()) / 1000)
@@ -163,6 +164,7 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
             if (err.error != null) {
               this.numberOfBids = err.error.totalNumberOfItems;
               this.highestBid = err.error.items[0];
+              console.log(this.highestBid);
             } else {
               this.numberOfBids = null;
               this.highestBid = null;

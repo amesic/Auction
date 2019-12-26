@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, OnChanges, EventEmitter, Output} from "@angular/core";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { LoginService } from 'src/app/services/login.service';
 import { BidsService } from 'src/app/services/bids.service';
 import { WatchlistService } from 'src/app/services/watchlist.service';
@@ -27,9 +30,14 @@ export class SingleProductComponent implements OnInit, OnChanges {
   messStatusAboutBids;
   messStatusAboutWatchList;
   faChevronRight = faChevronRight;
+  faCheckCircle = faCheckCircle;
+  faStar = faStar;
+  faTimes = faTimes;
   faHeart = faHeart;
   valueFromUser;
   errorMess = null;
+
+  close = false;
 
   @Output() messageEvent = new EventEmitter<boolean>();
 
@@ -111,4 +119,8 @@ export class SingleProductComponent implements OnInit, OnChanges {
       window.scrollTo(0, 0);
     })
   }
+  closeMessage() {
+    this.close = true;
+  }
+
 }

@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, OnChanges, ViewChild, AfterViewInit } from "@angular/core";
+import { Component, OnInit, Input, OnChanges} from "@angular/core";
 import { hdmy } from "../../../reusableFunctions/hdmy";
 import { Router } from "@angular/router";
-import { CountdownComponent } from 'ngx-countdown';
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: "app-my-account-bids-list",
@@ -13,6 +14,11 @@ export class MyAccountBidsListComponent implements OnInit, OnChanges{
   @Input() timeToCount;
 
   statusOfCounter;
+  expired;
+  close = false;
+
+  faCheckCircle = faCheckCircle;
+  faTimes = faTimes;
 
   constructor(private router: Router) {}
 
@@ -25,10 +31,17 @@ export class MyAccountBidsListComponent implements OnInit, OnChanges{
         Math.floor((<any>date - new Date().getTime()) / 1000)
       );
       product.timeToCount = Math.floor((<any>date - new Date().getTime()) / 1000);
-      if (product.timeToCount <= 3600) {
+      if(product.timeToCount <= 3600) {
        product.hideCounter = false;
       } else {
         product.hideCounter = true;
+      }
+      if(product.timeToCount < 0) {
+        this.expired = true;
+      } else {
+        if(this.expired == undefined) {
+        this.expired = false;
+        }
       }
     });
   }
@@ -38,7 +51,6 @@ export class MyAccountBidsListComponent implements OnInit, OnChanges{
   }
 
   handleEvent(event, product) {
-    console.log(event);
     if(event.action == "notify") {
       this.items.forEach(item => {
         if(item.id == product.id) {
@@ -46,6 +58,7 @@ export class MyAccountBidsListComponent implements OnInit, OnChanges{
         }
       });
     } else if(event.action == "done") {
+      this.expired = true;
       this.items.forEach(item => {
         if(item.id == product.id) {
           product.hideCounter = true;
@@ -53,5 +66,8 @@ export class MyAccountBidsListComponent implements OnInit, OnChanges{
         }
       });
     }
+  }
+  closeMessage() {
+    this.close = true;
   }
 }
