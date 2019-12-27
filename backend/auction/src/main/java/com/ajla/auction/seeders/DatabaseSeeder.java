@@ -7,6 +7,7 @@ import com.ajla.auction.model.Category;
 import com.ajla.auction.model.Characteristic;
 import com.ajla.auction.model.Image;
 import com.ajla.auction.model.Bid;
+import com.ajla.auction.model.Card;
 
 import com.ajla.auction.repo.UserRepository;
 import com.ajla.auction.repo.ProductRepository;
@@ -15,7 +16,9 @@ import com.ajla.auction.repo.CharacteristicRepository;
 import com.ajla.auction.repo.ImageRepository;
 import com.ajla.auction.repo.BidRepository;
 import com.ajla.auction.repo.AddressRepository;
+import com.ajla.auction.repo.CardRepository;
 
+import com.ajla.auction.service.StripeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Collections;
 
 
 @Component
@@ -41,7 +45,9 @@ public class DatabaseSeeder {
     private final BidRepository bidRepository;
     private final CharacteristicRepository characteristicRepository;
     private final AddressRepository addressRepository;
-    Logger logger = LoggerFactory.getLogger(DatabaseSeeder.class);
+    private final CardRepository cardRepository;
+    private final StripeService stripeService;
+    private Logger logger = LoggerFactory.getLogger(DatabaseSeeder.class);
 
     //dependency injection
     @Autowired
@@ -51,7 +57,9 @@ public class DatabaseSeeder {
                           final ImageRepository imageProductRepo,
                           final BidRepository bidRepository,
                           final CharacteristicRepository characteristicRepository,
-                          final AddressRepository addressRepository) {
+                          final AddressRepository addressRepository,
+                          final CardRepository cardRepository,
+                          final StripeService stripeService) {
         this.categoryRepo = categoryRepo;
         this.productRepo = productRepo;
         this.userRepo = userRepo;
@@ -59,12 +67,15 @@ public class DatabaseSeeder {
         this.bidRepository = bidRepository;
         this.characteristicRepository = characteristicRepository;
         this.addressRepository = addressRepository;
+        this.cardRepository = cardRepository;
+        this.stripeService = stripeService;
     }
 
     @EventListener
     public void seed(ContextRefreshedEvent event) {
         seedAddress();
         seedUser();
+        seedCards();
         seedCategories();
         seedCharacteristics();
         seedProducts();
@@ -161,6 +172,43 @@ public class DatabaseSeeder {
         }
         else {
             logger.trace("User Seeding Not Required");
+        }
+
+    }
+    private void seedCards() {
+        Card card = cardRepository.findCardById((long) 1);
+        if (card == null) {
+            User user;
+            Card c1 = new Card();
+            c1.setCustomerId(stripeService.createCustomer("mujo@gmail.com"));
+            Card c2 = new Card();
+            c2.setCustomerId(stripeService.createCustomer("huso@gmail.com"));
+            Card c3 = new Card();
+            c3.setCustomerId(stripeService.createCustomer("fata@gmail.com"));
+            Card c4 = new Card();
+            c4.setCustomerId(stripeService.createCustomer("suljo@gmail.com"));
+            cardRepository.saveAll(Arrays.asList(c1, c2, c3, c4));
+
+            user = userRepo.findByEmail("mujo@gmail.com");
+            user.setCard(c1);
+            userRepo.save(user);
+
+            user = userRepo.findByEmail("huso@gmail.com");
+            user.setCard(c2);
+            userRepo.save(user);
+
+            user = userRepo.findByEmail("fata@gmail.com");
+            user.setCard(c3);
+            userRepo.save(user);
+
+            user = userRepo.findByEmail("suljo@gmail.com");
+            user.setCard(c4);
+            userRepo.save(user);
+
+            logger.info("Card table seeded");
+        }
+        else {
+            logger.trace("Card Seeding Not Required");
         }
 
     }

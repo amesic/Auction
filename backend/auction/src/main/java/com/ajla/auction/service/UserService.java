@@ -1,13 +1,10 @@
 package com.ajla.auction.service;
 
+import com.ajla.auction.model.Card;
 import com.ajla.auction.model.User;
 import com.ajla.auction.repo.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,7 +37,7 @@ public class UserService implements IUserService, UserDetailsService {
         if (userWithEmail == null) {
             if (user.getEmail().matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$")
                     && user.getPassword().length() >= 8
-                    && user.getUserName() != null && user.getUserName() != "") {
+                    && user.getUserName() != null && !user.getUserName().equals("")) {
                 final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 userRepository.save(user);
@@ -60,5 +57,11 @@ public class UserService implements IUserService, UserDetailsService {
         }
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
                 new ArrayList<>());
+    }
+    @Override
+    public void saveCardId(final Card card, final String email) {
+        User user = findByEmail(email);
+        user.setCard(card);
+        userRepository.save(user);
     }
 }

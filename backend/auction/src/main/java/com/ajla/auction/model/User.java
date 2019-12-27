@@ -40,6 +40,12 @@ public class User {
     @JoinColumn(name = "idAddress")
     private Address address;
 
+    //cards table
+    @OneToOne
+    @Target(Card.class)
+    @JoinColumn(name = "idCard")
+    private Card card;
+
     //bids table
     @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
     @Target(Bid.class)
@@ -99,5 +105,12 @@ public class User {
     }
     public void setBids(List<Bid> bids) {
         this.bids = bids;
+    }
+    public Card getCard() {
+        return card;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
     }
 }

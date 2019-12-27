@@ -4,11 +4,16 @@
   <div class="required" *ngIf="userInfo != undefined">
     <div class="title">REQUIRED</div>
     <div class="profile-info">
-        <img
+      <img
         class="profile-img"
-          *ngIf="userInfo.image == null"
-          src="https://www.marketingmuses.com/wp-content/uploads/2018/01/invis-user.png"/>
-        <img class="profile-img" *ngIf="userInfo.image != null" src="{{ userInfo.image }}" />
+        *ngIf="userInfo.image == null"
+        src="https://www.marketingmuses.com/wp-content/uploads/2018/01/invis-user.png"
+      />
+      <img
+        class="profile-img"
+        *ngIf="userInfo.image != null"
+        src="{{ userInfo.image }}"
+      />
       <div class="user-info">
         <p>Your Name</p>
         <input
@@ -19,14 +24,14 @@
         />
         <p>Your Gender</p>
         <input
-        *ngIf = "userInfo.gender != null"
+          *ngIf="userInfo.gender != null"
           class="profile-info-gender"
           type="text"
           value="{{ userInfo.gender }}"
           readonly
         />
         <input
-        *ngIf = "userInfo.gender == null"
+          *ngIf="userInfo.gender == null"
           class="profile-info-gender"
           type="text"
           value=""
@@ -55,14 +60,14 @@
         </div>
         <p>Phone Number</p>
         <input
-        *ngIf = "userInfo.phoneNumber != null"
+          *ngIf="userInfo.phoneNumber != null"
           class="profile-info-phone-number"
           type="text"
           value="{{ userInfo.phoneNumber }}"
           readonly
         />
         <input
-        *ngIf = "userInfo.phoneNumber == null"
+          *ngIf="userInfo.phoneNumber == null"
           class="profile-info-phone-number"
           type="text"
           value=""
@@ -79,104 +84,180 @@
     </div>
   </div>
 
+  <div class="card" *ngIf="userInfo != undefined">
+    <div class="title">CARD INFORMATION</div>
+    <div class="card-info">
+      <div>
+        <p class="card-info-p">Credit card</p>
+        <p class="card-info-accepted-cards-p">We accept the following credit cards</p>
+        <div class="cc-img">
+          <img
+            src="https://seeklogo.net/wp-content/uploads/2016/11/visa-logo-preview.png"/>
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/8/88/MasterCard_early_1990s_logo.svg"/>
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Maestro_logo.png/1200px-Maestro_logo.png"/>
+          <img
+            src="https://i.pinimg.com/originals/81/b2/d3/81b2d3c1602b4a523d67a851d7d58db7.png"/>
+        </div>
+
+        <div class="card-info-name-number">
+          <div>
+            <p class="card-info-name-p">Name on card</p>
+            <input type="text" placeholder="e.g. Adam Smith" />
+          </div>
+          <div>
+            <p class="card-info-number-p">Card Number</p>
+            <input type="text" placeholder="e.g. 4242 4242 4242 4242" />
+          </div>
+        </div>
+
+        <div class="card-info-expiration-cvc">
+          <div>
+            <p class="card-info-expiration-p">Expration Date</p>
+            <div class="card-info-expiration">
+              <div>
+                <div class="card-info-year" appClickOutside>
+                  <p class="card-info-year-p">{{ pickedYear }}</p>
+                  <fa-icon [icon]="faChevronDown"></fa-icon>
+                </div>
+                <div class="card-info-years">
+                  <p class="card-info-year-p" (click)="pickAYear('2020')">2020</p>
+                  <p class="card-info-year-p" (click)="pickAYear('2021')">2021</p>
+                  <p class="card-info-year-p" (click)="pickAYear('2022')">2022</p>
+                  <p class="card-info-year-p" (click)="pickAYear('2023')">2023</p>
+                </div>
+              </div>
+              <div>
+                <div class="card-info-month" appClickOutside>
+                  <p class="card-info-month-p">{{ pickedMonth }}</p>
+                  <fa-icon [icon]="faChevronDown"></fa-icon>
+                </div>
+                <div class="card-info-months">
+                  <p class="card-info-month-p" (click)="pickAMonth('Jan')">Jan</p>
+                  <p class="card-info-month-p" (click)="pickAMonth('Feb')">Feb</p>
+                  <p class="card-info-month-p" (click)="pickAMonth('Mar')">Mar</p>
+                  <p class="card-info-month-p" (click)="pickAMonth('Apr')">Apr</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p class="card-info-cvc-p">CVC/CW</p>
+            <input type="text" placeholder="1234" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="optional" *ngIf="userInfo != undefined">
     <div class="title">OPTIONAL</div>
     <div class="address-info">
-        <div>
-      <p class="address-title">ADDRESS</p>
+      <div>
+        <p class="address-title">ADDRESS</p>
 
-      <p>Street</p>
-      <input
-      *ngIf= "userInfo.address != null && userInfo.address.street != null"
-        class="address-info-street"
-        type="text"
-        value="{{ userInfo.address.street }}"
-        placeholder="e.g. 5th Avenue"
-        readonly
-      />
-      <input
-      *ngIf= "userInfo.address == null || userInfo.address.street == null"
-        class="address-info-street"
-        type="text"
-        value=""
-        placeholder="e.g. 5th Avenue"
-        readonly
-      />
-      <div class="address-info-city-zip">
-        <div>
-      <p>City</p>
-      <input
-      *ngIf= "userInfo.address != null && userInfo.address.city != null"
-        class="address-info-city"
-        type="text"
-        value="{{ userInfo.address.city }}"
-        placeholder="e.g. New York"
-        readonly
-      />
-      <input
-      *ngIf= "userInfo.address == null || userInfo.address.city == null"
-        class="address-info-city"
-        type="text"
-        value=""
-        placeholder="e.g. New York"
-        readonly
-      />
+        <p>Street</p>
+        <input
+          *ngIf="userInfo.address != null && userInfo.address.street != null"
+          class="address-info-street"
+          type="text"
+          value="{{ userInfo.address.street }}"
+          placeholder="e.g. 5th Avenue"
+          readonly
+        />
+        <input
+          *ngIf="userInfo.address == null || userInfo.address.street == null"
+          class="address-info-street"
+          type="text"
+          value=""
+          placeholder="e.g. 5th Avenue"
+          readonly
+        />
+        <div class="address-info-city-zip">
+          <div>
+            <p>City</p>
+            <input
+              *ngIf="userInfo.address != null && userInfo.address.city != null"
+              class="address-info-city"
+              type="text"
+              value="{{ userInfo.address.city }}"
+              placeholder="e.g. New York"
+              readonly
+            />
+            <input
+              *ngIf="userInfo.address == null || userInfo.address.city == null"
+              class="address-info-city"
+              type="text"
+              value=""
+              placeholder="e.g. New York"
+              readonly
+            />
+          </div>
+          <div>
+            <p>ZipCode</p>
+            <input
+              *ngIf="
+                userInfo.address != null && userInfo.address.zipCode != null
+              "
+              class="address-info-zip"
+              type="text"
+              value="{{ userInfo.address.zipCode }}"
+              placeholder="e.g. 10065"
+              readonly
+            />
+            <input
+              *ngIf="
+                userInfo.address == null || userInfo.address.zipCode == null
+              "
+              class="address-info-zip"
+              type="text"
+              value=""
+              placeholder="e.g. 10065"
+              readonly
+            />
+          </div>
+        </div>
+        <p>State</p>
+        <input
+          *ngIf="userInfo.address != null && userInfo.address.state != null"
+          class="address-info-state"
+          type="text"
+          value="{{ userInfo.address.state }}"
+          placeholder="e.g. New York"
+          readonly
+        />
+        <input
+          *ngIf="userInfo.address == null || userInfo.address.state == null"
+          class="address-info-state"
+          type="text"
+          value=""
+          placeholder="e.g. New York"
+          readonly
+        />
+        <p>Country</p>
+        <input
+          *ngIf="userInfo.address != null && userInfo.address.country != null"
+          class="address-info-country"
+          type="text"
+          value="{{ userInfo.address.country }}"
+          placeholder="e.g. USA"
+          readonly
+        />
+        <input
+          *ngIf="userInfo.address == null || userInfo.address.country == null"
+          class="address-info-country"
+          type="text"
+          value=""
+          placeholder="e.g. USA"
+          readonly
+        />
+      </div>
     </div>
-    <div>
-      <p>ZipCode</p>
-      <input
-      *ngIf= "userInfo.address != null && userInfo.address.zipCode != null"
-        class="address-info-zip"
-        type="text"
-        value="{{ userInfo.address.zipCode }}"
-        placeholder="e.g. 10065"
-        readonly
-      />
-      <input
-      *ngIf= "userInfo.address == null || userInfo.address.zipCode == null"
-        class="address-info-zip"
-        type="text"
-        value=""
-        placeholder="e.g. 10065"
-        readonly
-      />
-    </div>
-    </div>
-    <p>State</p>
-    <input
-    *ngIf= "userInfo.address != null && userInfo.address.state != null"
-      class="address-info-state"
-      type="text"
-      value="{{ userInfo.address.state }}"
-      placeholder="e.g. New York"
-      readonly
-    />
-    <input
-    *ngIf= "userInfo.address == null || userInfo.address.state == null"
-      class="address-info-state"
-      type="text"
-      value=""
-      placeholder="e.g. New York"
-      readonly
-    />
-    <p>Country</p>
-    <input
-    *ngIf= "userInfo.address != null && userInfo.address.country != null"
-      class="address-info-country"
-      type="text"
-      value="{{ userInfo.address.country }}"
-      placeholder="e.g. USA"
-      readonly
-    />
-    <input
-    *ngIf= "userInfo.address == null || userInfo.address.country == null"
-      class="address-info-country"
-      type="text"
-      value=""
-      placeholder="e.g. USA"
-      readonly
-    />
   </div>
-</div>
+
+  <div class="button">
+  <input type="button" value="SAVE INFO">
+  <fa-icon [icon]="faChevronRight"></fa-icon>
 </div>
 </div>

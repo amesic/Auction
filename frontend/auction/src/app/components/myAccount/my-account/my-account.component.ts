@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { LoginService } from 'src/app/services/login.service';
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-my-account',
@@ -12,6 +14,12 @@ export class MyAccountComponent implements OnInit {
   month = "";
   year = "";
   day = "";
+
+  faChevronDown = faChevronDown;
+  faChevronRight = faChevronRight;
+
+  pickedYear = "Year";
+  pickedMonth = "Month";
 
   constructor(private userService: UserService, private loginService: LoginService) { }
 
@@ -25,6 +33,13 @@ export class MyAccountComponent implements OnInit {
       this.month = date.toDateString().split(" ")[1];
       }
     });
+  }
+
+  pickAYear(year) {
+    this.pickedYear = year;
+  }
+  pickAMonth(month) {
+    this.pickedMonth = month;
   }
 
 }

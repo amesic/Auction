@@ -1,8 +1,11 @@
 package com.ajla.auction.controller;
 
 import com.ajla.auction.config.JwtTokenUtil;
+import com.ajla.auction.model.Card;
 import com.ajla.auction.model.JwtResponse;
 import com.ajla.auction.model.User;
+import com.ajla.auction.service.CardService;
+import com.ajla.auction.service.StripeService;
 import com.ajla.auction.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -31,17 +34,25 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
     //for generate or validate token
     private final JwtTokenUtil jwtTokenUtil;
+    private final StripeService stripeService;
+    private final CardService cardService;
 
     @Autowired
     public UserController(final UserService userService,
                           final AuthenticationManager authenticationManager,
-                          final JwtTokenUtil jwtTokenUtil) {
+                          final JwtTokenUtil jwtTokenUtil,
+                          final StripeService stripeService,
+                          final CardService cardService) {
         Objects.requireNonNull(userService, "userService must not be null.");
         Objects.requireNonNull(authenticationManager, "authenticationManager must not be null.");
         Objects.requireNonNull(jwtTokenUtil, "jwtTokenUtil must not be null.");
+        Objects.requireNonNull(stripeService, "stripeService must not be null.");
+        Objects.requireNonNull(cardService, "cardService must not be null.");
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
+        this.stripeService = stripeService;
+        this.cardService = cardService;
     }
 
     @PostMapping(value = "/login")
@@ -73,6 +84,9 @@ public class UserController {
             return new ResponseEntity<>("Your data is not valid!", headers, HttpStatus.BAD_REQUEST);
         }
         if(!emailExist) {
+            String idCustomer = stripeService.createCustomer(user.getEmail());
+            Card savedCard = cardService.saveCustomerId(idCustomer);
+            userService.saveCardId(savedCard, user.getEmail());
             return new ResponseEntity<>(
                     "You are successfully registered " + user.getUserName() + "!",
                     headers,

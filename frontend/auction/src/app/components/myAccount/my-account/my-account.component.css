@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
 .required,
-.optional {
+.optional,
+.card {
   background: #ffffff;
   border: 1px solid #d8d8d8;
   height: 722px;
@@ -8,7 +9,7 @@
 }
 .optional {
   height: 650px;
-  margin-bottom: 422px;
+  margin-bottom: 100px;
 }
 .required p,
 .optional p {
@@ -20,7 +21,8 @@
   margin-bottom: 10px;
 }
 .required input,
-.optional input {
+.optional input,
+.card input {
   margin-bottom: 49px;
   font: 400 18px "Lato", sans-serif;
   color: #252525;
@@ -40,13 +42,15 @@
   width: 975px;
   margin-top: 36px;
 }
-.address-info {
+.address-info,
+.card-info {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 .required .title,
-.optional .title {
+.optional .title,
+.card .title {
   background: #fafafa;
   font: 700 20px "Lato", sans-serif;
   color: #252525;
@@ -103,4 +107,138 @@
   display: flex;
   justify-content: space-between;
   width: 600px;
+}
+.cc-img {
+  display: flex;
+  justify-content: space-between;
+  width: 195px;
+  margin-bottom: 39px;
+}
+.cc-img > img {
+  height: 25px;
+  width: 40px;
+}
+.card-info-years,
+.card-info-months {
+  display: none;
+}
+.card-info-year.show ~ .card-info-years,
+.card-info-month.show ~ .card-info-months {
+  display: block;
+}
+.card-info-expiration-cvc {
+  display: flex;
+  justify-content: space-between;
+}
+.card-info-expiration {
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+}
+.card-info-name-number {
+  display: flex;
+  justify-content: space-between;
+  width: 623px;
+  margin-bottom: 40px;
+}
+.card-info-accepted-cards-p,
+.card-info-p,
+.card-info-name-p,
+.card-info-number-p,
+.card-info-expiration-p,
+.card-info-year-p,
+.card-info-month-p,
+.card-info-cvc-p {
+  font: 400 16px "Lato", sans-serif;
+  color: #9b9b9b;
+  letter-spacing: 0.56px;
+  line-height: 26px;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 10px;
+}
+.card-info-name-p,
+.card-info-number-p,
+.card-info-expiration-p,
+.card-info-year-p,
+.card-info-month-p,
+.card-info-cvc-p {
+  color: #252525;
+}
+.card-info-year-p,
+.card-info-month-p {
+  letter-spacing: 0.63px;
+}
+.card-info-p {
+  font: 400 18px "Lato", sans-serif;
+  color: #252525;
+  margin-top: 40px;
+}
+.card input {
+  height: 46px;
+  width: 300px;
+}
+.card-info-year,
+.card-info-month {
+  background: #fcfcfc;
+  border: 1px solid #d8d8d8;
+  height: 46px;
+  width: 139px;
+  position: relative;
+  cursor: pointer;
+}
+.card-info-year > fa-icon,
+.card-info-month > fa-icon {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.card-info-year > p,
+.card-info-month > p {
+  margin-top: 10px;
+  margin-left: 5px;
+}
+.card-info-years,
+.card-info-months {
+  background: #fcfcfc;
+  border: 1px solid #d8d8d8;
+  width: 139px;
+}
+.card-info-years > p,
+.card-info-months > p {
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-top: 5px;
+}
+.card-info-years > p:hover,
+.card-info-months > p:hover {
+  cursor: pointer;
+  background-color: #8367d8;
+  color: #fafafa;
+}
+.button {
+  margin-bottom: 422px;
+  position: relative;
+  width: 243px;
+  cursor: pointer;
+  margin-left: 870px;
+}
+.button > input {
+  height: 46px;
+  width: 243px;
+  background: #ffffff;
+  border: 3px solid #8367d8;
+  box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+  font: 700 18px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.63px;
+}
+.button > fa-icon {
+  position: absolute;
+  top: 8px;
+  right: 25px;
+  font-size: 20px;
+}
+.button:hover {
+  transform: translateX(1%) translateY(5%);
 }
