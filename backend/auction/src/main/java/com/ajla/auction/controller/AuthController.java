@@ -2,7 +2,9 @@ package com.ajla.auction.controller;
 
 import com.ajla.auction.config.JwtTokenUtil;
 import com.ajla.auction.model.Bid;
+import com.ajla.auction.model.CardInfo;
 import com.ajla.auction.model.User;
+import com.ajla.auction.model.Card;
 import com.ajla.auction.model.ProductInfoBid;
 import com.ajla.auction.model.UserWatchProductId;
 import com.ajla.auction.model.Watchlist;
@@ -13,7 +15,10 @@ import com.ajla.auction.model.BidInfo;
 import com.ajla.auction.service.BidService;
 import com.ajla.auction.service.ProductService;
 import com.ajla.auction.service.UserService;
+import com.ajla.auction.service.StripeService;
+import com.ajla.auction.service.CardService;
 import com.ajla.auction.service.WatchlistService;
+import com.stripe.exception.StripeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +44,8 @@ public class AuthController {
     private final UserService userService;
     private final ProductService productService;
     private final WatchlistService watchlistService;
+    private final StripeService stripeService;
+    private final CardService cardService;
 
     private Bid highestBid;
 
@@ -48,7 +55,9 @@ public class AuthController {
                           final SimpMessagingTemplate template,
                           final ProductController productController,
                           final UserService userService, ProductService productService,
-                          final WatchlistService watchlistService) {
+                          final WatchlistService watchlistService,
+                          final StripeService stripeService,
+                          final CardService cardService) {
         Objects.requireNonNull(template, "template must not be null.");
         Objects.requireNonNull(jwtTokenUtil, "jwtTokenUtil must not be null.");
         Objects.requireNonNull(bidService, "bidService must not be null.");
@@ -56,6 +65,8 @@ public class AuthController {
         Objects.requireNonNull(userService, "userService must not be null.");
         Objects.requireNonNull(productService, "productService must not be null.");
         Objects.requireNonNull(watchlistService, "watchlistService must not be null.");
+        Objects.requireNonNull(stripeService, "stripeService must not be null.");
+        Objects.requireNonNull(cardService, "cardService must not be null.");
         this.jwtTokenUtil = jwtTokenUtil;
         this.bidService = bidService;
         this.template = template;
@@ -63,6 +74,8 @@ public class AuthController {
         this.userService = userService;
         this.productService = productService;
         this.watchlistService = watchlistService;
+        this.stripeService = stripeService;
+        this.cardService = cardService;
     }
 
     @PostMapping("/bid/newBid")
@@ -193,6 +206,29 @@ public class AuthController {
             @RequestParam("size") final Long size,
             @RequestParam("email") final String email) {
         return new ResponseEntity<>(bidService.bidsOfUser(pageNumber, size, email), HttpStatus.OK);
+    }
+
+    @PostMapping("/card/user")
+    public ResponseEntity<?> saveCardFromUser(@RequestBody final CardInfo cardInfo) {
+        User user = userService.findByEmail(cardInfo.getEmailUser());
+        if (user.getCard() != null && cardInfo.getNumber().equals("") && cardInfo.getCvc().equals("")) {
+            String customerId = cardService.checkForCustomerId(user.getCard().getId());
+            try {
+                CardInfo cardUpdated = stripeService.updateCustomer(customerId, cardInfo);
+                return new ResponseEntity<>(cardUpdated, HttpStatus.OK);
+            } catch (StripeException ex) {
+                return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            try {
+                CardInfo cardSavedInfo = stripeService.createCustomer(cardInfo);
+                Card savedCard = cardService.saveCustomerId(cardSavedInfo.getCustomerId());
+                userService.saveCardId(savedCard, cardInfo.getEmailUser());
+                return new ResponseEntity<>(cardSavedInfo, HttpStatus.OK);
+            } catch (StripeException ex) {
+                return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
+            }
+        }
     }
 
 }

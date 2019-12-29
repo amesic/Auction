@@ -84,9 +84,6 @@ public class UserController {
             return new ResponseEntity<>("Your data is not valid!", headers, HttpStatus.BAD_REQUEST);
         }
         if(!emailExist) {
-            String idCustomer = stripeService.createCustomer(user.getEmail());
-            Card savedCard = cardService.saveCustomerId(idCustomer);
-            userService.saveCardId(savedCard, user.getEmail());
             return new ResponseEntity<>(
                     "You are successfully registered " + user.getUserName() + "!",
                     headers,

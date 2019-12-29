@@ -19,9 +19,14 @@ import com.ajla.auction.repo.AddressRepository;
 import com.ajla.auction.repo.CardRepository;
 
 import com.ajla.auction.service.StripeService;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Customer;
+import com.stripe.model.CustomerCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,6 +38,8 @@ import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Component
@@ -48,6 +55,9 @@ public class DatabaseSeeder {
     private final CardRepository cardRepository;
     private final StripeService stripeService;
     private Logger logger = LoggerFactory.getLogger(DatabaseSeeder.class);
+
+    @Value("${stripe.keys.secret}")
+    private String API_SECRET_KEY;
 
     //dependency injection
     @Autowired
@@ -72,19 +82,29 @@ public class DatabaseSeeder {
     }
 
     @EventListener
-    public void seed(ContextRefreshedEvent event) {
+    public void seed(ContextRefreshedEvent event) throws StripeException {
         seedAddress();
         seedUser();
-        seedCards();
+        //seedCards();
         seedCategories();
         seedCharacteristics();
         seedProducts();
         seedImagesForProducts();
         seedBids();
     }
-    private void seedAddress() {
+    private void seedAddress() throws StripeException {
         Address address = addressRepository.findAddressById((long) 1);
         if (address == null) {
+            Stripe.apiKey = API_SECRET_KEY;
+            Map<String, Object> params = new HashMap<>();
+            CustomerCollection customers = Customer.list(params);
+            customers.getData().forEach(c -> {
+                try {
+                    c.delete();
+                } catch (StripeException e) {
+                    e.printStackTrace();
+                }
+            });
             Address a = new Address();
             a.setCity("Sarajevo");
             a.setCountry("Bosnia and Herzegovina");
@@ -175,7 +195,7 @@ public class DatabaseSeeder {
         }
 
     }
-    private void seedCards() {
+    /*private void seedCards() {
         Card card = cardRepository.findCardById((long) 1);
         if (card == null) {
             User user;
@@ -211,7 +231,7 @@ public class DatabaseSeeder {
             logger.trace("Card Seeding Not Required");
         }
 
-    }
+    }*/
     private void seedCategories() {
         final Category oneOfParentsCategories = categoryRepo.findCategoryById((long) 1);
         if (oneOfParentsCategories == null) {

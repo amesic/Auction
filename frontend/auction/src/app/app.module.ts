@@ -1,5 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
+import { NgModule, InjectionToken } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { BasicAuthHtppInterceptorServiceService } from './services/basic-auth-htpp-interceptor-service.service';
@@ -10,6 +10,7 @@ import { Ng5SliderModule } from 'ng5-slider';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WebSocketService } from "./services/web-socket.service";
 import { CountdownModule } from 'ngx-countdown';
+import { NgxStripeModule, StripeService } from 'ngx-stripe';
 
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -98,7 +99,8 @@ import { MyAccountBidsListComponent } from './components/myAccount/myAccountBids
     NgxChartsModule,
     BrowserAnimationsModule,
     Ng5SliderModule,
-    CountdownModule
+    CountdownModule,
+    NgxStripeModule.forRoot('pk_test_TR5mGkpcgr38V10nUPn33Fgo0079fPVuwK'),
   ],
   providers: [
     LoginRegisterActivate,

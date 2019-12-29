@@ -23,6 +23,14 @@ public class CardService implements ICardService{
         cardRepository.save(card);
         return cardRepository.findByCustomerId(customerId);
     }
+    @Override
+    public String checkForCustomerId(Long cardId) {
+        Card card = cardRepository.findCardById(cardId);
+        if (card == null) {
+            return null;
+        }
+        return card.getCustomerId();
+    }
 
 
 }

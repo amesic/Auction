@@ -36,7 +36,7 @@ export class MyAccountBidsListComponent implements OnInit, OnChanges{
       } else {
         product.hideCounter = true;
       }
-      if(product.timeToCount < 0) {
+      if(product.timeToCount < 0 && product.highestBid == product.valueOfBid) {
         this.expired = true;
       } else {
         if(this.expired == undefined) {

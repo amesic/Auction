@@ -148,7 +148,8 @@
 .card-info-expiration-p,
 .card-info-year-p,
 .card-info-month-p,
-.card-info-cvc-p {
+.card-info-cvc-p,
+.card-info-number-expiration-cvc {
   font: 400 16px "Lato", sans-serif;
   color: #9b9b9b;
   letter-spacing: 0.56px;
@@ -162,7 +163,8 @@
 .card-info-expiration-p,
 .card-info-year-p,
 .card-info-month-p,
-.card-info-cvc-p {
+.card-info-cvc-p,
+.card-info-number-expiration-cvc {
   color: #252525;
 }
 .card-info-year-p,
@@ -242,3 +244,24 @@
 .button:hover {
   transform: translateX(1%) translateY(5%);
 }
+.card-info-number-expiration-cvc {
+  display: flex;
+  justify-content: space-between;
+  width: 635px;
+}
+.card-info-number-expiration-cvc > div {
+  display: flex;
+  justify-content: space-between;
+  width: 152px;
+}
+#card-element {
+  width: 615px;
+}
+.card-info-name-number > div > input.emptyInput,
+.card-info-year.emptyInput,
+.card-info-month.emptyInput,
+.card-info-cvc-p ~ input.emptyInput {
+  border: 1px solid #ff6d6d;
+  background: #ffd8d8;
+}
+
