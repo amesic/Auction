@@ -14,15 +14,19 @@ const httpOptions={
 })
 export class UserService {
   urlUserInfo = "/auth/user/info";
-  urlCardInfo = "/auth/card/user";
+  urlSaveCardInfo = "/auth/card/user";
+  urlCardInfo = "/auth/card/info/user";
 
   constructor(private http: HttpClient) { }
 
   getUserInfo(email): Observable<User> {
     return this.http.get<User>(this.urlUserInfo + "?email=" + email);
   }
+  getCardInfo(email): Observable<any> {
+    return this.http.get<any>(this.urlCardInfo + "?email=" + email)
+  }
   saveCardInformation(number, exp_month, exp_year, cvc, name, emailUser): Observable<any> {
-    return this.http.post<any>(this.urlCardInfo, {
+    return this.http.post<any>(this.urlSaveCardInfo, {
       "number": number,
       "exp_month": exp_month,
       "exp_year": exp_year,

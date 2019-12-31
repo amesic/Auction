@@ -1,0 +1,194 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div class="message" 
+[ngClass]="{showMessageError: showMessageError}">
+Go to your profile and provide all the necessary information below!
+</div>
+<div class="payment">
+  <div class="title">PAYMENT</div>
+  <div *ngIf="userInfo != undefined" class="payment-card-info">
+    <div>
+      <p>Address</p>
+      <input
+        *ngIf="userInfo.address == null"
+        type="text"
+        placeholder="e.g. 678 Berge Tunnel Apt.278"
+        readonly
+      />
+      <input
+        *ngIf="userInfo.address != null"
+        type="text"
+        value="{{ userInfo.address.street }}"
+        readonly
+      />
+
+      <div class="payment-city-country">
+        <div>
+          <p>City</p>
+          <input
+            *ngIf="userInfo.address == null"
+            type="text"
+            placeholder="e.g. New York"
+            readonly
+          />
+          <input
+            *ngIf="userInfo.address != null"
+            type="text"
+            value="{{ userInfo.address.city }}"
+            readonly
+          />
+        </div>
+        <div>
+          <p>Country</p>
+          <input
+            *ngIf="userInfo.address == null"
+            type="text"
+            placeholder="e.g. USA"
+            readonly
+          />
+          <input
+            *ngIf="userInfo.address != null"
+            type="text"
+            value="{{ userInfo.address.country }}"
+            readonly
+          />
+        </div>
+      </div>
+
+      <p>Zip Code</p>
+      <input
+        *ngIf="userInfo.address == null"
+        type="text"
+        placeholder="e.g. 10065"
+        readonly
+      />
+      <input
+        *ngIf="userInfo.address != null"
+        type="text"
+        value="{{ userInfo.address.zipCode }}"
+        readonly
+      />
+
+      <p>Phone</p>
+      <input
+        *ngIf="userInfo.phoneNumber == null"
+        type="text"
+        placeholder="e.g. 555 5555 5555"
+        readonly
+      />
+      <input
+        *ngIf="userInfo.phoneNumber != null"
+        type="text"
+        value="{{ userInfo.phoneNumber }}"
+        readonly
+      />
+    </div>
+  </div>
+  <div class="card-info">
+    <div>
+      <p class="card-info-p">Credit card</p>
+      <div class="brand">
+        <p class="card-info-accepted-cards-p">Brand:</p>
+        <div class="cc-img">
+          <img
+            *ngIf="cardInfo != null && cardInfo.brand == 'Visa'"
+            src="https://seeklogo.net/wp-content/uploads/2016/11/visa-logo-preview.png"
+          />
+          <img
+            *ngIf="cardInfo != null && cardInfo.brand == 'MasterCard'"
+            src="https://upload.wikimedia.org/wikipedia/commons/8/88/MasterCard_early_1990s_logo.svg"
+          />
+          <img
+            *ngIf="cardInfo != null && cardInfo.brand == 'Maestro'"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Maestro_logo.png/1200px-Maestro_logo.png"
+          />
+          <img
+            *ngIf="cardInfo != null && cardInfo.brand == 'AmericanExpress'"
+            src="https://i.pinimg.com/originals/81/b2/d3/81b2d3c1602b4a523d67a851d7d58db7.png"
+          />
+        </div>
+      </div>
+
+      <div class="card-info-name-number">
+        <div>
+          <p class="card-info-name-p">Name on card</p>
+          <input
+            class="card-info-name-input"
+            *ngIf="cardInfo != null"
+            value="{{ cardInfo.name }}"
+            type="text"
+            placeholder="e.g. Adam Smith"
+            readonly
+          />
+          <input
+          *ngIf="cardInfo == null"
+            class="card-info-name-input"
+            type="text"
+            placeholder="e.g. Adam Smith"
+            readonly
+          />
+        </div>
+        <div>
+          <p class="card-info-number-p">Card Number</p>
+          <input
+            class="card-info-number-input"
+            *ngIf="cardInfo != null"
+            value="************{{ cardInfo.number }}"
+            type="text"
+            placeholder="e.g. 4242 4242 4242 4242"
+            maxlength="16"
+          />
+          <input
+            class="card-info-number-input"
+            *ngIf="cardInfo == null"
+            type="text"
+            placeholder="e.g. 4242 4242 4242 4242"
+            maxlength="16"
+          />
+        </div>
+      </div>
+
+      <div class="card-info-expiration-cvc">
+        <div>
+          <p class="card-info-expiration-p">Expration Date</p>
+          <div class="card-info-expiration">
+            <input
+            *ngIf="cardInfo == null"
+              class="year-input"
+              type="text"
+              placeholder="e.g. 2020"
+              readonly
+            />
+            <input
+            *ngIf="cardInfo != null"
+              class="year-input"
+              type="text"
+              value="{{cardInfo.exp_year}}"
+              readonly
+            />
+            <input
+            *ngIf="cardInfo == null"
+              class="month-input"
+              type="text"
+              placeholder="e.g. 01"
+              readonly
+            />
+            <input
+            *ngIf="cardInfo != null"
+              class="month-input"
+              type="text"
+              value="{{cardInfo.exp_month}}"
+              readonly
+            />
+          </div>
+        </div>
+        <div>
+          <p class="card-info-cvc-p">CVC/CW</p>
+          <input class="cvc-input" type="text" placeholder="1234" readonly />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="button">
+    <input *ngIf="highestBid != undefined" type="button" value="PAY {{highestBid.value}}$" class="pay" (click)="pay()" />
+  </div>
+</div>

@@ -18,6 +18,7 @@ import { MyAccountProductsComponent } from "./components/myAccount/myAccountProd
 import { MyAccountBidsComponent } from "./components/myAccount/myAccountBids/my-account-bids/my-account-bids.component"
 import { MyAccountWatchlistComponent } from "./components/myAccount/myAccountWatchlist/my-account-watchlist/my-account-watchlist.component"
 import { LoginService } from "./services/login.service";
+import { PaymentComponent } from "./components/payment/payment.component";
 import { ErrorComponent } from "./components/error/error.component";
 
 @Injectable()
@@ -143,6 +144,21 @@ const routes: Routes = [
         component: MyAccountWatchlistComponent,
         data: {
           breadcrumb: "WATCHLIST"
+        }
+      },
+    ]
+  },
+  {
+    path: "payment",
+    data: {
+      breadcrumb: "SINGLE PRODUCT"
+    },
+    children: [
+      {
+        path: ":idProduct",
+        component: PaymentComponent,
+        data: {
+          breadcrumb: "PAYMENT"
         }
       },
     ]

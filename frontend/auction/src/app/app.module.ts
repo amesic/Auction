@@ -50,6 +50,7 @@ import { MyAccountWatchlistComponent } from './components/myAccount/myAccountWat
 import { MyAccountProductsListComponent } from './components/myAccount/myAccountProducts/my-account-products-list/my-account-products-list.component';
 import { MyAccountWatchlistListComponent } from './components/myAccount/myAccountWatchlist/my-account-watchlist-list/my-account-watchlist-list.component';
 import { MyAccountBidsListComponent } from './components/myAccount/myAccountBids/my-account-bids-list/my-account-bids-list.component';
+import { PaymentComponent } from './components/payment/payment.component';
 
 @NgModule({
   declarations: [
@@ -88,6 +89,7 @@ import { MyAccountBidsListComponent } from './components/myAccount/myAccountBids
     MyAccountProductsListComponent,
     MyAccountWatchlistListComponent,
     MyAccountBidsListComponent,
+    PaymentComponent,
   ],
   imports: [
     BrowserModule,

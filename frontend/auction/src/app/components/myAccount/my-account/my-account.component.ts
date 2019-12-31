@@ -57,6 +57,14 @@ export class MyAccountComponent implements OnInit {
       this.month = date.toDateString().split(" ")[1];
       }
     });
+    this.userService.getCardInfo(this.loginService.getUserEmail()).subscribe(card => {
+      this.cardInfo = card;
+     if (this.cardInfo != null) {
+       this.pickedYear = this.cardInfo.exp_year;
+       this.pickedMonth = this.cardInfo.exp_month;
+     }
+    },
+    err => console.log(err.error));
   }
 
   pickAYear(year) {
@@ -116,10 +124,8 @@ export class MyAccountComponent implements OnInit {
         let number = this.cardForm.get("number").value;
         let cvccw = this.cardForm.get("cvccw").value;
         if (this.cardInfo != undefined) {
-          if (this.cardForm.get("number").value == this.cardInfo.number) {
+          if (this.cardForm.get("number").value.substr(12,17) == this.cardInfo.number) {
           number = "";
-        }
-        if (this.cardForm.get("cvccw").value == this.cardInfo.cvc) {
           cvccw = "";
         }
       }
@@ -132,7 +138,6 @@ export class MyAccountComponent implements OnInit {
       this.loginService.getUserEmail(),
       ).subscribe(cardInfo => {
         this.cardInfo = cardInfo;
-        console.log(this.cardInfo);
       },
       err => {
         if (err.error == "incorrect_number" || 

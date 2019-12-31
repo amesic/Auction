@@ -85,7 +85,6 @@ public class DatabaseSeeder {
     public void seed(ContextRefreshedEvent event) throws StripeException {
         seedAddress();
         seedUser();
-        //seedCards();
         seedCategories();
         seedCharacteristics();
         seedProducts();
@@ -195,43 +194,6 @@ public class DatabaseSeeder {
         }
 
     }
-    /*private void seedCards() {
-        Card card = cardRepository.findCardById((long) 1);
-        if (card == null) {
-            User user;
-            Card c1 = new Card();
-            c1.setCustomerId(stripeService.createCustomer("mujo@gmail.com"));
-            Card c2 = new Card();
-            c2.setCustomerId(stripeService.createCustomer("huso@gmail.com"));
-            Card c3 = new Card();
-            c3.setCustomerId(stripeService.createCustomer("fata@gmail.com"));
-            Card c4 = new Card();
-            c4.setCustomerId(stripeService.createCustomer("suljo@gmail.com"));
-            cardRepository.saveAll(Arrays.asList(c1, c2, c3, c4));
-
-            user = userRepo.findByEmail("mujo@gmail.com");
-            user.setCard(c1);
-            userRepo.save(user);
-
-            user = userRepo.findByEmail("huso@gmail.com");
-            user.setCard(c2);
-            userRepo.save(user);
-
-            user = userRepo.findByEmail("fata@gmail.com");
-            user.setCard(c3);
-            userRepo.save(user);
-
-            user = userRepo.findByEmail("suljo@gmail.com");
-            user.setCard(c4);
-            userRepo.save(user);
-
-            logger.info("Card table seeded");
-        }
-        else {
-            logger.trace("Card Seeding Not Required");
-        }
-
-    }*/
     private void seedCategories() {
         final Category oneOfParentsCategories = categoryRepo.findCategoryById((long) 1);
         if (oneOfParentsCategories == null) {
@@ -453,7 +415,7 @@ public class DatabaseSeeder {
             p20.setSubcategory(c);
             p20.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
             p20.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
-            p20.setEndDate(LocalDateTime.of(2020, Month.DECEMBER, 20, 2, 30));
+            p20.setEndDate(LocalDateTime.of(2020, Month.DECEMBER, 30, 20, 58));
             u = userRepo.findUserById((long) 1);
             p20.setSeller(u);
             p20.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -469,7 +431,7 @@ public class DatabaseSeeder {
             p21.setSubcategory(c);
             p21.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
             p21.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
-            p21.setEndDate(LocalDateTime.of(2020, Month.MARCH, 10, 3, 30));
+            p21.setEndDate(LocalDateTime.of(2019, Month.DECEMBER, 31, 1, 30));
             u = userRepo.findUserById((long) 1);
             p21.setSeller(u);
             p21.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");

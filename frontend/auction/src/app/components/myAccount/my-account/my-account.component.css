@@ -254,9 +254,6 @@
   justify-content: space-between;
   width: 152px;
 }
-#card-element {
-  width: 615px;
-}
 .card-info-name-number > div > input.emptyInput,
 .card-info-year.emptyInput,
 .card-info-month.emptyInput,

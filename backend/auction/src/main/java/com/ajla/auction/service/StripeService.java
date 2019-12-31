@@ -61,6 +61,21 @@ public class StripeService implements IStripeService{
         cardInfoSaved.setName(updateCard.getName());
         cardInfoSaved.setNumber(updateCard.getLast4());
         return cardInfoSaved;
+    }
+
+    @Override
+    public CardInfo getUserCardDetails(final String customerId) throws StripeException {
+        Stripe.apiKey = API_SECRET_KEY;
+        Customer customer1 = Customer.retrieve(customerId);
+        Card card = (Card) customer1.getSources().getData().get(0);
+
+        CardInfo cardInfo = new CardInfo();
+        cardInfo.setExp_month(card.getExpMonth());
+        cardInfo.setExp_year(card.getExpYear());
+        cardInfo.setName(card.getName());
+        cardInfo.setNumber(card.getLast4());
+        cardInfo.setBrand(card.getBrand());
+        return cardInfo;
 
     }
 }

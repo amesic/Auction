@@ -41,7 +41,7 @@
 </div>
 <fa-icon [icon]="faStar"></fa-icon>
 <p>{{rating}}/5</p>
-<input type="button" value="PAY" class="pay">
+<input type="button" value="PAY" class="pay" (click)="pay()">
 </div>
 
 <div *ngIf="!userIsSeller && timeLeft.substr(0,1) != '-'" class="bid">

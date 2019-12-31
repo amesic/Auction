@@ -10,6 +10,8 @@ public class CardInfo {
     private String emailUser;
     private String customerId;
 
+    private String brand;
+
     public String getNumber() {
         return number;
     }
@@ -64,5 +66,13 @@ public class CardInfo {
 
     public void setCustomerId(String customerId) {
         this.customerId = customerId;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 }

@@ -7,6 +7,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { LoginService } from 'src/app/services/login.service';
 import { BidsService } from 'src/app/services/bids.service';
 import { WatchlistService } from 'src/app/services/watchlist.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-single-product",
@@ -42,9 +43,11 @@ export class SingleProductComponent implements OnInit, OnChanges {
   @Output() messageEvent = new EventEmitter<boolean>();
 
 
-  constructor(private loginService: LoginService, 
+  constructor(
+    private loginService: LoginService, 
     private bidService: BidsService,
-    private watchlistService: WatchlistService) {} 
+    private watchlistService: WatchlistService,
+    private router: Router) {} 
   
   ngOnChanges() {
     if (this.messStatusAboutBids != null) {
@@ -121,6 +124,10 @@ export class SingleProductComponent implements OnInit, OnChanges {
   }
   closeMessage() {
     this.close = true;
+  }
+
+  pay() {
+    this.router.navigate(["/payment/" + this.productInfo.id]);
   }
 
 }

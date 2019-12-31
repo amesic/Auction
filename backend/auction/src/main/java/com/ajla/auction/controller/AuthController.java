@@ -231,4 +231,20 @@ public class AuthController {
         }
     }
 
+    @GetMapping("/card/info/user")
+    public ResponseEntity<?> getUserCardInfo(@RequestParam("email") final String email) {
+       User user = userService.findByEmail(email);
+       if (user.getCard() != null) {
+           String customerId = user.getCard().getCustomerId();
+           try {
+               CardInfo cardInfo = stripeService.getUserCardDetails(customerId);
+               return new ResponseEntity<>(cardInfo, HttpStatus.OK);
+           } catch (StripeException ex) {
+               return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
+           }
+       } else {
+           return new ResponseEntity<>(null, HttpStatus.OK);
+       }
+    }
+
 }
