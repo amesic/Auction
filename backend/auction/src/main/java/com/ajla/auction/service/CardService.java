@@ -23,6 +23,7 @@ public class CardService implements ICardService{
         cardRepository.save(card);
         return cardRepository.findByCustomerId(customerId);
     }
+
     @Override
     public String checkForCustomerId(Long cardId) {
         Card card = cardRepository.findCardById(cardId);
@@ -30,6 +31,13 @@ public class CardService implements ICardService{
             return null;
         }
         return card.getCustomerId();
+    }
+
+    @Override
+    public void saveAccountId(final Long cardId, final String accountId) {
+        Card card = cardRepository.findCardById(cardId);
+        card.setAccountId(accountId);
+        cardRepository.save(card);
     }
 
 

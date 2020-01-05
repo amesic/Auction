@@ -5,6 +5,7 @@ import com.ajla.auction.model.Bid;
 import com.ajla.auction.model.CardInfo;
 import com.ajla.auction.model.User;
 import com.ajla.auction.model.Card;
+import com.ajla.auction.model.Product;
 import com.ajla.auction.model.ProductInfoBid;
 import com.ajla.auction.model.UserWatchProductId;
 import com.ajla.auction.model.Watchlist;
@@ -215,8 +216,16 @@ public class AuthController {
             String customerId = cardService.checkForCustomerId(user.getCard().getId());
             try {
                 CardInfo cardUpdated = stripeService.updateCustomer(customerId, cardInfo);
+                if (user.getSeller()) {
+                    try {
+                        String accountId = stripeService.createStripeAccountForSeller(user, cardInfo);
+                        cardService.saveAccountId(user.getCard().getId(), accountId);
+                    } catch(StripeException ex) {
+                        return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
+                    }
+                }
                 return new ResponseEntity<>(cardUpdated, HttpStatus.OK);
-            } catch (StripeException ex) {
+            } catch(StripeException ex) {
                 return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
             }
         } else {
@@ -224,8 +233,16 @@ public class AuthController {
                 CardInfo cardSavedInfo = stripeService.createCustomer(cardInfo);
                 Card savedCard = cardService.saveCustomerId(cardSavedInfo.getCustomerId());
                 userService.saveCardId(savedCard, cardInfo.getEmailUser());
+                if (user.getSeller()) {
+                    try {
+                        String accountId = stripeService.createStripeAccountForSeller(user, cardInfo);
+                        cardService.saveAccountId(savedCard.getId(), accountId);
+                    } catch(StripeException ex) {
+                        return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
+                    }
+                }
                 return new ResponseEntity<>(cardSavedInfo, HttpStatus.OK);
-            } catch (StripeException ex) {
+            } catch(StripeException ex) {
                 return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
             }
         }
@@ -245,6 +262,27 @@ public class AuthController {
        } else {
            return new ResponseEntity<>(null, HttpStatus.OK);
        }
+    }
+
+    @GetMapping("/card/charge")
+    public ResponseEntity<?> chargeCustomer(@RequestParam("emailCustomer") final String emailCustomer,
+                                            @RequestParam("emailSeller") final String emailSeller,
+                                            @RequestParam("productId") final Long productId,
+                                            @RequestParam("amount") final int amount) {
+        User customer = userService.findByEmail(emailCustomer);
+        User seller = userService.findByEmail(emailSeller);
+        Product product = productService.findSingleProduct(productId);
+        try {
+            String chargeId = stripeService.createCharge(
+                    customer.getCard().getCustomerId(),
+                    seller.getCard().getAccountId(),
+                    product.getTitle(),
+                    amount
+            );
+            return new ResponseEntity<>(chargeId, HttpStatus.OK);
+        } catch (StripeException ex) {
+            return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

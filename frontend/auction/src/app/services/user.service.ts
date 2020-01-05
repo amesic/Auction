@@ -16,6 +16,7 @@ export class UserService {
   urlUserInfo = "/auth/user/info";
   urlSaveCardInfo = "/auth/card/user";
   urlCardInfo = "/auth/card/info/user";
+  urlChargeCustomer = "/auth/card/charge"
 
   constructor(private http: HttpClient) { }
 
@@ -34,5 +35,12 @@ export class UserService {
       "name": name,
       "emailUser": emailUser
     }, httpOptions);
+  }
+  chargeCustomer(emailCustomer, emailSeller, productId, amount): Observable<any> {
+    return this.http.get<any>(this.urlChargeCustomer 
+      + "?emailCustomer=" + emailCustomer
+      + "&emailSeller=" + emailSeller
+      + "&productId=" + productId
+      + "&amount=" + amount);
   }
 }

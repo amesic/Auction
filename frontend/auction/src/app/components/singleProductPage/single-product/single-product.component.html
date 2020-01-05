@@ -33,7 +33,10 @@
   <fa-icon [icon]="faTimes" (click)="closeMessage()"></fa-icon>
 </div>
 
-<div *ngIf="!userIsSeller && highestBid != undefined && highestBid.user.email == loginService.getUserEmail()" class="infoSeller">
+<div *ngIf="!userIsSeller && 
+highestBid != undefined && 
+highestBid.user.email == loginService.getUserEmail() &&
+timeLeft.substr(0,1) == '-'" class="infoSeller">
 <p class="infoBid">Seller:</p>
 <div>
 <img src="{{ productInfo.seller.image }}">

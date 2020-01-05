@@ -33,6 +33,7 @@ public class User {
     private String image; //path for image
     private LocalDate birthDate;
     private String phoneNumber;
+    private Boolean seller;
 
     //address table
     @OneToOne
@@ -109,8 +110,13 @@ public class User {
     public Card getCard() {
         return card;
     }
-
     public void setCard(Card card) {
         this.card = card;
+    }
+    public Boolean getSeller() {
+        return seller;
+    }
+    public void setSeller(Boolean seller) {
+        this.seller = seller;
     }
 }

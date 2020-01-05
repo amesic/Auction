@@ -21,6 +21,8 @@ import com.ajla.auction.repo.CardRepository;
 import com.ajla.auction.service.StripeService;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Account;
+import com.stripe.model.AccountCollection;
 import com.stripe.model.Customer;
 import com.stripe.model.CustomerCollection;
 import org.slf4j.Logger;
@@ -104,6 +106,15 @@ public class DatabaseSeeder {
                     e.printStackTrace();
                 }
             });
+            AccountCollection accounts = Account.list(params);
+            accounts.getData().forEach(a -> {
+                try {
+                    a.delete();
+                } catch (StripeException e) {
+                    e.printStackTrace();
+                }
+            });
+
             Address a = new Address();
             a.setCity("Sarajevo");
             a.setCountry("Bosnia and Herzegovina");
@@ -155,6 +166,7 @@ public class DatabaseSeeder {
             u.setBirthDate((LocalDate.parse("2.11.1970", formatter)));
             u.setEmail("huso@gmail.com");
             u.setAddress(addressRepository.findAddressById((long) 1));
+            u.setSeller(true);
 
             User u1 = new User();
             u1.setUserName("Mujo Mujic");
@@ -165,6 +177,7 @@ public class DatabaseSeeder {
             u1.setPhoneNumber("+38762222444");
             u1.setBirthDate((LocalDate.parse("1.12.1980", formatter)));
             u1.setAddress(addressRepository.findAddressById((long) 2));
+            u1.setSeller(true);
 
             User u2 = new User();
             u2.setUserName("Fata Fatic");
@@ -175,6 +188,7 @@ public class DatabaseSeeder {
             u2.setPhoneNumber("+38762222444");
             u2.setBirthDate((LocalDate.parse("10.07.1971", formatter)));
             u2.setAddress(addressRepository.findAddressById((long) 3));
+            u2.setSeller(false);
 
             User u3 = new User();
             u3.setUserName("Suljo Suljic");
@@ -185,6 +199,7 @@ public class DatabaseSeeder {
             u3.setPhoneNumber("+38762222444");
             u3.setBirthDate((LocalDate.parse("10.07.1961", formatter)));
             u3.setAddress(addressRepository.findAddressById((long) 4));
+            u3.setSeller(false);
 
             userRepo.saveAll(Arrays.asList(u, u1, u2, u3));
             logger.info("User table seeded");
@@ -431,7 +446,7 @@ public class DatabaseSeeder {
             p21.setSubcategory(c);
             p21.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
             p21.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
-            p21.setEndDate(LocalDateTime.of(2019, Month.DECEMBER, 31, 1, 30));
+            p21.setEndDate(LocalDateTime.of(2020, Month.JANUARY, 5, 20, 15));
             u = userRepo.findUserById((long) 1);
             p21.setSeller(u);
             p21.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");

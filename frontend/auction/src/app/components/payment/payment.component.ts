@@ -57,6 +57,15 @@ export class PaymentComponent implements OnInit {
       window.scroll(0,0);
     } else {
       this.showMessageError = false;
+      this.userService.chargeCustomer(
+        this.userInfo.email, 
+        this.product.seller.email,
+        this.product.id,
+        this.highestBid.value * 100).subscribe(chargeId => {
+          console.log("charge Id", chargeId);
+          },
+          err => console.log(err.error)
+          );
     }
   }
 }

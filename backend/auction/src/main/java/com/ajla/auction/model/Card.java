@@ -22,6 +22,7 @@ public class Card {
     private Long id;
 
     private String customerId;
+    private String accountId;
 
     @JsonIgnore
     @OneToOne
@@ -45,5 +46,13 @@ public class Card {
 
     public Long getId() {
         return id;
+    }
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 }
