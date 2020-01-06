@@ -27,6 +27,7 @@ export class SingleProductComponent implements OnInit, OnChanges {
   @Input() numberOfViewers;
   @Input() stompClient;
   @Input() sessionId;
+  @Input() ratingSeller;
  
   messStatusAboutBids;
   messStatusAboutWatchList;

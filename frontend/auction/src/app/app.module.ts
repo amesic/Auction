@@ -10,7 +10,8 @@ import { Ng5SliderModule } from 'ng5-slider';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WebSocketService } from "./services/web-socket.service";
 import { CountdownModule } from 'ngx-countdown';
-import { NgxStripeModule, StripeService } from 'ngx-stripe';
+import { NgxStripeModule } from 'ngx-stripe';
+import { RatingModule } from 'ng-starrating';
 
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -103,6 +104,7 @@ import { PaymentComponent } from './components/payment/payment.component';
     Ng5SliderModule,
     CountdownModule,
     NgxStripeModule.forRoot('pk_test_TR5mGkpcgr38V10nUPn33Fgo0079fPVuwK'),
+    RatingModule
   ],
   providers: [
     LoginRegisterActivate,

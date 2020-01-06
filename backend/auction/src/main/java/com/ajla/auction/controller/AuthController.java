@@ -4,6 +4,7 @@ import com.ajla.auction.config.JwtTokenUtil;
 import com.ajla.auction.model.Bid;
 import com.ajla.auction.model.CardInfo;
 import com.ajla.auction.model.User;
+import com.ajla.auction.model.Rate;
 import com.ajla.auction.model.Card;
 import com.ajla.auction.model.Product;
 import com.ajla.auction.model.ProductInfoBid;
@@ -16,6 +17,7 @@ import com.ajla.auction.model.BidInfo;
 import com.ajla.auction.service.BidService;
 import com.ajla.auction.service.ProductService;
 import com.ajla.auction.service.UserService;
+import com.ajla.auction.service.RateService;
 import com.ajla.auction.service.StripeService;
 import com.ajla.auction.service.CardService;
 import com.ajla.auction.service.WatchlistService;
@@ -47,6 +49,7 @@ public class AuthController {
     private final WatchlistService watchlistService;
     private final StripeService stripeService;
     private final CardService cardService;
+    private final RateService rateService;
 
     private Bid highestBid;
 
@@ -58,7 +61,8 @@ public class AuthController {
                           final UserService userService, ProductService productService,
                           final WatchlistService watchlistService,
                           final StripeService stripeService,
-                          final CardService cardService) {
+                          final CardService cardService,
+                          final RateService rateService) {
         Objects.requireNonNull(template, "template must not be null.");
         Objects.requireNonNull(jwtTokenUtil, "jwtTokenUtil must not be null.");
         Objects.requireNonNull(bidService, "bidService must not be null.");
@@ -68,6 +72,7 @@ public class AuthController {
         Objects.requireNonNull(watchlistService, "watchlistService must not be null.");
         Objects.requireNonNull(stripeService, "stripeService must not be null.");
         Objects.requireNonNull(cardService, "cardService must not be null.");
+        Objects.requireNonNull(rateService, "rateService must not be null.");
         this.jwtTokenUtil = jwtTokenUtil;
         this.bidService = bidService;
         this.template = template;
@@ -77,6 +82,7 @@ public class AuthController {
         this.watchlistService = watchlistService;
         this.stripeService = stripeService;
         this.cardService = cardService;
+        this.rateService = rateService;
     }
 
     @PostMapping("/bid/newBid")
@@ -279,10 +285,19 @@ public class AuthController {
                     product.getTitle(),
                     amount
             );
-            return new ResponseEntity<>(chargeId, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (StripeException ex) {
             return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
         }
     }
 
+    @GetMapping("/rating")
+    public ResponseEntity<?> chargeCustomer(@RequestParam("emailSeller") final String emailSeller) {
+        return new ResponseEntity<>(rateService.getRatingOfSeller(emailSeller), HttpStatus.OK);
+    }
+
+    @PostMapping("/rate")
+    public ResponseEntity<?> saveRateFromUser(@RequestBody final Rate rate) {
+        return new ResponseEntity<>(rateService.saveRateFromUser(rate), HttpStatus.OK);
+    }
 }

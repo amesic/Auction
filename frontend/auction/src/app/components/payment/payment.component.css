@@ -163,3 +163,72 @@ p {
 .showMessageError {
   display: flex;
 }
+.cover {
+  width: 100%;
+  height: 525%;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  display: none;
+}
+.pop-up-message {
+  position: absolute;
+  z-index: 2;
+  background-color: #fcfcfc;
+  width: 50%;
+  text-align: center;
+  display: none;
+}
+img {
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  margin-top: 20px;
+  margin-bottom: 5px;
+}
+.seller-name {
+  margin-bottom: 50px;
+  font: 400 16px "Lato", sans-serif;
+}
+.star-rating {
+  margin-bottom: 40px;
+}
+.rate-seller-p {
+  font: 700 18px "Lato", sans-serif;
+}
+.pop-up-message-buttons {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+.pop-up-message-buttons > .skip-button,
+.pop-up-message-buttons > .done-button {
+  width: 30%;
+  padding: 0;
+  font: 700 16px "Lato", sans-serif;
+  letter-spacing: 0.56px;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.15);
+}
+.pop-up-message-buttons > .done-button {
+  background-color: #8367d8;
+  color: #ffffff;
+  border: none;
+}
+.pop-up-message-buttons > .skip-button:hover,
+.pop-up-message-buttons > .done-button:hover {
+  transform: translateX(1%) translateY(5%);
+}
+.pop-up-message-wrapp {
+  display: none;
+  justify-content: center;
+  margin-top: 50px;
+}
+.showPopUp {
+  display: block;
+}
+.showMessageWrap {
+  display: flex;
+}

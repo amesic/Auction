@@ -1,9 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { UserService } from "src/app/services/user.service";
 import { LoginService } from "src/app/services/login.service";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from 'src/app/services/product.service';
 import { BidsService } from 'src/app/services/bids.service';
+import { StarRatingComponent } from 'ng-starrating';
 
 @Component({
   selector: "app-payment",
@@ -19,16 +20,22 @@ export class PaymentComponent implements OnInit {
 
   showMessageError = false;
 
+  ratingValue;
+
+  hidePopUp = true;
+
   constructor(
     private userService: UserService,
     private loginService: LoginService,
     private activatedRoute: ActivatedRoute,
     private productService: ProductService,
-    private bidService: BidsService
+    private bidService: BidsService,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(routeParams => {
+      this.ratingValue = 1;
     this.userService
       .getUserInfo(this.loginService.getUserEmail())
       .subscribe(user => {
@@ -61,11 +68,25 @@ export class PaymentComponent implements OnInit {
         this.userInfo.email, 
         this.product.seller.email,
         this.product.id,
-        this.highestBid.value * 100).subscribe(chargeId => {
-          console.log("charge Id", chargeId);
+        this.highestBid.value * 100).subscribe(response => {
+          this.hidePopUp = false;
+          window.scroll(0,0);
           },
-          err => console.log(err.error)
+          err => console.log("EROR", err.error)
           );
     }
+  }
+  onRate($event:{oldValue:number, newValue:number, starRating:StarRatingComponent}) {
+      this.ratingValue = `${$event.newValue}`;
+  }
+  done() {
+    this.userService.saveRateFromUser(this.loginService.getUserEmail(), 
+    this.product.seller.email, this.ratingValue).subscribe(rate => {
+      this.router.navigate(["/my-account/bids"]);
+    },
+    err => console.log(err.error));
+  }
+  skip() {
+    this.router.navigate(["/my-account/bids"]);
   }
 }

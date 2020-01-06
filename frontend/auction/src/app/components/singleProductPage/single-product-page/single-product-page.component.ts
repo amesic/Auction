@@ -5,6 +5,7 @@ import { LoginService } from "src/app/services/login.service";
 import { BidsService } from "src/app/services/bids.service";
 import { WebSocketService } from 'src/app/services/web-socket.service';
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: "app-single-product-page",
@@ -22,6 +23,7 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
   usersProduct;
   timeLeft;
   hide;
+  ratingSeller;
 
   pageNumber = 0;
   size = 5;
@@ -82,6 +84,7 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
     private activatedRoute: ActivatedRoute,
     private loginService: LoginService,
     private bidService: BidsService,
+    private userService: UserService,
     private router: Router,
     private webSocketService: WebSocketService
   ) {
@@ -129,6 +132,9 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
       this.productService
         .getSingleProduct(routeParams.idProduct).subscribe(singleProduct => {
           this.productInfo = singleProduct;
+          this.userService.ratingOfSeller(this.productInfo.seller.email).subscribe(rating => {
+            this.ratingSeller = rating;
+          });
           let date = new Date(Date.parse(this.productInfo.endDate));
           this.timeLeft = this.dhms(
             Math.floor((<any>date - new Date().getTime()) / 1000)

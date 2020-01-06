@@ -1,22 +1,8 @@
 package com.ajla.auction.seeders;
 
-import com.ajla.auction.model.User;
-import com.ajla.auction.model.Address;
-import com.ajla.auction.model.Product;
-import com.ajla.auction.model.Category;
-import com.ajla.auction.model.Characteristic;
-import com.ajla.auction.model.Image;
-import com.ajla.auction.model.Bid;
-import com.ajla.auction.model.Card;
+import com.ajla.auction.model.*;
 
-import com.ajla.auction.repo.UserRepository;
-import com.ajla.auction.repo.ProductRepository;
-import com.ajla.auction.repo.CategoryRepository;
-import com.ajla.auction.repo.CharacteristicRepository;
-import com.ajla.auction.repo.ImageRepository;
-import com.ajla.auction.repo.BidRepository;
-import com.ajla.auction.repo.AddressRepository;
-import com.ajla.auction.repo.CardRepository;
+import com.ajla.auction.repo.*;
 
 import com.ajla.auction.service.StripeService;
 import com.stripe.Stripe;
@@ -39,7 +25,6 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,8 +39,7 @@ public class DatabaseSeeder {
     private final BidRepository bidRepository;
     private final CharacteristicRepository characteristicRepository;
     private final AddressRepository addressRepository;
-    private final CardRepository cardRepository;
-    private final StripeService stripeService;
+    private final RateRepository rateRepository;
     private Logger logger = LoggerFactory.getLogger(DatabaseSeeder.class);
 
     @Value("${stripe.keys.secret}")
@@ -70,8 +54,7 @@ public class DatabaseSeeder {
                           final BidRepository bidRepository,
                           final CharacteristicRepository characteristicRepository,
                           final AddressRepository addressRepository,
-                          final CardRepository cardRepository,
-                          final StripeService stripeService) {
+                          final RateRepository rateRepository) {
         this.categoryRepo = categoryRepo;
         this.productRepo = productRepo;
         this.userRepo = userRepo;
@@ -79,8 +62,7 @@ public class DatabaseSeeder {
         this.bidRepository = bidRepository;
         this.characteristicRepository = characteristicRepository;
         this.addressRepository = addressRepository;
-        this.cardRepository = cardRepository;
-        this.stripeService = stripeService;
+        this.rateRepository = rateRepository;
     }
 
     @EventListener
@@ -92,6 +74,7 @@ public class DatabaseSeeder {
         seedProducts();
         seedImagesForProducts();
         seedBids();
+        seedRates();
     }
     private void seedAddress() throws StripeException {
         Address address = addressRepository.findAddressById((long) 1);
@@ -446,7 +429,7 @@ public class DatabaseSeeder {
             p21.setSubcategory(c);
             p21.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
             p21.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
-            p21.setEndDate(LocalDateTime.of(2020, Month.JANUARY, 5, 20, 15));
+            p21.setEndDate(LocalDateTime.of(2020, Month.JANUARY, 5, 23, 53));
             u = userRepo.findUserById((long) 1);
             p21.setSeller(u);
             p21.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -1161,29 +1144,6 @@ public class DatabaseSeeder {
             b1.setUser(u);
             b1.setValue((double) 1700);
 
-            Bid b2 = new Bid();
-            b2.setDate((LocalDate.parse("5.11.2019", formatter)));
-            p = productRepo.findProductById((long) 4);
-            b2.setProduct(p);
-            u = userRepo.findUserById((long) 4);
-            b2.setUser(u);
-            b2.setValue((double) 1800);
-
-            Bid b3 = new Bid();
-            b3.setDate((LocalDate.parse("5.11.2019", formatter)));
-            p = productRepo.findProductById((long) 4);
-            b3.setProduct(p);
-            u = userRepo.findUserById((long) 4);
-            b3.setUser(u);
-            b3.setValue((double) 1900);
-
-            Bid b4 = new Bid();
-            b4.setDate((LocalDate.parse("5.11.2019", formatter)));
-            p = productRepo.findProductById((long) 4);
-            b4.setProduct(p);
-            u = userRepo.findUserById((long) 4);
-            b4.setUser(u);
-            b4.setValue((double) 2000);
 
             Bid b5 = new Bid();
             b5.setDate((LocalDate.parse("5.11.2019", formatter)));
@@ -1193,7 +1153,7 @@ public class DatabaseSeeder {
             b5.setUser(u);
             b5.setValue((double) 3000);
 
-            bidRepository.saveAll(Arrays.asList(b, b1, b2, b3, b4, b5));
+            bidRepository.saveAll(Arrays.asList(b, b1, b5));
 
         logger.info("Bid table seeded");
     }
@@ -1201,6 +1161,35 @@ public class DatabaseSeeder {
         logger.trace("Bid Seeding Not Required");
     }
 
+
+    }
+    private void seedRates() {
+        Rate rate = rateRepository.findRateById((long) 1);
+        if (rate == null) {
+            User seller = userRepo.findUserById((long) 1);
+            User user = userRepo.findUserById((long) 2);
+            Rate r1 = new Rate();
+            r1.setSeller(seller);
+            r1.setUser(user);
+            r1.setValue(5);
+
+            user = userRepo.findUserById((long) 3);
+            Rate r2 = new Rate();
+            r2.setSeller(seller);
+            r2.setUser(user);
+            r2.setValue(4);
+
+            user = userRepo.findUserById((long) 4);
+            Rate r3 = new Rate();
+            r3.setSeller(seller);
+            r3.setUser(user);
+            r3.setValue(4);
+
+            rateRepository.saveAll(Arrays.asList(r1, r2, r3));
+            logger.info("Rate table seeded");
+        } else {
+        logger.trace("Rate Seeding Not Required");
+    }
 
     }
 }
