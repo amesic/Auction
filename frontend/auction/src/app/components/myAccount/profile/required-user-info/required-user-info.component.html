@@ -1,0 +1,119 @@
+<div class="required" #required>
+    <div class="title">REQUIRED</div>
+    <div class="profile-info">
+      <img
+        class="profile-img"
+        *ngIf="userInfo != undefined && userInfo.image == null"
+        src="https://www.marketingmuses.com/wp-content/uploads/2018/01/invis-user.png"
+      />
+      <img
+        class="profile-img"
+        *ngIf="userInfo != undefined && userInfo.image != null"
+        src="{{ userInfo.image }}"
+      />
+      <div class="user-info">
+        <form [formGroup]="userRequiredInfoForm">
+        <p>Your Name</p>
+        <input 
+        *ngIf="userInfo != undefined"
+        class="profile-info-name" 
+        type="text" 
+        value="{{ userInfo.userName }}" 
+        placeholder="e.g. Adam Smith" 
+        formControlName="username" 
+        [ngClass]="{emptyInput: incorrectUsernameInput}" #username/>
+
+        <p>I am</p>
+        <div class="profile-info-gender-wrapp">
+          <div class="profile-info-gender"
+          [ngClass]="{emptyInput: incorrectGender}"
+           appClickOutside >
+            <p class="profile-info-gender-p">{{ gender }}</p>
+            <fa-icon [icon]="faChevronDown"></fa-icon>
+          </div>
+          <div class="profile-info-genders">
+            <p class="profile-info-gender-p" (click)="pickAGender('male')">male</p>
+            <p class="profile-info-gender-p" (click)="pickAGender('female')">female</p>
+          </div>
+        </div>
+
+        <p>Date of Birth</p>
+        <div class="profile-info-birth-wrapp">
+          <div>
+          <div class="profile-info-birth-month" 
+          [ngClass]="{emptyInput: incorrectMonthBirth}"
+          appClickOutside >
+            <p class="profile-info-birth-month-p">{{ month }}</p>
+            <fa-icon [icon]="faChevronDown"></fa-icon>
+          </div>
+          <div class="profile-info-birth-months">
+            <p class="profile-info-birth-month-p" (click)="pickAMonthOfBirth('Jan')">Jan</p>
+            <p class="profile-info-birth-month-p" (click)="pickAMonthOfBirth('Feb')">Feb</p>
+            <p class="profile-info-birth-month-p" (click)="pickAMonthOfBirth('Mar')">Mar</p>
+            <p class="profile-info-birth-month-p" (click)="pickAMonthOfBirth('Apr')">Apr</p>
+          </div>
+        </div>
+
+        <div>
+          <div class="profile-info-birth-day" 
+          [ngClass]="{emptyInput: incorrectDayBirth}"
+          appClickOutside >
+            <p class="profile-info-birth-day-p">{{ day }}</p>
+            <fa-icon [icon]="faChevronDown"></fa-icon>
+          </div>
+          <div class="profile-info-birth-days">
+            <p class="profile-info-birth-day-p" (click)="pickADayOfBirth('01')">01</p>
+            <p class="profile-info-birth-day-p" (click)="pickADayOfBirth('02')">02</p>
+            <p class="profile-info-birth-day-p" (click)="pickADayOfBirth('03')">03</p>
+            <p class="profile-info-birth-day-p" (click)="pickADayOfBirth('04')">04</p>
+          </div>
+        </div>
+
+        <div>
+          <div class="profile-info-birth-year" 
+          [ngClass]="{emptyInput: incorrectYearBirth}"
+          appClickOutside >
+            <p class="profile-info-birth-year-p">{{ year }}</p>
+            <fa-icon [icon]="faChevronDown"></fa-icon>
+          </div>
+          <div class="profile-info-birth-years">
+            <p class="profile-info-birth-year-p" (click)="pickAYearOfBirth('1990')">1990</p>
+            <p class="profile-info-birth-year-p" (click)="pickAYearOfBirth('1991')">1991</p>
+            <p class="profile-info-birth-year-p" (click)="pickAYearOfBirth('1992')">1992</p>
+            <p class="profile-info-birth-year-p" (click)="pickAYearOfBirth('1993')">1993</p>
+          </div>
+        </div>
+
+
+
+        </div>
+
+        <p>Phone Number</p>
+        <input
+          *ngIf="userInfo != undefined && userInfo.phoneNumber != null"
+          class="profile-info-phone-number"
+          type="tel"
+          value="{{ userInfo.phoneNumber }}"
+          formControlName="phonenumber"
+          [ngClass]="{emptyInput: incorrectPhonenumberInput}"
+        />
+        <input
+          *ngIf="userInfo != undefined && userInfo.phoneNumber == null"
+          class="profile-info-phone-number"
+          type="tel"
+          formControlName="phonenumber"
+          [ngClass]="{emptyInput: incorrectPhonenumberInput}"
+        />
+        <p>Email Address</p>
+        <input
+        *ngIf="userInfo != undefined"
+          class="profile-info-email"
+          type="text"
+          value="{{ userInfo.email }}"
+          formControlName="email"
+          [ngClass]="{emptyInput: incorrectEmailInput}"
+        />
+      </form>
+      </div>
+    </div>
+  </div>

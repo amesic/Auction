@@ -1,0 +1,24 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div class="container">
+  <app-tabs></app-tabs>
+
+  <app-required-user-info 
+  [userInfo]="userInfo"
+  [day]="day"
+  [month]="month"
+  [year]="year"
+  [gender]="gender">
+</app-required-user-info>
+
+ <app-card 
+ [cardInfo]="cardInfo"
+ [yearExp]="yearExp"
+ [monthExp]="monthExp">
+ </app-card>
+
+ <app-address 
+ [addressInfo]="addressInfo">
+ </app-address>
+</div>
+
+

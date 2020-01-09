@@ -40,6 +40,7 @@ public class UserService implements IUserService, UserDetailsService {
                     && user.getUserName() != null && !user.getUserName().equals("")) {
                 final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
+                user.setSeller(false);
                 userRepository.save(user);
                 return false;
             }

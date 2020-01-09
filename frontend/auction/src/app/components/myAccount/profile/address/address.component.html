@@ -1,0 +1,100 @@
+<div class="optional">
+    <div class="title">OPTIONAL</div>
+    <div class="address-info">
+      <div>
+        <p class="address-title">ADDRESS</p>
+
+        <p>Street</p>
+        <input
+          *ngIf="addressInfo != null && addressInfo.street != null"
+          class="address-info-street"
+          type="text"
+          value="{{ addressInfo.street }}"
+          placeholder="e.g. 5th Avenue"
+          readonly
+        />
+        <input
+          *ngIf="addressInfo == null || addressInfo.street == null"
+          class="address-info-street"
+          type="text"
+          value=""
+          placeholder="e.g. 5th Avenue"
+          readonly
+        />
+        <div class="address-info-city-zip">
+          <div>
+            <p>City</p>
+            <input
+              *ngIf="addressInfo!= null && addressInfo.city != null"
+              class="address-info-city"
+              type="text"
+              value="{{ addressInfo.city }}"
+              placeholder="e.g. New York"
+              readonly
+            />
+            <input
+              *ngIf="addressInfo == null || addressInfocity == null"
+              class="address-info-city"
+              type="text"
+              value=""
+              placeholder="e.g. New York"
+              readonly
+            />
+          </div>
+          <div>
+            <p>ZipCode</p>
+            <input
+              *ngIf="addressInfo!= null && addressInfo.zipCode != null"
+              class="address-info-zip"
+              type="text"
+              value="{{ addressInfo.zipCode }}"
+              placeholder="e.g. 10065"
+              readonly
+            />
+            <input
+              *ngIf="addressInfo == null || addressInfo.zipCode == null"
+              class="address-info-zip"
+              type="text"
+              value=""
+              placeholder="e.g. 10065"
+              readonly
+            />
+          </div>
+        </div>
+        <p>State</p>
+        <input
+          *ngIf="addressInfo != null && addressInfostate != null"
+          class="address-info-state"
+          type="text"
+          value="{{ addressInfo.state }}"
+          placeholder="e.g. New York"
+          readonly
+        />
+        <input
+          *ngIf="addressInfo == null || addressInfo.state == null"
+          class="address-info-state"
+          type="text"
+          value=""
+          placeholder="e.g. New York"
+          readonly
+        />
+        <p>Country</p>
+        <input
+          *ngIf="addressInfo != null && addressInfo.country != null"
+          class="address-info-country"
+          type="text"
+          value="{{ addressInfo.country }}"
+          placeholder="e.g. USA"
+          readonly
+        />
+        <input
+          *ngIf="addressInfo == null || addressInfocountry == null"
+          class="address-info-country"
+          type="text"
+          value=""
+          placeholder="e.g. USA"
+          readonly
+        />
+      </div>
+    </div>
+  </div>

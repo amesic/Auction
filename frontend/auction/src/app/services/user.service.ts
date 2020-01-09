@@ -28,13 +28,19 @@ export class UserService {
   getCardInfo(email): Observable<any> {
     return this.http.get<any>(this.urlCardInfo + "?email=" + email)
   }
-  saveCardInformation(number, exp_month, exp_year, cvc, name, emailUser): Observable<any> {
+  /*saveCardInformation(number, exp_month, exp_year, cvc, name, emailUser): Observable<any> {
     return this.http.post<any>(this.urlSaveCardInfo, {
       "number": number,
       "exp_month": exp_month,
       "exp_year": exp_year,
       "cvc": cvc,
       "name": name,
+      "emailUser": emailUser
+    }, httpOptions);
+  }*/
+  saveCardInformation(token, emailUser): Observable<any> {
+    return this.http.post<any>(this.urlSaveCardInfo, {
+      "token": token,
       "emailUser": emailUser
     }, httpOptions);
   }

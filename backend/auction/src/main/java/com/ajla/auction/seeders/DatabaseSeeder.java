@@ -2,15 +2,14 @@ package com.ajla.auction.seeders;
 
 import com.ajla.auction.model.*;
 
+import com.ajla.auction.model.Address;
+import com.ajla.auction.model.Product;
 import com.ajla.auction.repo.*;
 
 import com.ajla.auction.service.StripeService;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
-import com.stripe.model.Account;
-import com.stripe.model.AccountCollection;
-import com.stripe.model.Customer;
-import com.stripe.model.CustomerCollection;
+import com.stripe.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

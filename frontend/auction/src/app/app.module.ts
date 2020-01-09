@@ -43,7 +43,7 @@ import { ShopProductsComponent } from './components/shopProduct/products/shop-pr
 import { ErrorComponent } from './components/error/error.component';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
 import { FilterPriceComponent } from './components/shopProduct/filters/filter-price/filter-price.component';
-import { MyAccountComponent } from './components/myAccount/my-account/my-account.component';
+import { MyAccountComponent } from './components/myAccount/profile/my-account/my-account.component';
 import { TabsComponent } from './components/myAccount/tabs/tabs.component';
 import { MyAccountProductsComponent } from './components/myAccount/myAccountProducts/my-account-products/my-account-products.component';
 import { MyAccountBidsComponent } from './components/myAccount/myAccountBids/my-account-bids/my-account-bids.component';
@@ -52,6 +52,10 @@ import { MyAccountProductsListComponent } from './components/myAccount/myAccount
 import { MyAccountWatchlistListComponent } from './components/myAccount/myAccountWatchlist/my-account-watchlist-list/my-account-watchlist-list.component';
 import { MyAccountBidsListComponent } from './components/myAccount/myAccountBids/my-account-bids-list/my-account-bids-list.component';
 import { PaymentComponent } from './components/payment/payment.component';
+import { CardComponent } from './components/myAccount/profile/card/card.component';
+import { AddressComponent } from './components/myAccount/profile/address/address.component';
+import { RequiredUserInfoComponent } from './components/myAccount/profile/required-user-info/required-user-info.component';
+import { SpinnerComponent } from './components/myAccount/spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -91,6 +95,10 @@ import { PaymentComponent } from './components/payment/payment.component';
     MyAccountWatchlistListComponent,
     MyAccountBidsListComponent,
     PaymentComponent,
+    CardComponent,
+    AddressComponent,
+    RequiredUserInfoComponent,
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,

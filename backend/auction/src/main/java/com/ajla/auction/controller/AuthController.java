@@ -218,10 +218,10 @@ public class AuthController {
     @PostMapping("/card/user")
     public ResponseEntity<?> saveCardFromUser(@RequestBody final CardInfo cardInfo) {
         User user = userService.findByEmail(cardInfo.getEmailUser());
-        if (user.getCard() != null && cardInfo.getNumber().equals("") && cardInfo.getCvc().equals("")) {
-            String customerId = cardService.checkForCustomerId(user.getCard().getId());
+
+        if (user.getCard() != null) {
             try {
-                CardInfo cardUpdated = stripeService.updateCustomer(customerId, cardInfo);
+                CardInfo cardUpdated = stripeService.updateCustomer(user.getCard().getCustomerId(), cardInfo);
                 if (user.getSeller()) {
                     try {
                         String accountId = stripeService.createStripeAccountForSeller(user, cardInfo);

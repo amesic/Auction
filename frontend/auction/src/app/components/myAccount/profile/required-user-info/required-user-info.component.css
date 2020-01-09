@@ -1,0 +1,205 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
+.required {
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  height: 722px;
+  margin-top: 27px;
+}
+.required p {
+  margin: 0;
+  padding: 0;
+  font: 400 18px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.63px;
+  margin-bottom: 10px;
+}
+.required input {
+  margin-bottom: 49px;
+  font: 400 18px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.63px;
+  background: #fcfcfc;
+  border: 1px solid #d8d8d8;
+  padding-left: 20px;
+}
+.profile-info {
+  display: flex;
+  justify-content: space-around;
+  width: 975px;
+  margin-top: 36px;
+}
+.required .title {
+  background: #fafafa;
+  font: 700 20px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.7px;
+  padding-left: 32px;
+  padding-top: 13px;
+  padding-bottom: 13px;
+}
+.required .profile-img {
+  height: 246px;
+  width: 198px;
+  object-fit: cover;
+}
+.profile-info-name,
+.profile-info-phone-number,
+.profile-info-email {
+  height: 46px;
+}
+.profile-info-name,
+.profile-info-phone-number,
+.profile-info-email {
+  width: 600px;
+}
+.profile-info-genders,
+.profile-info-birth-months,
+.profile-info-birth-days,
+.profile-info-birth-years {
+  display: none;
+}
+.profile-info-gender.show ~ .profile-info-genders,
+.profile-info-birth-month.show ~ .profile-info-birth-months,
+.profile-info-birth-day.show ~ .profile-info-birth-days,
+.profile-info-birth-year.show ~ .profile-info-birth-years {
+  display: block;
+}
+
+.profile-info-gender-p,
+.profile-info-birth-mont-p,
+.profile-info-birth-day-p,
+.profile-info-birth-year-p {
+  font: 400 16px "Lato", sans-serif;
+  color: #9b9b9b;
+  letter-spacing: 0.56px;
+  line-height: 26px;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 10px;
+}
+.profile-info-gender-p,
+.profile-info-birth-month-p,
+.profile-info-birth-day-p,
+.profile-info-birth-year-p {
+  color: #252525;
+}
+.profile-info-gender-p,
+.profile-info-birth-month-p,
+.profile-info-birth-day-p,
+.profile-info-birth-year-p {
+  letter-spacing: 0.63px;
+}
+.profile-info-gender,
+.profile-info-birth-month,
+.profile-info-birth-day,
+.profile-info-birth-year {
+  background: #fcfcfc;
+  border: 1px solid #d8d8d8;
+  height: 46px;
+  width: 139px;
+  position: relative;
+  cursor: pointer;
+}
+.profile-info-gender > fa-icon,
+.profile-info-birth-month > fa-icon,
+.profile-info-birth-day > fa-icon,
+.profile-info-birth-year > fa-icon {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.profile-info-gender > p,
+.profile-info-birth-month > p,
+.profile-info-birth-day > p,
+.profile-info-birth-year > p {
+  margin-top: 10px;
+  margin-left: 5px;
+}
+.profile-info-genders,
+.profile-info-birth-months,
+.profile-info-birth-days,
+.profile-info-birth-years {
+  background: #fcfcfc;
+  border: 1px solid #d8d8d8;
+  width: 139px;
+}
+.profile-info-genders,
+.profile-info-gender {
+  width: 290px;
+}
+.profile-info-gender-wrapp,
+.profile-info-birth-wrapp {
+  margin-bottom: 49px;
+}
+.profile-info-birth-wrapp {
+  display: flex;
+  justify-content: space-between;
+  width: 450px;
+}
+.profile-info-genders,
+.profile-info-birth-months,
+.profile-info-birth-days,
+.profile-info-birth-years {
+  position: absolute;
+  z-index: 2;
+}
+.profile-info-genders > p,
+.profile-info-birth-months > p,
+.profile-info-birth-days > p,
+.profile-info-birth-years > p {
+  height: 46px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  margin: 0;
+}
+.profile-info-genders > p:hover,
+.profile-info-birth-months > p:hover,
+.profile-info-birth-days > p:hover,
+.profile-info-birth-years > p:hover {
+  cursor: pointer;
+  background-color: #8367d8;
+  color: #fafafa;
+}
+.button {
+  margin-bottom: 60px;
+  position: relative;
+  width: 243px;
+  cursor: pointer;
+  margin-left: 870px;
+  margin-top: 20px;
+  display: none;
+}
+.button > input {
+  height: 46px;
+  width: 243px;
+  background: #ffffff;
+  border: 3px solid #8367d8;
+  box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+  font: 700 18px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.63px;
+}
+.button > fa-icon {
+  position: absolute;
+  top: 8px;
+  right: 25px;
+  font-size: 20px;
+}
+.button:hover {
+  transform: translateX(1%) translateY(5%);
+}
+
+.user-info > form > .profile-info-name.emptyInput,
+.user-info > form > .profile-info-phone-number.emptyInput,
+.user-info > form > .profile-info-email.emptyInput,
+.profile-info-gender.emptyInput,
+.profile-info-birth-month.emptyInput,
+.profile-info-birth-day.emptyInput,
+.profile-info-birth-year.emptyInput {
+  border: 1px solid #ff6d6d;
+  background: #ffd8d8;
+}
+.button.showButton {
+  display: block;
+}

@@ -1,0 +1,120 @@
+<div class="card" #card>
+    <div class="title">
+    <p class="title-title">CARD INFORMATION </p>
+    <p class="title-edit" [ngClass]="{hide: enableSaveCardButton}" (click)="editCard()">Edit card information</p>
+  </div>
+    <div class="card-info">
+      <div>
+        <p class="card-info-p">Credit card</p>
+        <p [ngClass]="{showDrop: enableSaveCardButton}" class="card-info-accepted-cards-p">We accept the following credit cards</p>
+        <div [ngClass]="{showDrop: enableSaveCardButton}" class="cc-img">
+          <img
+            src="https://seeklogo.net/wp-content/uploads/2016/11/visa-logo-preview.png"/>
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/8/88/MasterCard_early_1990s_logo.svg"/>
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Maestro_logo.png/1200px-Maestro_logo.png"/>
+          <img
+            src="https://i.pinimg.com/originals/81/b2/d3/81b2d3c1602b4a523d67a851d7d58db7.png"/>
+        </div>
+        <div class="brand" [ngClass]="{showDrop: !enableSaveCardButton} ">
+        <p class="card-info-accepted-cards-p-one">Brand:</p>
+        <div class="cc-img-one">
+          <img [ngClass]="{showImage: cardInfo != undefined && cardInfo.brand == 'Visa'}"
+            src="https://seeklogo.net/wp-content/uploads/2016/11/visa-logo-preview.png"/>
+          <img [ngClass]="{showImage: cardInfo != undefined && cardInfo.brand == 'MasterCard'}"
+            src="https://upload.wikimedia.org/wikipedia/commons/8/88/MasterCard_early_1990s_logo.svg"/>
+          <img [ngClass]="{showImage: cardInfo != undefined && cardInfo.brand == 'Maestro'}"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Maestro_logo.png/1200px-Maestro_logo.png"/>
+          <img [ngClass]="{showImage: cardInfo != undefined && cardInfo.brand == 'American Express'}"
+            src="https://i.pinimg.com/originals/81/b2/d3/81b2d3c1602b4a523d67a851d7d58db7.png"/>
+        </div>
+      </div>
+
+        <form [formGroup]="cardForm">
+        <div class="card-info-name-number">
+          <div>
+            <p class="card-info-name-p">Name on card</p>
+            <input *ngIf="cardInfo != null" value="{{cardInfo.name}}" type="text" placeholder="e.g. Adam Smith" formControlName="name" 
+            [ngClass]="{emptyInput: incorrectNameInput, enabledInput: enableSaveCardButton, onChange: changeNameInput}"/>
+            <input *ngIf="cardInfo == null" type="text" placeholder="e.g. Adam Smith" formControlName="name" 
+            [ngClass]="{emptyInput: incorrectNameInput, enabledInput: enableSaveCardButton, onChange: changeNameInput}"/>
+            <p class="message">{{ messageNameInput }}</p>
+          </div>
+          <div>
+            <p class="card-info-number-p">Card Number</p>
+            <input *ngIf="cardInfo != null" value="************{{cardInfo.number}}" type="text" placeholder="e.g. 4242 4242 4242 4242" formControlName="number"
+            [ngClass]="{emptyInput: incorrectNumberInput, enabledInput: enableSaveCardButton, onChange: changeNumberInput}" maxlength="16"/>
+            <input *ngIf="cardInfo == null" type="text" placeholder="e.g. 4242 4242 4242 4242" formControlName="number"
+            [ngClass]="{emptyInput: incorrectNumberInput, enabledInput: enableSaveCardButton, onChange: changeNumberInput}" maxlength="16"/>
+            <p class="message">{{ messageNumberInput }}</p>
+          </div>
+        </div>
+
+        <div class="card-info-expiration-cvc">
+          <div>
+            <p class="card-info-expiration-p">Expiration Date</p>
+            <div class="card-info-expiration">
+              <div class="card-info-year year" [ngClass]="{showDrop: !enableSaveCardButton}">
+                <p class="card-info-year-p">
+                  {{ yearExp }}</p>
+                </div>
+              <div class="card-info-month month" [ngClass]="{showDrop: !enableSaveCardButton}">
+                <p class="card-info-month-p">{{ monthExp }}</p>
+              </div>
+              <div class="year-exp" [ngClass]="{showDrop: enableSaveCardButton}">
+                <div class="card-info-year" appClickOutside
+                [ngClass]="{emptyInput: incorrectYear, onChange: changeYear}">
+                  <p class="card-info-year-p">{{ yearExp }}</p>
+                  <fa-icon [icon]="faChevronDown"></fa-icon>
+                </div>
+                <div class="card-info-years">
+                  <p class="card-info-year-p" (click)="pickAYear('2020')">2020</p>
+                  <p class="card-info-year-p" (click)="pickAYear('2021')">2021</p>
+                  <p class="card-info-year-p" (click)="pickAYear('2022')">2022</p>
+                  <p class="card-info-year-p" (click)="pickAYear('2023')">2023</p>
+                </div>
+              </div>
+              <div class="month-exp" [ngClass]="{showDrop: enableSaveCardButton}">
+                <div class="card-info-month" appClickOutside 
+                [ngClass]="{emptyInput: incorrectMonth, onChange: changeMonth}">
+                  <p class="card-info-month-p">{{ monthExp }}</p>
+                  <fa-icon [icon]="faChevronDown"></fa-icon>
+                </div>
+                <div class="card-info-months">
+                  <p class="card-info-month-p" (click)="pickAMonth('1')">1</p>
+                  <p class="card-info-month-p" (click)="pickAMonth('2')">2</p>
+                  <p class="card-info-month-p" (click)="pickAMonth('3')">3</p>
+                  <p class="card-info-month-p" (click)="pickAMonth('4')">4</p>
+                </div>
+              </div>
+            </div>
+            <p class="message">{{ messageExpDate }}</p>
+          </div>
+          <div class="cvc-input" [ngClass]="{showInput: enableSaveCardButton}">
+            <p class="card-info-cvc-p">CVC/CW</p>
+            <input type="text" placeholder="1234" formControlName="cvccw"
+            [ngClass]="{emptyInput: incorrectCvcInput, enabledInput: enableSaveCardButton, onChange: changeCvcInput}"/>
+            <p class="message">{{ messageCvcInput }}</p>
+          </div>
+        </div>
+      </form>
+      </div>
+    </div>
+    <div class="spinner" [ngClass]="{showSpinner: loading}">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
+
+
+  <div class="buttons">
+    <div class="button cancel" [ngClass]="{showButton: enableSaveCardButton}">
+      <input type="button" value="CANCEL" (click)="cancel()">
+    </div>
+
+  <div class="button" [ngClass]="{showButton: enableSaveCardButton}">
+    <input type="button" value="SAVE CARD" (click)="saveInformations(card, required)">
+    <fa-icon [icon]="faChevronRight"></fa-icon>
+  </div>
+</div>
+

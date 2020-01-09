@@ -12,6 +12,8 @@ public class CardInfo {
 
     private String brand;
 
+    private String token;
+
     public String getNumber() {
         return number;
     }
@@ -74,5 +76,13 @@ public class CardInfo {
 
     public void setBrand(String brand) {
         this.brand = brand;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
