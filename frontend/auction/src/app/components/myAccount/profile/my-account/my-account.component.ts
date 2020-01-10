@@ -11,9 +11,9 @@ export class MyAccountComponent implements OnInit {
   userInfo;
   cardInfo;
   addressInfo;
-  month = "";
-  year = "";
-  day = "";
+  month = "Month";
+  year = "Year";
+  day = "Day";
   
   yearExp = "Year";
   monthExp = "Month";

@@ -10,15 +10,17 @@ export class LoginService {
   constructor(private http: HttpClient) {}
 
   authenticate(email: string, password: string) {
-    return this.http.post<any>(this.url, { email, password }).pipe(
-      map(userData => {
-        sessionStorage.setItem("username", userData.username);
-        let tokenStr = "Bearer " + userData.token;
-        sessionStorage.setItem("token", tokenStr);
-        sessionStorage.setItem("email", email);
-        return userData;
-      })
-    );
+    return this.http
+      .post<any>(this.url, { email, password })
+      .pipe(
+        map(userData => {
+          sessionStorage.setItem("username", userData.username);
+          let tokenStr = "Bearer " + userData.token;
+          sessionStorage.setItem("token", tokenStr);
+          sessionStorage.setItem("email", email);
+          return userData;
+        })
+      );
   }
   isUserLoggedIn() {
     let user = sessionStorage.getItem("username");
@@ -37,11 +39,16 @@ export class LoginService {
     }
   }
   getUserEmail() {
-    if(this.isUserLoggedIn()) {
+    if (this.isUserLoggedIn()) {
       return sessionStorage.getItem("email");
-    }
-    else {
+    } else {
       return "";
     }
+  }
+  setSession(token, username, email) {
+    sessionStorage.setItem("username", username);
+    let tokenStr = "Bearer " + token;
+    sessionStorage.setItem("token", tokenStr);
+    sessionStorage.setItem("email", email);
   }
 }

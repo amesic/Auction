@@ -5,28 +5,33 @@
   height: 722px;
   margin-top: 27px;
 }
-.required p {
-  margin: 0;
-  padding: 0;
+.required .p {
   font: 400 18px "Lato", sans-serif;
   color: #252525;
   letter-spacing: 0.63px;
   margin-bottom: 10px;
 }
 .required input {
-  margin-bottom: 49px;
   font: 400 18px "Lato", sans-serif;
   color: #252525;
   letter-spacing: 0.63px;
-  background: #fcfcfc;
-  border: 1px solid #d8d8d8;
+  background: #e2e2e263;
+  border: 1px solid #b3b3b3;
   padding-left: 20px;
+}
+.input-wrapp {
+  margin-bottom: 30px;
+  width: 600px;
 }
 .profile-info {
   display: flex;
   justify-content: space-around;
-  width: 975px;
+  width: 1040px;
   margin-top: 36px;
+}
+.birth-message-wrapp {
+  display: flex;
+  flex-direction: column;
 }
 .required .title {
   background: #fafafa;
@@ -50,7 +55,7 @@
 .profile-info-name,
 .profile-info-phone-number,
 .profile-info-email {
-  width: 600px;
+  width: 100%;
 }
 .profile-info-genders,
 .profile-info-birth-months,
@@ -64,7 +69,6 @@
 .profile-info-birth-year.show ~ .profile-info-birth-years {
   display: block;
 }
-
 .profile-info-gender-p,
 .profile-info-birth-mont-p,
 .profile-info-birth-day-p,
@@ -129,7 +133,7 @@
 }
 .profile-info-gender-wrapp,
 .profile-info-birth-wrapp {
-  margin-bottom: 49px;
+  margin-bottom: 30px;
 }
 .profile-info-birth-wrapp {
   display: flex;
@@ -161,12 +165,42 @@
   background-color: #8367d8;
   color: #fafafa;
 }
+.required .title-title {
+  margin: 0;
+  padding: 0;
+  font: 700 20px "Lato", sans-serif;
+}
+.required .title-edit {
+  margin: 0;
+  padding: 0;
+  font: 400 12px "Lato", sans-serif;
+}
+.required .title-edit:hover {
+  color: #8367d8;
+  cursor: pointer;
+  text-decoration: #8367d8 underline;
+  transform: translateX(1%) translateY(5%);
+}
+.required .title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 32px;
+  padding-right: 32px;
+  background: #fafafa;
+  color: #252525;
+  letter-spacing: 0.7px;
+  height: 50px;
+}
+.required .title-edit.hide {
+  display: none;
+}
+
 .button {
   margin-bottom: 60px;
   position: relative;
   width: 243px;
   cursor: pointer;
-  margin-left: 870px;
   margin-top: 20px;
   display: none;
 }
@@ -190,9 +224,9 @@
   transform: translateX(1%) translateY(5%);
 }
 
-.user-info > form > .profile-info-name.emptyInput,
-.user-info > form > .profile-info-phone-number.emptyInput,
-.user-info > form > .profile-info-email.emptyInput,
+.user-info > form > .input-wrapp > .profile-info-name.emptyInput,
+.user-info > form > .input-wrapp > .profile-info-phone-number.emptyInput,
+.user-info > form > .input-wrapp > .profile-info-email.emptyInput,
 .profile-info-gender.emptyInput,
 .profile-info-birth-month.emptyInput,
 .profile-info-birth-day.emptyInput,
@@ -203,3 +237,95 @@
 .button.showButton {
   display: block;
 }
+
+form > .input-wrapp > .profile-info-name.enabledInput,
+form > .input-wrapp > .profile-info-phone-number.enabledInput,
+form > .input-wrapp > .profile-info-email.enabledInput {
+  background: #fcfcfc;
+  border: 1px solid #d8d8d8;
+}
+.month,
+.year,
+.day,
+.day-birth,
+.month-birth,
+.year-birth,
+.gender-user,
+.gender {
+  display: none;
+}
+.month,
+.year,
+.day,
+.gender {
+  background: #e2e2e263;
+  border: 1px solid #b3b3b3;
+}
+.day-birth.showDrop,
+.month-birth.showDrop,
+.year-birth.showDrop,
+.month.showDrop,
+.year.showDrop,
+.day.showDrop,
+.gender.showDrop,
+.gender-user.showDrop {
+  display: block;
+}
+
+.month.showDrop:hover,
+.year.showDrop:hover,
+.day.showDrop:hover,
+.gender.showDrop:hover {
+  cursor: default;
+}
+
+form > .input-wrapp > .profile-info-name.onChange,
+form > .input-wrapp > .profile-info-phone-number.onChange,
+form > .input-wrapp > .profile-info-email.onChange,
+.profile-info-birth-year.onChange,
+.profile-info-birth-month.onChange,
+.profile-info-birth-day.onChange,
+.profile-info-gender.onChange {
+  border: 1px solid #74acff;
+}
+form > .input-wrapp > .profile-info-name.emptyInput,
+form > .input-wrapp > .profile-info-phone-number.emptyInput,
+form > .input-wrapp > .profile-info-email.emptyInput,
+.profile-info-birth-year.emptyInput,
+.profile-info-birth-month.emptyInput,
+.profile-info-birth-day.emptyInput,
+.profile-info-gender.emptyInput {
+  border: 1px solid #ff6d6d;
+  background: #ffd8d8;
+}
+.message {
+  padding: 0;
+  margin: 0;
+  color: #ff6d6d;
+  font: 200 14px "Lato", sans-serif;
+  margin-top: 5px;
+  letter-spacing: 2px;
+  width: 300px;
+}
+.spinner.showSpinner {
+  display: block;
+}
+.spinner {
+  height: 722px;
+  background-color: rgba(0, 0, 0, 0.164);
+  position: absolute;
+  width: 1110px;
+  display: none;
+  top: 256px;
+}
+.reqired {
+  position: relative;
+}
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+.buttons .cancel {
+  margin-right: 10px;
+}
+

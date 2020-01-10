@@ -8,6 +8,7 @@ import com.ajla.auction.model.Rate;
 import com.ajla.auction.model.Card;
 import com.ajla.auction.model.Product;
 import com.ajla.auction.model.ProductInfoBid;
+import com.ajla.auction.model.RequiredInfoUser;
 import com.ajla.auction.model.UserWatchProductId;
 import com.ajla.auction.model.Watchlist;
 import com.ajla.auction.model.UserProductInfoBid;
@@ -30,9 +31,15 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -50,6 +57,7 @@ public class AuthController {
     private final StripeService stripeService;
     private final CardService cardService;
     private final RateService rateService;
+    private final AuthenticationManager authenticationManager;
 
     private Bid highestBid;
 
@@ -62,7 +70,8 @@ public class AuthController {
                           final WatchlistService watchlistService,
                           final StripeService stripeService,
                           final CardService cardService,
-                          final RateService rateService) {
+                          final RateService rateService,
+                          final AuthenticationManager authenticationManager) {
         Objects.requireNonNull(template, "template must not be null.");
         Objects.requireNonNull(jwtTokenUtil, "jwtTokenUtil must not be null.");
         Objects.requireNonNull(bidService, "bidService must not be null.");
@@ -73,6 +82,7 @@ public class AuthController {
         Objects.requireNonNull(stripeService, "stripeService must not be null.");
         Objects.requireNonNull(cardService, "cardService must not be null.");
         Objects.requireNonNull(rateService, "rateService must not be null.");
+        Objects.requireNonNull(authenticationManager, "authenticationManager must not be null.");
         this.jwtTokenUtil = jwtTokenUtil;
         this.bidService = bidService;
         this.template = template;
@@ -83,6 +93,7 @@ public class AuthController {
         this.stripeService = stripeService;
         this.cardService = cardService;
         this.rateService = rateService;
+        this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/bid/newBid")
@@ -300,4 +311,27 @@ public class AuthController {
     public ResponseEntity<?> saveRateFromUser(@RequestBody final Rate rate) {
         return new ResponseEntity<>(rateService.saveRateFromUser(rate), HttpStatus.OK);
     }
+
+    @PostMapping("/user/required/info")
+    public ResponseEntity<?> saveRequiredInfoFromUser(@RequestBody final RequiredInfoUser requiredInfoUser) throws Throwable {
+        try {
+            User savedUser = userService.saveUserRequiredInfo(requiredInfoUser);
+            RequiredInfoUser savedUserInfo = new RequiredInfoUser();
+            savedUserInfo.setEmail(savedUser.getEmail());
+            savedUserInfo.setGender(savedUser.getGender());
+            savedUserInfo.setBirthDate(savedUser.getBirthDate());
+            savedUserInfo.setPhoneNumber(savedUser.getPhoneNumber());
+            savedUserInfo.setUserName(savedUser.getUserName());
+            savedUserInfo.setImage(savedUser.getImage());
+            if (!requiredInfoUser.getEmail().equals(requiredInfoUser.getEmailLoggedUser())) {
+                final UserDetails userDetails = userService.loadUserByUsername(savedUser.getEmail());
+                final String token = jwtTokenUtil.generateToken(userDetails);
+                savedUserInfo.setToken(token);
+            }
+            return new ResponseEntity<>(savedUserInfo, HttpStatus.OK);
+        } catch (Throwable ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

@@ -1,10 +1,16 @@
 package com.ajla.auction.service;
 
 import com.ajla.auction.model.Card;
+import com.ajla.auction.model.RequiredInfoUser;
 import com.ajla.auction.model.User;
 import com.ajla.auction.repo.UserRepository;
+import com.ajla.auction.config.JwtTokenUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -66,4 +72,41 @@ public class UserService implements IUserService, UserDetailsService {
         user.setCard(card);
         userRepository.save(user);
     }
+
+    @Override
+    public  User saveUserRequiredInfo(final RequiredInfoUser requiredInfoUser) throws Throwable {
+        if (requiredInfoUser.getEmail().matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$")
+                && findByEmail(requiredInfoUser.getEmail()) == null
+        && requiredInfoUser.getUserName() != null && !requiredInfoUser.getUserName().equals("")
+        && requiredInfoUser.getBirthDate() != null
+        && requiredInfoUser.getGender() != null && !requiredInfoUser.getGender().equals("")
+        && requiredInfoUser.getPhoneNumber().matches("^[+]*[(]?[0-9]{1,4}[)]?[-\\s./0-9]*$")) {
+            User user = findByEmail(requiredInfoUser.getEmailLoggedUser());
+            user.setPhoneNumber(requiredInfoUser.getPhoneNumber());
+            user.setUserName(requiredInfoUser.getUserName());
+            user.setGender(requiredInfoUser.getGender());
+            user.setBirthDate(requiredInfoUser.getBirthDate());
+            if (!requiredInfoUser.getEmailLoggedUser().equals(requiredInfoUser.getEmail())) {
+                user.setEmail(requiredInfoUser.getEmail());
+            }
+            userRepository.save(user);
+            return user;
+        } else if (!requiredInfoUser.getEmail().matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$")) {
+            throw new Throwable("Email is invalid!");
+        } else if (findByEmail(requiredInfoUser.getEmail()) != null
+                && !requiredInfoUser.getEmailLoggedUser().equals(requiredInfoUser.getEmail())) {
+            throw new Throwable("Profile with this email already exist!");
+        } else if (requiredInfoUser.getUserName() == null || requiredInfoUser.getUserName().equals("")) {
+            throw new Throwable("Username input empty!");
+        } else if (requiredInfoUser.getBirthDate() == null) {
+            throw new Throwable("Birth date input empty!");
+        } else if (requiredInfoUser.getGender() == null && requiredInfoUser.getGender().equals("")) {
+            throw new Throwable("Gender input empty!");
+        } else if (!requiredInfoUser.getPhoneNumber().matches("^[+]*[(]?[0-9]{1,4}[)]?[-\\s./0-9]*$")) {
+            throw new Throwable("Phone number is invalid!");
+        }
+        return null;
+
+    }
+
 }

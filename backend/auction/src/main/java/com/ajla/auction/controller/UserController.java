@@ -34,8 +34,6 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
     //for generate or validate token
     private final JwtTokenUtil jwtTokenUtil;
-    private final StripeService stripeService;
-    private final CardService cardService;
 
     @Autowired
     public UserController(final UserService userService,
@@ -51,8 +49,6 @@ public class UserController {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
-        this.stripeService = stripeService;
-        this.cardService = cardService;
     }
 
     @PostMapping(value = "/login")

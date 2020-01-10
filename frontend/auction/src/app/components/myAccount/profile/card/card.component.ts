@@ -257,6 +257,8 @@ export class CardComponent implements OnInit {
   this.messageExpDate = "";
   this.messageNameInput = "";
   this.messageNumberInput = "";
+
+  this.loading = false;
 }
 
 }

@@ -1,5 +1,9 @@
+<div class="wrapp">
 <div class="required" #required>
-    <div class="title">REQUIRED</div>
+    <div class="title">
+      <p class="title-title">REQUIRED</p>
+      <p class="title-edit" [ngClass]="{hide: enableSaveCardButton}" (click)="editCard()">Edit required information</p>
+    </div>
     <div class="profile-info">
       <img
         class="profile-img"
@@ -13,7 +17,8 @@
       />
       <div class="user-info">
         <form [formGroup]="userRequiredInfoForm">
-        <p>Your Name</p>
+        <div class="input-wrapp">
+        <p class="p">Your Name</p>
         <input 
         *ngIf="userInfo != undefined"
         class="profile-info-name" 
@@ -21,13 +26,22 @@
         value="{{ userInfo.userName }}" 
         placeholder="e.g. Adam Smith" 
         formControlName="username" 
-        [ngClass]="{emptyInput: incorrectUsernameInput}" #username/>
+        [ngClass]="{emptyInput: incorrectUsernameInput, enabledInput: enableSaveCardButton, onChange: changeUsernameInput}" #username/>
+        <p class="message">{{ messageUsernameInput }}</p>
+      </div>
 
-        <p>I am</p>
+        <p class="p"> I am</p>
         <div class="profile-info-gender-wrapp">
+          <div class="profile-info-gender gender" [ngClass]="{showDrop: !enableSaveCardButton}">
+            <p class="profile-info-gender-p">
+              {{ gender }}</p>
+            </div>
+            <p class="message">{{ messageGender }}</p>
+
+          <div class="gender-user" [ngClass]="{showDrop: enableSaveCardButton}">
           <div class="profile-info-gender"
-          [ngClass]="{emptyInput: incorrectGender}"
-           appClickOutside >
+          [ngClass]="{emptyInput: incorrectGender, onChange: changeGender}"
+           appClickOutside>
             <p class="profile-info-gender-p">{{ gender }}</p>
             <fa-icon [icon]="faChevronDown"></fa-icon>
           </div>
@@ -36,84 +50,122 @@
             <p class="profile-info-gender-p" (click)="pickAGender('female')">female</p>
           </div>
         </div>
+        </div>
 
-        <p>Date of Birth</p>
+        <p class="p">Date of Birth</p>
+        <div class="birth-message-wrapp">
         <div class="profile-info-birth-wrapp">
-          <div>
+          <div class="profile-info-birth-month month" [ngClass]="{showDrop: !enableSaveCardButton}">
+            <p class="profile-info-birth-month-p p">
+              {{ month }}</p>
+            </div>
+            <div class="profile-info-birth-day day" [ngClass]="{showDrop: !enableSaveCardButton}">
+              <p class="profile-info-birth-day-p p">{{ day }}</p>
+            </div>
+          <div class="profile-info-birth-year year" [ngClass]="{showDrop: !enableSaveCardButton}">
+            <p class="profile-info-birth-year-p p">{{ year }}</p>
+          </div>
+
+
+        <div class="month-birth" [ngClass]="{showDrop: enableSaveCardButton}">
           <div class="profile-info-birth-month" 
-          [ngClass]="{emptyInput: incorrectMonthBirth}"
+          [ngClass]="{emptyInput: incorrectMonthBirth, onChange: changeMonth}"
           appClickOutside >
-            <p class="profile-info-birth-month-p">{{ month }}</p>
+            <p class="profile-info-birth-month-p p">{{ month }}</p>
             <fa-icon [icon]="faChevronDown"></fa-icon>
           </div>
           <div class="profile-info-birth-months">
-            <p class="profile-info-birth-month-p" (click)="pickAMonthOfBirth('Jan')">Jan</p>
-            <p class="profile-info-birth-month-p" (click)="pickAMonthOfBirth('Feb')">Feb</p>
-            <p class="profile-info-birth-month-p" (click)="pickAMonthOfBirth('Mar')">Mar</p>
-            <p class="profile-info-birth-month-p" (click)="pickAMonthOfBirth('Apr')">Apr</p>
+            <p class="profile-info-birth-month-p p" (click)="pickAMonthOfBirth('Jan')">Jan</p>
+            <p class="profile-info-birth-month-p p" (click)="pickAMonthOfBirth('Feb')">Feb</p>
+            <p class="profile-info-birth-month-p p" (click)="pickAMonthOfBirth('Mar')">Mar</p>
+            <p class="profile-info-birth-month-p p" (click)="pickAMonthOfBirth('Apr')">Apr</p>
           </div>
         </div>
 
-        <div>
+        <div class="day-birth" [ngClass]="{showDrop: enableSaveCardButton}">
           <div class="profile-info-birth-day" 
-          [ngClass]="{emptyInput: incorrectDayBirth}"
+          [ngClass]="{emptyInput: incorrectDayBirth, onChange: changeDay}"
           appClickOutside >
-            <p class="profile-info-birth-day-p">{{ day }}</p>
+            <p class="profile-info-birth-day-p p">{{ day }}</p>
             <fa-icon [icon]="faChevronDown"></fa-icon>
           </div>
           <div class="profile-info-birth-days">
-            <p class="profile-info-birth-day-p" (click)="pickADayOfBirth('01')">01</p>
-            <p class="profile-info-birth-day-p" (click)="pickADayOfBirth('02')">02</p>
-            <p class="profile-info-birth-day-p" (click)="pickADayOfBirth('03')">03</p>
-            <p class="profile-info-birth-day-p" (click)="pickADayOfBirth('04')">04</p>
+            <p class="profile-info-birth-day-p p" (click)="pickADayOfBirth('01')">01</p>
+            <p class="profile-info-birth-day-p p" (click)="pickADayOfBirth('02')">02</p>
+            <p class="profile-info-birth-day-p p" (click)="pickADayOfBirth('03')">03</p>
+            <p class="profile-info-birth-day-p p" (click)="pickADayOfBirth('04')">04</p>
           </div>
         </div>
 
-        <div>
+        <div class="year-birth" [ngClass]="{showDrop: enableSaveCardButton}">
           <div class="profile-info-birth-year" 
-          [ngClass]="{emptyInput: incorrectYearBirth}"
+          [ngClass]="{emptyInput: incorrectYearBirth, onChange: changeYear}"
           appClickOutside >
-            <p class="profile-info-birth-year-p">{{ year }}</p>
+            <p class="profile-info-birth-year-p p">{{ year }}</p>
             <fa-icon [icon]="faChevronDown"></fa-icon>
           </div>
           <div class="profile-info-birth-years">
-            <p class="profile-info-birth-year-p" (click)="pickAYearOfBirth('1990')">1990</p>
-            <p class="profile-info-birth-year-p" (click)="pickAYearOfBirth('1991')">1991</p>
-            <p class="profile-info-birth-year-p" (click)="pickAYearOfBirth('1992')">1992</p>
-            <p class="profile-info-birth-year-p" (click)="pickAYearOfBirth('1993')">1993</p>
+            <p class="profile-info-birth-year-p p" (click)="pickAYearOfBirth('1990')">1990</p>
+            <p class="profile-info-birth-year-p p" (click)="pickAYearOfBirth('1991')">1991</p>
+            <p class="profile-info-birth-year-p p" (click)="pickAYearOfBirth('1992')">1992</p>
+            <p class="profile-info-birth-year-p p" (click)="pickAYearOfBirth('1993')">1993</p>
           </div>
         </div>
-
-
-
         </div>
+        <p class="message">{{ messageBirthDate }}</p>
+      </div>
 
-        <p>Phone Number</p>
+        <div class="input-wrapp">
+        <p class="p">Phone Number</p>
         <input
           *ngIf="userInfo != undefined && userInfo.phoneNumber != null"
           class="profile-info-phone-number"
           type="tel"
           value="{{ userInfo.phoneNumber }}"
           formControlName="phonenumber"
-          [ngClass]="{emptyInput: incorrectPhonenumberInput}"
+          placeholder="e.g. 003874444444"
+          [ngClass]="{emptyInput: incorrectPhonenumberInput, enabledInput: enableSaveCardButton, onChange: changePhonenumberInput}"
         />
         <input
           *ngIf="userInfo != undefined && userInfo.phoneNumber == null"
           class="profile-info-phone-number"
           type="tel"
           formControlName="phonenumber"
-          [ngClass]="{emptyInput: incorrectPhonenumberInput}"
+          placeholder="e.g. 003874444444"
+          [ngClass]="{emptyInput: incorrectPhonenumberInput, enabledInput: enableSaveCardButton, onChange: changePhonenumberInput}"
         />
-        <p>Email Address</p>
+        <p class="message">{{ messagePhonenumberInput }}</p>
+        </div>
+
+        <div class="input-wrapp">
+        <p class="p">Email Address</p>
         <input
         *ngIf="userInfo != undefined"
           class="profile-info-email"
           type="text"
           value="{{ userInfo.email }}"
           formControlName="email"
-          [ngClass]="{emptyInput: incorrectEmailInput}"
+          placeholder="e.g. example@gmail.com"
+          [ngClass]="{emptyInput: incorrectEmailInput, enabledInput: enableSaveCardButton, onChange: changeEmailInput}"
         />
+        <p class="message">{{ messageEmailInput }}</p>
+      </div>
       </form>
       </div>
     </div>
+    <div class="spinner" [ngClass]="{showSpinner: loading}">
+      <app-spinner></app-spinner>
+    </div>
   </div>
+
+  <div class="buttons">
+    <div class="button cancel" [ngClass]="{showButton: enableSaveCardButton}">
+      <input type="button" value="CANCEL" (click)="cancel()">
+    </div>
+
+  <div class="button" [ngClass]="{showButton: enableSaveCardButton}">
+    <input type="button" value="SAVE REQUIRED" (click)="saveInformations(required)">
+    <fa-icon [icon]="faChevronRight"></fa-icon>
+  </div>
+</div>
+</div>

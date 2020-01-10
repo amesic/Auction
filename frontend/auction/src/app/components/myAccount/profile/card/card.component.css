@@ -255,6 +255,10 @@
 .cc-img.showDrop {
   display: block;
 }
+.year.showDrop:hover,
+.month.showDrop:hover {
+  cursor: default;
+}
 .brand.showDrop {
   display: flex;
 }
