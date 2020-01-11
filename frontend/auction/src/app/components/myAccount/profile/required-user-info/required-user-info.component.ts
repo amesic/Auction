@@ -233,7 +233,8 @@ export class RequiredUserInfoComponent implements OnInit, OnChanges {
         this.changeYear = false;
         this.changeMonth = false;
         this.changeDay = false;
-      }, err => {   
+      }, err => {  
+        console.log(err.error); 
         this.loading = false;
         if (err.error == "Email is invalid!" || err.error == "Profile with this email already exist!") {
           this.incorrectEmailInput = true;

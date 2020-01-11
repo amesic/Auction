@@ -102,28 +102,28 @@ public class DatabaseSeeder {
             a.setCountry("Bosnia and Herzegovina");
             a.setStreet("Olimpijska 8");
             a.setZipCode("71000");
-            a.setState("");
+            a.setState("Federacija BiH");
 
             Address a1 = new Address();
             a1.setCity("Sarajevo");
             a1.setCountry("Bosnia and Herzegovina");
             a1.setStreet("Olimpijska 10");
             a1.setZipCode("71000");
-            a1.setState("");
+            a1.setState("Federacija BiH");
 
             Address a2 = new Address();
             a2.setCity("Sarajevo");
             a2.setCountry("Bosnia and Herzegovina");
             a2.setStreet("Olimpijska 12");
             a2.setZipCode("71000");
-            a2.setState("");
+            a2.setState("Federacija BiH");
 
             Address a3 = new Address();
             a3.setCity("Sarajevo");
             a3.setCountry("Bosnia and Herzegovina");
             a3.setStreet("Olimpijska 17");
             a3.setZipCode("71000");
-            a3.setState("");
+            a3.setState("Federacija BiH");
 
             addressRepository.saveAll(Arrays.asList(a, a1, a2, a3));
             logger.info("Address table seeded");

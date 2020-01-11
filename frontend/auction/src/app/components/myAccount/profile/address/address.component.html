@@ -1,17 +1,22 @@
-<div class="optional">
-    <div class="title">OPTIONAL</div>
+<div class="optional" #address>
+  <div class="title">
+    <div class="title">ADDRESS INFORMATION</div>
+    <p class="title-edit" [ngClass]="{hide: enableSaveCardButton}" (click)="editCard()">Edit address information</p>
+  </div>
     <div class="address-info">
-      <div>
-        <p class="address-title">ADDRESS</p>
+      <form [formGroup]="addressForm">
+        <p class="address-title p">ADDRESS</p>
 
-        <p>Street</p>
+        <p class="p">Street</p>
+        <div class="input-wrapp">
         <input
           *ngIf="addressInfo != null && addressInfo.street != null"
           class="address-info-street"
           type="text"
           value="{{ addressInfo.street }}"
           placeholder="e.g. 5th Avenue"
-          readonly
+          formControlName="street" 
+          [ngClass]="{emptyInput: incorrectStreetInput, enabledInput: enableSaveCardButton, onChange: changeStreetInput}"
         />
         <input
           *ngIf="addressInfo == null || addressInfo.street == null"
@@ -19,37 +24,46 @@
           type="text"
           value=""
           placeholder="e.g. 5th Avenue"
-          readonly
+          formControlName="street" 
+          [ngClass]="{emptyInput: incorrectStreetInput, enabledInput: enableSaveCardButton, onChange: changeStreetInput}"
         />
+        <p class="message">{{ messageStreetInput }}</p>
+      </div>
+
+      <div class="input-wrapp">
         <div class="address-info-city-zip">
           <div>
-            <p>City</p>
+            <p class="p">City</p>
             <input
               *ngIf="addressInfo!= null && addressInfo.city != null"
               class="address-info-city"
               type="text"
               value="{{ addressInfo.city }}"
               placeholder="e.g. New York"
-              readonly
+              formControlName="city" 
+              [ngClass]="{emptyInput: incorrectCityInput, enabledInput: enableSaveCardButton, onChange: changeCityInput}"
             />
             <input
-              *ngIf="addressInfo == null || addressInfocity == null"
+              *ngIf="addressInfo == null || addressInfo.city == null"
               class="address-info-city"
               type="text"
               value=""
               placeholder="e.g. New York"
-              readonly
+              formControlName="city"
+              [ngClass]="{emptyInput: incorrectCityInput, enabledInput: enableSaveCardButton, onChange: changeCityInput}"
             />
+            <p class="message">{{ messageCityInput }}</p>
           </div>
           <div>
-            <p>ZipCode</p>
+            <p class="p">ZipCode</p>
             <input
               *ngIf="addressInfo!= null && addressInfo.zipCode != null"
               class="address-info-zip"
               type="text"
               value="{{ addressInfo.zipCode }}"
               placeholder="e.g. 10065"
-              readonly
+              formControlName="zipcode" 
+              [ngClass]="{emptyInput: incorrectZipcodeInput, enabledInput: enableSaveCardButton, onChange: changeZipcodeInput}"
             />
             <input
               *ngIf="addressInfo == null || addressInfo.zipCode == null"
@@ -57,18 +71,24 @@
               type="text"
               value=""
               placeholder="e.g. 10065"
-              readonly
+              formControlName="zipcode"
+              [ngClass]="{emptyInput: incorrectZipcodeInput, enabledInput: enableSaveCardButton, onChange: changeZipcodeInput}"
             />
+            <p class="message">{{ messageZipcodeInput }}</p>
           </div>
         </div>
-        <p>State</p>
+      </div>
+
+      <div class="input-wrapp">
+        <p class="p">State</p>
         <input
-          *ngIf="addressInfo != null && addressInfostate != null"
+          *ngIf="addressInfo != null && addressInfo.state != null"
           class="address-info-state"
           type="text"
           value="{{ addressInfo.state }}"
           placeholder="e.g. New York"
-          readonly
+          formControlName="state" 
+          [ngClass]="{emptyInput: incorrectStateInput, enabledInput: enableSaveCardButton, onChange: changeStateInput}"
         />
         <input
           *ngIf="addressInfo == null || addressInfo.state == null"
@@ -76,25 +96,48 @@
           type="text"
           value=""
           placeholder="e.g. New York"
-          readonly
+          formControlName="state"
+          [ngClass]="{emptyInput: incorrectStateInput, enabledInput: enableSaveCardButton, onChange: changeStateInput}" 
         />
-        <p>Country</p>
+        <p class="message">{{ messageStateInput }}</p>
+      </div>
+
+      <div class="input-wrapp">
+        <p class="p">Country</p>
         <input
           *ngIf="addressInfo != null && addressInfo.country != null"
           class="address-info-country"
           type="text"
           value="{{ addressInfo.country }}"
           placeholder="e.g. USA"
-          readonly
+          formControlName="country" 
+          [ngClass]="{emptyInput: incorrectCountryInput, enabledInput: enableSaveCardButton, onChange: changeCountryInput}"
         />
         <input
-          *ngIf="addressInfo == null || addressInfocountry == null"
+          *ngIf="addressInfo == null || addressInfo.country == null"
           class="address-info-country"
           type="text"
           value=""
           placeholder="e.g. USA"
-          readonly
+          formControlName="country"
+          [ngClass]="{emptyInput: incorrectCountryInput, enabledInput: enableSaveCardButton, onChange: changeCountryInput}"
         />
+        <p class="message">{{ messageCountryInput }}</p>
       </div>
+      </form>
+    </div>
+    <div class="spinner" [ngClass]="{showSpinner: loading}">
+      <app-spinner></app-spinner>
     </div>
   </div>
+
+  <div class="buttons">
+    <div class="button cancel" [ngClass]="{showButton: enableSaveCardButton}">
+      <input type="button" value="CANCEL" (click)="cancel()">
+    </div>
+
+  <div class="button" [ngClass]="{showButton: enableSaveCardButton}">
+    <input type="button" value="SAVE ADDRESS" (click)="saveInformations(address)">
+    <fa-icon [icon]="faChevronRight"></fa-icon>
+  </div>
+</div>

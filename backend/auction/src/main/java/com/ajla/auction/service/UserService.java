@@ -1,16 +1,13 @@
 package com.ajla.auction.service;
 
+import com.ajla.auction.model.Address;
 import com.ajla.auction.model.Card;
 import com.ajla.auction.model.RequiredInfoUser;
 import com.ajla.auction.model.User;
+import com.ajla.auction.repo.AddressRepository;
 import com.ajla.auction.repo.UserRepository;
-import com.ajla.auction.config.JwtTokenUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,13 +20,17 @@ import java.util.Objects;
 @Service
 public class UserService implements IUserService, UserDetailsService {
     private final UserRepository userRepository;
+    private final AddressRepository addressRepository;
 
     //we need qualifier when have more implementations of userRepo
     //for example Smth1 implements userRepo, Smth2 implements userRepo, and then we have two beans
     @Autowired
-    public UserService(final UserRepository userRepository) {
+    public UserService(final UserRepository userRepository,
+                       final AddressRepository addressRepository) {
         Objects.requireNonNull(userRepository, "userRepository must not be null.");
+        Objects.requireNonNull(addressRepository, "addressRepository must not be null.");
         this.userRepository = userRepository;
+        this.addressRepository = addressRepository;
     }
 
     @Override
@@ -74,9 +75,10 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
-    public  User saveUserRequiredInfo(final RequiredInfoUser requiredInfoUser) throws Throwable {
+    public User saveUserRequiredInfo(final RequiredInfoUser requiredInfoUser) throws Throwable {
         if (requiredInfoUser.getEmail().matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$")
-                && findByEmail(requiredInfoUser.getEmail()) == null
+                && ((findByEmail(requiredInfoUser.getEmail()) != null && requiredInfoUser.getEmailLoggedUser().equals(requiredInfoUser.getEmail()))
+                || (findByEmail(requiredInfoUser.getEmail()) == null && !requiredInfoUser.getEmailLoggedUser().equals(requiredInfoUser.getEmail())))
         && requiredInfoUser.getUserName() != null && !requiredInfoUser.getUserName().equals("")
         && requiredInfoUser.getBirthDate() != null
         && requiredInfoUser.getGender() != null && !requiredInfoUser.getGender().equals("")
@@ -100,13 +102,34 @@ public class UserService implements IUserService, UserDetailsService {
             throw new Throwable("Username input empty!");
         } else if (requiredInfoUser.getBirthDate() == null) {
             throw new Throwable("Birth date input empty!");
-        } else if (requiredInfoUser.getGender() == null && requiredInfoUser.getGender().equals("")) {
+        } else if (requiredInfoUser.getGender() == null || requiredInfoUser.getGender().equals("")) {
             throw new Throwable("Gender input empty!");
         } else if (!requiredInfoUser.getPhoneNumber().matches("^[+]*[(]?[0-9]{1,4}[)]?[-\\s./0-9]*$")) {
             throw new Throwable("Phone number is invalid!");
         }
         return null;
 
+    }
+
+    @Override
+    public Address saveAddressOfUser(final User user) {
+        User updatedUser = findByEmail(user.getEmail());
+        if (updatedUser.getAddress() == null) {
+            Address savedAddress = new Address();
+            savedAddress.setCity(user.getAddress().getCity());
+            savedAddress.setCountry(user.getAddress().getCountry());
+            savedAddress.setStreet(user.getAddress().getStreet());
+            savedAddress.setState(user.getAddress().getState());
+            savedAddress.setZipCode(user.getAddress().getZipCode());
+
+            updatedUser.setAddress(addressRepository.save(savedAddress));
+            userRepository.save(updatedUser);
+            return savedAddress;
+        } else {
+            Address addressInfo = user.getAddress();
+            addressInfo.setId(updatedUser.getAddress().getId());
+            return addressRepository.updateAddressOfUser(addressInfo);
+        }
     }
 
 }

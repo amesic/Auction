@@ -334,4 +334,9 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/user/address/info")
+    public ResponseEntity<?> saveAddressInfo(@RequestBody final User user) {
+        return new ResponseEntity<>(userService.saveAddressOfUser(user), HttpStatus.OK);
+    }
+
 }

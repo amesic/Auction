@@ -4,27 +4,28 @@
   border: 1px solid #d8d8d8;
   height: 722px;
   margin-top: 27px;
+  margin-bottom: 20px;
 }
 .optional {
   height: 650px;
-  margin-bottom: 100px;
 }
-.optional p {
-  margin: 0;
-  padding: 0;
+.optional .p {
   font: 400 18px "Lato", sans-serif;
   color: #252525;
   letter-spacing: 0.63px;
   margin-bottom: 10px;
 }
-.optional input{
-  margin-bottom: 49px;
+.optional input {
   font: 400 18px "Lato", sans-serif;
   color: #252525;
   letter-spacing: 0.63px;
-  background: #fcfcfc;
-  border: 1px solid #d8d8d8;
+  background: #e2e2e263;
+  border: 1px solid #b3b3b3;
   padding-left: 20px;
+}
+.input-wrapp {
+  margin-bottom: 30px;
+  width: 600px;
 }
 .optional .address-title {
   font-size: 28px;
@@ -71,8 +72,6 @@
   position: relative;
   width: 243px;
   cursor: pointer;
-  margin-left: 870px;
-  margin-top:20px;
   display: none;
 }
 .button > input {
@@ -97,6 +96,120 @@
 .profile-info-birth-year.emptyInput {
   border: 1px solid #ff6d6d;
   background: #ffd8d8;
+}
+
+.required .title-title {
+  margin: 0;
+  padding: 0;
+  font: 700 20px "Lato", sans-serif;
+}
+.optional .title-edit {
+  margin: 0;
+  padding: 0;
+  font: 400 12px "Lato", sans-serif;
+}
+.optional .title-edit:hover {
+  color: #8367d8;
+  cursor: pointer;
+  text-decoration: #8367d8 underline;
+  transform: translateX(1%) translateY(5%);
+}
+.optional .title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 32px;
+  padding-right: 32px;
+  background: #fafafa;
+  color: #252525;
+  letter-spacing: 0.7px;
+  height: 50px;
+}
+.optional .title-edit.hide {
+  display: none;
+}
+
+.address-info > form > .input-wrapp > .address-info-street.enabledInput,
+.address-info
+  > form
+  > .input-wrapp
+  > .address-info-city-zip
+  > div
+  > .address-info-city.enabledInput,
+.address-info
+  > form
+  > .input-wrapp
+  > .address-info-city-zip
+  > div
+  > .address-info-zip.enabledInput,
+.address-info > form > .input-wrapp > .address-info-state.enabledInput,
+.address-info > form > .input-wrapp > .address-info-country.enabledInput {
+  background: #fcfcfc;
+  border: 1px solid #d8d8d8;
+}
+
+.address-info > form > .input-wrapp > .address-info-street.onChange,
+.address-info
+  > form
+  > .input-wrapp
+  > .address-info-city-zip
+  > div
+  > .address-info-city.onChange,
+.address-info
+  > form
+  > .input-wrapp
+  > .address-info-city-zip
+  > div
+  > .address-info-zip.onChange,
+.address-info > form > .input-wrapp > .address-info-state.onChange,
+.address-info > form > .input-wrapp > .address-info-country.onChange {
+  border: 1px solid #74acff;
+}
+.address-info > form > .input-wrapp > .address-info-street.emptyInput,
+.address-info
+  > form
+  > .input-wrapp
+  > .address-info-city-zip
+  > div
+  > .address-info-city.emptyInput,
+.address-info
+  > form
+  > .input-wrapp
+  > .address-info-city-zip
+  > div
+  > .address-info-zip.emptyInput,
+.address-info > form > .input-wrapp > .address-info-state.emptyInput,
+.address-info > form > .input-wrapp > .address-info-country.emptyInput {
+  border: 1px solid #ff6d6d;
+  background: #ffd8d8;
+}
+
+.message {
+  padding: 0;
+  margin: 0;
+  color: #ff6d6d;
+  font: 200 14px "Lato", sans-serif;
+  margin-top: 5px;
+  letter-spacing: 2px;
+  width: 300px;
+}
+.spinner.showSpinner {
+  display: block;
+}
+.spinner {
+  height: 722px;
+  background-color: rgba(0, 0, 0, 0.164);
+  position: absolute;
+  width: 1110px;
+  display: none;
+  top: 256px;
+}
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+.buttons .cancel {
+  margin-right: 10px;
 }
 .button.showButton {
   display: block;
