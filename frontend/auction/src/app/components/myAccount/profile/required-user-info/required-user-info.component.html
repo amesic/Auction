@@ -5,6 +5,7 @@
       <p class="title-edit" [ngClass]="{hide: enableSaveCardButton}" (click)="editCard()">Edit required information</p>
     </div>
     <div class="profile-info">
+      <div class="image-button">
       <img
         class="profile-img"
         *ngIf="userInfo != undefined && userInfo.image == null"
@@ -15,6 +16,14 @@
         *ngIf="userInfo != undefined && userInfo.image != null"
         src="{{ userInfo.image }}"
       />
+      <button type="button" class="file-upload-button" [ngClass]="{showButton: enableSaveCardButton}">
+        CHANGE PHOTO
+        <input type="file"
+          (change)="onFileSelect($event)"
+          />
+      </button>
+      <p class="message">{{ messagePhoto }}</p>
+    </div>
       <div class="user-info">
         <form [formGroup]="userRequiredInfoForm">
         <div class="input-wrapp">
@@ -36,7 +45,6 @@
             <p class="profile-info-gender-p">
               {{ gender }}</p>
             </div>
-            <p class="message">{{ messageGender }}</p>
 
           <div class="gender-user" [ngClass]="{showDrop: enableSaveCardButton}">
           <div class="profile-info-gender"
@@ -50,6 +58,7 @@
             <p class="profile-info-gender-p" (click)="pickAGender('female')">female</p>
           </div>
         </div>
+        <p class="message">{{ messageGender }}</p>
         </div>
 
         <p class="p">Date of Birth</p>

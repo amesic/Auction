@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, AfterViewInit, OnChanges } from "@angular/core";
+import { Component, OnInit, Input, OnChanges } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { UserService } from 'src/app/services/user.service';
-import { LoginService } from 'src/app/services/login.service';
+import { UserService } from "src/app/services/user.service";
+import { LoginService } from "src/app/services/login.service";
 
 @Component({
   selector: "app-required-user-info",
@@ -16,6 +16,7 @@ export class RequiredUserInfoComponent implements OnInit, OnChanges {
   @Input() month;
   @Input() year;
   @Input() gender;
+  @Input() image;
 
   faChevronDown = faChevronDown;
   faChevronRight = faChevronRight;
@@ -49,58 +50,86 @@ export class RequiredUserInfoComponent implements OnInit, OnChanges {
   messageBirthDate;
   messagePhonenumberInput;
   messageEmailInput;
+  messagePhoto;
+
+  fileData: File;
+  previewUrl: any;
 
   userRequiredInfoForm = new FormGroup({
-    username: new FormControl({value: null, disabled: true}, [Validators.required]),
-    phonenumber: new FormControl({value: null, disabled: true}, [Validators.required]),
-    email: new FormControl({value: null, disabled: true}, [Validators.required])
+    username: new FormControl({ value: null, disabled: true }, [
+      Validators.required
+    ]),
+    phonenumber: new FormControl({ value: null, disabled: true }, [
+      Validators.required
+    ]),
+    email: new FormControl({ value: null, disabled: true }, [
+      Validators.required
+    ])
   });
 
   constructor(
     private userService: UserService,
     private loginService: LoginService
-    ) {}
+  ) {}
 
   ngOnInit() {
-    this.userRequiredInfoForm.controls['username'].valueChanges.subscribe(value => {
-      if (value == "") {
-      this.incorrectUsernameInput = true;
-      this.messageUsernameInput = "Enter your name!";
-      this.changeUsernameInput = false;
-      } else {
-      this.incorrectUsernameInput = false;
-      this.messageUsernameInput = "";
+    this.userRequiredInfoForm.controls["username"].valueChanges.subscribe(
+      value => {
+        if (value == "") {
+          this.incorrectUsernameInput = true;
+          this.messageUsernameInput = "Enter your name!";
+          this.changeUsernameInput = false;
+        } else {
+          this.incorrectUsernameInput = false;
+          this.messageUsernameInput = "";
+        }
+        if (
+          this.userInfo != undefined &&
+          value != null &&
+          value != this.userInfo.userName
+        ) {
+          this.changeUsernameInput = true;
+        }
       }
-      if (this.userInfo != undefined && value != null && value != this.userInfo.userName) {
-        this.changeUsernameInput= true;
+    );
+    this.userRequiredInfoForm.controls["phonenumber"].valueChanges.subscribe(
+      value => {
+        if (value == "") {
+          this.incorrectPhonenumberInput = true;
+          this.messagePhonenumberInput = "Enter your phone number!";
+          this.changePhonenumberInput = false;
+        } else {
+          this.incorrectPhonenumberInput = false;
+          this.messagePhonenumberInput = "";
+        }
+        if (
+          this.userInfo != undefined &&
+          value != null &&
+          value != this.userInfo.phoneNumber
+        ) {
+          this.changePhonenumberInput = true;
+        }
       }
-    });
-    this.userRequiredInfoForm.controls['phonenumber'].valueChanges.subscribe(value => {
-      if (value == "") {
-        this.incorrectPhonenumberInput = true;
-        this.messagePhonenumberInput = "Enter your phone number!";
-        this.changePhonenumberInput = false;
-      } else {
-        this.incorrectPhonenumberInput = false;
-        this.messagePhonenumberInput = "";
+    );
+    this.userRequiredInfoForm.controls["email"].valueChanges.subscribe(
+      value => {
+        if (value == "") {
+          this.incorrectEmailInput = true;
+          this.messageEmailInput = "Enter your email!";
+          this.changeEmailInput = false;
+        } else {
+          this.incorrectEmailInput = false;
+          this.messageEmailInput = "";
+        }
+        if (
+          this.userInfo != undefined &&
+          value != null &&
+          value != this.userInfo.email
+        ) {
+          this.changeEmailInput = true;
+        }
       }
-      if (this.userInfo != undefined && value != null && value != this.userInfo.phoneNumber) {
-        this.changePhonenumberInput = true;
-      }
-    });
-    this.userRequiredInfoForm.controls['email'].valueChanges.subscribe(value => {
-      if (value == "") {
-        this.incorrectEmailInput = true;
-        this.messageEmailInput = "Enter your email!";
-        this.changeEmailInput = false;
-      } else {
-        this.incorrectEmailInput = false;
-        this.messageEmailInput = "";
-      }
-      if (this.userInfo != undefined && value != null && value != this.userInfo.email)  {
-        this.changeEmailInput = true;
-      }
-    });
+    );
   }
   ngOnChanges() {
     this.monthCopy = this.month;
@@ -147,7 +176,7 @@ export class RequiredUserInfoComponent implements OnInit, OnChanges {
     // card info
     if (this.username.errors != null) {
       this.incorrectUsernameInput = true;
-      this.messageUsernameInput = "Enter your name!"
+      this.messageUsernameInput = "Enter your name!";
       requiredHtmlElement.scrollIntoView();
     } else {
       this.incorrectUsernameInput = false;
@@ -155,15 +184,15 @@ export class RequiredUserInfoComponent implements OnInit, OnChanges {
     }
     if (this.email.errors != null) {
       this.incorrectEmailInput = true;
-      this.messageEmailInput = "Enter your email!"
+      this.messageEmailInput = "Enter your email!";
       requiredHtmlElement.scrollIntoView();
     } else {
       this.incorrectEmailInput = false;
-      this. messageEmailInput = "";
+      this.messageEmailInput = "";
     }
     if (this.phonenumber.errors != null) {
       this.incorrectPhonenumberInput = true;
-      this.messagePhonenumberInput = "Enter your phone number!"
+      this.messagePhonenumberInput = "Enter your phone number!";
       requiredHtmlElement.scrollIntoView();
     } else {
       this.incorrectEmailInput = false;
@@ -171,112 +200,154 @@ export class RequiredUserInfoComponent implements OnInit, OnChanges {
     }
     if (this.month == "Month") {
       this.incorrectMonthBirth = true;
-      this.messageBirthDate = "Choose birth date!"
+      this.messageBirthDate = "Choose birth date!";
       requiredHtmlElement.scrollIntoView();
     } else {
       this.incorrectMonthBirth = false;
-        this.messageBirthDate = "";
+      this.messageBirthDate = "";
     }
     if (this.day == "Day") {
       this.incorrectDayBirth = true;
-      this.messageBirthDate = "Choose birth date!"
+      this.messageBirthDate = "Choose birth date!";
       requiredHtmlElement.scrollIntoView();
     } else {
       this.incorrectDayBirth = false;
-      if (this.month != "Month") {
+      if (this.month != "Month" && this.year != "Year") {
         this.messageBirthDate = "";
       }
     }
     if (this.year == "Year") {
       this.incorrectYearBirth = true;
-      this.messageBirthDate = "Choose birth date!"
+      this.messageBirthDate = "Choose birth date!";
       requiredHtmlElement.scrollIntoView();
     } else {
       this.incorrectYearBirth = false;
-      if (this.day != "Day") {
+      if (this.day != "Day" && this.month != "Month") {
         this.messageBirthDate = "";
       }
     }
-    if (this.username.errors == null &&
+    if (this.gender == "Your Gender") {
+      this.incorrectGender = true;
+      this.messageGender = "Choose your gender";
+      requiredHtmlElement.scrollIntoView();
+    } else {
+      this.incorrectGender = false;
+      this.messageGender = "";
+    }
+    if (this.userInfo.image == null) {
+      this.messagePhoto = "Choose profile photo!";
+      requiredHtmlElement.scrollIntoView();
+    } else {
+      this.messagePhoto = "";
+    }
+    if (
+      this.username.errors == null &&
       this.phonenumber.errors == null &&
       this.email.errors == null &&
       this.year != "Year" &&
       this.month != "Month" &&
-      this.day != "Day") {   
+      this.day != "Day" &&
+      this.userInfo.image != null
+    ) {
       this.loading = true;
       let dateString = this.month + " " + this.day + " " + this.year;
       let date = new Date(dateString);
-      this.userService.saveRequiredInfoFromUser(
-        this.userRequiredInfoForm.get("username").value,
-        this.gender,
-        date,
-        this.userRequiredInfoForm.get("phonenumber").value,
-        this.userRequiredInfoForm.get("email").value,
-        this.loginService.getUserEmail()
-      ).subscribe(savedInfo => {
-        this.loading = false;
-        this.userInfo = savedInfo;
-        if (this.userInfo.token != null) {
-        this.loginService.setSession(this.userInfo.token, this.userInfo.userName, this.userInfo.email);
-        }
-        this.incorrectEmailInput = false;
-        this.incorrectPhonenumberInput = false;
-        this.incorrectUsernameInput = false;
-        this.enableSaveCardButton = false;
-        this.userRequiredInfoForm.get("username").disable({onlySelf: true});
-        this.userRequiredInfoForm.get("phonenumber").disable({onlySelf: true});
-        this.userRequiredInfoForm.get("email").disable({onlySelf: true});
-        this.changeUsernameInput = false;
-        this.changePhonenumberInput = false;
-        this.changeEmailInput = false;
-        this.changeGender = false;
-        this.changeYear = false;
-        this.changeMonth = false;
-        this.changeDay = false;
-      }, err => {  
-        console.log(err.error); 
-        this.loading = false;
-        if (err.error == "Email is invalid!" || err.error == "Profile with this email already exist!") {
-          this.incorrectEmailInput = true;
-          this.messageEmailInput = err.error;
-        } else if (err.error == "Phone number is invalid!") {
-          this.incorrectPhonenumberInput = true;
-          this.messagePhonenumberInput = err.error;
-        }
-      })
+      this.userService
+        .saveRequiredInfoFromUser(
+          this.userRequiredInfoForm.get("username").value,
+          this.userInfo.image,
+          this.gender,
+          date,
+          this.userRequiredInfoForm.get("phonenumber").value,
+          this.userRequiredInfoForm.get("email").value,
+          this.loginService.getUserEmail()
+        )
+        .subscribe(
+          savedInfo => {
+            this.loading = false;
+            this.userInfo = savedInfo;
+            if (this.userInfo.token != null) {
+              this.loginService.setSession(
+                this.userInfo.token,
+                this.userInfo.userName,
+                this.userInfo.email
+              );
+            }
+            this.incorrectEmailInput = false;
+            this.incorrectPhonenumberInput = false;
+            this.incorrectUsernameInput = false;
+            this.enableSaveCardButton = false;
+            this.userRequiredInfoForm
+              .get("username")
+              .disable({ onlySelf: true });
+            this.userRequiredInfoForm
+              .get("phonenumber")
+              .disable({ onlySelf: true });
+            this.userRequiredInfoForm.get("email").disable({ onlySelf: true });
+            this.changeUsernameInput = false;
+            this.changePhonenumberInput = false;
+            this.changeEmailInput = false;
+            this.changeGender = false;
+            this.changeYear = false;
+            this.changeMonth = false;
+            this.changeDay = false;
+          },
+          err => {
+            console.log(err.error);
+            this.loading = false;
+            if (
+              err.error == "Email is invalid!" ||
+              err.error == "Profile with this email already exist!"
+            ) {
+              this.incorrectEmailInput = true;
+              this.messageEmailInput = err.error;
+            } else if (err.error == "Phone number is invalid!") {
+              this.incorrectPhonenumberInput = true;
+              this.messagePhonenumberInput = err.error;
+            }
+          }
+        );
+    }
   }
- 
-}
 
   editCard() {
     this.enableSaveCardButton = true;
-    this.userRequiredInfoForm.get("username").enable({onlySelf: true});
-    this.userRequiredInfoForm.get("phonenumber").enable({onlySelf: true});
-    this.userRequiredInfoForm.get("email").enable({onlySelf: true});
-  
+    this.userRequiredInfoForm.get("username").enable({ onlySelf: true });
+    this.userRequiredInfoForm.get("phonenumber").enable({ onlySelf: true });
+    this.userRequiredInfoForm.get("email").enable({ onlySelf: true });
+
     if (this.userInfo != null) {
-    this.userRequiredInfoForm.get("username").setValue(this.userInfo.userName);
-    this.userRequiredInfoForm.get("phonenumber").setValue(this.userInfo.phoneNumber);
-    this.userRequiredInfoForm.get("email").setValue(this.userInfo.email);
+      this.userRequiredInfoForm
+        .get("username")
+        .setValue(this.userInfo.userName);
+      this.userRequiredInfoForm
+        .get("phonenumber")
+        .setValue(this.userInfo.phoneNumber);
+      this.userRequiredInfoForm.get("email").setValue(this.userInfo.email);
     }
   }
   cancel() {
     this.enableSaveCardButton = false;
-    this.userRequiredInfoForm.get("username").disable({onlySelf: true});
-    this.userRequiredInfoForm.get("email").disable({onlySelf: true});
-    this.userRequiredInfoForm.get("phonenumber").disable({onlySelf: true});
-  
+    this.userRequiredInfoForm.get("username").disable({ onlySelf: true });
+    this.userRequiredInfoForm.get("email").disable({ onlySelf: true });
+    this.userRequiredInfoForm.get("phonenumber").disable({ onlySelf: true });
+    this.userInfo.image = this.image;
+
     if (this.userInfo != null) {
-    this.userRequiredInfoForm.get("username").setValue(this.userInfo.userName)
-    this.userRequiredInfoForm.get("phonenumber").setValue(this.userInfo.phoneNumber);
-    this.userRequiredInfoForm.get("email").setValue(this.userInfo.email);
-    this.month = this.monthCopy;
-    this.year = this.yearCopy;
-    this.day = this.dayCopy;
+      this.userRequiredInfoForm
+        .get("username")
+        .setValue(this.userInfo.userName);
+      this.userRequiredInfoForm
+        .get("phonenumber")
+        .setValue(this.userInfo.phoneNumber);
+      this.userRequiredInfoForm.get("email").setValue(this.userInfo.email);
+      this.month = this.monthCopy;
+      this.year = this.yearCopy;
+      this.day = this.dayCopy;
     } else {
-      this.userRequiredInfoForm.get("username").setValue(null)
-    this.userRequiredInfoForm.get("phonenumber").setValue(null);
-    this.userRequiredInfoForm.get("email").setValue(null);
+      this.userRequiredInfoForm.get("username").setValue(null);
+      this.userRequiredInfoForm.get("phonenumber").setValue(null);
+      this.userRequiredInfoForm.get("email").setValue(null);
     }
 
     this.incorrectUsernameInput = false;
@@ -286,7 +357,7 @@ export class RequiredUserInfoComponent implements OnInit, OnChanges {
     this.incorrectMonthBirth = false;
     this.incorrectDayBirth = false;
     this.incorrectGender = false;
-  
+
     this.changeUsernameInput = false;
     this.changePhonenumberInput = false;
     this.changeEmailInput = false;
@@ -294,7 +365,7 @@ export class RequiredUserInfoComponent implements OnInit, OnChanges {
     this.changeYear = false;
     this.changeMonth = false;
     this.changeDay = false;
-  
+
     this.messageUsernameInput = "";
     this.messageGender = "";
     this.messageBirthDate = "";
@@ -302,5 +373,31 @@ export class RequiredUserInfoComponent implements OnInit, OnChanges {
     this.messageEmailInput = "";
 
     this.loading = false;
+  }
+
+  onFileSelect(fileInput: any) {
+    this.fileData = <File>fileInput.target.files[0];
+    this.preview();
+  }
+
+  preview() {
+    var mimeType = this.fileData.type;
+    if (mimeType.match(/image\/*/) == null) {
+      this.messagePhoto = "Image is invalid!";
+    } else {
+      this.messagePhoto = "";
+      var reader = new FileReader();
+      reader.readAsDataURL(this.fileData);
+      reader.onload = _event => {
+        this.previewUrl = reader.result;
+        this.userInfo.image = this.previewUrl;
+        /*this.userService.saveProfileImage(this.loginService.getUserEmail(), this.previewUrl)
+        .subscribe(image => {
+          this.userInfo.image = image.url;
+        }, err => {
+          console.log(err);
+        })*/
+      };
+    }
   }
 }

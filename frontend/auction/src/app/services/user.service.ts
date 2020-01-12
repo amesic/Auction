@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { User } from "../models/User";
-import { Address } from '../models/Address';
+import { Address } from "../models/Address";
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -21,7 +21,8 @@ export class UserService {
   urlRatingOfSeller = "/auth/rating";
   urlSaveRateFromUser = "/auth/rate";
   urlSaveRequiredInfo = "/auth/user/required/info";
-  urlSaveAddressInfo = "/auth/user/address/info"
+  urlSaveAddressInfo = "/auth/user/address/info";
+  urlSaveProfileImage = "/auth/user/profile/image";
 
   constructor(private http: HttpClient) {}
 
@@ -81,6 +82,7 @@ export class UserService {
   }
   saveRequiredInfoFromUser(
     username,
+    image,
     gender,
     birthDate,
     phonenumber,
@@ -93,6 +95,7 @@ export class UserService {
         userName: username,
         gender: gender,
         birthDate: birthDate,
+        image: image,
         phoneNumber: phonenumber,
         email: email,
         emailLoggedUser: emailUser

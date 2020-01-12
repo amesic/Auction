@@ -22,6 +22,7 @@ import com.ajla.auction.service.RateService;
 import com.ajla.auction.service.StripeService;
 import com.ajla.auction.service.CardService;
 import com.ajla.auction.service.WatchlistService;
+import com.ajla.auction.service.CloudinaryService;
 import com.stripe.exception.StripeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,16 +32,21 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Base64;
+import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @CrossOrigin(origins = {"http://localhost:4200", "https://atlantbh-auction.herokuapp.com"}, allowCredentials = "true")
@@ -57,7 +63,7 @@ public class AuthController {
     private final StripeService stripeService;
     private final CardService cardService;
     private final RateService rateService;
-    private final AuthenticationManager authenticationManager;
+    private final CloudinaryService cloudinaryService;
 
     private Bid highestBid;
 
@@ -71,7 +77,7 @@ public class AuthController {
                           final StripeService stripeService,
                           final CardService cardService,
                           final RateService rateService,
-                          final AuthenticationManager authenticationManager) {
+                          final CloudinaryService cloudinaryService) {
         Objects.requireNonNull(template, "template must not be null.");
         Objects.requireNonNull(jwtTokenUtil, "jwtTokenUtil must not be null.");
         Objects.requireNonNull(bidService, "bidService must not be null.");
@@ -82,7 +88,7 @@ public class AuthController {
         Objects.requireNonNull(stripeService, "stripeService must not be null.");
         Objects.requireNonNull(cardService, "cardService must not be null.");
         Objects.requireNonNull(rateService, "rateService must not be null.");
-        Objects.requireNonNull(authenticationManager, "authenticationManager must not be null.");
+        Objects.requireNonNull(cloudinaryService, "cloudinaryService must not be null.");
         this.jwtTokenUtil = jwtTokenUtil;
         this.bidService = bidService;
         this.template = template;
@@ -93,7 +99,7 @@ public class AuthController {
         this.stripeService = stripeService;
         this.cardService = cardService;
         this.rateService = rateService;
-        this.authenticationManager = authenticationManager;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @PostMapping("/bid/newBid")
@@ -313,18 +319,22 @@ public class AuthController {
     }
 
     @PostMapping("/user/required/info")
-    public ResponseEntity<?> saveRequiredInfoFromUser(@RequestBody final RequiredInfoUser requiredInfoUser) throws Throwable {
+    public ResponseEntity<?> saveRequiredInfoFromUser(@RequestBody final RequiredInfoUser requiredInfoUser) {
         try {
-            User savedUser = userService.saveUserRequiredInfo(requiredInfoUser);
+            User updatedUser = userService.findByEmail(requiredInfoUser.getEmail());
+            String url = cloudinaryService.saveProfileImage(requiredInfoUser.getImage(), updatedUser.getId());
+            requiredInfoUser.setImage(url);
+
+            updatedUser = userService.saveUserRequiredInfo(requiredInfoUser);
             RequiredInfoUser savedUserInfo = new RequiredInfoUser();
-            savedUserInfo.setEmail(savedUser.getEmail());
-            savedUserInfo.setGender(savedUser.getGender());
-            savedUserInfo.setBirthDate(savedUser.getBirthDate());
-            savedUserInfo.setPhoneNumber(savedUser.getPhoneNumber());
-            savedUserInfo.setUserName(savedUser.getUserName());
-            savedUserInfo.setImage(savedUser.getImage());
+            savedUserInfo.setEmail(updatedUser.getEmail());
+            savedUserInfo.setGender(updatedUser.getGender());
+            savedUserInfo.setBirthDate(updatedUser.getBirthDate());
+            savedUserInfo.setPhoneNumber(updatedUser.getPhoneNumber());
+            savedUserInfo.setUserName(updatedUser.getUserName());
+            savedUserInfo.setImage(updatedUser.getImage());
             if (!requiredInfoUser.getEmail().equals(requiredInfoUser.getEmailLoggedUser())) {
-                final UserDetails userDetails = userService.loadUserByUsername(savedUser.getEmail());
+                final UserDetails userDetails = userService.loadUserByUsername(updatedUser.getEmail());
                 final String token = jwtTokenUtil.generateToken(userDetails);
                 savedUserInfo.setToken(token);
             }
@@ -338,5 +348,20 @@ public class AuthController {
     public ResponseEntity<?> saveAddressInfo(@RequestBody final User user) {
         return new ResponseEntity<>(userService.saveAddressOfUser(user), HttpStatus.OK);
     }
+
+  /*  @PostMapping("/user/profile/image")
+    public ResponseEntity<?> saveImageProfile(@RequestBody final User user) {
+        try {
+            User updatedUser = userService.findByEmail(user.getEmail());
+            String url = cloudinaryService.saveProfileImage(user.getImage(), updatedUser.getId());
+            Map<String, Object> image = new HashMap<>();
+            image.put("url", url);
+            userService.saveProfileImage(url, updatedUser.getEmail());
+            return new ResponseEntity<>(image, HttpStatus.OK);
+        } catch (IOException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }*/
+
 
 }

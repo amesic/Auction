@@ -44,7 +44,7 @@
 }
 .required .profile-img {
   height: 246px;
-  width: 198px;
+  width: 209px;
   object-fit: cover;
 }
 .profile-info-name,
@@ -131,8 +131,7 @@
 .profile-info-gender {
   width: 290px;
 }
-.profile-info-gender-wrapp,
-.profile-info-birth-wrapp {
+.profile-info-gender-wrapp {
   margin-bottom: 30px;
 }
 .profile-info-birth-wrapp {
@@ -234,7 +233,7 @@
   border: 1px solid #ff6d6d;
   background: #ffd8d8;
 }
-.button.showButton {
+.button.showButton, .file-upload-button.showButton {
   display: block;
 }
 
@@ -328,4 +327,42 @@ form > .input-wrapp > .profile-info-email.emptyInput,
 .buttons .cancel {
   margin-right: 10px;
 }
-
+.image-button {
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+}
+.image-button > button {
+  background: #ffffff;
+  border: 3px solid #e3e3e3;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.05);
+  height: 49px;
+  width: 209px;
+  color: #252525;
+  letter-spacing: 0.56px;
+  text-align: center;
+  font: 700 16px "Lato", sans-serif;
+  margin-top: 11px;
+  overflow: hidden;
+  position: relative;
+}
+.image-button > button:hover {
+  transform: translateX(1%) translateY(5%);
+  cursor: pointer;
+}
+.image-button > button > input:hover {
+  cursor: pointer;
+}
+.image-button > button > input {
+  font-size: 100px;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+}
+.file-upload-button {
+  display: none;
+}
+.birth-message-wrapp {
+  margin-bottom: 30px;
+}

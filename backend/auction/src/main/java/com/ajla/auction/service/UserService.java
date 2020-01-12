@@ -88,6 +88,7 @@ public class UserService implements IUserService, UserDetailsService {
             user.setUserName(requiredInfoUser.getUserName());
             user.setGender(requiredInfoUser.getGender());
             user.setBirthDate(requiredInfoUser.getBirthDate());
+            user.setImage(requiredInfoUser.getImage());
             if (!requiredInfoUser.getEmailLoggedUser().equals(requiredInfoUser.getEmail())) {
                 user.setEmail(requiredInfoUser.getEmail());
             }
@@ -131,5 +132,6 @@ public class UserService implements IUserService, UserDetailsService {
             return addressRepository.updateAddressOfUser(addressInfo);
         }
     }
+
 
 }

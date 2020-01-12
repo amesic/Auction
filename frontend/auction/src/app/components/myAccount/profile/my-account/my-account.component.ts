@@ -14,6 +14,7 @@ export class MyAccountComponent implements OnInit {
   month = "Month";
   year = "Year";
   day = "Day";
+  image;
   
   yearExp = "Year";
   monthExp = "Month";
@@ -28,6 +29,7 @@ export class MyAccountComponent implements OnInit {
     this.userService.getUserInfo(this.loginService.getUserEmail()).subscribe(user => {
       this.userInfo = user;
       this.addressInfo = user.address;
+      this.image = this.userInfo.image;
       if (this.userInfo.birthDate != null) {
       let date = new Date(Date.parse(this.userInfo.birthDate));
       this.day = date.toDateString().split(" ")[2];
