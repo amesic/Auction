@@ -58,7 +58,8 @@ export class CardComponent implements OnInit {
       this.incorrectNameInput = false;
       this.messageNameInput = "";
       }
-      if (this.cardInfo != undefined && value != null && value != this.cardInfo.name) {
+      if ((this.cardInfo != undefined && value != null && value != this.cardInfo.name)
+      || (this.cardInfo == null && value != null)) {
         this.changeNameInput = true;
       }
     });
@@ -71,7 +72,10 @@ export class CardComponent implements OnInit {
         this.incorrectNumberInput = false;
         this.messageNumberInput = "";
       }
-      if (this.cardInfo != undefined && value != null && value != "************" + this.cardInfo.number) {
+      if ((this.cardInfo != undefined 
+        && value != null 
+        && value != "************" + this.cardInfo.number)  ||
+        (this.cardInfo == null && value != null)) {
         this.changeNumberInput = true;
       }
     });

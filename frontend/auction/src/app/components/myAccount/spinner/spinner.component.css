@@ -23,6 +23,15 @@
   -webkit-animation-delay: -0.16s;
   animation-delay: -0.16s;
 }
+.loader.forPaymentComponent {
+  margin-top: 390px;
+}
+.loader.forRequiredComponent {
+  margin-top: 300px;
+}
+.loader.forBidsComponent {
+  margin-top: 230px;
+}
 .loader:before,
 .loader:after {
   content: "";

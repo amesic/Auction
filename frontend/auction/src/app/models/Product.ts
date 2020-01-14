@@ -19,4 +19,5 @@ export class Product {
     timeToCount;
     hideCounter: boolean;
     statusOfCounter;
+    paid: boolean;
   }

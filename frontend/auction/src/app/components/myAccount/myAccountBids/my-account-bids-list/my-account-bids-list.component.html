@@ -49,9 +49,13 @@
         <div class="highest-bid color-highest-bid" *ngIf="item.highestBid != null" [ngClass]="{ highestValue : item.highestBid == item.valueOfBid}">{{ item.highestBid | currency: "USD" }}</div>
         <div class="highest-bid" *ngIf="item.highestBid == null">/</div>
         <input [ngClass]="{hideButtonView: (item.statusOfCounter == 'done' || item.timeToCount < 0) && item.highestBid == item.valueOfBid}" type="button" value="VIEW" class="view" (click)="sendInfoOfProduct(item.title, item.id)">
-        <input [ngClass]="{showButtonPay: (item.statusOfCounter == 'done' || item.timeToCount < 0) && item.highestBid == item.valueOfBid}" type="button" value="PAY" class="view pay" (click)="sendInfoOfProduct(item.title, item.id)">
+        <input [ngClass]="{showButtonPay: (item.statusOfCounter == 'done' || item.timeToCount < 0) && item.highestBid == item.valueOfBid  && !item.paid}" type="button" value="PAY" class="view pay" (click)="sendInfoOfProduct(item.title, item.id)">
+        <input [ngClass]="{showButtonPaid: (item.statusOfCounter == 'done' || item.timeToCount < 0) && item.highestBid == item.valueOfBid && item.paid}" type="button" value="PAID" class="paid" (click)="sendInfoOfProduct(item.title, item.id)">
     </div>
       </div>
     </div>
     </div>
-    
+
+    <div class="spinner" [ngClass]="{showSpinner: loading}">
+      <app-spinner [componentUsingSpinner]="'bids'"></app-spinner>
+    </div>

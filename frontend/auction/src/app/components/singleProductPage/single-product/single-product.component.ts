@@ -28,6 +28,7 @@ export class SingleProductComponent implements OnInit, OnChanges {
   @Input() stompClient;
   @Input() sessionId;
   @Input() ratingSeller;
+  @Input() paid;
  
   messStatusAboutBids;
   messStatusAboutWatchList;
@@ -60,6 +61,7 @@ export class SingleProductComponent implements OnInit, OnChanges {
     if (this.errorMess != null) {
       this.errorMess = null;
     }
+    console.log(this.paid);
    }
   ngOnInit() {
     if(this.userIsLoged != true) {

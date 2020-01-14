@@ -13,10 +13,14 @@ public interface IStripeService {
 
     CardInfo getUserCardDetails(final String customerId) throws StripeException;
 
-    String createCharge(final String customerId,
+    String createCharge(final User customer,
+                        final Long productId,
                         final String accountId,
                         final String productName,
+                        final String token,
                         final int amount) throws StripeException;
 
     String createStripeAccountForSeller(final User seller, final CardInfo cardInfo) throws StripeException;
+
+    Boolean checkIfCustomerPaidItem(final User customer, final String productName) throws StripeException;
 }

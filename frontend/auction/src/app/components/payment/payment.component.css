@@ -3,9 +3,9 @@
   background: #ffffff;
   border: 1px solid #d8d8d8;
   margin-top: 50px;
-  margin-left: 200px;
-  margin-right: 200px;
-  margin-bottom: 200px;
+}
+.wrapp {
+  width: 60%;
 }
 .payment-card-info,
 .card-info {
@@ -16,30 +16,22 @@
 .card-info {
   margin-top: 0;
 }
-.title {
-  background: #fafafa;
-  font: 700 20px "Lato", sans-serif;
-  color: #252525;
-  letter-spacing: 0.7px;
-  padding-left: 32px;
-  padding-top: 13px;
-  padding-bottom: 13px;
-  text-align: center;
-}
 .payment-city-country {
   display: flex;
   justify-content: space-between;
 }
 input {
-  margin-bottom: 49px;
   font: 400 18px "Lato", sans-serif;
   color: #252525;
   letter-spacing: 0.63px;
-  background: #fcfcfc;
-  border: 1px solid #d8d8d8;
+  background: #e2e2e263;
+  border: 1px solid #b3b3b3;
   padding-left: 20px;
   width: 100%;
   height: 46px;
+}
+.input-wrapp {
+  margin-bottom: 30px;
 }
 p {
   margin: 0;
@@ -51,74 +43,19 @@ p {
 }
 .brand {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  width: 105px;
+  margin-bottom: 30px;
+}
+.brand > p {
+  margin: 0;
+  padding: 0;
 }
 .cc-img > img {
   height: 35px;
   width: 50px;
 }
-.card-info-expiration-cvc {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 40px;
-}
-.card-info-expiration {
-  display: flex;
-  justify-content: space-between;
-  width: 390px;
-}
-.card-info-name-number {
-  display: flex;
-  justify-content: space-between;
-}
-.card-info-accepted-cards-p,
-.card-info-p,
-.card-info-name-p,
-.card-info-number-p,
-.card-info-expiration-p,
-.card-info-year-p,
-.card-info-month-p,
-.card-info-cvc-p,
-.card-info-number-expiration-cvc {
-  font: 400 16px "Lato", sans-serif;
-  color: #9b9b9b;
-  letter-spacing: 0.56px;
-  line-height: 26px;
-  margin: 0;
-  padding: 0;
-  margin-bottom: 10px;
-}
-.card-info-name-p,
-.card-info-number-p,
-.card-info-expiration-p,
-.card-info-year-p,
-.card-info-month-p,
-.card-info-cvc-p,
-.card-info-number-expiration-cvc {
-  color: #252525;
-}
-.card-info-p {
-  font: 400 18px "Lato", sans-serif;
-  color: #252525;
-}
-.card-info-number-expiration-cvc {
-  display: flex;
-  justify-content: space-between;
-  width: 500px;
-}
-.card-info-number-expiration-cvc > div {
-  display: flex;
-  justify-content: space-between;
-  width: 152px;
-}
-.payment-city-country > div > input,
-.card-info-name-input,
-.card-info-number-input,
-.cvc-input {
-  width: 390px;
-}
-.card-info-accepted-cards-p,
 .cc-img {
   margin: 0;
   padding: 0;
@@ -127,11 +64,29 @@ p {
   display: flex;
   justify-content: space-between;
   margin-left: 15px;
+  margin-bottom: 39px;
+  width: 195px;
 }
-.year-input,
-.month-input {
-  width: 180px;
+.cc-img-one > img {
+  width: 50px;
+  height: 50px;
+  margin: 0;
+  padding: 0;
+  object-fit: contain;
+  display: none;
 }
+.cc-img-one > img.showImage {
+  display: block;
+}
+.cc-img > img {
+  height: 25px;
+  width: 40px;
+}
+
+
+
+
+
 .pay {
   font: 700 16px "Lato", sans-serif;
   letter-spacing: 0.56px;
@@ -141,7 +96,6 @@ p {
   border: none;
   box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.15);
   padding: 0;
-  margin-right: 30px;
 }
 .pay:hover {
   transform: translateX(1%) translateY(5%);
@@ -149,8 +103,10 @@ p {
 .button {
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 200px;
+  margin-top: 20px;
 }
-.message {
+.message-error {
   color: rgb(171, 78, 78);
   background: rgb(246, 229, 229);
   padding-left: 75px;
@@ -171,6 +127,7 @@ p {
   top: 0;
   left: 0;
   display: none;
+  z-index: 2;
 }
 .pop-up-message {
   position: absolute;
@@ -180,7 +137,7 @@ p {
   text-align: center;
   display: none;
 }
-img {
+.pop-up-message-wrapp > div > img {
   border-radius: 50%;
   width: 70px;
   height: 70px;
@@ -203,6 +160,7 @@ img {
   justify-content: space-between;
   padding-left: 40px;
   padding-right: 40px;
+  margin-bottom: 20px;
 }
 .pop-up-message-buttons > .skip-button,
 .pop-up-message-buttons > .done-button {
@@ -232,3 +190,272 @@ img {
 .showMessageWrap {
   display: flex;
 }
+
+.title-title {
+  margin: 0;
+  padding: 0;
+  font: 700 20px "Lato", sans-serif;
+}
+.title-edit {
+  margin: 0;
+  padding: 0;
+  font: 400 12px "Lato", sans-serif;
+}
+.title-edit:hover {
+  color: #8367d8;
+  cursor: pointer;
+  text-decoration: #8367d8 underline;
+  transform: translateX(1%) translateY(5%);
+}
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 32px;
+  padding-right: 32px;
+  background: #fafafa;
+  color: #252525;
+  letter-spacing: 0.7px;
+  height: 50px;
+}
+.title-edit.hide {
+  display: none;
+}
+input.enabledInput {
+  background: #fcfcfc;
+  border: 1px solid #d8d8d8;
+}
+input.onChange {
+  border: 1px solid #74acff;
+}
+input.emptyInput {
+  border: 1px solid #ff6d6d;
+  background: #ffd8d8;
+}
+.checkbox > input {
+  width: 0;
+  height: 0;
+  margin: 0;
+  margin-right: 5px;
+}
+.checkbox > p {
+  font: 200 10px "Lato", sans-serif;
+  margin-bottom: 0;
+}
+.checkbox {
+  display: none;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.checkbox.showCheckbox {
+  display: flex;
+}
+.message {
+  padding: 0;
+  margin: 0;
+  color: #ff6d6d;
+  font: 200 14px "Lato", sans-serif;
+  margin-top: 5px;
+  letter-spacing: 2px;
+  width: 300px;
+}
+form {
+  margin-bottom: 80px;
+}
+
+
+
+
+
+
+
+
+
+.card-info-years,
+.card-info-months {
+  display: none;
+}
+.card-info-year.show ~ .card-info-years,
+.card-info-month.show ~ .card-info-months {
+  display: block;
+  position: absolute;
+  z-index: 2;
+}
+.card-info-expiration-cvc {
+  display: flex;
+  justify-content: space-between;
+  width: 623px;
+}
+.card-info-expiration {
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+}
+.card-info-name-number {
+  display: flex;
+  justify-content: space-between;
+  width: 623px;
+  margin-bottom: 40px;
+}
+.card-info-accepted-cards-p,
+.card-info-accepted-cards-p-one,
+.card-info-p,
+.card-info-name-p,
+.card-info-number-p,
+.card-info-expiration-p,
+.card-info-year-p,
+.card-info-month-p,
+.card-info-cvc-p,
+.card-info-number-expiration-cvc {
+  font: 400 16px "Lato", sans-serif;
+  color: #9b9b9b;
+  letter-spacing: 0.56px;
+  line-height: 26px;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 10px;
+}
+.card-info-name-p,
+.card-info-number-p,
+.card-info-expiration-p,
+.card-info-year-p,
+.card-info-month-p,
+.card-info-cvc-p,
+.card-info-number-expiration-cvc {
+  color: #252525;
+}
+.card-info-year-p,
+.card-info-month-p {
+  letter-spacing: 0.63px;
+}
+.card-info-p {
+  font: 400 18px "Lato", sans-serif;
+  color: #252525;
+}
+.card input {
+  height: 46px;
+  width: 300px;
+}
+.card-info-year,
+.card-info-month {
+  background: #fcfcfc;
+  border: 1px solid #d8d8d8;
+  height: 46px;
+  width: 139px;
+  position: relative;
+  cursor: pointer;
+}
+.card-info-year > fa-icon,
+.card-info-month > fa-icon {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.card-info-year > p,
+.card-info-month > p {
+  margin-top: 10px;
+  margin-left: 5px;
+}
+.card-info-years,
+.card-info-months {
+  background: #fcfcfc;
+  border: 1px solid #d8d8d8;
+  width: 139px;
+}
+.card-info-years > p,
+.card-info-months > p {
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-top: 5px;
+  margin: 0;
+}
+.card-info-years > p:hover,
+.card-info-months > p:hover {
+  cursor: pointer;
+  background-color: #8367d8;
+  color: #fafafa;
+}
+
+.card-info-number-expiration-cvc {
+  display: flex;
+  justify-content: space-between;
+  width: 635px;
+}
+.card-info-number-expiration-cvc > div {
+  display: flex;
+  justify-content: space-between;
+  width: 152px;
+}
+.card-info-name-number > div > input.enabledInput,
+.card-info-cvc-p ~ input.enabledInput {
+  background: #fcfcfc;
+  border: 1px solid #d8d8d8;
+}
+.cvc-input {
+  display: none;
+}
+.cvc-input.showInput {
+  display: block;
+}
+.year-exp,
+.month-exp,
+.month,
+.year,
+.card-info-accepted-cards-p,
+.cc-img,
+.brand {
+  display: none;
+}
+.month,
+.year {
+  background: #e2e2e263;
+  border: 1px solid #b3b3b3;
+}
+.year-exp.showDrop,
+.month-exp.showDrop,
+.year.showDrop,
+.month.showDrop,
+.card-info-accepted-cards-p.showDrop,
+.cc-img.showDrop {
+  display: block;
+}
+.year.showDrop:hover,
+.month.showDrop:hover {
+  cursor: default;
+}
+.brand.showDrop {
+  display: flex;
+}
+
+.card-info-name-number > div > input.onChange,
+.card-info-year.onChange,
+.card-info-month.onChange,
+.cvc-input > input.onChange {
+  border: 1px solid #74acff;
+}
+.card-info-name-number > div > input.emptyInput,
+.card-info-year.emptyInput,
+.card-info-month.emptyInput,
+.cvc-input > input.emptyInput {
+  border: 1px solid #ff6d6d;
+  background: #ffd8d8;
+}
+
+
+.spinner.showSpinner {
+  display: block;
+}
+.spinner {
+  height: 1062px;
+  top: 0px;
+  background-color: rgba(0, 0, 0, 0.164);
+  position: absolute;
+  width: 100%;
+  display: none;
+}
+.payment {
+  position: relative;
+}
+
+

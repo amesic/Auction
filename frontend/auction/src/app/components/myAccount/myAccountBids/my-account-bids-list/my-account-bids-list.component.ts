@@ -3,6 +3,8 @@ import { hdmy } from "../../../reusableFunctions/hdmy";
 import { Router } from "@angular/router";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { UserService } from 'src/app/services/user.service';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: "app-my-account-bids-list",
@@ -20,7 +22,11 @@ export class MyAccountBidsListComponent implements OnInit, OnChanges{
   faCheckCircle = faCheckCircle;
   faTimes = faTimes;
 
-  constructor(private router: Router) {}
+  loading = false;
+
+  constructor(private router: Router,
+    private userService: UserService,
+    private loginService: LoginService) {}
 
   ngOnInit() {}
 
@@ -36,8 +42,14 @@ export class MyAccountBidsListComponent implements OnInit, OnChanges{
       } else {
         product.hideCounter = true;
       }
-      if(product.timeToCount < 0 && product.highestBid == product.valueOfBid) {
+      if (product.timeToCount < 0 && product.highestBid == product.valueOfBid) {
         this.expired = true;
+        this.loading = true;
+        this.userService.checkIfCustomerPaidItem(this.loginService.getUserEmail(), product.id)
+        .subscribe(paid => {
+          this.loading = false;
+          product.paid = paid;
+        }, err => console.log(err.error));
       } else {
         if(this.expired == undefined) {
         this.expired = false;

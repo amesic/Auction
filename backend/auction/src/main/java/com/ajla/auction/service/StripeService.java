@@ -5,6 +5,7 @@ import com.ajla.auction.model.User;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Card;
+import com.stripe.model.ChargeCollection;
 import com.stripe.model.Customer;
 import com.stripe.model.Charge;
 import com.stripe.model.File;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class StripeService implements IStripeService{
@@ -29,19 +31,24 @@ public class StripeService implements IStripeService{
 
         Map<String, Object> customerParams = new HashMap<>();
         customerParams.put("email", cardInfo.getEmailUser());
-        customerParams.put("source", cardInfo.getToken());
+        if (cardInfo.getToken() != null) {
+            customerParams.put("source", cardInfo.getToken());
+        }
 
         //create a new customer
         Customer savedCustomer = Customer.create(customerParams);
-        Card card = (Card) savedCustomer.getSources().getData().get(0);
-
         CardInfo cardInfoSaved = new CardInfo();
-        cardInfoSaved.setExp_month(card.getExpMonth());
-        cardInfoSaved.setExp_year(card.getExpYear());
-        cardInfoSaved.setName(card.getName());
-        cardInfoSaved.setNumber(card.getLast4());
         cardInfoSaved.setCustomerId(savedCustomer.getId());
-        cardInfoSaved.setBrand(card.getBrand());
+
+        if (cardInfo.getToken() != null) {
+        Card card = (Card) savedCustomer.getSources().getData().get(0);
+            cardInfoSaved.setExp_month(card.getExpMonth());
+            cardInfoSaved.setExp_year(card.getExpYear());
+            cardInfoSaved.setName(card.getName());
+            cardInfoSaved.setNumber(card.getLast4());
+            cardInfoSaved.setBrand(card.getBrand());
+        }
+
         return cardInfoSaved;
     }
 
@@ -49,20 +56,25 @@ public class StripeService implements IStripeService{
     public CardInfo updateCustomer(final String customerId, final CardInfo cardInfo) throws StripeException {
         Stripe.apiKey = API_SECRET_KEY;
         Customer customer = Customer.retrieve(customerId);
-        Card card = (Card) customer.getSources().getData().get(0);
-        card.delete();
-        Map<String, Object> customerParams = new HashMap<>();
-        customerParams.put("source", cardInfo.getToken());
-        Customer updatedCustomer = customer.update(customerParams);
+        if (customer.getSources().getData().size() != 0) {
+            Card card = (Card) customer.getSources().getData().get(0);
+            card.delete();
+        }
+        CardInfo cardInfoSaved = null;
+        if (cardInfo.getToken() != null) {
+            Map<String, Object> customerParams = new HashMap<>();
+            customerParams.put("source", cardInfo.getToken());
+            Customer updatedCustomer = customer.update(customerParams);
 
-        Card cardSaved = (Card) updatedCustomer.getSources().getData().get(0);
+            Card cardSaved = (Card) updatedCustomer.getSources().getData().get(0);
 
-        CardInfo cardInfoSaved = new CardInfo();
-        cardInfoSaved.setExp_month(cardSaved.getExpMonth());
-        cardInfoSaved.setExp_year(cardSaved.getExpYear());
-        cardInfoSaved.setName(cardSaved.getName());
-        cardInfoSaved.setNumber(cardSaved.getLast4());
-        cardInfoSaved.setBrand(cardSaved.getBrand());
+            cardInfoSaved = new CardInfo();
+            cardInfoSaved.setExp_month(cardSaved.getExpMonth());
+            cardInfoSaved.setExp_year(cardSaved.getExpYear());
+            cardInfoSaved.setName(cardSaved.getName());
+            cardInfoSaved.setNumber(cardSaved.getLast4());
+            cardInfoSaved.setBrand(cardSaved.getBrand());
+        }
         return cardInfoSaved;
     }
 
@@ -70,38 +82,58 @@ public class StripeService implements IStripeService{
     public CardInfo getUserCardDetails(final String customerId) throws StripeException {
         Stripe.apiKey = API_SECRET_KEY;
         Customer customer1 = Customer.retrieve(customerId);
-        Card card = (Card) customer1.getSources().getData().get(0);
+        CardInfo cardInfo = null;
+        if (customer1.getSources().getData().size() != 0) {
+            Card card = (Card) customer1.getSources().getData().get(0);
 
-        CardInfo cardInfo = new CardInfo();
-        cardInfo.setExp_month(card.getExpMonth());
-        cardInfo.setExp_year(card.getExpYear());
-        cardInfo.setName(card.getName());
-        cardInfo.setNumber(card.getLast4());
-        cardInfo.setBrand(card.getBrand());
+            cardInfo = new CardInfo();
+            cardInfo.setExp_month(card.getExpMonth());
+            cardInfo.setExp_year(card.getExpYear());
+            cardInfo.setName(card.getName());
+            cardInfo.setNumber(card.getLast4());
+            cardInfo.setBrand(card.getBrand());
+        }
         return cardInfo;
     }
 
     @Override
-    public String createCharge(final String customerId,
+    public String createCharge(final User customer,
+                               final Long productId,
                                final String accountId,
                                final String productName,
+                               final String token,
                                final int amount) throws StripeException {
         Stripe.apiKey = API_SECRET_KEY;
+
+        Card card = null;
+        String customerId = customer.getCard().getCustomerId();
         Customer customer1 = Customer.retrieve(customerId);
-        Card card = (Card) customer1.getSources().getData().get(0);
+        if (customer1.getSources().getData().size() != 0) {
+            card = (Card) customer1.getSources().getData().get(0);
+        }
 
         Map<String, Object> transferData = new HashMap<>();
         transferData.put("destination", accountId);
+        Map<String, Object> metaData = new HashMap<>();
+        metaData.put("order_id", productId);
+        metaData.put("customer", customerId);
 
         Map<String, Object> chargeParams = new HashMap<>();
         chargeParams.put("amount", amount);
         chargeParams.put("currency", "usd");
         chargeParams.put("description", "Payment for " + productName);
-        chargeParams.put("customer", customerId);
-        chargeParams.put("card", card.getId());
+        if (token != null) {
+            chargeParams.put("source", token);
+        }
+        if (card != null) {
+            chargeParams.put("customer", customerId);
+            chargeParams.put("card", card.getId());
+        }
+        chargeParams.put("metadata", metaData);
         chargeParams.put("transfer_data", transferData);
 
         Charge charge = Charge.create(chargeParams);
+
         return charge.getId();
     }
 
@@ -179,5 +211,28 @@ public class StripeService implements IStripeService{
         Account account = Account.create(params);
 
         return account.getId();
+    }
+
+    @Override
+    public Boolean checkIfCustomerPaidItem(final User customer, final String productName) throws StripeException {
+        Map<String, Object> params = new HashMap<>();
+        /*params.put("customer", customer.getCard().getCustomerId());*/
+
+        ChargeCollection charge = Charge.list(params);
+
+        AtomicReference<Boolean> paid = new AtomicReference<>(false);
+
+        if (charge.getData().size() != 0) {
+            charge.getData().forEach(c -> {
+                Boolean metadataHasCusId = false;
+                if (customer.getCard() != null) {
+                    metadataHasCusId = c.getMetadata().containsValue(customer.getCard().getCustomerId());
+                }
+                if (metadataHasCusId && c.getDescription().equals("Payment for " + productName)) {
+                    paid.set(true);
+                }
+            });
+        }
+        return paid.get();
     }
 }

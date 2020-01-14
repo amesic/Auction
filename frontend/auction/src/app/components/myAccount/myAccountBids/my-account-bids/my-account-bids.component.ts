@@ -43,24 +43,6 @@ export class MyAccountBidsComponent implements OnInit {
           console.log(err);
         }
       );
-  /*// Open connection with server socket
-  this.stompClient = this.webSocketService.connect();
-  this.stompClient.connect({}, frame => {
-    let urlarray = this.stompClient.ws._transport.url.split('/');
-    this.sessionId = urlarray[urlarray.length-2];
-  // Subscribe to notification queue/notify
-  this.stompClient.subscribe('/user/queue/notify/timeLeft', notifications => {
-    // Update notifications attribute with the recent messsage sent from the server
-    //this.numberOfViewers = JSON.parse(notifications.body);
-  });
-      let object = {
-        "email": this.loginService.getUserEmail(),
-        "bids" : this.items,
-        "sessionId": this.sessionId
-      }
-      this.stompClient.send("/app/send/message/bidsOfUser" , {}, JSON.stringify(object));
-    
-  });*/
 }
 
   loadMore() {

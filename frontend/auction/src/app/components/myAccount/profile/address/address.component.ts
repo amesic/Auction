@@ -72,9 +72,10 @@ export class AddressComponent implements OnInit {
         this.messageStreetInput = "";
       }
       if (
-        this.addressInfo != undefined &&
+        (this.addressInfo != undefined &&
         value != null &&
-        value != this.addressInfo.street
+        value != this.addressInfo.street) ||
+        (this.addressInfo == null && value != null)
       ) {
         this.changeStreetInput = true;
       }
@@ -89,9 +90,10 @@ export class AddressComponent implements OnInit {
         this.messageStateInput = "";
       }
       if (
-        this.addressInfo != undefined &&
+        (this.addressInfo != undefined &&
         value != null &&
-        value != this.addressInfo.state
+        value != this.addressInfo.state) ||
+        (this.addressInfo == null && value != null)
       ) {
         this.changeStateInput = true;
       }
@@ -106,9 +108,10 @@ export class AddressComponent implements OnInit {
         this.messageZipcodeInput = "";
       }
       if (
-        this.addressInfo != undefined &&
+        (this.addressInfo != undefined &&
         value != null &&
-        value != this.addressInfo.zipCode
+        value != this.addressInfo.zipCode) ||
+        (this.addressInfo == null && value != null)
       ) {
         this.changeZipcodeInput = true;
       }
@@ -123,9 +126,10 @@ export class AddressComponent implements OnInit {
         this.messageCountryInput = "";
       }
       if (
-        this.addressInfo != undefined &&
+        (this.addressInfo != undefined &&
         value != null &&
-        value != this.addressInfo.country
+        value != this.addressInfo.country) ||
+        (this.addressInfo == null && value != null)
       ) {
         this.changeCountryInput = true;
       }
@@ -140,9 +144,10 @@ export class AddressComponent implements OnInit {
         this.messageCityInput = "";
       }
       if (
-        this.addressInfo != undefined &&
+        (this.addressInfo != undefined &&
         value != null &&
-        value != this.addressInfo.city
+        value != this.addressInfo.city) ||
+        (this.addressInfo == null && value != null)
       ) {
         this.changeCityInput = true;
       }

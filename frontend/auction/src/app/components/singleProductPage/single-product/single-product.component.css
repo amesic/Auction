@@ -226,19 +226,28 @@
   cursor: pointer;
   color: #494949;
 }
+.message.paidMessage {
+  background-color: #d9f0cf;
+  color: #6cc047;
+
+}
 .showMessage {
   display: flex;
 }
 .infoSeller {
   display: flex;
-  justify-content: space-between;
-  width: 350px;
+  justify-content: flex-start;
   align-items: center;
   font: 400 16px "Lato", sans-serif;
   margin-bottom: 30px;
 }
-.infoSeller > fa-icon {
+.infoSeller > div > fa-icon {
   color: #8367d8;
+  margin-right: 5px;
+}
+.infoSeller > .seller-info {
+  margin-right: 15px;
+
 }
 .infoSeller > div > img {
   border-radius: 50%;
@@ -247,6 +256,10 @@
   object-fit: cover;
   margin: 0;
   padding: 0;
+  margin-right: 5px;
+  margin-left: 10px;
+}
+.infoSeller > .rating {
   margin-right: 10px;
 }
 .infoSeller > div {

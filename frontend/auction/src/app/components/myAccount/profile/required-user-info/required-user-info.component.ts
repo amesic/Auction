@@ -84,9 +84,10 @@ export class RequiredUserInfoComponent implements OnInit, OnChanges {
           this.messageUsernameInput = "";
         }
         if (
-          this.userInfo != undefined &&
+          (this.userInfo != undefined &&
           value != null &&
-          value != this.userInfo.userName
+          value != this.userInfo.userName)  ||
+          (this.userInfo == null && value != null)
         ) {
           this.changeUsernameInput = true;
         }
@@ -103,9 +104,10 @@ export class RequiredUserInfoComponent implements OnInit, OnChanges {
           this.messagePhonenumberInput = "";
         }
         if (
-          this.userInfo != undefined &&
+          (this.userInfo != undefined &&
           value != null &&
-          value != this.userInfo.phoneNumber
+          value != this.userInfo.phoneNumber) ||
+          (this.userInfo == null && value != null)
         ) {
           this.changePhonenumberInput = true;
         }
@@ -122,9 +124,10 @@ export class RequiredUserInfoComponent implements OnInit, OnChanges {
           this.messageEmailInput = "";
         }
         if (
-          this.userInfo != undefined &&
+          (this.userInfo != undefined &&
           value != null &&
-          value != this.userInfo.email
+          value != this.userInfo.email) ||
+          (this.userInfo == null && value != null)
         ) {
           this.changeEmailInput = true;
         }
@@ -391,12 +394,6 @@ export class RequiredUserInfoComponent implements OnInit, OnChanges {
       reader.onload = _event => {
         this.previewUrl = reader.result;
         this.userInfo.image = this.previewUrl;
-        /*this.userService.saveProfileImage(this.loginService.getUserEmail(), this.previewUrl)
-        .subscribe(image => {
-          this.userInfo.image = image.url;
-        }, err => {
-          console.log(err);
-        })*/
       };
     }
   }

@@ -24,28 +24,35 @@
     timeLeft.substr(0,1) == '-' && 
     !close && 
     highestBid != undefined &&
-    (userIsSeller || highestBid.user.email == loginService.getUserEmail())}">
+    (userIsSeller || highestBid.user.email == loginService.getUserEmail()),
+    paidMessage: paid}">
     <div>
     <fa-icon [icon]="faCheckCircle"></fa-icon>
-    <p *ngIf="highestBid != undefined && !userIsSeller && highestBid.user.email == loginService.getUserEmail()"><strong> Congratulations!</strong> You outbid the competition</p>
+    <p *ngIf="highestBid != undefined && !userIsSeller && highestBid.user.email == loginService.getUserEmail() && !paid"><strong> Congratulations!</strong> You outbid the competition</p>
+    <p *ngIf="highestBid != undefined && !userIsSeller && highestBid.user.email == loginService.getUserEmail() && paid"><strong> Congratulations!</strong> You paid for this item!</p>
     <p *ngIf="highestBid != undefined && userIsSeller"><strong> {{ highestBid.user.userName }}</strong> is the highest bidder!</p>
   </div>
   <fa-icon [icon]="faTimes" (click)="closeMessage()"></fa-icon>
 </div>
 
-<div *ngIf="!userIsSeller && 
-highestBid != undefined && 
-highestBid.user.email == loginService.getUserEmail() &&
-timeLeft.substr(0,1) == '-'" class="infoSeller">
-<p class="infoBid">Seller:</p>
-<div>
+<div class="infoSeller">
+<p *ngIf="!userIsSeller" class="infoBid">Seller:</p>
+<p *ngIf="userIsSeller" class="infoBid">You:</p>
+<div class="seller-info">
 <img src="{{ productInfo.seller.image }}">
 <p>{{ productInfo.seller.userName }}</p>
 </div>
+<div class="rating">
 <fa-icon [icon]="faStar"></fa-icon>
 <p *ngIf="ratingSeller != null">{{ ratingSeller | number: '1.1-1' }}/5</p>
 <p *ngIf="ratingSeller == null">0/5</p>
-<input type="button" value="PAY" class="pay" (click)="pay()">
+</div>
+<input *ngIf="!userIsSeller && 
+highestBid != undefined && 
+highestBid.user.email == loginService.getUserEmail() &&
+timeLeft.substr(0,1) == '-' &&
+!paid" 
+type="button" value="PAY" class="pay" (click)="pay()">
 </div>
 
 <div *ngIf="!userIsSeller && timeLeft.substr(0,1) != '-'" class="bid">

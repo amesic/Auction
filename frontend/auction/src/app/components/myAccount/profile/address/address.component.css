@@ -98,7 +98,7 @@
   background: #ffd8d8;
 }
 
-.required .title-title {
+.optional .title-title {
   margin: 0;
   padding: 0;
   font: 700 20px "Lato", sans-serif;

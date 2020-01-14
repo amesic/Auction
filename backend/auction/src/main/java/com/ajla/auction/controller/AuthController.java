@@ -291,15 +291,18 @@ public class AuthController {
     public ResponseEntity<?> chargeCustomer(@RequestParam("emailCustomer") final String emailCustomer,
                                             @RequestParam("emailSeller") final String emailSeller,
                                             @RequestParam("productId") final Long productId,
+                                            @RequestParam(required = false) final String token,
                                             @RequestParam("amount") final int amount) {
         User customer = userService.findByEmail(emailCustomer);
         User seller = userService.findByEmail(emailSeller);
         Product product = productService.findSingleProduct(productId);
         try {
-            String chargeId = stripeService.createCharge(
-                    customer.getCard().getCustomerId(),
+           String chargeId = stripeService.createCharge(
+                    customer,
+                    product.getId(),
                     seller.getCard().getAccountId(),
                     product.getTitle(),
+                    token,
                     amount
             );
             return new ResponseEntity<>(HttpStatus.OK);
@@ -322,9 +325,10 @@ public class AuthController {
     public ResponseEntity<?> saveRequiredInfoFromUser(@RequestBody final RequiredInfoUser requiredInfoUser) {
         try {
             User updatedUser = userService.findByEmail(requiredInfoUser.getEmail());
-            String url = cloudinaryService.saveProfileImage(requiredInfoUser.getImage(), updatedUser.getId());
-            requiredInfoUser.setImage(url);
-
+            if (requiredInfoUser.getImage() != null) {
+                String url = cloudinaryService.saveProfileImage(requiredInfoUser.getImage(), updatedUser.getId());
+                requiredInfoUser.setImage(url);
+            }
             updatedUser = userService.saveUserRequiredInfo(requiredInfoUser);
             RequiredInfoUser savedUserInfo = new RequiredInfoUser();
             savedUserInfo.setEmail(updatedUser.getEmail());
@@ -349,19 +353,24 @@ public class AuthController {
         return new ResponseEntity<>(userService.saveAddressOfUser(user), HttpStatus.OK);
     }
 
-  /*  @PostMapping("/user/profile/image")
-    public ResponseEntity<?> saveImageProfile(@RequestBody final User user) {
+    @PostMapping("/user/payment/info")
+    public ResponseEntity<?> savePaymentInfo(@RequestBody final User user) {
         try {
-            User updatedUser = userService.findByEmail(user.getEmail());
-            String url = cloudinaryService.saveProfileImage(user.getImage(), updatedUser.getId());
-            Map<String, Object> image = new HashMap<>();
-            image.put("url", url);
-            userService.saveProfileImage(url, updatedUser.getEmail());
-            return new ResponseEntity<>(image, HttpStatus.OK);
-        } catch (IOException ex) {
+            return new ResponseEntity<>(userService.savePaymentInfo(user), HttpStatus.OK);
+        } catch (Throwable ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }*/
+    }
 
-
+    @GetMapping("/user/payments")
+    public ResponseEntity<?> checkIfUserPaidItem(@RequestParam("emailCustomer") final String emailCustomer,
+                                                 @RequestParam("productId") final Long productId) {
+        User customer = userService.findByEmail(emailCustomer);
+        Product product = productService.findSingleProduct(productId);
+        try {
+            return new ResponseEntity<>(stripeService.checkIfCustomerPaidItem(customer, product.getTitle()), HttpStatus.OK);
+        } catch (StripeException ex) {
+            return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

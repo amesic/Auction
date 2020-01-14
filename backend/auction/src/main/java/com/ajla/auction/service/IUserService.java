@@ -15,4 +15,6 @@ public interface IUserService {
     User saveUserRequiredInfo(final RequiredInfoUser requiredInfoUser) throws Throwable;
 
     Address saveAddressOfUser(final User user);
+
+    User savePaymentInfo(final User user) throws Throwable;
 }

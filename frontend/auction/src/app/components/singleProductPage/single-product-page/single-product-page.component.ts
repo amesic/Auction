@@ -24,6 +24,7 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
   timeLeft;
   hide;
   ratingSeller;
+  paid;
 
   pageNumber = 0;
   size = 5;
@@ -31,6 +32,7 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
   stompClient = null;
   sessionId;
   showNotification = false;
+  loading = false;
   faTimes = faTimes;
 
   dhms(t) {
@@ -181,6 +183,12 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
       this.productService.getRelatedProducts(routeParams.idProduct).subscribe(relatedProducts => {
           this.relatedProducts = relatedProducts;
         });
+        this.loading = true;
+      this.userService.checkIfCustomerPaidItem(this.loginService.getUserEmail(), routeParams.idProduct)
+        .subscribe(paid => {
+          this.loading = false;
+          this.paid = paid;
+        }, err => console.log(err.error));
     });
     this.router.events.subscribe(evt => {
      if (!(evt instanceof NavigationEnd)) {

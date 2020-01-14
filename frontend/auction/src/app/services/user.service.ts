@@ -22,7 +22,8 @@ export class UserService {
   urlSaveRateFromUser = "/auth/rate";
   urlSaveRequiredInfo = "/auth/user/required/info";
   urlSaveAddressInfo = "/auth/user/address/info";
-  urlSaveProfileImage = "/auth/user/profile/image";
+  urlSavePaymentInfo = "/auth/user/payment/info";
+  urlUserPayments = "/auth/user/payments";
 
   constructor(private http: HttpClient) {}
 
@@ -46,19 +47,17 @@ export class UserService {
     emailCustomer,
     emailSeller,
     productId,
+    token,
     amount
   ): Observable<any> {
-    return this.http.get<any>(
-      this.urlChargeCustomer +
-        "?emailCustomer=" +
-        emailCustomer +
-        "&emailSeller=" +
-        emailSeller +
-        "&productId=" +
-        productId +
-        "&amount=" +
-        amount
-    );
+    let url = this.urlChargeCustomer;
+    url += "?emailCustomer=" + emailCustomer + "&emailSeller=" + emailSeller + "&productId=" + productId;
+    if (token == null) {
+      url +=  "&amount=" + amount;
+    } else {
+      url += "&token=" + token + "&amount=" + amount;
+    }
+    return this.http.get<any>(url);
   }
   ratingOfSeller(emailSeller): Observable<any> {
     return this.http.get<any>(
@@ -103,7 +102,6 @@ export class UserService {
       httpOptions
     );
   }
-
   saveAddressInfoFromUser(
     email,
     state,
@@ -126,5 +124,34 @@ export class UserService {
       },
       httpOptions
     );
+  }
+  savePaymentInfo(
+    email,
+    phonenumber,
+    state,
+    street,
+    city,
+    zipCode,
+    country
+  ): Observable<User> {
+    return this.http.post<User>(
+      this.urlSavePaymentInfo,
+      {
+        email: email,
+        phoneNumber: phonenumber,
+        address: {
+          city: city,
+          country: country,
+          state: state,
+          street: street,
+          zipCode: zipCode
+        }
+      },
+      httpOptions
+    );
+  }
+  checkIfCustomerPaidItem(emailCustomer, productId): Observable<Boolean> {
+    return this.http.get<Boolean>(this.urlUserPayments
+       + "?emailCustomer=" + emailCustomer + "&productId=" + productId);
   }
 }

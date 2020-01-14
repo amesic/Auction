@@ -133,5 +133,17 @@ public class UserService implements IUserService, UserDetailsService {
         }
     }
 
+    @Override
+    public  User savePaymentInfo(final User user) throws Throwable {
+        saveAddressOfUser(user);
+        User updatedUser = findByEmail(user.getEmail());
+        if (user.getPhoneNumber().matches("^[+]*[(]?[0-9]{1,4}[)]?[-\\s./0-9]*$")) {
+            updatedUser.setPhoneNumber(user.getPhoneNumber());
+            return userRepository.save(updatedUser);
+        } else {
+            throw new Throwable("Phone number is invalid!");
+        }
+    }
+
 
 }
