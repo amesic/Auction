@@ -46,7 +46,7 @@ export class SingleProductComponent implements OnInit, OnChanges {
 
 
   constructor(
-    private loginService: LoginService, 
+    public loginService: LoginService, 
     private bidService: BidsService,
     private watchlistService: WatchlistService,
     private router: Router) {} 
@@ -61,7 +61,6 @@ export class SingleProductComponent implements OnInit, OnChanges {
     if (this.errorMess != null) {
       this.errorMess = null;
     }
-    console.log(this.paid);
    }
   ngOnInit() {
     if(this.userIsLoged != true) {

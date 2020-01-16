@@ -36,6 +36,9 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
   faTimes = faTimes;
 
   dhms(t) {
+    if (t < 3600 && t > 0) {
+      return "Less than an hour";
+    }
     var years, months, days, hours;
     years = Math.floor(t / 31104000);
     t -= years * 31104000;
@@ -141,6 +144,17 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
           this.timeLeft = this.dhms(
             Math.floor((<any>date - new Date().getTime()) / 1000)
           );
+          if (this.timeLeft.substr(0,1) == "-") {
+          this.loading = true;
+        this.userService.checkIfCustomerPaidItem(this.loginService.getUserEmail(), routeParams.idProduct)
+          .subscribe(paid => {
+            this.loading = false;
+            this.paid = paid;
+          }, err => {
+            console.log(err.error);
+            this.loading = false;
+          });
+        }
         });
       this.productService.getNumberViewers(routeParams.idProduct).subscribe(number => {
         this.numberOfViewers = number;
@@ -183,12 +197,6 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
       this.productService.getRelatedProducts(routeParams.idProduct).subscribe(relatedProducts => {
           this.relatedProducts = relatedProducts;
         });
-        this.loading = true;
-      this.userService.checkIfCustomerPaidItem(this.loginService.getUserEmail(), routeParams.idProduct)
-        .subscribe(paid => {
-          this.loading = false;
-          this.paid = paid;
-        }, err => console.log(err.error));
     });
     this.router.events.subscribe(evt => {
      if (!(evt instanceof NavigationEnd)) {

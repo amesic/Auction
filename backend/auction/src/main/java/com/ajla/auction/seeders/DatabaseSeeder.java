@@ -428,7 +428,7 @@ public class DatabaseSeeder {
             p21.setSubcategory(c);
             p21.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
             p21.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
-            p21.setEndDate(LocalDateTime.of(2020, Month.JANUARY, 15, 0, 15));
+            p21.setEndDate(LocalDateTime.of(2020, Month.JANUARY, 16, 15, 8));
             u = userRepo.findUserById((long) 1);
             p21.setSeller(u);
             p21.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -444,7 +444,7 @@ public class DatabaseSeeder {
             p22.setSubcategory(c);
             p22.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
             p22.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
-            p22.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 12, 10, 30));
+            p22.setEndDate(LocalDateTime.of(2020, Month.JANUARY, 16, 16, 8));
             u = userRepo.findUserById((long) 1);
             p22.setSeller(u);
             p22.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -1152,7 +1152,39 @@ public class DatabaseSeeder {
             b5.setUser(u);
             b5.setValue((double) 3000);
 
-            bidRepository.saveAll(Arrays.asList(b, b1, b5));
+            Bid b6 = new Bid();
+            b6.setDate((LocalDate.parse("5.11.2019", formatter)));
+            p = productRepo.findProductById((long) 22);
+            b6.setProduct(p);
+            u = userRepo.findUserById((long) 4);
+            b6.setUser(u);
+            b6.setValue((double) 2000);
+
+            Bid b7 = new Bid();
+            b7.setDate((LocalDate.parse("5.11.2019", formatter)));
+            p = productRepo.findProductById((long) 23);
+            b7.setProduct(p);
+            u = userRepo.findUserById((long) 4);
+            b7.setUser(u);
+            b7.setValue((double) 2000);
+
+            Bid b8 = new Bid();
+            b8.setDate((LocalDate.parse("5.11.2019", formatter)));
+            p = productRepo.findProductById((long) 23);
+            b8.setProduct(p);
+            u = userRepo.findUserById((long) 3);
+            b8.setUser(u);
+            b8.setValue((double) 5000);
+
+            Bid b9 = new Bid();
+            b9.setDate((LocalDate.parse("5.11.2019", formatter)));
+            p = productRepo.findProductById((long) 22);
+            b9.setProduct(p);
+            u = userRepo.findUserById((long) 3);
+            b9.setUser(u);
+            b9.setValue((double) 1500);
+
+            bidRepository.saveAll(Arrays.asList(b, b1, b5, b7, b6, b8, b9));
 
         logger.info("Bid table seeded");
     }

@@ -44,9 +44,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 @CrossOrigin(origins = {"http://localhost:4200", "https://atlantbh-auction.herokuapp.com"}, allowCredentials = "true")
@@ -245,6 +244,8 @@ public class AuthController {
                         cardService.saveAccountId(user.getCard().getId(), accountId);
                     } catch(StripeException ex) {
                         return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
                 return new ResponseEntity<>(cardUpdated, HttpStatus.OK);
@@ -262,6 +263,8 @@ public class AuthController {
                         cardService.saveAccountId(savedCard.getId(), accountId);
                     } catch(StripeException ex) {
                         return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
                 return new ResponseEntity<>(cardSavedInfo, HttpStatus.OK);
@@ -324,7 +327,7 @@ public class AuthController {
     @PostMapping("/user/required/info")
     public ResponseEntity<?> saveRequiredInfoFromUser(@RequestBody final RequiredInfoUser requiredInfoUser) {
         try {
-            User updatedUser = userService.findByEmail(requiredInfoUser.getEmail());
+            User updatedUser = userService.findByEmail(requiredInfoUser.getEmailLoggedUser());
             if (requiredInfoUser.getImage() != null) {
                 String url = cloudinaryService.saveProfileImage(requiredInfoUser.getImage(), updatedUser.getId());
                 requiredInfoUser.setImage(url);

@@ -23,7 +23,7 @@ export class MyAccountComponent implements OnInit {
 
   constructor(
     private userService: UserService, 
-    private loginService: LoginService) { }
+    public loginService: LoginService) { }
 
   ngOnInit() {
     this.userService.getUserInfo(this.loginService.getUserEmail()).subscribe(user => {
@@ -39,7 +39,7 @@ export class MyAccountComponent implements OnInit {
       if (this.userInfo.gender != null) {
         this.gender = this.userInfo.gender;
       }
-    });
+    }, err => console.log(err.error));
     this.userService.getCardInfo(this.loginService.getUserEmail()).subscribe(card => {
       this.cardInfo = card;
      if (this.cardInfo != null) {

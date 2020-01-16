@@ -13,6 +13,15 @@ import com.stripe.model.Account;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -138,7 +147,7 @@ public class StripeService implements IStripeService{
     }
 
     @Override
-    public String createStripeAccountForSeller(final User seller, final CardInfo cardInfo) throws StripeException {
+    public String createStripeAccountForSeller(final User seller, final CardInfo cardInfo) throws StripeException, IOException {
         Stripe.apiKey = API_SECRET_KEY;
         List<Object> requestedCapabilities = new ArrayList<>();
         requestedCapabilities.add("card_payments");
@@ -157,15 +166,21 @@ public class StripeService implements IStripeService{
         dob.put("month", 12);
         dob.put("year", 1990);
 
+
+        URL url = new URL("https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80");
+        Image image = ImageIO.read(url);
+        java.io.File file = new java.io.File("img1.jpg");
+        file.createNewFile();
+        ImageIO.write((RenderedImage) image, "jpg", file);
+
         Map<String, Object> fileParamsFront = new HashMap<>();
         fileParamsFront.put("purpose", "identity_document");
-        fileParamsFront.put("file", new java.io.File("C:\\Users\\G3 16GB\\Desktop\\Auction\\backend\\imagesForStripe\\img1.jpg"));
+        fileParamsFront.put("file", file);
         String frontId = File.create(fileParamsFront).getId();
-
 
         Map<String, Object> fileParamsBack = new HashMap<>();
         fileParamsBack.put("purpose", "identity_document");
-        fileParamsBack.put("file", new java.io.File("C:\\Users\\G3 16GB\\Desktop\\Auction\\backend\\imagesForStripe\\img2.jpg"));
+        fileParamsBack.put("file", file);
         String backId = File.create(fileParamsBack).getId();
 
         Map<String, Object> document= new HashMap<>();

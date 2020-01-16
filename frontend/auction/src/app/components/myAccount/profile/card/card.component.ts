@@ -45,7 +45,7 @@ export class CardComponent implements OnInit {
 
   constructor(
     private userService: UserService, 
-    private loginService: LoginService,
+    public loginService: LoginService,
     private _zone: NgZone) { }
 
   ngOnInit() {
@@ -99,6 +99,12 @@ export class CardComponent implements OnInit {
       this.changeYear = true;
     }
     this.yearExp = year; 
+    if (this.yearExp != "Year") {
+      this.incorrectYear = false;
+      if (this.monthExp != "Month") {
+        this.messageExpDate = "";
+      }
+    }
   }
 
   pickAMonth(month) {
@@ -106,6 +112,12 @@ export class CardComponent implements OnInit {
       this.changeMonth = true;
     } 
     this.monthExp = month;
+    if (this.monthExp != "Month") {
+      this.incorrectMonth = false;
+      if (this.yearExp != "Year") {
+        this.messageExpDate = "";
+      }
+    }
   }
 
   get name() {
@@ -194,7 +206,7 @@ export class CardComponent implements OnInit {
           this.changeCvcInput = false;
           this.changeMonth = false;
           this.changeYear = false;
-         });
+         }, err => console.log(err.error));
         } else {
           this.loading = false;
          if (response.error.message == "The card number is not a valid credit card number."

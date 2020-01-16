@@ -1,4 +1,4 @@
-import { PriceNumber } from './priceNumber';
+import { PriceNumber } from './PriceNumber';
 
 export class PriceProduct {
     avgPrice;

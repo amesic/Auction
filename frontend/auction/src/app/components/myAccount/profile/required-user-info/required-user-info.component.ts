@@ -146,24 +146,46 @@ export class RequiredUserInfoComponent implements OnInit, OnChanges {
       this.changeGender = true;
     }
     this.gender = gender;
+    if (this.gender != "Your Gender") {
+      this.incorrectGender = false;
+      this.messageGender = "";
+    }
   }
   pickAMonthOfBirth(month) {
     if (this.month != null && this.month != month) {
       this.changeMonth = true;
     }
     this.month = month;
+    if (this.month != "Month") {
+      this.incorrectMonthBirth = false;
+      if (this.day != "Day" && this.year != "Year") {
+        this.messageBirthDate = "";
+      }
+    }
   }
   pickADayOfBirth(day) {
     if (this.day != null && this.day != day) {
       this.changeDay = true;
     }
     this.day = day;
+    if (this.day != "Day") {
+      this.incorrectDayBirth = false;
+      if (this.month != "Month" && this.year != "Year") {
+        this.messageBirthDate = "";
+      }
+    }
   }
   pickAYearOfBirth(year) {
     if (this.year != null && this.year != year) {
       this.changeYear = true;
     }
     this.year = year;
+    if (this.year != "Year") {
+      this.incorrectYearBirth = false;
+      if (this.day != "Day" && this.month != "Month") {
+        this.messageBirthDate = "";
+      }
+    }
   }
 
   get username() {

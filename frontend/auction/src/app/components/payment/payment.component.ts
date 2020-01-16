@@ -119,6 +119,13 @@ export class PaymentComponent implements OnInit {
         .getUserInfo(this.loginService.getUserEmail())
         .subscribe(user => {
           this.userInfo = user;
+          if (this.userInfo != null && this.userInfo.address != null) {
+            this.addressForm.get("phonenumber").setValue(this.userInfo.phoneNumber);
+            this.addressForm.get("city").setValue(this.userInfo.address.city);
+            this.addressForm.get("country").setValue(this.userInfo.address.country);
+            this.addressForm.get("street").setValue(this.userInfo.address.street);
+            this.addressForm.get("zipcode").setValue(this.userInfo.address.zipCode);
+          }
         });
       this.userService.getCardInfo(this.loginService.getUserEmail()).subscribe(
         card => {
@@ -126,6 +133,8 @@ export class PaymentComponent implements OnInit {
           if (this.cardInfo != null) {
             this.yearExp = this.cardInfo.exp_year;
             this.monthExp = this.cardInfo.exp_month;
+            this.cardForm.get("number").setValue("************" + this.cardInfo.number);
+            this.cardForm.get("name").setValue(this.cardInfo.name);
           }
         },
         err => console.log(err.error)
@@ -294,6 +303,12 @@ export class PaymentComponent implements OnInit {
       this.changeYear = true;
     }
     this.yearExp = year;
+    if (this.yearExp != "Year") {
+      this.incorrectYear = false;
+      if (this.monthExp != "Month") {
+        this.messageExpDate = "";
+      }
+    }
   }
 
   pickAMonth(month) {
@@ -301,6 +316,12 @@ export class PaymentComponent implements OnInit {
       this.changeMonth = true;
     }
     this.monthExp = month;
+    if (this.monthExp != "Month") {
+      this.incorrectMonth = false;
+      if (this.yearExp != "Year") {
+        this.messageExpDate = "";
+      }
+    }
   }
 
   checkboxAddress(event) {
@@ -515,6 +536,26 @@ export class PaymentComponent implements OnInit {
         });
         
       }
+      if (this.cardInfo != null && 
+        this.cardForm.get("number").value == "************" + this.cardInfo.number &&
+        !this.saveCard) {
+          this.userService.chargeCustomer(
+            this.userInfo.email,
+            this.product.seller.email,
+            this.product.id,
+            null,
+            this.highestBid.value * 100
+          ).subscribe(
+            response => {
+              this.loading = false;
+              this.hidePopUp = false;
+              window.scroll(0, 0);
+            },
+            err => console.log("ERROR", err.error)
+          );
+
+        }
+        else {
         (<any>window).Stripe.card.createToken({
           number: this.cardForm.get("number").value,
           exp_month: this.monthExp,
@@ -588,7 +629,8 @@ export class PaymentComponent implements OnInit {
             this.loading = false;
             cardHtmlElement.scrollIntoView();
            if (response.error.message == "The card number is not a valid credit card number."
-            || response.error.message == "Your card number is incorrect.") {
+            || response.error.message == "Your card number is incorrect." 
+            || response.error.message == "card_declined") {
               this.messageNumberInput = response.error.message;
               this.incorrectNumberInput = true;
               this.loading = false;
@@ -602,6 +644,7 @@ export class PaymentComponent implements OnInit {
         });  
       }); 
     }
+  }
   }
 
   onRate($event: {
