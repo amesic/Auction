@@ -291,6 +291,7 @@ export class RequiredUserInfoComponent implements OnInit, OnChanges {
           savedInfo => {
             this.loading = false;
             this.userInfo = savedInfo;
+            this.image = this.userInfo.image;
             if (this.userInfo.token != null) {
               this.loginService.setSession(
                 this.userInfo.token,
