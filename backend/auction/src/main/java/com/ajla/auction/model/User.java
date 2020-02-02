@@ -33,12 +33,19 @@ public class User {
     private String image; //path for image
     private LocalDate birthDate;
     private String phoneNumber;
+    private Boolean seller;
 
     //address table
     @OneToOne
     @Target(Address.class)
     @JoinColumn(name = "idAddress")
     private Address address;
+
+    //cards table
+    @OneToOne
+    @Target(Card.class)
+    @JoinColumn(name = "idCard")
+    private Card card;
 
     //bids table
     @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
@@ -99,5 +106,17 @@ public class User {
     }
     public void setBids(List<Bid> bids) {
         this.bids = bids;
+    }
+    public Card getCard() {
+        return card;
+    }
+    public void setCard(Card card) {
+        this.card = card;
+    }
+    public Boolean getSeller() {
+        return seller;
+    }
+    public void setSeller(Boolean seller) {
+        this.seller = seller;
     }
 }

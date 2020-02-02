@@ -1,5 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
+import { NgModule, InjectionToken } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { BasicAuthHtppInterceptorServiceService } from './services/basic-auth-htpp-interceptor-service.service';
@@ -9,6 +9,9 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { Ng5SliderModule } from 'ng5-slider';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WebSocketService } from "./services/web-socket.service";
+import { CountdownModule } from 'ngx-countdown';
+import { NgxStripeModule } from 'ngx-stripe';
+import { RatingModule } from 'ng-starrating';
 
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -40,7 +43,7 @@ import { ShopProductsComponent } from './components/shopProduct/products/shop-pr
 import { ErrorComponent } from './components/error/error.component';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
 import { FilterPriceComponent } from './components/shopProduct/filters/filter-price/filter-price.component';
-import { MyAccountComponent } from './components/myAccount/my-account/my-account.component';
+import { MyAccountComponent } from './components/myAccount/profile/my-account/my-account.component';
 import { TabsComponent } from './components/myAccount/tabs/tabs.component';
 import { MyAccountProductsComponent } from './components/myAccount/myAccountProducts/my-account-products/my-account-products.component';
 import { MyAccountBidsComponent } from './components/myAccount/myAccountBids/my-account-bids/my-account-bids.component';
@@ -48,6 +51,11 @@ import { MyAccountWatchlistComponent } from './components/myAccount/myAccountWat
 import { MyAccountProductsListComponent } from './components/myAccount/myAccountProducts/my-account-products-list/my-account-products-list.component';
 import { MyAccountWatchlistListComponent } from './components/myAccount/myAccountWatchlist/my-account-watchlist-list/my-account-watchlist-list.component';
 import { MyAccountBidsListComponent } from './components/myAccount/myAccountBids/my-account-bids-list/my-account-bids-list.component';
+import { PaymentComponent } from './components/payment/payment.component';
+import { CardComponent } from './components/myAccount/profile/card/card.component';
+import { AddressComponent } from './components/myAccount/profile/address/address.component';
+import { RequiredUserInfoComponent } from './components/myAccount/profile/required-user-info/required-user-info.component';
+import { SpinnerComponent } from './components/myAccount/spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +94,11 @@ import { MyAccountBidsListComponent } from './components/myAccount/myAccountBids
     MyAccountProductsListComponent,
     MyAccountWatchlistListComponent,
     MyAccountBidsListComponent,
+    PaymentComponent,
+    CardComponent,
+    AddressComponent,
+    RequiredUserInfoComponent,
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,
@@ -96,7 +109,10 @@ import { MyAccountBidsListComponent } from './components/myAccount/myAccountBids
     FormsModule,
     NgxChartsModule,
     BrowserAnimationsModule,
-    Ng5SliderModule
+    Ng5SliderModule,
+    CountdownModule,
+    NgxStripeModule.forRoot('pk_test_TR5mGkpcgr38V10nUPn33Fgo0079fPVuwK'),
+    RatingModule
   ],
   providers: [
     LoginRegisterActivate,

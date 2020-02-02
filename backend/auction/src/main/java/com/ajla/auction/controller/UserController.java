@@ -1,8 +1,11 @@
 package com.ajla.auction.controller;
 
 import com.ajla.auction.config.JwtTokenUtil;
+import com.ajla.auction.model.Card;
 import com.ajla.auction.model.JwtResponse;
 import com.ajla.auction.model.User;
+import com.ajla.auction.service.CardService;
+import com.ajla.auction.service.StripeService;
 import com.ajla.auction.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -35,10 +38,14 @@ public class UserController {
     @Autowired
     public UserController(final UserService userService,
                           final AuthenticationManager authenticationManager,
-                          final JwtTokenUtil jwtTokenUtil) {
+                          final JwtTokenUtil jwtTokenUtil,
+                          final StripeService stripeService,
+                          final CardService cardService) {
         Objects.requireNonNull(userService, "userService must not be null.");
         Objects.requireNonNull(authenticationManager, "authenticationManager must not be null.");
         Objects.requireNonNull(jwtTokenUtil, "jwtTokenUtil must not be null.");
+        Objects.requireNonNull(stripeService, "stripeService must not be null.");
+        Objects.requireNonNull(cardService, "cardService must not be null.");
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;

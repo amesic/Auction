@@ -21,6 +21,7 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Join;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.List;
 import java.util.Collections;
@@ -81,13 +82,13 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         cqForProductsSize.select(cb.count(productForProductsSize))
                 .where(cb.or(
-                        cb.equal(productForProductsSize.get("endDate"), LocalDate.now()),
-                        cb.equal(productForProductsSize.get("endDate"), LocalDate.now().plusDays(1))
+                        cb.equal(productForProductsSize.get("endDate"), LocalDateTime.now()),
+                        cb.equal(productForProductsSize.get("endDate"), LocalDateTime.now().plusDays(1))
                 ));
 
         cq.where(cb.or(
-                cb.equal(product.get("endDate"), LocalDate.now()),
-                cb.equal(product.get("endDate"), LocalDate.now().plusDays(1))
+                cb.equal(product.get("endDate"), LocalDateTime.now()),
+                cb.equal(product.get("endDate"), LocalDateTime.now().plusDays(1))
         ))
                 .orderBy(cb.asc(product.get("endDate")));
         final TypedQuery<Product> queryForListProducts = em.createQuery(cq);
@@ -113,12 +114,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         cqForSizeOfProducts.select(cb.count(productForSizeOfProducts))
                 .where(cb.and(
-                        cb.greaterThanOrEqualTo(productForSizeOfProducts.get("endDate"), LocalDate.now()),
-                        cb.lessThanOrEqualTo(productForSizeOfProducts.get("startDate"), LocalDate.now())
+                        cb.greaterThanOrEqualTo(productForSizeOfProducts.get("endDate"), LocalDateTime.now()),
+                        cb.lessThanOrEqualTo(productForSizeOfProducts.get("startDate"), LocalDateTime.now())
                 ));
         cq.where(cb.and(
-                cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
-                cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
+                cb.greaterThanOrEqualTo(product.get("endDate"), LocalDateTime.now()),
+                cb.lessThanOrEqualTo(product.get("startDate"), LocalDateTime.now())
         ))
                 .orderBy( cb.desc(product.get("startDate")));
 
@@ -158,8 +159,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         cq.where(cb.and(
                 cb.equal(product.get("subcategory"), idSubcategory),
                 cb.notEqual(product.get("id"), idProduct),
-                cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
-                cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
+                cb.greaterThanOrEqualTo(product.get("endDate"), LocalDateTime.now()),
+                cb.lessThanOrEqualTo(product.get("startDate"), LocalDateTime.now())
         ))
                 .orderBy(cb.desc(product.get("startDate")));
 
@@ -205,8 +206,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 for (Category subcategory : category.getSubcategories()) {
                     cq.where(cb.and(
                             cb.equal(product.get("subcategory"), subcategory.getId()),
-                            cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now()),
-                            cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now())
+                            cb.lessThanOrEqualTo(product.get("startDate"), LocalDateTime.now()),
+                            cb.greaterThanOrEqualTo(product.get("endDate"), LocalDateTime.now())
                     ));
                     query = em.createQuery(cq);
                     NumberOfProductsInfo subcategoryInfo = new NumberOfProductsInfo(
@@ -277,7 +278,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 query.setParameter("lowerBound", lowerBound);
                 query.setParameter("upperBound", upperBound);
             }
-            query.setParameter("dateNow", LocalDate.now());
+            query.setParameter("dateNow", LocalDateTime.now());
             NumberOfProductsInfo categoryOfCharacteristic = new NumberOfProductsInfo(oneOfCharacteristic.getId(),
                     oneOfCharacteristic.getName(), Collections.emptyList(), query.getSingleResult());
             allCategoriesOfMainCharacteristic.add(categoryOfCharacteristic);
@@ -302,30 +303,30 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             if (searchUser == null) {
                 cq.multiselect(product.get("startPrice"), cb.count(product))
                 .where(cb.and(
-                        cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
-                        cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
+                        cb.greaterThanOrEqualTo(product.get("endDate"), LocalDateTime.now()),
+                        cb.lessThanOrEqualTo(product.get("startDate"), LocalDateTime.now())
                 ));
                 cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
 
                 cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
                         .where(cb.and(
-                                cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
-                                cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now())
+                                cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDateTime.now()),
+                                cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDateTime.now())
                         ));
             } else {
                 String searchValue = "%" + searchUser.toLowerCase() + "%";
                 cq.multiselect(product.get("startPrice"), cb.count(product))
                 .where(cb.and(
-                        cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
-                        cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now()),
+                        cb.greaterThanOrEqualTo(product.get("endDate"), LocalDateTime.now()),
+                        cb.lessThanOrEqualTo(product.get("startDate"), LocalDateTime.now()),
                         cb.like(cb.lower(product.get("title")), searchValue)
                 ));
                 cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
 
                 cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
                         .where(cb.and(
-                                cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
-                                cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now()),
+                                cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDateTime.now()),
+                                cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDateTime.now()),
                                 cb.like(cb.lower(productForAvgPrice.get("title")), searchValue)
                         ));
             }
@@ -344,24 +345,24 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                     cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
                             .where(cb.and(
                                     cb.equal(product.get("subcategory"), subcategory),
-                                    cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
-                                    cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
+                                    cb.greaterThanOrEqualTo(product.get("endDate"), LocalDateTime.now()),
+                                    cb.lessThanOrEqualTo(product.get("startDate"), LocalDateTime.now())
                             ));
                     cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
 
                     cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
                     .where(cb.and(
                             cb.equal(productForAvgPrice.get("subcategory"), subcategory),
-                            cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
-                            cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now())
+                            cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDateTime.now()),
+                            cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDateTime.now())
                     ));
                 } else {
                     String searchValue = "%" + searchUser.toLowerCase() + "%";
                     cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
                             .where(cb.and(
                                     cb.equal(product.get("subcategory"), subcategory),
-                                    cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
-                                    cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now()),
+                                    cb.greaterThanOrEqualTo(product.get("endDate"), LocalDateTime.now()),
+                                    cb.lessThanOrEqualTo(product.get("startDate"), LocalDateTime.now()),
                                     cb.like(cb.lower(product.get("title")), searchValue)
                             ));
                     cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
@@ -369,8 +370,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                     cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
                             .where(cb.and(
                                     cb.equal(productForAvgPrice.get("subcategory"), subcategory),
-                                    cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
-                                    cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now()),
+                                    cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDateTime.now()),
+                                    cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDateTime.now()),
                                     cb.like(cb.lower(productForAvgPrice.get("title")), searchValue)
                             ));
                 }
@@ -406,24 +407,24 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                     cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
                             .where(cb.and(
                                     cb.in(product.get("id")).value(productsIdWithCharacteristics),
-                                    cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
-                                    cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
+                                    cb.greaterThanOrEqualTo(product.get("endDate"), LocalDateTime.now()),
+                                    cb.lessThanOrEqualTo(product.get("startDate"), LocalDateTime.now())
                             ));
                     cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
 
                     cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
                             .where(cb.and(
                                     cb.in(productForAvgPrice.get("id")).value(productsIdWithCharacteristics),
-                                    cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
-                                    cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now())
+                                    cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDateTime.now()),
+                                    cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDateTime.now())
                             ));
                 } else {
                     String searchValue = "%" + searchUser.toLowerCase() + "%";
                     cq.multiselect(product.get("startPrice"), cb.count(product).alias("value"))
                             .where(cb.and(
                                     cb.in(product.get("id")).value(productsIdWithCharacteristics),
-                                    cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
-                                    cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now()),
+                                    cb.greaterThanOrEqualTo(product.get("endDate"), LocalDateTime.now()),
+                                    cb.lessThanOrEqualTo(product.get("startDate"), LocalDateTime.now()),
                                     cb.like(cb.lower(product.get("title")), searchValue)
                             ));
                     cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
@@ -431,8 +432,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                     cqForAvgPrice.select(cb.avg(productForAvgPrice.get("startPrice")))
                             .where(cb.and(
                                     cb.in(productForAvgPrice.get("id")).value(productsIdWithCharacteristics),
-                                    cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
-                                    cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now()),
+                                    cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDateTime.now()),
+                                    cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDateTime.now()),
                                     cb.like(cb.lower(productForAvgPrice.get("title")), searchValue)
                             ));
                 }
@@ -471,8 +472,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                         .where(cb.and(
                                 cb.equal(product.get("subcategory"), subcategory),
                                 cb.in(product.get("id")).value(productsIdWithCharacteristics),
-                                cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
-                                cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now())
+                                cb.greaterThanOrEqualTo(product.get("endDate"), LocalDateTime.now()),
+                                cb.lessThanOrEqualTo(product.get("startDate"), LocalDateTime.now())
                                 ));
                 cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
 
@@ -489,8 +490,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                         .where(cb.and(
                                 cb.equal(product.get("subcategory"), subcategory),
                                 cb.in(product.get("id")).value(productsIdWithCharacteristics),
-                                cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
-                                cb.lessThanOrEqualTo(product.get("startDate"), LocalDate.now()),
+                                cb.greaterThanOrEqualTo(product.get("endDate"), LocalDateTime.now()),
+                                cb.lessThanOrEqualTo(product.get("startDate"), LocalDateTime.now()),
                                 cb.like(cb.lower(product.get("title")), searchValue)
                         ));
                 cq.groupBy(product.get("startPrice")).orderBy(cb.asc(product.get("startPrice")));
@@ -499,8 +500,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                         .where(cb.and(
                                 cb.equal(productForAvgPrice.get("subcategory"), subcategory),
                                 cb.in(productForAvgPrice.get("id")).value(productsIdWithCharacteristics),
-                                cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDate.now()),
-                                cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDate.now()),
+                                cb.greaterThanOrEqualTo(productForAvgPrice.get("endDate"), LocalDateTime.now()),
+                                cb.lessThanOrEqualTo(productForAvgPrice.get("startDate"), LocalDateTime.now()),
                                 cb.like(cb.lower(productForAvgPrice.get("title")), searchValue)
                         ));
             }
@@ -602,7 +603,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                     String searchFromUser = "%" + searchUser + "%";
                     query.setParameter("searchFromUser", searchFromUser);
                 }
-                query.setParameter("dateNow", LocalDate.now());
+                query.setParameter("dateNow", LocalDateTime.now());
                 if (query.getResultList().isEmpty()) {
                     return null;
                 }
@@ -643,7 +644,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 String searchFromUser = "%" + searchUser + "%";
                 query.setParameter("searchFromUser", searchFromUser);
             }
-            query.setParameter("dateNow", LocalDate.now());
+            query.setParameter("dateNow", LocalDateTime.now());
             if (query.getResultList().isEmpty()) {
                 return null;
             }
@@ -679,7 +680,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 String searchFromUser = "%" + searchUser + "%";
                 query.setParameter("searchFromUser", searchFromUser);
             }
-            query.setParameter("dateNow", LocalDate.now());
+            query.setParameter("dateNow", LocalDateTime.now());
             if (query.getResultList().isEmpty()) {
                 return null;
             }
@@ -715,7 +716,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 String searchFromUser = "%" + searchUser + "%";
                 query.setParameter("searchFromUser", searchFromUser);
             }
-            query.setParameter("dateNow", LocalDate.now());
+            query.setParameter("dateNow", LocalDateTime.now());
             if (query.getResultList().isEmpty()) {
                 return null;
             }
@@ -743,12 +744,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         cqForProductsSize.select(cb.count(productForProductsSize))
                 .where(cb.and(
-                        cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
+                        cb.greaterThanOrEqualTo(product.get("endDate"), LocalDateTime.now()),
                         cb.equal(product.get("seller"), idSeller)
                 ));
 
         cq.where(cb.and(
-                cb.greaterThanOrEqualTo(product.get("endDate"), LocalDate.now()),
+                cb.greaterThanOrEqualTo(product.get("endDate"), LocalDateTime.now()),
                 cb.equal(product.get("seller"), idSeller)
         ))
                 .orderBy(cb.asc(product.get("endDate")));
@@ -797,12 +798,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         cqForProductsSize.select(cb.count(productForProductsSize))
                 .where(cb.and(
-                        cb.lessThan(product.get("endDate"), LocalDate.now()),
+                        cb.lessThan(product.get("endDate"), LocalDateTime.now()),
                         cb.equal(product.get("seller"), idSeller)
                 ));
 
         cq.where(cb.and(
-                cb.lessThan(product.get("endDate"), LocalDate.now()),
+                cb.lessThan(product.get("endDate"), LocalDateTime.now()),
                 cb.equal(product.get("seller"), idSeller)
         ))
                 .orderBy(cb.desc(product.get("endDate")));

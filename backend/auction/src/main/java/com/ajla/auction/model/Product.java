@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.ManyToMany;
 import javax.persistence.CascadeType;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class Product {
     @Column(length = 65535, columnDefinition = "text")
     private String description;
     @JsonIgnore
-    private LocalDate datePublishing;
+    private LocalDateTime datePublishing;
 
     @ManyToOne
     @Target(User.class)
@@ -43,8 +44,8 @@ public class Product {
     private User seller;
 
     @JsonIgnore
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private double startPrice;
 
     @OneToMany(cascade = {CascadeType.ALL})
@@ -94,11 +95,11 @@ public class Product {
         this.description = description;
     }
 
-    public LocalDate getDatePublishing() {
+    public LocalDateTime getDatePublishing() {
         return datePublishing;
     }
 
-    public void setDatePublishing(LocalDate datePublishing) {
+    public void setDatePublishing(LocalDateTime datePublishing) {
         this.datePublishing = datePublishing;
     }
 
@@ -110,19 +111,19 @@ public class Product {
         this.seller = seller;
     }
 
-    public LocalDate getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
