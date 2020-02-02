@@ -1,32 +1,31 @@
 package com.ajla.auction.seeders;
 
-import com.ajla.auction.model.User;
+import com.ajla.auction.model.*;
+
 import com.ajla.auction.model.Address;
 import com.ajla.auction.model.Product;
-import com.ajla.auction.model.Category;
-import com.ajla.auction.model.Characteristic;
-import com.ajla.auction.model.Image;
-import com.ajla.auction.model.Bid;
+import com.ajla.auction.repo.*;
 
-import com.ajla.auction.repo.UserRepository;
-import com.ajla.auction.repo.ProductRepository;
-import com.ajla.auction.repo.CategoryRepository;
-import com.ajla.auction.repo.CharacteristicRepository;
-import com.ajla.auction.repo.ImageRepository;
-import com.ajla.auction.repo.BidRepository;
-import com.ajla.auction.repo.AddressRepository;
-
+import com.ajla.auction.service.StripeService;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Component
@@ -39,7 +38,11 @@ public class DatabaseSeeder {
     private final BidRepository bidRepository;
     private final CharacteristicRepository characteristicRepository;
     private final AddressRepository addressRepository;
-    Logger logger = LoggerFactory.getLogger(DatabaseSeeder.class);
+    private final RateRepository rateRepository;
+    private Logger logger = LoggerFactory.getLogger(DatabaseSeeder.class);
+
+    @Value("${stripe.keys.secret}")
+    private String API_SECRET_KEY;
 
     //dependency injection
     @Autowired
@@ -49,7 +52,8 @@ public class DatabaseSeeder {
                           final ImageRepository imageProductRepo,
                           final BidRepository bidRepository,
                           final CharacteristicRepository characteristicRepository,
-                          final AddressRepository addressRepository) {
+                          final AddressRepository addressRepository,
+                          final RateRepository rateRepository) {
         this.categoryRepo = categoryRepo;
         this.productRepo = productRepo;
         this.userRepo = userRepo;
@@ -57,10 +61,11 @@ public class DatabaseSeeder {
         this.bidRepository = bidRepository;
         this.characteristicRepository = characteristicRepository;
         this.addressRepository = addressRepository;
+        this.rateRepository = rateRepository;
     }
 
     @EventListener
-    public void seed(ContextRefreshedEvent event) {
+    public void seed(ContextRefreshedEvent event) throws StripeException {
         seedAddress();
         seedUser();
         seedCategories();
@@ -68,37 +73,57 @@ public class DatabaseSeeder {
         seedProducts();
         seedImagesForProducts();
         seedBids();
+        seedRates();
     }
-    private void seedAddress() {
+    private void seedAddress() throws StripeException {
         Address address = addressRepository.findAddressById((long) 1);
         if (address == null) {
+            Stripe.apiKey = API_SECRET_KEY;
+            Map<String, Object> params = new HashMap<>();
+            CustomerCollection customers = Customer.list(params);
+            customers.getData().forEach(c -> {
+                try {
+                    c.delete();
+                } catch (StripeException e) {
+                    e.printStackTrace();
+                }
+            });
+            AccountCollection accounts = Account.list(params);
+            accounts.getData().forEach(a -> {
+                try {
+                    a.delete();
+                } catch (StripeException e) {
+                    e.printStackTrace();
+                }
+            });
+
             Address a = new Address();
             a.setCity("Sarajevo");
             a.setCountry("Bosnia and Herzegovina");
             a.setStreet("Olimpijska 8");
             a.setZipCode("71000");
-            a.setState("");
+            a.setState("Federacija BiH");
 
             Address a1 = new Address();
             a1.setCity("Sarajevo");
             a1.setCountry("Bosnia and Herzegovina");
             a1.setStreet("Olimpijska 10");
             a1.setZipCode("71000");
-            a1.setState("");
+            a1.setState("Federacija BiH");
 
             Address a2 = new Address();
             a2.setCity("Sarajevo");
             a2.setCountry("Bosnia and Herzegovina");
             a2.setStreet("Olimpijska 12");
             a2.setZipCode("71000");
-            a2.setState("");
+            a2.setState("Federacija BiH");
 
             Address a3 = new Address();
             a3.setCity("Sarajevo");
             a3.setCountry("Bosnia and Herzegovina");
             a3.setStreet("Olimpijska 17");
             a3.setZipCode("71000");
-            a3.setState("");
+            a3.setState("Federacija BiH");
 
             addressRepository.saveAll(Arrays.asList(a, a1, a2, a3));
             logger.info("Address table seeded");
@@ -123,6 +148,7 @@ public class DatabaseSeeder {
             u.setBirthDate((LocalDate.parse("2.11.1970", formatter)));
             u.setEmail("huso@gmail.com");
             u.setAddress(addressRepository.findAddressById((long) 1));
+            u.setSeller(true);
 
             User u1 = new User();
             u1.setUserName("Mujo Mujic");
@@ -133,6 +159,7 @@ public class DatabaseSeeder {
             u1.setPhoneNumber("+38762222444");
             u1.setBirthDate((LocalDate.parse("1.12.1980", formatter)));
             u1.setAddress(addressRepository.findAddressById((long) 2));
+            u1.setSeller(true);
 
             User u2 = new User();
             u2.setUserName("Fata Fatic");
@@ -143,6 +170,7 @@ public class DatabaseSeeder {
             u2.setPhoneNumber("+38762222444");
             u2.setBirthDate((LocalDate.parse("10.07.1971", formatter)));
             u2.setAddress(addressRepository.findAddressById((long) 3));
+            u2.setSeller(false);
 
             User u3 = new User();
             u3.setUserName("Suljo Suljic");
@@ -153,6 +181,7 @@ public class DatabaseSeeder {
             u3.setPhoneNumber("+38762222444");
             u3.setBirthDate((LocalDate.parse("10.07.1961", formatter)));
             u3.setAddress(addressRepository.findAddressById((long) 4));
+            u3.setSeller(false);
 
             userRepo.saveAll(Arrays.asList(u, u1, u2, u3));
             logger.info("User table seeded");
@@ -365,9 +394,9 @@ public class DatabaseSeeder {
             p.setCategory(c);
             c = categoryRepo.findCategoryById((long) 2);
             p.setSubcategory(c);
-            p.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
-            p.setStartDate((LocalDate.parse("2.11.2019", formatter)));
-            p.setEndDate((LocalDate.parse("1.01.2019", formatter)));
+            p.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p.setEndDate(LocalDateTime.of(2020, Month.JANUARY, 20, 1, 0));
             User u = userRepo.findUserById((long) 2);
             p.setSeller(u);
             p.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -381,9 +410,9 @@ public class DatabaseSeeder {
             p20.setCategory(c);
             c = categoryRepo.findCategoryById((long) 2);
             p20.setSubcategory(c);
-            p20.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
-            p20.setStartDate((LocalDate.parse("2.11.2019", formatter)));
-            p20.setEndDate((LocalDate.parse("1.01.2020", formatter)));
+            p20.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p20.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p20.setEndDate(LocalDateTime.of(2020, Month.DECEMBER, 30, 20, 58));
             u = userRepo.findUserById((long) 1);
             p20.setSeller(u);
             p20.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -397,9 +426,9 @@ public class DatabaseSeeder {
             p21.setCategory(c);
             c = categoryRepo.findCategoryById((long) 2);
             p21.setSubcategory(c);
-            p21.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
-            p21.setStartDate((LocalDate.parse("2.11.2019", formatter)));
-            p21.setEndDate((LocalDate.parse("1.01.2020", formatter)));
+            p21.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p21.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p21.setEndDate(LocalDateTime.of(2020, Month.JANUARY, 16, 15, 55));
             u = userRepo.findUserById((long) 1);
             p21.setSeller(u);
             p21.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -413,9 +442,9 @@ public class DatabaseSeeder {
             p22.setCategory(c);
             c = categoryRepo.findCategoryById((long) 2);
             p22.setSubcategory(c);
-            p22.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
-            p22.setStartDate((LocalDate.parse("2.11.2019", formatter)));
-            p22.setEndDate((LocalDate.parse("1.01.2020", formatter)));
+            p22.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p22.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p22.setEndDate(LocalDateTime.of(2020, Month.JANUARY, 16, 16,  55));
             u = userRepo.findUserById((long) 1);
             p22.setSeller(u);
             p22.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -429,9 +458,9 @@ public class DatabaseSeeder {
             p1.setCategory(c);
             c = categoryRepo.findCategoryById((long) 3);
             p1.setSubcategory(c);
-            p1.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
-            p1.setStartDate((LocalDate.parse("6.11.2019", formatter)));
-            p1.setEndDate((LocalDate.parse("6.01.2020", formatter)));
+            p1.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p1.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p1.setEndDate(LocalDateTime.of(2020, Month.FEBRUARY, 2, 18, 30));
             u = userRepo.findUserById((long) 1);
             p1.setSeller(u);
             p1.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -445,9 +474,9 @@ public class DatabaseSeeder {
             p23.setCategory(c);
             c = categoryRepo.findCategoryById((long) 3);
             p23.setSubcategory(c);
-            p23.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
-            p23.setStartDate((LocalDate.parse("11.11.2019", formatter)));
-            p23.setEndDate((LocalDate.parse("6.01.2020", formatter)));
+            p23.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p23.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p23.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p23.setSeller(u);
             p23.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -462,9 +491,9 @@ public class DatabaseSeeder {
             p24.setCategory(c);
             c = categoryRepo.findCategoryById((long) 3);
             p24.setSubcategory(c);
-            p24.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
-            p24.setStartDate((LocalDate.parse("11.11.2019", formatter)));
-            p24.setEndDate((LocalDate.parse("6.01.2020", formatter)));
+            p24.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p24.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p24.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p24.setSeller(u);
             p24.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -478,9 +507,9 @@ public class DatabaseSeeder {
             p25.setCategory(c);
             c = categoryRepo.findCategoryById((long) 3);
             p25.setSubcategory(c);
-            p25.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
-            p25.setStartDate((LocalDate.parse("11.11.2019", formatter)));
-            p25.setEndDate((LocalDate.parse("6.01.2020", formatter)));
+            p25.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p25.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p25.setEndDate(LocalDateTime.of(2019, Month.DECEMBER, 26, 16, 50));
             u = userRepo.findUserById((long) 1);
             p25.setSeller(u);
             p25.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -495,9 +524,9 @@ public class DatabaseSeeder {
             p2.setCategory(c);
             c = categoryRepo.findCategoryById((long) 6);
             p2.setSubcategory(c);
-            p2.setDatePublishing((LocalDate.parse("5.11.2019", formatter)));
-            p2.setStartDate((LocalDate.parse("1.11.2019", formatter)));
-            p2.setEndDate((LocalDate.parse("1.01.2020", formatter)));
+            p2.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p2.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p2.setEndDate(LocalDateTime.of(2019, Month.DECEMBER, 26, 15, 52));
             u = userRepo.findUserById((long) 1);
             p2.setSeller(u);
             p2.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -511,9 +540,9 @@ public class DatabaseSeeder {
             p3.setCategory(c);
             c = categoryRepo.findCategoryById((long) 5);
             p3.setSubcategory(c);
-            p3.setDatePublishing((LocalDate.parse("3.11.2019", formatter)));
-            p3.setStartDate((LocalDate.parse("1.10.2019", formatter)));
-            p3.setEndDate((LocalDate.parse("01.01.2020", formatter)));
+            p3.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p3.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p3.setEndDate(LocalDateTime.of(2019, Month.DECEMBER, 26, 15, 52));
             u = userRepo.findUserById((long) 1);
             p3.setSeller(u);
             p3.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -527,9 +556,9 @@ public class DatabaseSeeder {
             p4.setCategory(c);
             c = categoryRepo.findCategoryById((long) 8);
             p4.setSubcategory(c);
-            p4.setDatePublishing((LocalDate.parse("5.11.2019", formatter)));
-            p4.setStartDate((LocalDate.parse("25.09.2019", formatter)));
-            p4.setEndDate((LocalDate.parse("25.01.2020", formatter)));
+            p4.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p4.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p4.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p4.setSeller(u);
             p4.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -543,9 +572,9 @@ public class DatabaseSeeder {
             p5.setCategory(c);
             c = categoryRepo.findCategoryById((long) 9);
             p5.setSubcategory(c);
-            p5.setDatePublishing((LocalDate.parse("5.11.2019", formatter)));
-            p5.setStartDate((LocalDate.parse("25.03.2019", formatter)));
-            p5.setEndDate((LocalDate.parse("25.01.2020", formatter)));
+            p5.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p5.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p5.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p5.setSeller(u);
             p5.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -559,9 +588,9 @@ public class DatabaseSeeder {
             p6.setCategory(c);
             c = categoryRepo.findCategoryById((long) 11);
             p6.setSubcategory(c);
-            p6.setDatePublishing((LocalDate.parse("10.11.2019", formatter)));
-            p6.setStartDate((LocalDate.parse("1.01.2020", formatter)));
-            p6.setEndDate((LocalDate.parse("25.01.2020", formatter)));
+            p6.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p6.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p6.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p6.setSeller(u);
             p6.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -575,9 +604,9 @@ public class DatabaseSeeder {
             p7.setCategory(c);
             c = categoryRepo.findCategoryById((long) 12);
             p7.setSubcategory(c);
-            p7.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
-            p7.setStartDate((LocalDate.parse("6.11.2019", formatter)));
-            p7.setEndDate((LocalDate.parse("25.02.2020", formatter)));
+            p7.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p7.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p7.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p7.setSeller(u);
             p7.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -591,9 +620,9 @@ public class DatabaseSeeder {
             p8.setCategory(c);
             c = categoryRepo.findCategoryById((long) 14);
             p8.setSubcategory(c);
-            p8.setDatePublishing((LocalDate.parse("2.11.2019", formatter)));
-            p8.setStartDate((LocalDate.parse("3.11.2019", formatter)));
-            p8.setEndDate((LocalDate.parse("25.02.2020", formatter)));
+            p8.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p8.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p8.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p8.setSeller(u);
             p8.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -607,9 +636,9 @@ public class DatabaseSeeder {
             p9.setCategory(c);
             c = categoryRepo.findCategoryById((long) 15);
             p9.setSubcategory(c);
-            p9.setDatePublishing((LocalDate.parse("27.11.2019", formatter)));
-            p9.setStartDate((LocalDate.parse("4.08.2019", formatter)));
-            p9.setEndDate((LocalDate.parse("25.02.2020", formatter)));
+            p9.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p9.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p9.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p9.setSeller(u);
             p9.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -623,9 +652,9 @@ public class DatabaseSeeder {
             p10.setCategory(c);
             c = categoryRepo.findCategoryById((long) 17);
             p10.setSubcategory(c);
-            p10.setDatePublishing((LocalDate.parse("27.11.2019", formatter)));
-            p10.setStartDate((LocalDate.parse("1.03.2019", formatter)));
-            p10.setEndDate((LocalDate.parse("25.02.2020", formatter)));
+            p10.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p10.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p10.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p10.setSeller(u);
             p10.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -639,9 +668,9 @@ public class DatabaseSeeder {
             p11.setCategory(c);
             c = categoryRepo.findCategoryById((long) 19);
             p11.setSubcategory(c);
-            p11.setDatePublishing((LocalDate.parse("30.11.2019", formatter)));
-            p11.setStartDate((LocalDate.parse("31.02.2019", formatter)));
-            p11.setEndDate((LocalDate.parse("25.02.2020", formatter)));
+            p11.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p11.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p11.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p11.setSeller(u);
             p11.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -655,9 +684,9 @@ public class DatabaseSeeder {
             p12.setCategory(c);
             c = categoryRepo.findCategoryById((long) 20);
             p12.setSubcategory(c);
-            p12.setDatePublishing((LocalDate.parse("30.11.2019", formatter)));
-            p12.setStartDate((LocalDate.parse("31.12.2019", formatter)));
-            p12.setEndDate((LocalDate.parse("25.02.2020", formatter)));
+            p12.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p12.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p12.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p12.setSeller(u);
             p12.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -671,9 +700,9 @@ public class DatabaseSeeder {
             p13.setCategory(c);
             c = categoryRepo.findCategoryById((long) 22);
             p13.setSubcategory(c);
-            p13.setDatePublishing((LocalDate.parse("01.12.2019", formatter)));
-            p13.setStartDate((LocalDate.parse("1.12.2019", formatter)));
-            p13.setEndDate((LocalDate.parse("4.02.2020", formatter)));
+            p13.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p13.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p13.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p13.setSeller(u);
             p13.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -687,9 +716,9 @@ public class DatabaseSeeder {
             p14.setCategory(c);
             c = categoryRepo.findCategoryById((long) 23);
             p14.setSubcategory(c);
-            p14.setDatePublishing((LocalDate.parse("01.12.2019", formatter)));
-            p14.setStartDate((LocalDate.parse("1.10.2019", formatter)));
-            p14.setEndDate((LocalDate.parse("10.11.2020", formatter)));
+            p14.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p14.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p14.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p14.setSeller(u);
             p14.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -703,9 +732,9 @@ public class DatabaseSeeder {
             p15.setCategory(c);
             c = categoryRepo.findCategoryById((long) 25);
             p15.setSubcategory(c);
-            p15.setDatePublishing((LocalDate.parse("13.12.2019", formatter)));
-            p15.setStartDate((LocalDate.parse("13.10.2019", formatter)));
-            p15.setEndDate((LocalDate.parse("10.11.2020", formatter)));
+            p15.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p15.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p15.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p15.setSeller(u);
             p15.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -719,9 +748,9 @@ public class DatabaseSeeder {
             p16.setCategory(c);
             c = categoryRepo.findCategoryById((long) 27);
             p16.setSubcategory(c);
-            p16.setDatePublishing((LocalDate.parse("18.12.2019", formatter)));
-            p16.setStartDate((LocalDate.parse("20.10.2019", formatter)));
-            p16.setEndDate((LocalDate.parse("10.11.2020", formatter)));
+            p16.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p16.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p16.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p16.setSeller(u);
             p16.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -735,9 +764,9 @@ public class DatabaseSeeder {
             p17.setCategory(c);
             c = categoryRepo.findCategoryById((long) 28);
             p17.setSubcategory(c);
-            p17.setDatePublishing((LocalDate.parse("15.11.2019", formatter)));
-            p17.setStartDate((LocalDate.parse("1.11.2019", formatter)));
-            p17.setEndDate((LocalDate.parse("4.12.2020", formatter)));
+            p17.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p17.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p17.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p17.setSeller(u);
             p17.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -751,9 +780,9 @@ public class DatabaseSeeder {
             p18.setCategory(c);
             c = categoryRepo.findCategoryById((long) 30);
             p18.setSubcategory(c);
-            p18.setDatePublishing((LocalDate.parse("15.11.2019", formatter)));
-            p18.setStartDate((LocalDate.parse("1.11.2019", formatter)));
-            p18.setEndDate((LocalDate.parse("10.11.2020", formatter)));
+            p18.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p18.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p18.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p18.setSeller(u);
             p18.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -767,9 +796,9 @@ public class DatabaseSeeder {
             p19.setCategory(c);
             c = categoryRepo.findCategoryById((long) 31);
             p19.setSubcategory(c);
-            p19.setDatePublishing((LocalDate.parse("15.11.2019", formatter)));
-            p19.setStartDate((LocalDate.parse("1.10.2019", formatter)));
-            p19.setEndDate((LocalDate.parse("10.11.2020", formatter)));
+            p19.setDatePublishing(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p19.setStartDate(LocalDateTime.of(2019, Month.NOVEMBER, 20, 6, 30));
+            p19.setEndDate(LocalDateTime.of(2020, Month.NOVEMBER, 20, 6, 30));
             u = userRepo.findUserById((long) 1);
             p19.setSeller(u);
             p19.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
@@ -1114,29 +1143,6 @@ public class DatabaseSeeder {
             b1.setUser(u);
             b1.setValue((double) 1700);
 
-            Bid b2 = new Bid();
-            b2.setDate((LocalDate.parse("5.11.2019", formatter)));
-            p = productRepo.findProductById((long) 4);
-            b2.setProduct(p);
-            u = userRepo.findUserById((long) 4);
-            b2.setUser(u);
-            b2.setValue((double) 1800);
-
-            Bid b3 = new Bid();
-            b3.setDate((LocalDate.parse("5.11.2019", formatter)));
-            p = productRepo.findProductById((long) 4);
-            b3.setProduct(p);
-            u = userRepo.findUserById((long) 4);
-            b3.setUser(u);
-            b3.setValue((double) 1900);
-
-            Bid b4 = new Bid();
-            b4.setDate((LocalDate.parse("5.11.2019", formatter)));
-            p = productRepo.findProductById((long) 4);
-            b4.setProduct(p);
-            u = userRepo.findUserById((long) 4);
-            b4.setUser(u);
-            b4.setValue((double) 2000);
 
             Bid b5 = new Bid();
             b5.setDate((LocalDate.parse("5.11.2019", formatter)));
@@ -1146,7 +1152,39 @@ public class DatabaseSeeder {
             b5.setUser(u);
             b5.setValue((double) 3000);
 
-            bidRepository.saveAll(Arrays.asList(b, b1, b2, b3, b4, b5));
+            Bid b6 = new Bid();
+            b6.setDate((LocalDate.parse("5.11.2019", formatter)));
+            p = productRepo.findProductById((long) 22);
+            b6.setProduct(p);
+            u = userRepo.findUserById((long) 4);
+            b6.setUser(u);
+            b6.setValue((double) 2000);
+
+            Bid b7 = new Bid();
+            b7.setDate((LocalDate.parse("5.11.2019", formatter)));
+            p = productRepo.findProductById((long) 23);
+            b7.setProduct(p);
+            u = userRepo.findUserById((long) 4);
+            b7.setUser(u);
+            b7.setValue((double) 2000);
+
+            Bid b8 = new Bid();
+            b8.setDate((LocalDate.parse("5.11.2019", formatter)));
+            p = productRepo.findProductById((long) 23);
+            b8.setProduct(p);
+            u = userRepo.findUserById((long) 3);
+            b8.setUser(u);
+            b8.setValue((double) 5000);
+
+            Bid b9 = new Bid();
+            b9.setDate((LocalDate.parse("5.11.2019", formatter)));
+            p = productRepo.findProductById((long) 22);
+            b9.setProduct(p);
+            u = userRepo.findUserById((long) 3);
+            b9.setUser(u);
+            b9.setValue((double) 1500);
+
+            bidRepository.saveAll(Arrays.asList(b, b1, b5, b7, b6, b8, b9));
 
         logger.info("Bid table seeded");
     }
@@ -1154,6 +1192,35 @@ public class DatabaseSeeder {
         logger.trace("Bid Seeding Not Required");
     }
 
+
+    }
+    private void seedRates() {
+        Rate rate = rateRepository.findRateById((long) 1);
+        if (rate == null) {
+            User seller = userRepo.findUserById((long) 1);
+            User user = userRepo.findUserById((long) 2);
+            Rate r1 = new Rate();
+            r1.setSeller(seller);
+            r1.setUser(user);
+            r1.setValue(5);
+
+            user = userRepo.findUserById((long) 3);
+            Rate r2 = new Rate();
+            r2.setSeller(seller);
+            r2.setUser(user);
+            r2.setValue(4);
+
+            user = userRepo.findUserById((long) 4);
+            Rate r3 = new Rate();
+            r3.setSeller(seller);
+            r3.setUser(user);
+            r3.setValue(4);
+
+            rateRepository.saveAll(Arrays.asList(r1, r2, r3));
+            logger.info("Rate table seeded");
+        } else {
+        logger.trace("Rate Seeding Not Required");
+    }
 
     }
 }

@@ -190,11 +190,100 @@
 }
 .allImages .smallImages div > img:hover {
   transform: translateY(2%);
-
 }
 .watchlist fa-icon {
   cursor: pointer;
 }
 .onHover:hover{
   transform: translateY(5%) translateX(1%);
+}
+.message > div {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+.message > div > p {
+  margin: 0;
+  padding: 0;
+}
+.message {
+  background-color: #e7e0ff;
+  color: #8367d8;
+  justify-content: space-between;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  align-items: center;
+  margin-bottom: 20px;
+  display: none;
+}
+.message > div > fa-icon {
+  margin-right: 7px;
+}
+.message > fa-icon:hover {
+  cursor: pointer;
+  color: #494949;
+}
+.message.paidMessage {
+  background-color: #d9f0cf;
+  color: #6cc047;
+
+}
+.showMessage {
+  display: flex;
+}
+.infoSeller {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font: 400 16px "Lato", sans-serif;
+  margin-bottom: 30px;
+}
+.infoSeller > div > fa-icon {
+  color: #8367d8;
+  margin-right: 5px;
+}
+.infoSeller > .seller-info {
+  margin-right: 15px;
+
+}
+.infoSeller > div > img {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  margin: 0;
+  padding: 0;
+  margin-right: 5px;
+  margin-left: 10px;
+}
+.infoSeller > .rating {
+  margin-right: 10px;
+}
+.infoSeller > div {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+.infoSeller > p, .infoSeller > div > p {
+  margin: 0;
+  padding: 0;
+}
+.pay {
+  font: 700 16px "Lato", sans-serif;
+  letter-spacing: 0.56px;
+  height: 35px;
+  width: 75px;
+  margin-left: 10px;
+  background-color: #8367d8;
+  color: #ffffff;
+  border: none;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.15);
+}
+.pay:hover {
+  background: #c3b0ff;
+  color: #ffffff;
 }

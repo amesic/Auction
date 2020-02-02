@@ -2,17 +2,28 @@ package com.ajla.auction.controller;
 
 import com.ajla.auction.config.JwtTokenUtil;
 import com.ajla.auction.model.Bid;
+import com.ajla.auction.model.CardInfo;
 import com.ajla.auction.model.User;
+import com.ajla.auction.model.Rate;
+import com.ajla.auction.model.Card;
+import com.ajla.auction.model.Product;
 import com.ajla.auction.model.ProductInfoBid;
+import com.ajla.auction.model.RequiredInfoUser;
 import com.ajla.auction.model.UserWatchProductId;
 import com.ajla.auction.model.Watchlist;
 import com.ajla.auction.model.UserProductInfoBid;
 import com.ajla.auction.model.PaginationInfo;
+import com.ajla.auction.model.UserBidList;
 import com.ajla.auction.model.BidInfo;
 import com.ajla.auction.service.BidService;
 import com.ajla.auction.service.ProductService;
 import com.ajla.auction.service.UserService;
+import com.ajla.auction.service.RateService;
+import com.ajla.auction.service.StripeService;
+import com.ajla.auction.service.CardService;
 import com.ajla.auction.service.WatchlistService;
+import com.ajla.auction.service.CloudinaryService;
+import com.stripe.exception.StripeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +32,19 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -38,6 +59,10 @@ public class AuthController {
     private final UserService userService;
     private final ProductService productService;
     private final WatchlistService watchlistService;
+    private final StripeService stripeService;
+    private final CardService cardService;
+    private final RateService rateService;
+    private final CloudinaryService cloudinaryService;
 
     private Bid highestBid;
 
@@ -47,7 +72,11 @@ public class AuthController {
                           final SimpMessagingTemplate template,
                           final ProductController productController,
                           final UserService userService, ProductService productService,
-                          final WatchlistService watchlistService) {
+                          final WatchlistService watchlistService,
+                          final StripeService stripeService,
+                          final CardService cardService,
+                          final RateService rateService,
+                          final CloudinaryService cloudinaryService) {
         Objects.requireNonNull(template, "template must not be null.");
         Objects.requireNonNull(jwtTokenUtil, "jwtTokenUtil must not be null.");
         Objects.requireNonNull(bidService, "bidService must not be null.");
@@ -55,6 +84,10 @@ public class AuthController {
         Objects.requireNonNull(userService, "userService must not be null.");
         Objects.requireNonNull(productService, "productService must not be null.");
         Objects.requireNonNull(watchlistService, "watchlistService must not be null.");
+        Objects.requireNonNull(stripeService, "stripeService must not be null.");
+        Objects.requireNonNull(cardService, "cardService must not be null.");
+        Objects.requireNonNull(rateService, "rateService must not be null.");
+        Objects.requireNonNull(cloudinaryService, "cloudinaryService must not be null.");
         this.jwtTokenUtil = jwtTokenUtil;
         this.bidService = bidService;
         this.template = template;
@@ -62,6 +95,10 @@ public class AuthController {
         this.userService = userService;
         this.productService = productService;
         this.watchlistService = watchlistService;
+        this.stripeService = stripeService;
+        this.cardService = cardService;
+        this.rateService = rateService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @PostMapping("/bid/newBid")
@@ -90,6 +127,23 @@ public class AuthController {
     @GetMapping("/user/info")
     public ResponseEntity<User> getUserInformation(@RequestParam("email") final String email) {
         return new ResponseEntity<>(userService.findByEmail(email), HttpStatus.OK);
+    }
+
+    @MessageMapping("/send/message/bidsOfUser")
+    @SendToUser
+    public void onMyAccountBidsList(final UserBidList userBidList) {
+        /*SimpMessageHeaderAccessor headerAcc = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
+        headerAcc.setSessionId(userBidList.getSessionId());
+        headerAcc.setLeaveMutable(true);
+        userBidList.getBids().forEach(bid -> {
+
+        });
+        this.template.convertAndSendToUser(
+                userBidList.getSessionId(),
+                "/notify/timeLeft",
+                bidInfo,
+                headerAcc.getMessageHeaders()
+                );*/
     }
 
     @MessageMapping("/send/message/highestBid")
@@ -177,4 +231,149 @@ public class AuthController {
         return new ResponseEntity<>(bidService.bidsOfUser(pageNumber, size, email), HttpStatus.OK);
     }
 
+    @PostMapping("/card/user")
+    public ResponseEntity<?> saveCardFromUser(@RequestBody final CardInfo cardInfo) {
+        User user = userService.findByEmail(cardInfo.getEmailUser());
+
+        if (user.getCard() != null) {
+            try {
+                CardInfo cardUpdated = stripeService.updateCustomer(user.getCard().getCustomerId(), cardInfo);
+                if (user.getSeller()) {
+                    try {
+                        String accountId = stripeService.createStripeAccountForSeller(user, cardInfo);
+                        cardService.saveAccountId(user.getCard().getId(), accountId);
+                    } catch(StripeException ex) {
+                        return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return new ResponseEntity<>(cardUpdated, HttpStatus.OK);
+            } catch(StripeException ex) {
+                return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            try {
+                CardInfo cardSavedInfo = stripeService.createCustomer(cardInfo);
+                Card savedCard = cardService.saveCustomerId(cardSavedInfo.getCustomerId());
+                userService.saveCardId(savedCard, cardInfo.getEmailUser());
+                if (user.getSeller()) {
+                    try {
+                        String accountId = stripeService.createStripeAccountForSeller(user, cardInfo);
+                        cardService.saveAccountId(savedCard.getId(), accountId);
+                    } catch(StripeException ex) {
+                        return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return new ResponseEntity<>(cardSavedInfo, HttpStatus.OK);
+            } catch(StripeException ex) {
+                return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
+            }
+        }
+    }
+
+    @GetMapping("/card/info/user")
+    public ResponseEntity<?> getUserCardInfo(@RequestParam("email") final String email) {
+       User user = userService.findByEmail(email);
+       if (user.getCard() != null) {
+           String customerId = user.getCard().getCustomerId();
+           try {
+               CardInfo cardInfo = stripeService.getUserCardDetails(customerId);
+               return new ResponseEntity<>(cardInfo, HttpStatus.OK);
+           } catch (StripeException ex) {
+               return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
+           }
+       } else {
+           return new ResponseEntity<>(null, HttpStatus.OK);
+       }
+    }
+
+    @GetMapping("/card/charge")
+    public ResponseEntity<?> chargeCustomer(@RequestParam("emailCustomer") final String emailCustomer,
+                                            @RequestParam("emailSeller") final String emailSeller,
+                                            @RequestParam("productId") final Long productId,
+                                            @RequestParam(required = false) final String token,
+                                            @RequestParam("amount") final int amount) {
+        User customer = userService.findByEmail(emailCustomer);
+        User seller = userService.findByEmail(emailSeller);
+        Product product = productService.findSingleProduct(productId);
+        try {
+           String chargeId = stripeService.createCharge(
+                    customer,
+                    product.getId(),
+                    seller.getCard().getAccountId(),
+                    product.getTitle(),
+                    token,
+                    amount
+            );
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (StripeException ex) {
+            return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/rating")
+    public ResponseEntity<?> chargeCustomer(@RequestParam("emailSeller") final String emailSeller) {
+        return new ResponseEntity<>(rateService.getRatingOfSeller(emailSeller), HttpStatus.OK);
+    }
+
+    @PostMapping("/rate")
+    public ResponseEntity<?> saveRateFromUser(@RequestBody final Rate rate) {
+        return new ResponseEntity<>(rateService.saveRateFromUser(rate), HttpStatus.OK);
+    }
+
+    @PostMapping("/user/required/info")
+    public ResponseEntity<?> saveRequiredInfoFromUser(@RequestBody final RequiredInfoUser requiredInfoUser) {
+        try {
+            User updatedUser = userService.findByEmail(requiredInfoUser.getEmailLoggedUser());
+            if (requiredInfoUser.getImage() != null) {
+                String url = cloudinaryService.saveProfileImage(requiredInfoUser.getImage(), updatedUser.getId());
+                requiredInfoUser.setImage(url);
+            }
+            updatedUser = userService.saveUserRequiredInfo(requiredInfoUser);
+            RequiredInfoUser savedUserInfo = new RequiredInfoUser();
+            savedUserInfo.setEmail(updatedUser.getEmail());
+            savedUserInfo.setGender(updatedUser.getGender());
+            savedUserInfo.setBirthDate(updatedUser.getBirthDate());
+            savedUserInfo.setPhoneNumber(updatedUser.getPhoneNumber());
+            savedUserInfo.setUserName(updatedUser.getUserName());
+            savedUserInfo.setImage(updatedUser.getImage());
+            if (!requiredInfoUser.getEmail().equals(requiredInfoUser.getEmailLoggedUser())) {
+                final UserDetails userDetails = userService.loadUserByUsername(updatedUser.getEmail());
+                final String token = jwtTokenUtil.generateToken(userDetails);
+                savedUserInfo.setToken(token);
+            }
+            return new ResponseEntity<>(savedUserInfo, HttpStatus.OK);
+        } catch (Throwable ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/user/address/info")
+    public ResponseEntity<?> saveAddressInfo(@RequestBody final User user) {
+        return new ResponseEntity<>(userService.saveAddressOfUser(user), HttpStatus.OK);
+    }
+
+    @PostMapping("/user/payment/info")
+    public ResponseEntity<?> savePaymentInfo(@RequestBody final User user) {
+        try {
+            return new ResponseEntity<>(userService.savePaymentInfo(user), HttpStatus.OK);
+        } catch (Throwable ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/user/payments")
+    public ResponseEntity<?> checkIfUserPaidItem(@RequestParam("emailCustomer") final String emailCustomer,
+                                                 @RequestParam("productId") final Long productId) {
+        User customer = userService.findByEmail(emailCustomer);
+        Product product = productService.findSingleProduct(productId);
+        try {
+            return new ResponseEntity<>(stripeService.checkIfCustomerPaidItem(customer, product.getTitle()), HttpStatus.OK);
+        } catch (StripeException ex) {
+            return new ResponseEntity<>(ex.getCode(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

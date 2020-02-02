@@ -1,0 +1,261 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div class="cover" [ngClass]="{showPopUp: !hidePopUp}"></div>
+<div class="pop-up-message-wrapp" [ngClass]="{showMessageWrap: !hidePopUp}">
+<div *ngIf="product != undefined" 
+class="pop-up-message"
+[ngClass]="{showPopUp: !hidePopUp}">
+  <p class="title">SELLER RATING</p>
+  <img src="{{product.seller.image}}">
+  <p class="seller-name">{{ product.seller.userName }}</p>
+  <p class="rate-seller-p">Please, rate a seller!</p>
+  <div class="star-rating">
+  <star-rating 
+  value="1" 
+  totalstars="5" 
+  checkedcolor="#8367d8" 
+  uncheckedcolor="rgba(0, 0, 0, 0.1)" 
+  size="30px" 
+  readonly="false" 
+  (rate)="onRate($event)"></star-rating>
+</div>
+<div class="pop-up-message-buttons">
+  <input type="button" value="SKIP" (click)="skip()" class="skip-button">
+  <input type="button" value="DONE" (click)="done()" class="done-button">
+</div>
+</div>
+</div>
+<div class="message-error" 
+[ngClass]="{showMessageError: showMessageError}">
+Provide all the necessary information below!
+</div>
+
+<div class="container wrapp" *ngIf="!paid">
+<div class="payment">
+
+  <div class="title">
+    <div class="title-title">PAYMENT</div>
+    <p class="title-edit" [ngClass]="{hide: enableSaveCardButton}" (click)="edit()">Edit information</p>
+  </div>
+
+
+  <div class="payment-card-info" #address>
+    <form [formGroup]="addressForm">
+      <div class="checkbox" [ngClass]="{showCheckbox: enableSaveCardButton}">
+      <input type="checkbox" (change)="checkboxAddress($event)">
+      <p>Save address to your profile</p>
+    </div>
+
+      <p>Address</p>
+
+      <div class="input-wrapp">
+      <input
+        *ngIf="userInfo != undefined && userInfo.address == null"
+        type="text"
+        placeholder="e.g. 678 Berge Tunnel Apt.278"
+        formControlName="street" 
+        [ngClass]="{emptyInput: incorrectStreetInput, enabledInput: enableSaveCardButton, onChange: changeStreetInput}"
+      />
+      <input
+        *ngIf="userInfo != undefined && userInfo.address != null"
+        type="text"
+        value="{{ userInfo.address.street }}"
+        formControlName="street"
+        [ngClass]="{emptyInput: incorrectStreetInput, enabledInput: enableSaveCardButton, onChange: changeStreetInput}" 
+      />
+      <p class="message">{{ messageStreetInput }}</p>
+    </div>
+
+    <div class="input-wrapp">
+      <div class="payment-city-country">
+        <div>
+          <p>City</p>
+          <input
+            *ngIf="userInfo != undefined && userInfo.address == null"
+            type="text"
+            placeholder="e.g. New York"
+            formControlName="city" 
+            [ngClass]="{emptyInput: incorrectCityInput, enabledInput: enableSaveCardButton, onChange: changeCityInput}"
+          />
+          <input
+            *ngIf="userInfo != undefined && userInfo.address != null"
+            type="text"
+            value="{{ userInfo.address.city }}"
+            formControlName="city" 
+            [ngClass]="{emptyInput: incorrectCityInput, enabledInput: enableSaveCardButton, onChange: changeCityInput}"
+          />
+          <p class="message">{{ messageCityInput }}</p>
+        </div>
+        <div>
+          <p>Country</p>
+          <input
+            *ngIf="userInfo != undefined && userInfo.address == null"
+            type="text"
+            placeholder="e.g. USA"
+            formControlName="country"
+            [ngClass]="{emptyInput: incorrectCountryInput, enabledInput: enableSaveCardButton, onChange: changeCountryInput}"
+          />
+          <input
+            *ngIf="userInfo != undefined && userInfo.address != null"
+            type="text"
+            value="{{ userInfo.address.country }}"
+            formControlName="country" 
+            [ngClass]="{emptyInput: incorrectCountryInput, enabledInput: enableSaveCardButton, onChange: changeCountryInput}"
+          />
+          <p class="message">{{ messageCountryInput }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-wrapp">
+      <p>Zip Code</p>
+      <input
+        *ngIf="userInfo != undefined && userInfo.address == null"
+        type="text"
+        placeholder="e.g. 10065"
+        formControlName="zipcode" 
+        [ngClass]="{emptyInput: incorrectZipcodeInput, enabledInput: enableSaveCardButton, onChange: changeZipcodeInput}"
+      />
+      <input
+        *ngIf="userInfo != undefined && userInfo.address != null"
+        type="text"
+        value="{{ userInfo.address.zipCode }}"
+        formControlName="zipcode" 
+        [ngClass]="{emptyInput: incorrectZipcodeInput, enabledInput: enableSaveCardButton, onChange: changeZipcodeInput}"
+      />
+      <p class="message">{{ messageZipcodeInput }}</p>
+    </div>
+
+    <div class="input-wrapp">
+      <p>Phone</p>
+      <input
+        *ngIf="userInfo != undefined && userInfo.phoneNumber == null"
+        type="text"
+        placeholder="e.g. 555 5555 5555"
+        formControlName="phonenumber" 
+        [ngClass]="{emptyInput: incorrectPhoneInput, enabledInput: enableSaveCardButton, onChange: changePhoneInput}"
+      />
+      <input
+        *ngIf="userInfo != undefined && userInfo.phoneNumber != null"
+        type="text"
+        value="{{ userInfo.phoneNumber }}"
+        formControlName="phonenumber"
+        [ngClass]="{emptyInput: incorrectPhoneInput, enabledInput: enableSaveCardButton, onChange: changePhoneInput}" 
+      />
+      <p class="message">{{ messagePhoneInput }}</p>
+    </div>
+    </form>
+  </div>
+
+  
+  <div class="card-info" #card>
+    <div class="checkbox" [ngClass]="{showCheckbox: enableSaveCardButton}">
+      <input type="checkbox" (change)="checkboxCard($event)">
+      <p>Save card to your profile</p>
+    </div>
+
+    <div>
+      <p class="card-info-p">Credit card</p>
+      <p [ngClass]="{showDrop: enableSaveCardButton}" class="card-info-accepted-cards-p">We accept the following credit cards</p>
+      <div [ngClass]="{showDrop: enableSaveCardButton}" class="cc-img">
+        <img
+          src="https://seeklogo.net/wp-content/uploads/2016/11/visa-logo-preview.png"/>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/8/88/MasterCard_early_1990s_logo.svg"/>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Maestro_logo.png/1200px-Maestro_logo.png"/>
+        <img
+          src="https://i.pinimg.com/originals/81/b2/d3/81b2d3c1602b4a523d67a851d7d58db7.png"/>
+      </div>
+      <div class="brand" [ngClass]="{showDrop: !enableSaveCardButton} ">
+      <p class="card-info-accepted-cards-p-one">Brand:</p>
+      <div class="cc-img-one">
+        <img [ngClass]="{showImage: cardInfo != undefined && cardInfo.brand == 'Visa'}"
+          src="https://seeklogo.net/wp-content/uploads/2016/11/visa-logo-preview.png"/>
+        <img [ngClass]="{showImage: cardInfo != undefined && cardInfo.brand == 'MasterCard'}"
+          src="https://upload.wikimedia.org/wikipedia/commons/8/88/MasterCard_early_1990s_logo.svg"/>
+        <img [ngClass]="{showImage: cardInfo != undefined && cardInfo.brand == 'Maestro'}"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Maestro_logo.png/1200px-Maestro_logo.png"/>
+        <img [ngClass]="{showImage: cardInfo != undefined && cardInfo.brand == 'American Express'}"
+          src="https://i.pinimg.com/originals/81/b2/d3/81b2d3c1602b4a523d67a851d7d58db7.png"/>
+      </div>
+    </div>
+
+      <form [formGroup]="cardForm">
+      <div class="card-info-name-number">
+        <div>
+          <p class="card-info-name-p">Name on card</p>
+          <input *ngIf="cardInfo != null" value="{{cardInfo.name}}" type="text" placeholder="e.g. Adam Smith" formControlName="name" 
+          [ngClass]="{emptyInput: incorrectNameInput, enabledInput: enableSaveCardButton, onChange: changeNameInput}"/>
+          <input *ngIf="cardInfo == null" type="text" placeholder="e.g. Adam Smith" formControlName="name" 
+          [ngClass]="{emptyInput: incorrectNameInput, enabledInput: enableSaveCardButton, onChange: changeNameInput}"/>
+          <p class="message">{{ messageNameInput }}</p>
+        </div>
+        <div>
+          <p class="card-info-number-p">Card Number</p>
+          <input *ngIf="cardInfo != null" value="************{{cardInfo.number}}" type="text" placeholder="e.g. 4242 4242 4242 4242" formControlName="number"
+          [ngClass]="{emptyInput: incorrectNumberInput, enabledInput: enableSaveCardButton, onChange: changeNumberInput}" maxlength="16"/>
+          <input *ngIf="cardInfo == null" type="text" placeholder="e.g. 4242 4242 4242 4242" formControlName="number"
+          [ngClass]="{emptyInput: incorrectNumberInput, enabledInput: enableSaveCardButton, onChange: changeNumberInput}" maxlength="16"/>
+          <p class="message">{{ messageNumberInput }}</p>
+        </div>
+      </div>
+
+      <div class="card-info-expiration-cvc">
+        <div>
+          <p class="card-info-expiration-p">Expiration Date</p>
+          <div class="card-info-expiration">
+            <div class="card-info-year year" [ngClass]="{showDrop: !enableSaveCardButton}">
+              <p class="card-info-year-p">
+                {{ yearExp }}</p>
+              </div>
+            <div class="card-info-month month" [ngClass]="{showDrop: !enableSaveCardButton}">
+              <p class="card-info-month-p">{{ monthExp }}</p>
+            </div>
+            <div class="year-exp" [ngClass]="{showDrop: enableSaveCardButton}">
+              <div class="card-info-year" appClickOutside
+              [ngClass]="{emptyInput: incorrectYear, onChange: changeYear}">
+                <p class="card-info-year-p">{{ yearExp }}</p>
+                <fa-icon [icon]="faChevronDown"></fa-icon>
+              </div>
+              <div class="card-info-years">
+                <p class="card-info-year-p" (click)="pickAYear('2020')">2020</p>
+                <p class="card-info-year-p" (click)="pickAYear('2021')">2021</p>
+                <p class="card-info-year-p" (click)="pickAYear('2022')">2022</p>
+                <p class="card-info-year-p" (click)="pickAYear('2023')">2023</p>
+              </div>
+            </div>
+            <div class="month-exp" [ngClass]="{showDrop: enableSaveCardButton}">
+              <div class="card-info-month" appClickOutside 
+              [ngClass]="{emptyInput: incorrectMonth, onChange: changeMonth}">
+                <p class="card-info-month-p">{{ monthExp }}</p>
+                <fa-icon [icon]="faChevronDown"></fa-icon>
+              </div>
+              <div class="card-info-months">
+                <p class="card-info-month-p" (click)="pickAMonth('1')">1</p>
+                <p class="card-info-month-p" (click)="pickAMonth('2')">2</p>
+                <p class="card-info-month-p" (click)="pickAMonth('3')">3</p>
+                <p class="card-info-month-p" (click)="pickAMonth('4')">4</p>
+              </div>
+            </div>
+          </div>
+          <p class="message">{{ messageExpDate }}</p>
+        </div>
+        <div class="cvc-input" [ngClass]="{showInput: enableSaveCardButton}">
+          <p class="card-info-cvc-p">CVC/CW</p>
+          <input type="text" placeholder="1234" formControlName="cvccw"
+          [ngClass]="{emptyInput: incorrectCvcInput, enabledInput: enableSaveCardButton, onChange: changeCvcInput}"/>
+          <p class="message">{{ messageCvcInput }}</p>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+  
+  <div class="spinner" [ngClass]="{showSpinner: loading}">
+    <app-spinner [componentUsingSpinner]="'payment'"></app-spinner>
+  </div>
+</div>
+<div class="button">
+  <input *ngIf="highestBid != undefined" type="button" value="PAY {{highestBid.value}}$" class="pay" (click)="pay(card, address)" />
+</div>
+</div>

@@ -13,11 +13,12 @@ import { LandingPageComponent } from "./components/landingPage/landing-page/land
 import { AllCategoriesComponent } from "./components/all-categories/all-categories.component";
 import { SingleProductPageComponent } from "./components/singleProductPage/single-product-page/single-product-page.component";
 import { ShopComponent } from "./components/shopProduct/shop/shop.component";
-import { MyAccountComponent } from "./components/myAccount/my-account/my-account.component"
+import { MyAccountComponent } from "./components/myAccount/profile/my-account/my-account.component"
 import { MyAccountProductsComponent } from "./components/myAccount/myAccountProducts/my-account-products/my-account-products.component"
 import { MyAccountBidsComponent } from "./components/myAccount/myAccountBids/my-account-bids/my-account-bids.component"
 import { MyAccountWatchlistComponent } from "./components/myAccount/myAccountWatchlist/my-account-watchlist/my-account-watchlist.component"
 import { LoginService } from "./services/login.service";
+import { PaymentComponent } from "./components/payment/payment.component";
 import { ErrorComponent } from "./components/error/error.component";
 
 @Injectable()
@@ -143,6 +144,21 @@ const routes: Routes = [
         component: MyAccountWatchlistComponent,
         data: {
           breadcrumb: "WATCHLIST"
+        }
+      },
+    ]
+  },
+  {
+    path: "payment",
+    data: {
+      breadcrumb: "SINGLE PRODUCT"
+    },
+    children: [
+      {
+        path: ":idProduct",
+        component: PaymentComponent,
+        data: {
+          breadcrumb: "PAYMENT"
         }
       },
     ]

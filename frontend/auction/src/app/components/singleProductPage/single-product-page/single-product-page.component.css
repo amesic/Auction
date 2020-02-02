@@ -65,3 +65,17 @@
 .sellerNotif {
   padding-top: 17px;
 }
+.spinner.showSpinner {
+  display: block;
+}
+.spinner {
+  height: 106.5%;
+  top: -77px;
+  background-color: rgba(0, 0, 0, 0.164);
+  position: absolute;
+  width: 100%;
+  display: none;
+}
+.shop {
+  position: relative;
+}

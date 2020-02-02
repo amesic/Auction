@@ -22,6 +22,8 @@
     [timeLeft]="timeLeft"
     [stompClient]="stompClient"
     [sessionId]="sessionId"
+    [ratingSeller]="ratingSeller"
+    [paid]="paid"
     (messageEvent)="recieveMessageFromSingleProduct($event)"></app-single-product>
 
   <app-set-products
@@ -36,4 +38,8 @@
     [idProduct]="productInfo.id"
     [numberOfBids]="numberOfBids"
     [hide]="hide"></app-bids>
+    <div class="spinner" [ngClass]="{showSpinner: loading}">
+      <app-spinner [componentUsingSpinner]="'bids'"></app-spinner>
+    </div>
 </div>
+

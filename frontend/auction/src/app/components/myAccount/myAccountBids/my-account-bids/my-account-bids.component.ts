@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { BidsService } from "src/app/services/bids.service";
 import { LoginService } from "src/app/services/login.service";
+import { WebSocketService } from 'src/app/services/web-socket.service';
 
 @Component({
   selector: "app-my-account-bids",
@@ -14,9 +15,13 @@ export class MyAccountBidsComponent implements OnInit {
   size = 5;
   hide = false;
 
+  stompClient;
+  sessionId;
+
   constructor(
     private bidService: BidsService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private webSocketService: WebSocketService
   ) {}
 
   checkIfThereIsNoItemsLeft(pageNumber, size, totalNumberOfItems) {
@@ -24,14 +29,8 @@ export class MyAccountBidsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.bidService
-      .getBidsFromUser(
-        this.pageNumber,
-        this.size,
-        this.loginService.getUserEmail()
-      )
-      .subscribe(
-        bidsFromUser => {
+    this.bidService.getBidsFromUser(this.pageNumber, this.size, this.loginService.getUserEmail())
+      .subscribe(bidsFromUser => {
           this.items = bidsFromUser.items;
           this.pageNumber = this.pageNumber + 1;
           this.hide = this.checkIfThereIsNoItemsLeft(
@@ -44,7 +43,7 @@ export class MyAccountBidsComponent implements OnInit {
           console.log(err);
         }
       );
-  }
+}
 
   loadMore() {
     this.bidService

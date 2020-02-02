@@ -5,6 +5,7 @@ import { LoginService } from "src/app/services/login.service";
 import { BidsService } from "src/app/services/bids.service";
 import { WebSocketService } from 'src/app/services/web-socket.service';
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: "app-single-product-page",
@@ -22,6 +23,8 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
   usersProduct;
   timeLeft;
   hide;
+  ratingSeller;
+  paid;
 
   pageNumber = 0;
   size = 5;
@@ -29,9 +32,13 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
   stompClient = null;
   sessionId;
   showNotification = false;
+  loading = false;
   faTimes = faTimes;
 
   dhms(t) {
+    if (t < 3600 && t > 0) {
+      return "Less than an hour";
+    }
     var years, months, days, hours;
     years = Math.floor(t / 31104000);
     t -= years * 31104000;
@@ -82,6 +89,7 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
     private activatedRoute: ActivatedRoute,
     private loginService: LoginService,
     private bidService: BidsService,
+    private userService: UserService,
     private router: Router,
     private webSocketService: WebSocketService
   ) {
@@ -129,10 +137,24 @@ export class SingleProductPageComponent implements OnInit, OnDestroy{
       this.productService
         .getSingleProduct(routeParams.idProduct).subscribe(singleProduct => {
           this.productInfo = singleProduct;
+          this.userService.ratingOfSeller(this.productInfo.seller.email).subscribe(rating => {
+            this.ratingSeller = rating;
+          });
           let date = new Date(Date.parse(this.productInfo.endDate));
           this.timeLeft = this.dhms(
             Math.floor((<any>date - new Date().getTime()) / 1000)
           );
+          if (this.timeLeft.substr(0,1) == "-") {
+          this.loading = true;
+        this.userService.checkIfCustomerPaidItem(this.loginService.getUserEmail(), routeParams.idProduct)
+          .subscribe(paid => {
+            this.loading = false;
+            this.paid = paid;
+          }, err => {
+            console.log(err.error);
+            this.loading = false;
+          });
+        }
         });
       this.productService.getNumberViewers(routeParams.idProduct).subscribe(number => {
         this.numberOfViewers = number;
