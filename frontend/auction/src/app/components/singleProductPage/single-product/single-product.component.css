@@ -1,0 +1,289 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
+.container {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 120px;
+}
+.messError {
+  color: rgb(171, 78, 78);
+  background: rgb(246, 229, 229);
+  padding-left: 75px;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  font: 700 18px "Lato", sans-serif;
+  letter-spacing: 0.63px;
+}
+.messStatusAboutBids {
+  padding-left: 75px;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  font: 700 18px "Lato", sans-serif;
+  letter-spacing: 0.63px;
+  color: #417505;
+  background: #F0F3EE;
+}
+.usersProduct {
+  padding-left: 75px;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  font: 700 18px "Lato", sans-serif;
+  letter-spacing: 0.63px;
+  color: #AB944E;
+  background: #F6F2E5;
+}
+.allImages {
+  margin-right: 60px;
+}
+.allImages .smallImages {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.allImages .smallImages div {
+  width: 100px;
+}
+.allImages .smallImages div > img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  background: rgb(252, 252, 252);
+}
+.allImages .smallImages div > img:hover {
+  cursor: pointer;
+}
+.allImages .bigImage {
+  width: 389px;
+  height: 503px;
+  background: #ececec;
+  margin-bottom: 10px;
+}
+.views {
+  font: 400 16px "Lato", sans-serif;
+  color: #9b9b9b;
+  letter-spacing: 0.56px;
+  margin: 0;
+  margin-bottom: 1rem;
+}
+.views > label{
+  font: 400 16px "Lato", sans-serif;
+  color: #8367d8;
+}
+.allImages .bigImage > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.container .title {
+  font: 400 40px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 1.61px;
+}
+.container .price {
+  font: 400 24px "Lato", sans-serif;
+  color: #8367d8;
+  letter-spacing: 0.84px;
+  margin-bottom: 46px;
+  margin-top: -9px;
+}
+.container .bid .enterBid > input[type="number"] {
+  border: 1px solid #d8d8d8;
+  height: 54px;
+  width: 252px;
+  font: 400 22px "Lato", sans-serif;
+  -moz-appearance: textfield;
+}
+.container .enter {
+  font: 400 17px "Lato", sans-serif;
+  color: #9b9b9b;
+  letter-spacing: 0.52px;
+  line-height: 22px;
+}
+.container .buttonPlaceBid > input[type="button"] {
+  background: #ffffff;
+  border: 3px solid #8367d8;
+  box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+  height: 54px;
+  width: 185px;
+  font: 700 18px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.63px;
+  padding-right: 35px;
+}
+.container .buttonPlaceBid {
+  position: relative;
+}
+.container .buttonPlaceBid > fa-icon {
+  font-size: 20px;
+  position: absolute;
+  left: 142px;
+  transform: translateY(32%);
+}
+.disabledInput {
+  pointer-events: none;
+  background: #ececec;
+}
+.disabledButton {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+.infoBid {
+  font: 400 16px "Lato", sans-serif;
+  color: #9b9b9b;
+  letter-spacing: 0.56px;
+}
+.time {
+  margin-bottom: 50px;
+}
+.container .watchlist > input[type="button"] {
+  background: #ffffff;
+  border: 3px solid #ececec;
+  height: 36px;
+  width: 140px;
+  padding-right: 40px;
+  margin-bottom: 27px;
+}
+.container .watchlist > fa-icon {
+  color: #ececec;
+  font-size: 20px;
+  position: absolute;
+  left: 95px;
+  transform: translateY(11%);
+}
+.container .watchlist {
+  position: relative;
+  width: 140px;
+  height: 36px;
+  margin-bottom: 20px;
+}
+.container .details .titleOfDetails {
+  font: 400 18px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.63px;
+  border-bottom: 2px solid #ececec;
+  padding-bottom: 10px;
+}
+.container .details .titleOfDetails ~ p {
+  font: 400 15px "Lato", sans-serif;
+  font-size: 15px;
+  color: #252525;
+  letter-spacing: 0.53px;
+  line-height: 22px;
+}
+.container .bid {
+  display: flex;
+  margin-bottom: 43px;
+}
+.container .enterBid {
+  margin-right: 21px;
+  flex-basis: 251px;
+}
+.infoBid > .high {
+  font-weight: 700;
+  color: #8367d8;
+}
+.error {
+  font: 200 15px "Lato", sans-serif;
+  color: red;
+}
+.allImages .smallImages div > img:hover {
+  transform: translateY(2%);
+}
+.watchlist fa-icon {
+  cursor: pointer;
+}
+.onHover:hover{
+  transform: translateY(5%) translateX(1%);
+}
+.message > div {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+.message > div > p {
+  margin: 0;
+  padding: 0;
+}
+.message {
+  background-color: #e7e0ff;
+  color: #8367d8;
+  justify-content: space-between;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  align-items: center;
+  margin-bottom: 20px;
+  display: none;
+}
+.message > div > fa-icon {
+  margin-right: 7px;
+}
+.message > fa-icon:hover {
+  cursor: pointer;
+  color: #494949;
+}
+.message.paidMessage {
+  background-color: #d9f0cf;
+  color: #6cc047;
+
+}
+.showMessage {
+  display: flex;
+}
+.infoSeller {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font: 400 16px "Lato", sans-serif;
+  margin-bottom: 30px;
+}
+.infoSeller > div > fa-icon {
+  color: #8367d8;
+  margin-right: 5px;
+}
+.infoSeller > .seller-info {
+  margin-right: 15px;
+
+}
+.infoSeller > div > img {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  margin: 0;
+  padding: 0;
+  margin-right: 5px;
+  margin-left: 10px;
+}
+.infoSeller > .rating {
+  margin-right: 10px;
+}
+.infoSeller > div {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+.infoSeller > p, .infoSeller > div > p {
+  margin: 0;
+  padding: 0;
+}
+.pay {
+  font: 700 16px "Lato", sans-serif;
+  letter-spacing: 0.56px;
+  height: 35px;
+  width: 75px;
+  margin-left: 10px;
+  background-color: #8367d8;
+  color: #ffffff;
+  border: none;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.15);
+}
+.pay:hover {
+  background: #c3b0ff;
+  color: #ffffff;
+}

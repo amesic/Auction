@@ -1,0 +1,30 @@
+<div *ngIf = "userIsSeller" class="container">
+  <div class="info">
+    <p>Bider</p>
+
+    <div class="infoDateBid">
+      <p>Date</p>
+      <p>Bid</p>
+    </div>
+
+  </div>
+
+  <div *ngFor="let bid of bids" class="biders">
+    <div class="user">
+    <div class="img">
+    <img *ngIf="bid.user.image == null" src="https://www.pnglot.com/pngfile/detail/493-4930333_user-icon-my-profile-icon-png.png">
+    <img *ngIf="bid.user.image != null" src="{{bid.user.image}}">
+  </div>
+    <p>{{bid.user.userName}}</p>
+  </div>
+
+    <div class="dateBid">
+      <p>{{bid.date | date:'d MMMM y'}}</p>
+      <p [ngClass]="{'green': bid.value == highestBid.value}">{{bid.value | currency:'USD'}}</p>
+    </div>
+  </div>
+</div>
+
+<div class="containerButton">
+  <input type="button" (click)="onClick()" value="Load more..." class="button" [ngClass]="{'noMoreItems': hide}">
+  </div>

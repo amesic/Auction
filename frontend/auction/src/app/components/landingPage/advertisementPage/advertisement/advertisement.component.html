@@ -1,0 +1,19 @@
+<div id="container">
+  <div class="container">
+    <app-categories></app-categories>
+    <div id="aboutPro">
+      <div>
+        <p id="title">{{ product.title }}</p>
+        <p id="price">Start from - {{ product.startPrice | currency:'USD'}}</p>
+        <p id="desc">{{ product.description }}</p>
+      </div>
+      <div class="wrap-input">
+        <input type="button" value="BID NOW" (click)="sendInfoOfProduct(product)"/>
+        <fa-icon [icon]="faChevronRight"></fa-icon>
+      </div>
+    </div>
+    <div>
+      <img src="{{ product.images[0].link }}" />
+    </div>
+  </div>
+</div>

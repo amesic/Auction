@@ -1,0 +1,115 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
+.categories {
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  width: 265px;
+  margin-bottom: 20px;
+}
+.categories > ul {
+  height: 620px;
+  overflow-y: auto;
+  scrollbar-color: rgb(213, 211, 214) rgb(236, 238, 236);
+  scrollbar-width: thin;
+}
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+a {
+  text-decoration: none;
+  color: #252525;
+  letter-spacing: 0.49px;
+  font: 400 14px "Lato", sans-serif;
+  cursor: pointer;
+}
+.categories .subcategory > a {
+  color: #9b9b9b;
+}
+.category .categoryIcon > a,
+p {
+  padding-left: 20px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+.categories > ul > p {
+  font: 700 14px "Lato", sans-serif;
+  color: #8367d8;
+  letter-spacing: 0.49px;
+  margin: 0;
+  margin-bottom: 13px;
+}
+.category > ul {
+  display: none;
+}
+.category > .categoryIcon.show ~ ul {
+  display: block;
+}
+.subcategory {
+  padding-left: 30px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+.categoryIcon {
+  display: flex;
+  justify-content: space-between;
+}
+.plus {
+  padding-top: 10px;
+  padding-right: 5px;
+  display: block;
+  cursor: pointer;
+}
+.minus {
+  color: #8367d8;
+  padding-top: 10px;
+  padding-right: 5px;
+  display: none;
+  cursor: pointer;
+}
+.categoryIcon.show .plus {
+  display: none;
+}
+.categoryIcon.show .minus {
+  display: block;
+}
+.categories .subcategory > a.change {
+  color: #8367d8;
+}
+.categories .subcategory > a.changeColor {
+  color: #8367d8;
+}
+.categories .category .categoryIcon > a.changeColor {
+  font-weight: 700;
+  color: #8367d8;
+}
+label {
+  cursor: pointer;
+}
+.categories .subcategory > a:hover {
+  color: #8367d8;
+}
+.categories .subcategory > fa-icon:hover {
+  cursor: pointer;
+}
+.categories .subcategory {
+  display: flex;
+  justify-content: space-between;
+}
+.categories .subcategory > fa-icon {
+  padding-right: 8px;
+  padding-bottom: 9px;
+  font-size: 11px;
+  color: #9b9b9b;
+  display: none;
+}
+.categories .subcategory > a.changeColor ~ fa-icon {
+  display: block;
+}
+.category .categoryIcon > a:hover {
+  color: #8367d8;
+}
+.category > ul.showUl {
+  display: block;
+}

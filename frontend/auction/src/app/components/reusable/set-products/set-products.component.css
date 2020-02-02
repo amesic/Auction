@@ -1,0 +1,23 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
+.container {
+  margin-bottom: 100px;
+}
+.featureCollection {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.allOtherTypeOfProducts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.title {
+  font: 400 1.5em "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.06125em;
+  border-bottom: 0.18em solid #ececec;
+  padding-bottom: 0.875em;
+  margin-bottom: 1.5625em;
+}
+app-product {
+  margin-right: 25px;
+}

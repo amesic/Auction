@@ -1,0 +1,173 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
+.list {
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  margin-bottom: 100px;
+  margin-top: 27px;
+}
+.product-list-columns {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  height: 60px;
+  background: #fafafa;
+  align-items: center;
+  padding-left: 15px;
+  font: 400 18px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.63px;
+  padding-right: 39px;
+}
+p {
+  margin: 0;
+  padding: 0;
+}
+.product-list-columns-2 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.product-list-columns-4 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+.product-list-rows {
+  display: flex;
+  flex-direction: column;
+  font: 400 18px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.63px;
+}
+.product-list-row-item {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 15px;
+  margin-top: 5px;
+  padding-right: 39px;
+  align-items: center;
+}
+.product-list-row-item-info-2 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.product-list-row-item-info-2 > img {
+  width: 80px;
+  height: 80px;
+  margin-right: 20px;
+  object-fit: cover;
+}
+.product-list-row-item-info-4 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+.start-price,
+.highest-bid,
+.number-bids,
+.time,
+countdown {
+  text-align: center;
+  margin-top: 15px;
+}
+.start-price,
+.highest-bid,
+.number-bids,
+.time {
+  margin-top: 15px;
+}
+.view {
+  background: #ffffff;
+  border: 3px solid #e3e3e3;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.05);
+  font: 700 16px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.56px;
+  height: 49px;
+  margin-left: 10px;
+}
+.view:hover {
+  background: #c3b0ff;
+  color: #ffffff;
+}
+.id {
+  color: #8367d8;
+}
+.color-highest-bid {
+  color: #5b9ed6;
+}
+.highestValue {
+  color: #6cc047;
+}
+.pay {
+  background-color: #8367d8;
+  color: #ffffff;
+  border: none;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.15);
+}
+.paid {
+  background: #6cc047;
+  border: 3px solid #e3e3e3;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.05);
+  font: 700 16px "Lato", sans-serif;
+  color: #ffffff;
+  letter-spacing: 0.56px;
+  height: 49px;
+  margin-left: 10px;
+}
+.message > div {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+.message {
+  background-color: #e7e0ff;
+  color: #8367d8;
+  justify-content: space-between;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  align-items: center;
+  margin-top: 20px;
+}
+.message > div > fa-icon {
+  margin-right: 7px;
+}
+.message > fa-icon:hover {
+  cursor: pointer;
+  color: #494949;
+}
+countdown,
+.timeLeft,
+.timeExpired,
+.pay,
+.hideButtonView,
+.message,
+.paid {
+  display: none;
+}
+.showCounter,
+.showTimeLeft,
+.showTimeExpired,
+.hideLabel,
+.showButtonPay,
+.showButtonPaid {
+  display: block;
+}
+.showMessage {
+  display: flex;
+}
+.changeColorTimeExpired {
+  background-color: rgba(199, 199, 199, 0.2)
+}
+.spinner.showSpinner {
+  display: block;
+}
+.spinner {
+  height: 100%;
+  top: 0px;
+  background-color: rgba(0, 0, 0, 0.164);
+  position: absolute;
+  width: 100%;
+  display: none;
+}

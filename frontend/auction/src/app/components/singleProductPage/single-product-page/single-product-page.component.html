@@ -1,0 +1,45 @@
+<div *ngIf="productInfo != undefined && bidsOfProduct != undefined" class="shop">
+  <app-breadcrumbs></app-breadcrumbs>
+  
+  <div *ngIf="highestBid != null && showNotification" class="notification">
+      <div class="alert-area" [ngClass]="{'sellerNotif' : userIsSeller}">
+        <fa-icon class="closeIcon" [icon]="faTimes" (click)="closeNotification()"></fa-icon>
+        <p class="info">{{highestBid.user.userName}} just became highest bidder.</p>
+        <p *ngIf="!userIsSeller" class="bid">Bid now!</p>
+      </div>
+    </div>
+
+  <app-single-product
+    [productInfo]="productInfo"
+    [clickedImage]="productInfo.images[0].link"
+    [bidsOfProduct]="bidsOfProduct"
+    [highestBid]="highestBid"
+    [numberOfBids]="numberOfBids"
+    [userIsLoged]="userIsLoged"
+    [userIsSeller]="userIsSeller"
+    [usersProduct]="usersProduct"
+    [numberOfViewers]="numberOfViewers"
+    [timeLeft]="timeLeft"
+    [stompClient]="stompClient"
+    [sessionId]="sessionId"
+    [ratingSeller]="ratingSeller"
+    [paid]="paid"
+    (messageEvent)="recieveMessageFromSingleProduct($event)"></app-single-product>
+
+  <app-set-products
+    [title]="'Related Products'"
+    [products]="relatedProducts"
+    [className]="'featureCollection'"></app-set-products>
+
+  <app-bids
+    [bids]="bidsOfProduct"
+    [userIsSeller]="userIsSeller"
+    [highestBid]="highestBid"
+    [idProduct]="productInfo.id"
+    [numberOfBids]="numberOfBids"
+    [hide]="hide"></app-bids>
+    <div class="spinner" [ngClass]="{showSpinner: loading}">
+      <app-spinner [componentUsingSpinner]="'bids'"></app-spinner>
+    </div>
+</div>
+

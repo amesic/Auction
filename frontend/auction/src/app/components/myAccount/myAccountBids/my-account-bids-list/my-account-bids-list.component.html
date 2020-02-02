@@ -1,0 +1,61 @@
+<div class="message" [ngClass]="{showMessage: expired && !close}">
+  <div>
+  <fa-icon [icon]="faCheckCircle"></fa-icon>
+  <p><strong> Congratulations!</strong> You outbid the competition</p>
+</div>
+<fa-icon [icon]="faTimes" (click)="closeMessage()"></fa-icon>
+</div>
+<div class="list" *ngIf="items.length != 0">
+    <div class="product-list-columns">
+      <div class="product-list-columns-2">
+        <p>Item</p>
+        <p>Name</p>
+      </div>
+      <div class="product-list-columns-4">
+      <p class="time">Time Left</p>
+      <p class="start-price">Your Value</p>
+      <p class="number-bids">No. Bids</p>
+      <p class="highest-bid">Highest bid</p>
+    </div>
+    </div>
+    
+    <div class="product-list-rows">
+      <div *ngFor="let item of items" class="product-list-row-item" 
+      [ngClass]="{changeColorTimeExpired: (item.statusOfCounter == 'done' || item.timeToCount < 0) && item.highestBid == item.valueOfBid}">
+        <div class="product-list-row-item-info-2">
+          <img src="{{ item.images[0].link }}" />
+          <div>
+          <p>{{ item.title }}</p>
+          <p class="id">#{{ item.id }}</p>
+        </div>
+        </div>
+        <div class="product-list-row-item-info-4">
+        <div [ngClass]="{showTimeLeft: item.timeToCount > 3600 && item.hideCounter}" class="time timeLeft"> 
+          <label *ngIf="item.timeLeft != '   1h'">{{ item.timeLeft }}</label>
+          <label *ngIf="item.timeLeft == '   1h'">about 1h</label>
+        </div>
+        <div [ngClass]="{showTimeExpired: item.timeToCount < 0 || item.statusOfCounter == 'done'}" class="time timeExpired"> 
+          expired 
+        </div>
+        <countdown
+        *ngIf="item.timeToCount > 0" 
+        [ngClass]="{showCounter: (!item.hideCounter || item.timeToCount <= 3600) && item.statusOfCounter != 'done'}"
+        [config]="{leftTime: item.timeToCount, notify: [3600]}" 
+        (event)="handleEvent($event, item)">
+      </countdown>
+        <div class="start-price" [ngClass]="{ highestValue : item.highestBid == item.valueOfBid}">{{ item.valueOfBid | currency: "USD" }}</div>
+        <div class="number-bids" *ngIf="item.numberOfBids != null">{{ item.numberOfBids }}</div>
+        <div class="number-bids" *ngIf="item.numberOfBids == null">0</div>
+        <div class="highest-bid color-highest-bid" *ngIf="item.highestBid != null" [ngClass]="{ highestValue : item.highestBid == item.valueOfBid}">{{ item.highestBid | currency: "USD" }}</div>
+        <div class="highest-bid" *ngIf="item.highestBid == null">/</div>
+        <input [ngClass]="{hideButtonView: (item.statusOfCounter == 'done' || item.timeToCount < 0) && item.highestBid == item.valueOfBid}" type="button" value="VIEW" class="view" (click)="sendInfoOfProduct(item.title, item.id)">
+        <input [ngClass]="{showButtonPay: (item.statusOfCounter == 'done' || item.timeToCount < 0) && item.highestBid == item.valueOfBid  && !item.paid}" type="button" value="PAY" class="view pay" (click)="sendInfoOfProduct(item.title, item.id)">
+        <input [ngClass]="{showButtonPaid: (item.statusOfCounter == 'done' || item.timeToCount < 0) && item.highestBid == item.valueOfBid && item.paid}" type="button" value="PAID" class="paid" (click)="sendInfoOfProduct(item.title, item.id)">
+    </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="spinner" [ngClass]="{showSpinner: loading}">
+      <app-spinner [componentUsingSpinner]="'bids'"></app-spinner>
+    </div>

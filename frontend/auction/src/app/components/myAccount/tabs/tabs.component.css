@@ -1,0 +1,90 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
+.tab {
+  background: #f0f0f0;
+  font: 700 16px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.56px;
+  border: none;
+}
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  margin-top: 40px;
+}
+.tab-profile,
+.tab-products,
+.tab-bids,
+.tab-watchlist {
+  position: relative;
+}
+.tab-profile > input,
+.tab-products > input,
+.tab-bids > input,
+.tab-watchlist > input {
+  height: 46px;
+  padding-left: 30px;
+}
+.tab-profile:hover > fa-icon,
+.tab-products:hover > fa-icon,
+.tab-bids:hover > fa-icon,
+.tab-watchlist:hover > fa-icon {
+  color: #ffffff;
+}
+.tab-profile:hover > input,
+.tab-products:hover > input,
+.tab-bids:hover > input,
+.tab-watchlist:hover > input {
+  background: #c3b0ff;
+  color: #ffffff;
+}
+.tab-profile > input {
+  width: 118px;
+}
+.tab-products > input {
+  width: 125px;
+}
+.tab-bids > input {
+  width: 107px;
+}
+.tab-watchlist > input {
+  width: 133px;
+}
+.tab-profile > fa-icon,
+.tab-products > fa-icon,
+.tab-bids > fa-icon,
+.tab-watchlist > fa-icon {
+  position: absolute;
+}
+.tab-profile > fa-icon {
+  left: 15%;
+  top: 24%;
+}
+.tab-products > fa-icon {
+  left: 13%;
+  top: 24%;
+}
+.tab-bids > fa-icon {
+  left: 20%;
+  top: 24%;
+}
+.tab-watchlist > fa-icon {
+  left: 12%;
+  top: 23%;
+}
+.tab-profile.activeTab > fa-icon,
+.tab-products.activeTab > fa-icon,
+.tab-bids.activeTab > fa-icon,
+.tab-watchlist.activeTab > fa-icon {
+  color: #ffffff;
+}
+.tab-profile.activeTab > input,
+.tab-products.activeTab > input,
+.tab-bids.activeTab > input,
+.tab-watchlist.activeTab > input {
+  background:#8367D8;
+  color: #ffffff;
+}
+fa-icon {
+    cursor: pointer;
+}

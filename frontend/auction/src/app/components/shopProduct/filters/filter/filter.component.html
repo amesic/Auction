@@ -1,0 +1,9 @@
+<div *ngIf="filter != undefined" class="filter">
+    <p>FILTER BY {{title}}</p>
+    <div *ngFor="let item of filter.children" class="filterInfo">
+    <a (click)="sendFilterId(item.id)" [ngClass]="{ changeColor : item.id == message}">{{item.name}} ({{item.numberOfProducts}})</a>
+    <fa-icon class="closeIcon" 
+    [icon]="faTimes" 
+    (click)="sendFilterId(null)"></fa-icon>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="filters">
+  <app-filter-categories
+    [allCategories]="allCategories"
+    [activeSubcategoryId]="activeSubcategoryId"
+    [activeCategoryId]="activeCategoryId"></app-filter-categories>
+  <app-filter-price
+    [title]="'PRICE'"
+    [filter]="filterPrice"
+    [lowerBound]="lowerBound"
+    [upperBound]="upperBound"
+    [priceProduct]="priceProduct"
+    (messageEvent)="receiveMessageFromFilterPrice($event)"></app-filter-price>
+  <app-filter
+    [title]="'COLOR'"
+    [filter]="filterColor"
+    (messageEvent)="receiveMessageFromFilterColor($event)"></app-filter>
+  <app-filter
+    [title]="'SIZE'"
+    [filter]="filterSize"
+    (messageEvent)="receiveMessageFromFilterSize($event)"></app-filter>
+</div>

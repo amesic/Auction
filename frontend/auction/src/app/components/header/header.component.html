@@ -1,0 +1,55 @@
+  <div class="upHeader">
+    <div class="container">
+    <div class="icons">
+        <!--<fa-icon [icon]="faFacebook"></fa-icon>
+        <fa-icon [icon]="faInstagram"></fa-icon>
+        <fa-icon [icon]="faTwitter"></fa-icon>
+        <fa-icon [icon]="faGooglePlus"></fa-icon>-->
+      </div>
+  
+      <div class="links">
+        <a *ngIf="!userLoged" [routerLink]="['/home/login']">Login</a>
+        <label *ngIf="!userLoged"> or </label>
+        <a
+          *ngIf="!userLoged"
+          [routerLink]="['/home/register']">Create an Account</a>
+        <label *ngIf="userLoged">Welcome {{ userName }}!</label>
+        <a
+          *ngIf="userLoged"
+          [routerLink]="['/home']"
+          (click)="loginService.logOut()">Logout</a>
+      </div>
+    </div>
+    </div>
+    <div class="searchHeader container">
+      <div class="auction">
+        <div class="auctionIcon">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <label [routerLink]="['/home']">AUCTION</label>
+      </div>
+
+      <div class="search">
+        <input type="search" placeholder="Try enter: Shoes" (keyup.enter)="sendSearchValue($event.target.value)"/>
+        <fa-icon [icon]="faSearch" class="searchIcon"></fa-icon>
+      </div>
+  
+      <div class="linksBelowHeader">
+        <a [routerLink]="['/home']" routerLinkActive="active">HOME</a>
+        <a [routerLink]="['/shop']" routerLinkActive="active">SHOP</a>
+        <a *ngIf="userLoged" 
+        class="linkAcc" 
+        [ngClass]="{ 'active' : router.url.substr(0, 11) == '/my-account'}"
+        appClickOutside>MY ACCOUNT</a>
+        <div class="my-account">
+            <div class="my-account-choice">
+                <a [routerLink]="['/my-account/profile']" routerLinkActive="active">Profile</a>
+                <a [routerLink]="['/my-account/products']" routerLinkActive="active">Your products</a>
+                <a [routerLink]="['/my-account/bids']" routerLinkActive="active">Bids</a>
+                <a [routerLink]="['/my-account/watchlist']" routerLinkActive="active">Watchlist</a>
+              </div>
+            </div>
+      </div>
+  </div>

@@ -1,0 +1,161 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
+.upHeader {
+  background: #252525;
+  height: 30px;
+}
+.upHeader > .container {
+  display: flex;
+  justify-content: space-between;
+  height: 1.5625em;
+  font: 700 0.9375em "Lato", sans-serif;
+}
+.icons {
+  margin-top: 3px;
+}
+.icons > fa-icon {
+  margin: 0.3125em;
+  color: #ffffff;
+  opacity: 0.6;
+  font-size: 20px;
+}
+.links {
+  font-size: 0.625em;
+  letter-spacing: 0.030625em;
+  margin-top: 8px;
+}
+.links a {
+  margin-left: 0.9375em;
+  color: #ffffff;
+  text-decoration: none;
+}
+.links label {
+  color: #9b9b9b;
+  margin-left: 0.9375em;
+}
+.searchHeader {
+  display: flex;
+  justify-content: space-between;
+}
+.searchHeader input[type="search"] {
+  background: #ffffff;
+  border: 1px solid #e3e3e3;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
+  width: 513px;
+  height: 43px;
+  padding-left: 19px;
+  padding-right: 45px;
+  margin-top: 10px;
+  font: 400 17px "Lato", sans-serif;
+  margin-left: 131px;
+}
+::placeholder {
+  font-size: 15px;
+  color: #9b9b9b;
+  letter-spacing: 0.63px;
+  width: 137px;
+  height: 22px;
+}
+.searchHeader .auction {
+  font: 300 24px "Lato", sans-serif;
+  color: #8367d8;
+  letter-spacing: 0.84px;
+  height: 29px;
+  width: 140px;
+  margin-top: 19px;
+}
+.searchHeader .auction .auctionIcon span {
+  background: #c4bfd6;
+  display: inline-block;
+  border-radius: 1px;
+  height: 16px;
+  width: 4px;
+}
+.auction {
+  display: flex;
+}
+.auction label {
+  margin-left: 14px;
+}
+.searchHeader .auction .auctionIcon :nth-child(1) {
+  transform: rotate(45deg);
+}
+.searchHeader .auction .auctionIcon :nth-child(2) {
+  transform: rotate(-45deg) translateX(7px) translateY(-2px);
+}
+.searchHeader .auction .auctionIcon :nth-child(3) {
+  transform: rotate(90deg) translateX(5px) translateY(-4px);
+}
+.linksBelowHeader {
+  margin-top: 20px;
+  display: flex;
+  justify-content: end;
+}
+.linksBelowHeader a {
+  text-decoration: none;
+  font: 300 16px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.56px;
+  margin-left: 28px;
+}
+.linksBelowHeader .active, .my-account-choice .active {
+  color: #8367d8;
+  font-weight: 700;
+}
+.linksBelowHeader a:hover {
+  color: #8367d8;
+}
+.search {
+  position: relative;
+}
+.search > .searchIcon {
+  position: absolute;
+  right: 10px;
+  top: 51%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  font-size: 17px;
+}
+.auction > label:hover {
+  cursor: pointer;
+}
+.links > a:hover {
+  color: #8367d8;
+}
+.my-account {
+  display: none;
+  justify-content: flex-end;
+}
+.my-account-choice {
+  display: flex;
+  background: #ffffff;
+  border: 1px solid #ececec;
+  height: 246px;
+  width: 172px;
+  position: absolute;
+  flex-direction: column;
+  padding-top: 30px;
+  margin-top: 30px;
+  margin-right: -40px;
+  z-index: 2;
+}
+.linksBelowHeader >.linkAcc:hover {
+  cursor: pointer;
+}
+.linksBelowHeader >.linkAcc.show {
+  color: #8367d8;
+}
+.linksBelowHeader >.linkAcc.show ~ .my-account {
+  display: flex;
+}
+.my-account-choice > a {
+  height: 55px;
+  font: 400 16px "Lato", sans-serif;
+  color: #9b9b9b;
+  letter-spacing: 0.56px;
+  text-decoration: none;
+}
+.my-account-choice > a:hover {
+  cursor: pointer;
+  color: #8367d8;
+}

@@ -1,0 +1,97 @@
+<div class="messStatusAboutBids" *ngIf="messStatusAboutBids != null">{{ messStatusAboutBids }}</div>
+<div class="usersProduct" *ngIf="usersProduct != null">{{ usersProduct }}</div>
+<div class="usersProduct" *ngIf="messStatusAboutWatchList != null">{{ messStatusAboutWatchList }}</div>
+<div class="messError" *ngIf="errorMess != null" >{{ errorMess }}</div>
+<div class="container">
+    
+<div class="allImages"> 
+    <div class="bigImage">
+    <img src="{{clickedImage}}">
+</div>
+<div class="smallImages" > 
+    <div *ngFor="let image of productInfo.images; let i = index" >
+    <img src="{{image.link}}" (click)="clickOnImage($event)">
+</div>
+</div>
+</div>
+
+<div class="aboutProduct">
+<p class="title">{{ productInfo.title }}</p>
+<p class="price">Start from -{{ productInfo.startPrice | currency:'USD' }}</p>
+
+<div class="message" 
+[ngClass]="{showMessage: 
+    timeLeft.substr(0,1) == '-' && 
+    !close && 
+    highestBid != undefined &&
+    (userIsSeller || highestBid.user.email == loginService.getUserEmail()),
+    paidMessage: paid}">
+    <div>
+    <fa-icon [icon]="faCheckCircle"></fa-icon>
+    <p *ngIf="highestBid != undefined && !userIsSeller && highestBid.user.email == loginService.getUserEmail() && !paid"><strong> Congratulations!</strong> You outbid the competition</p>
+    <p *ngIf="highestBid != undefined && !userIsSeller && highestBid.user.email == loginService.getUserEmail() && paid"><strong> Congratulations!</strong> You paid for this item!</p>
+    <p *ngIf="highestBid != undefined && userIsSeller"><strong> {{ highestBid.user.userName }}</strong> is the highest bidder!</p>
+  </div>
+  <fa-icon [icon]="faTimes" (click)="closeMessage()"></fa-icon>
+</div>
+
+<div class="infoSeller">
+<p *ngIf="!userIsSeller" class="infoBid">Seller:</p>
+<p *ngIf="userIsSeller" class="infoBid">You:</p>
+<div class="seller-info">
+<img src="{{ productInfo.seller.image }}">
+<p>{{ productInfo.seller.userName }}</p>
+</div>
+<div class="rating">
+<fa-icon [icon]="faStar"></fa-icon>
+<p *ngIf="ratingSeller != null">{{ ratingSeller | number: '1.1-1' }}/5</p>
+<p *ngIf="ratingSeller == null">0/5</p>
+</div>
+<input *ngIf="!userIsSeller && 
+highestBid != undefined && 
+highestBid.user.email == loginService.getUserEmail() &&
+timeLeft.substr(0,1) == '-' &&
+!paid" 
+type="button" value="PAY" class="pay" (click)="pay()">
+</div>
+
+<div *ngIf="!userIsSeller && timeLeft.substr(0,1) != '-'" class="bid">
+<div class="enterBid">
+<input type="number" [ngClass]="{'disabledInput': !userIsLoged || userIsSeller}" (change)="saveValue($event.target.value)" #reference>
+<p class="enter"><label *ngIf="highestBid != null">Enter {{ highestBid.value + 1 | currency:'USD' }} or more</label>
+<label *ngIf="highestBid == null">Enter {{ productInfo.startPrice | currency:'USD' }} or more</label> <br>
+</p>
+</div>
+
+<div class="buttonPlaceBid">
+<input type="button" value="PLACE BID" [ngClass]="{'disabledButton': !userIsLoged  || userIsSeller}" (click)="reference.value=''" (click)="saveNewBid()">
+<fa-icon [icon]="faChevronRight"></fa-icon>
+</div>
+</div>
+<p class="infoBid">Highest bid: <label class="high" *ngIf="highestBid != null">{{ highestBid.value | currency:'USD' }}</label>
+<label *ngIf="highestBid == null">There are not bids yet!</label></p>
+<p class="infoBid">
+    <label *ngIf="numberOfBids != null">No bids: {{ numberOfBids }}</label> 
+</p>
+<div *ngIf="userIsLoged" class="views">
+      Users watching: <label>{{ numberOfViewers }}</label>
+</div>
+<p class="infoBid time">Time left: 
+    <label *ngIf = "timeLeft != undefined && timeLeft.substr(0,1) != '-'">{{ timeLeft }}</label>
+    <label *ngIf = "timeLeft != undefined && timeLeft.substr(0,1) == '-'">expired</label>
+</p>
+
+<div *ngIf="!userIsSeller" class="watchlist" [ngClass]="{'onHover': userIsLoged}" (click)="saveToWatchlist()">
+<input type="button" value="Watchlist" 
+[ngClass]="{'disabledButton': !userIsLoged}">
+<fa-icon [icon]="faHeart"></fa-icon>
+</div>
+
+<div class="details">
+<p class="titleOfDetails">Details</p>
+<p>{{ productInfo.description }}</p>
+</div>
+</div>
+
+</div>
+

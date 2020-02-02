@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 84px;
+}
+.subcategory > a,
+.category > a {
+  text-decoration: none;
+  color: #252525;
+  letter-spacing: 0.56px;
+  font: 400 16px "Lato", sans-serif;
+}
+.category > a {
+  font: 700 20px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.56px;
+}
+.categories > div {
+  width: 300px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+.subcategory > a:hover {
+  cursor: pointer;
+  color: #8367d8;
+}

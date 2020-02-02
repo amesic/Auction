@@ -1,0 +1,40 @@
+<div class="sorting">
+  <div class="sortingOptions">
+    <div class="sortingOption" appClickOutside>
+      <a>{{sortingType}}</a>
+      <fa-icon [icon]="faChevronDown"></fa-icon>
+    </div>
+    <ul>
+      <li (click)="sendTypeOfSorting('default', 'Default Sorting')">Default Sorting</li>
+      <li (click)="sendTypeOfSorting('newness', 'Sort by Newness')">Sort by Newness</li>
+      <li (click)="sendTypeOfSorting('priceLowest', 'Sort by Price: Lowest first')">Sort by Price: Lowest first</li>
+      <li (click)="sendTypeOfSorting('priceHighest', 'Sort by Price: Highest first')">Sort by Price: Highest first</li>
+    </ul>
+  </div>
+  <div class="list">
+    <div class="grid" (click)="grid()" [ngClass]="{ activeList: activeGrid }">
+      <fa-icon [icon]="faTh"></fa-icon>
+      <a>Grid</a>
+    </div>
+    <div class="list" (click)="list()" [ngClass]="{ activeList: activeList }">
+      <fa-icon [icon]="faList"></fa-icon>
+      <a>List</a>
+    </div>
+  </div>
+</div>
+<div *ngIf="products != undefined && products != null" [ngClass]="{ productsGrid: activeGrid, productsList: activeList }">
+  <div *ngFor="let product of products.items" class="shopProduct">
+    <app-shop-product
+      [product]="product"
+      [className]="className"
+    ></app-shop-product>
+  </div>
+</div>
+
+<div class="explore">
+<input type="button" value="EXPLORE MORE" (click)="onClick()" [ngClass]="{'noMoreItems': hide}">
+</div>
+
+<div *ngIf="messageIfThereIsNoProducts != null" class="message">
+  {{messageIfThereIsNoProducts}}
+</div>
