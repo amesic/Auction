@@ -73,9 +73,14 @@ public class UserController {
             return new ResponseEntity<>("Your data is not valid!", headers, HttpStatus.BAD_REQUEST);
         }
         if(!emailExist) {
-            return new ResponseEntity<>("You are successfully registered " + user.getUserName() + "!", headers, HttpStatus.OK);
+            return new ResponseEntity<>(
+                    "You are successfully registered " + user.getUserName() + "!",
+                    headers,
+                    HttpStatus.OK);
         }
-        return new ResponseEntity<>("You are already registered with " + user.getEmail() + " email!", headers, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(
+                "You are already registered with " + user.getEmail() + " email!",
+                headers,
+                HttpStatus.BAD_REQUEST);
     }
 }
-

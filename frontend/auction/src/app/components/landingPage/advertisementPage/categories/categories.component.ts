@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { CategoriesService } from "../../../../services/categories.service";
 import { Category } from "../../../../models/Category";
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-categories",
@@ -8,7 +9,7 @@ import { Category } from "../../../../models/Category";
   styleUrls: ["./categories.component.css"]
 })
 export class CategoriesComponent implements OnInit {
-  constructor(private categoriesService: CategoriesService) {}
+  constructor(private categoriesService: CategoriesService, private router: Router) {}
   categories: Array<Category>;
 
   ngOnInit() {
@@ -16,4 +17,8 @@ export class CategoriesComponent implements OnInit {
       this.categories = allCategories;
     });
   }
+  sendSubcategoryId(subcategoryId, categoryId) {
+    this.router.navigate(['/shop/category/' + categoryId + "/" + subcategoryId]);
+  }
+
 }

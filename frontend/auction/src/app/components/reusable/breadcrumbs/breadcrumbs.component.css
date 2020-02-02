@@ -6,17 +6,17 @@
   height: 3.125em;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-top: 0.625em;
 }
 .container :nth-child(1) {
   font: 400 1.0625em "Lato", sans-serif;
   color: #252525;
   letter-spacing: 0.039375em;
-  margin-top: 0.8125em;
   cursor: pointer;
+  margin: 0;
 }
 .container div {
-  margin-top: 5px;
   font: 400 0.9375em "Lato", sans-serif;
   color: #252525;
 }
@@ -25,11 +25,18 @@
   font-size: 1em;
   letter-spacing: 0.035em;
   cursor: pointer;
+  text-decoration: none;
+  margin: 0;
 }
 .container div :nth-child(2) {
+  margin: 0;
   font-size: 1em;
   letter-spacing: 0.035em;
   margin-left: 1.25em;
   cursor: pointer;
+}
+
+.container > label:hover, .container > div > label:hover, .container > div > a:hover {
+  color: #8367d8;
 }
 

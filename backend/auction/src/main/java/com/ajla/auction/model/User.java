@@ -13,8 +13,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.CascadeType;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -31,11 +31,11 @@ public class User {
     private String password;
     private String gender;
     private String image; //path for image
-    private Date birthDate;
+    private LocalDate birthDate;
     private String phoneNumber;
 
     //address table
-    @OneToOne(cascade = {CascadeType.ALL})
+    @OneToOne
     @Target(Address.class)
     @JoinColumn(name = "idAddress")
     private Address address;
@@ -79,10 +79,10 @@ public class User {
     public void setImage(String image) {
         this.image = image;
     }
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
     public String getPhoneNumber() {

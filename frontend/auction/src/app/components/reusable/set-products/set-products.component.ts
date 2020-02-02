@@ -11,10 +11,7 @@ export class SetProductsComponent implements OnInit {
   @Input() products;
   @Input() title;
   @Input() className;
-  constructor(private productService: ProductService, private router: Router) {}
+  constructor(private productService: ProductService) {}
 
   ngOnInit() {}
-  sendInfoOfProduct(product){
-    this.router.navigate(['/shop/product/' + product.title + "/" + product.id]);
-  }
 }

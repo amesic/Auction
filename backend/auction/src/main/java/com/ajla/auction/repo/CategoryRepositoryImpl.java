@@ -8,14 +8,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Objects;
 
 @Repository
 public class CategoryRepositoryImpl implements CategoryRepositoryCustom {
-    final EntityManager em;
+    private final EntityManager em;
 
     @Autowired
     public CategoryRepositoryImpl(final EntityManager em) {

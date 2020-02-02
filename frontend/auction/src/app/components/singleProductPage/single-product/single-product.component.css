@@ -60,6 +60,17 @@
   background: #ececec;
   margin-bottom: 10px;
 }
+.views {
+  font: 400 16px "Lato", sans-serif;
+  color: #9b9b9b;
+  letter-spacing: 0.56px;
+  margin: 0;
+  margin-bottom: 1rem;
+}
+.views > label{
+  font: 400 16px "Lato", sans-serif;
+  color: #8367d8;
+}
 .allImages .bigImage > img {
   width: 100%;
   height: 100%;
@@ -143,6 +154,9 @@
 }
 .container .watchlist {
   position: relative;
+  width: 140px;
+  height: 36px;
+  margin-bottom: 20px;
 }
 .container .details .titleOfDetails {
   font: 400 18px "Lato", sans-serif;
@@ -173,4 +187,14 @@
 .error {
   font: 200 15px "Lato", sans-serif;
   color: red;
+}
+.allImages .smallImages div > img:hover {
+  transform: translateY(2%);
+
+}
+.watchlist fa-icon {
+  cursor: pointer;
+}
+.onHover:hover{
+  transform: translateY(5%) translateX(1%);
 }

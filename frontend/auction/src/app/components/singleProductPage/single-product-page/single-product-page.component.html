@@ -1,5 +1,13 @@
-<div *ngIf="productInfo != undefined && bidsOfProduct != undefined">
+<div *ngIf="productInfo != undefined && bidsOfProduct != undefined" class="shop">
   <app-breadcrumbs></app-breadcrumbs>
+  
+  <div *ngIf="highestBid != null && showNotification" class="notification">
+      <div class="alert-area" [ngClass]="{'sellerNotif' : userIsSeller}">
+        <fa-icon class="closeIcon" [icon]="faTimes" (click)="closeNotification()"></fa-icon>
+        <p class="info">{{highestBid.user.userName}} just became highest bidder.</p>
+        <p *ngIf="!userIsSeller" class="bid">Bid now!</p>
+      </div>
+    </div>
 
   <app-single-product
     [productInfo]="productInfo"
@@ -10,7 +18,11 @@
     [userIsLoged]="userIsLoged"
     [userIsSeller]="userIsSeller"
     [usersProduct]="usersProduct"
-    [timeLeft]="timeLeft"></app-single-product>
+    [numberOfViewers]="numberOfViewers"
+    [timeLeft]="timeLeft"
+    [stompClient]="stompClient"
+    [sessionId]="sessionId"
+    (messageEvent)="recieveMessageFromSingleProduct($event)"></app-single-product>
 
   <app-set-products
     [title]="'Related Products'"

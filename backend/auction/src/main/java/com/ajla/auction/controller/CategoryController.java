@@ -1,7 +1,9 @@
 package com.ajla.auction.controller;
 
 import com.ajla.auction.model.Category;
+import com.ajla.auction.model.NumberOfProductsInfo;
 import com.ajla.auction.service.CategoryService;
+import com.ajla.auction.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +22,14 @@ import java.util.Objects;
 @RequestMapping("/category")
 public class CategoryController {
     private final CategoryService categoryService;
+    private final ProductService productService;
 
     @Autowired
-    public CategoryController(final CategoryService categoryService) {
+    public CategoryController(final CategoryService categoryService,
+                              final ProductService productService) {
         Objects.requireNonNull(categoryService, "categoryService must not be null.");
+        Objects.requireNonNull(productService, "productService must not be null.");
+        this.productService = productService;
         this.categoryService = categoryService;
     }
 
@@ -31,9 +37,13 @@ public class CategoryController {
     //http://localhost:8080/category/all
     @GetMapping("/all")
     @ResponseBody
-    public ResponseEntity<List<Category>> getAllCategories(@RequestParam(required = false) final Long numberOfCategories) {
+    public ResponseEntity<List<Category>> getAllCategories(
+            @RequestParam(required = false) final Long numberOfCategories) {
         return new ResponseEntity<>(categoryService.getAllCategories(numberOfCategories), HttpStatus.OK);
     }
 
-
+    @GetMapping("/numberOfProductsBySubcategory")
+    public ResponseEntity<List<NumberOfProductsInfo>> getNumberOfProducts() {
+        return new ResponseEntity<>(productService.numberOfProductsBySubcategories(), HttpStatus.OK);
+    }
 }

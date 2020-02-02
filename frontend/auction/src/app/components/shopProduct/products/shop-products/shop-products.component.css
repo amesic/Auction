@@ -1,0 +1,139 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
+.sorting {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.list {
+  display: flex;
+  justify-content: space-between;
+}
+.activeList {
+  background: #8367d8;
+  color: #ffffff;
+}
+.list a {
+  margin-left: 40px;
+  position: absolute;
+  right: 20px;
+  font-size: 20px;
+  transform: translateY(30%);
+}
+.grid,
+.list {
+  position: relative;
+  font: 700 16px "Lato", sans-serif;
+  letter-spacing: 0.56px;
+  height: 40px;
+  width: 220px;
+  cursor: pointer;
+}
+.grid > fa-icon,
+.list > fa-icon {
+  position: absolute;
+  right: 70px;
+  font-size: 20px;
+  transform: translateY(35%);
+}
+.sortingOptions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 43px;
+}
+.sortingOption > fa-icon {
+  position: absolute;
+  right: 14px;
+  font-size: 18px;
+}
+.sortingOption {
+  background: #ffffff;
+  border: 3px solid #ececec;
+  font: 400 16px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.56px;
+  height: 46px;
+  width: 400px;
+  padding-left: 18px;
+  padding-top: 12px;
+  padding-bottom: 15px;
+  padding-right: 131px;
+  cursor: pointer;
+}
+ul {
+  display: none;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: #ffffff;
+  border: 3px solid #ececec;
+  font: 400 16px "Lato", sans-serif;
+  color: #252525;
+  letter-spacing: 0.56px;
+  position: absolute;
+  margin-top: 44px;
+  z-index: 10;
+}
+ul > li {
+  cursor: pointer;
+  padding-left: 18px;
+  padding-top: 12px;
+  padding-bottom: 15px;
+  width: 395px;
+}
+ul > li:hover {
+  background: #8367d8;
+  color: #ffffff;
+}
+.sortingOption.show ~ ul {
+  display: block;
+}
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.productsGrid .shopProduct {
+  margin-bottom: 40px;
+}
+.productsList {
+  display: flex;
+  flex-direction: column;
+}
+.productsList .shopProduct {
+  margin-bottom: 15px;
+}
+.explore > input {
+  margin-bottom: 201px;
+  margin-top: 92px;
+  background: #8367d8;
+  font: 700 18px "Lato", sans-serif;
+  color: #ffffff;
+  letter-spacing: 0.63px;
+  border: none;
+  padding-right: 57px;
+  padding-left: 49px;
+  padding-top: 17px;
+  padding-bottom: 17px;
+}
+.explore {
+  text-align: center;
+}
+.noMoreItems {
+  display: none;
+}
+.message {
+  font: 400 50px "Lato", sans-serif;
+  color: #8367d8;
+  letter-spacing: 3.5px;
+  text-shadow: 2px 1px 0 #dadada;
+  text-align: center;
+  transform: translateY(300%);
+}
+.list .list:hover, .list .grid:hover {
+  background: #c3b0ff;
+  color: #ffffff;
+}
+.explore > input[type="button"]:hover {
+  transform: translateY(5%) translateX(1%);
+}

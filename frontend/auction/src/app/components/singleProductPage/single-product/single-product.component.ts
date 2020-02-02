@@ -1,15 +1,16 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, OnChanges, EventEmitter, Output} from "@angular/core";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { LoginService } from 'src/app/services/login.service';
 import { BidsService } from 'src/app/services/bids.service';
+import { WatchlistService } from 'src/app/services/watchlist.service';
 
 @Component({
   selector: "app-single-product",
   templateUrl: "./single-product.component.html",
   styleUrls: ["./single-product.component.css"]
 })
-export class SingleProductComponent implements OnInit {
+export class SingleProductComponent implements OnInit, OnChanges {
   @Input() productInfo;
   @Input() bidsOfProduct;
   @Input() userIsLoged;
@@ -19,16 +20,35 @@ export class SingleProductComponent implements OnInit {
   @Input() numberOfBids;
   @Input() usersProduct;
   @Input() timeLeft;
-  
+  @Input() numberOfViewers;
+  @Input() stompClient;
+  @Input() sessionId;
+ 
   messStatusAboutBids;
+  messStatusAboutWatchList;
   faChevronRight = faChevronRight;
   faHeart = faHeart;
   valueFromUser;
   errorMess = null;
 
-  constructor(private loginService: LoginService, 
-    private bidService: BidsService) {}
+  @Output() messageEvent = new EventEmitter<boolean>();
 
+
+  constructor(private loginService: LoginService, 
+    private bidService: BidsService,
+    private watchlistService: WatchlistService) {} 
+  
+  ngOnChanges() {
+    if (this.messStatusAboutBids != null) {
+      this.messStatusAboutBids = null;
+    }
+    if (this.messStatusAboutWatchList != null) {
+      this.messStatusAboutWatchList = null;
+    }
+    if (this.errorMess != null) {
+      this.errorMess = null;
+    }
+   }
   ngOnInit() {
     if(this.userIsLoged != true) {
       this.errorMess = "Please login for bidding!"
@@ -45,7 +65,15 @@ export class SingleProductComponent implements OnInit {
       this.bidService.saveBidFromUser(this.productInfo, this.loginService.getUserEmail(), 
       this.valueFromUser).subscribe(
         bid => {
+          this.messageEvent.emit(false);
+          let object = {
+            "email": this.loginService.getUserEmail(),
+            "productId" : this.productInfo.id,
+            "sessionId": this.sessionId
+          }
+          this.stompClient.send("/app/send/message/highestBid" , {}, JSON.stringify(object));
           this.errorMess = null;
+          this.messStatusAboutWatchList = null;
           this.highestBid = bid;
           this.numberOfBids = this.numberOfBids + 1;
           this.messStatusAboutBids = "Congrats! You are the highest bider!"
@@ -53,6 +81,7 @@ export class SingleProductComponent implements OnInit {
       },
       err => {
         this.messStatusAboutBids = null;
+        this.messStatusAboutWatchList = null;
         if(this.highestBid != null) {
         this.errorMess = "Please enter greater number than " + this.highestBid.value + "!";
         } else {
@@ -66,5 +95,20 @@ export class SingleProductComponent implements OnInit {
       this.errorMess = "Please enter valid number!";
       window.scrollTo(0, 0);
     }
+  }
+  saveToWatchlist() {
+    this.watchlistService.saveItemFromUserToWatchlist(this.productInfo.id, this.loginService.getUserEmail())
+    .subscribe(savedItem => {
+      this.messStatusAboutWatchList = "Item added to your watchlist!";
+      this.messStatusAboutBids = null;
+      this.errorMess = null;
+      window.scrollTo(0, 0);
+    },
+    err => {
+      this.errorMess = "Item already added to your watchlist!";
+      this.messStatusAboutWatchList = null;
+      this.messStatusAboutBids = null;
+      window.scrollTo(0, 0);
+    })
   }
 }

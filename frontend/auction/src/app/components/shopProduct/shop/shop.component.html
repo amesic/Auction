@@ -1,0 +1,29 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div class="container">
+<app-all-filters
+  [allCategories]="allCategories"
+  [filterColor]="filterColor"
+  [filterSize]="filterSize"
+  [filterPrice]="filterPrice"
+  [lowerBound]="lowerBound"
+  [upperBound]="upperBound"
+  [priceProduct]="priceProduct"
+  [activeSubcategoryId]="activeSubcategoryId"
+  [activeCategoryId]="activeCategoryId"
+  (messageEventFilterColor)="receiveMessageFromFilterColor($event)"
+  (messageEventFilterSize)="receiveMessageFromFilterSize($event)"
+  (messageEventFilterPrice)="receiveMessageFromFilterPrice($event)"></app-all-filters>
+<app-shop-products 
+[products]="products" 
+[hide]="hide"
+[filterColorId]="filterColorId"
+[filterSizeId]="filterSizeId"
+[subcategoryId]="subcategoryId"
+[lowerBoundPrice]="lowerBoundPrice"
+[upperBoundPrice]="upperBoundPrice"
+[valueFromUserSearch]="valueFromUserSearch"
+[pageNumber]="pageNumber"
+[size]="size"
+[messageIfThereIsNoProducts]="messageIfThereIsNoProducts" 
+(messageEventSorting)="recieveMessageFromShopProducts($event)"></app-shop-products>
+</div>

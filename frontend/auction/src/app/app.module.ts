@@ -4,6 +4,12 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { BasicAuthHtppInterceptorServiceService } from './services/basic-auth-htpp-interceptor-service.service';
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { FormsModule } from '@angular/forms';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { Ng5SliderModule } from 'ng5-slider';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { WebSocketService } from "./services/web-socket.service";
+
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -25,6 +31,23 @@ import { SingleProductComponent } from './components/singleProductPage/single-pr
 import { SingleProductPageComponent } from './components/singleProductPage/single-product-page/single-product-page.component';
 import { BidsComponent } from './components/singleProductPage/bids/bids.component';
 import { LoginRegisterActivate } from './app-routing.module';
+import { ShopComponent } from './components/shopProduct/shop/shop.component';
+import { FilterCategoriesComponent } from './components/shopProduct/filters/categories/filterCategories.component'; 
+import { AllFiltersComponent } from './components/shopProduct/filters/all-filters/all-filters.component';
+import { FilterComponent } from './components/shopProduct/filters/filter/filter.component';
+import { ShopProductComponent } from './components/shopProduct/products/shop-product/shop-product.component';
+import { ShopProductsComponent } from './components/shopProduct/products/shop-products/shop-products.component';
+import { ErrorComponent } from './components/error/error.component';
+import { ClickOutsideDirective } from './directives/click-outside.directive';
+import { FilterPriceComponent } from './components/shopProduct/filters/filter-price/filter-price.component';
+import { MyAccountComponent } from './components/myAccount/my-account/my-account.component';
+import { TabsComponent } from './components/myAccount/tabs/tabs.component';
+import { MyAccountProductsComponent } from './components/myAccount/myAccountProducts/my-account-products/my-account-products.component';
+import { MyAccountBidsComponent } from './components/myAccount/myAccountBids/my-account-bids/my-account-bids.component';
+import { MyAccountWatchlistComponent } from './components/myAccount/myAccountWatchlist/my-account-watchlist/my-account-watchlist.component';
+import { MyAccountProductsListComponent } from './components/myAccount/myAccountProducts/my-account-products-list/my-account-products-list.component';
+import { MyAccountWatchlistListComponent } from './components/myAccount/myAccountWatchlist/my-account-watchlist-list/my-account-watchlist-list.component';
+import { MyAccountBidsListComponent } from './components/myAccount/myAccountBids/my-account-bids-list/my-account-bids-list.component';
 
 @NgModule({
   declarations: [
@@ -45,17 +68,39 @@ import { LoginRegisterActivate } from './app-routing.module';
     PaginationComponent,
     SingleProductComponent,
     SingleProductPageComponent,
-    BidsComponent
+    BidsComponent,
+    ShopComponent,
+    AllFiltersComponent,
+    FilterCategoriesComponent,
+    FilterComponent,
+    ShopProductComponent,
+    ShopProductsComponent,
+    ErrorComponent,
+    ClickOutsideDirective,
+    FilterPriceComponent,
+    MyAccountComponent,
+    TabsComponent,
+    MyAccountProductsComponent,
+    MyAccountBidsComponent,
+    MyAccountWatchlistComponent,
+    MyAccountProductsListComponent,
+    MyAccountWatchlistListComponent,
+    MyAccountBidsListComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    FormsModule,
+    NgxChartsModule,
+    BrowserAnimationsModule,
+    Ng5SliderModule
   ],
   providers: [
     LoginRegisterActivate,
+    WebSocketService,
   {
       provide: HTTP_INTERCEPTORS,
       useClass: BasicAuthHtppInterceptorServiceService,

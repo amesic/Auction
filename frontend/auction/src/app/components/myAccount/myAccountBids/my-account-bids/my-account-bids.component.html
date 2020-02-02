@@ -1,0 +1,19 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div *ngIf="items != undefined" class="container">
+  <app-tabs></app-tabs>
+  <app-my-account-bids-list [items]="items"></app-my-account-bids-list>
+  <div class="load-button">
+    <input
+      [ngClass]="{ hide: hide }"
+      type="button"
+      value="LOAD MORE"
+      class="load"
+      (click)="loadMore()"/>
+  </div>
+
+  <div class="container" *ngIf="items != undefined && items.length == 0">
+    <div class="message">
+      No products yet!
+    </div>
+  </div>
+</div>

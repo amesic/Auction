@@ -31,9 +31,9 @@ public class UserService implements IUserService, UserDetailsService {
 
     @Override
     public User findByEmail(final String email) {
-       final User user = userRepository.findByEmail(email);
-       return user;
+        return userRepository.findByEmail(email);
     }
+
     @Override
     public Boolean saveDataFromUser(final User user) {
         final User userWithEmail = findByEmail(user.getEmail());
@@ -50,6 +50,7 @@ public class UserService implements IUserService, UserDetailsService {
         }
         return true;
     }
+
     //for auth looking for user from database
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {

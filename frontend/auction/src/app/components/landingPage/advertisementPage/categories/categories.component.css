@@ -52,4 +52,5 @@ p {
 }
 li :hover {
   cursor: pointer;
+  color: #8367d8;
 }

@@ -1,0 +1,24 @@
+<div *ngIf="filter != undefined && priceProduct != undefined && priceProduct.length != 0 && priceProduct.length != 1" class="filter">
+  <p class="title">FILTER BY {{ title }}</p>
+  <div class="components">
+    <ngx-charts-bar-vertical
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="priceProduct">
+    </ngx-charts-bar-vertical>
+      <ng5-slider [value]="value" [highValue]="highValue" [options]="options" (userChangeEnd)="sendInfoAboutPrice($event)"></ng5-slider>
+  </div>
+    <p class="info">
+      {{ lower | currency: "USD" }} - {{ upper | currency: "USD" }}
+    </p>
+  <p class="info">
+    <label *ngIf="filter.avgPrice % 1 != 0">
+      The average price is
+      {{ filter.avgPrice | number: "1.0-0" | currency: "USD" }}
+    </label>
+    <label *ngIf="filter.avgPrice % 1 == 0">
+      The average price is
+      {{ filter.avgPrice | currency: "USD" }}
+    </label>
+  </p>
+</div>

@@ -10,9 +10,11 @@ import {
 })
 export class ShowHideDirective {
   @HostBinding("class.show") isOpen = false;
-  constructor(private el: ElementRef) {}
+  @HostBinding("class.hide") isHide = false;
+  constructor() {}
   @HostListener("click")
   onClick() {
     this.isOpen = !this.isOpen;
+    this.isHide = !this.isHide;
   }
 }

@@ -1,0 +1,46 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
+.filter {
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  width: 265px;
+  margin-bottom: 20px;
+}
+.filter > .title {
+  margin: 0;
+  font: 700 14px "Lato", sans-serif;
+  color: #8367d8;
+  letter-spacing: 0.49px;
+  display: flex;
+  align-items: center;
+  height: 42px;
+  padding-left: 20px;
+}
+.filter > .info {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  height: 42px;
+  padding-left: 20px;
+  font: 400 14px "Lato", sans-serif;
+  color: #9b9b9b;
+  letter-spacing: 0.49px;
+}
+.components {
+  display: flex;
+  flex-direction: column;
+}
+ngx-charts-bar-vertical {
+  margin-bottom: -34px;
+}
+.ng5-slider .ng5-slider-selection {
+  background: #8367d8 !important;
+}
+.ng5-slider .ng5-slider-pointer {
+  background: #8367d8 !important;
+}
+.ng5-slider {
+  margin-left: 20px !important;
+  width: 80% !important;
+  margin-top: 23px !important;
+}

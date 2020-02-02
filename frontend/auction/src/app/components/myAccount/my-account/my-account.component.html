@@ -1,0 +1,182 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div class="container">
+  <app-tabs></app-tabs>
+  <div class="required" *ngIf="userInfo != undefined">
+    <div class="title">REQUIRED</div>
+    <div class="profile-info">
+        <img
+        class="profile-img"
+          *ngIf="userInfo.image == null"
+          src="https://www.marketingmuses.com/wp-content/uploads/2018/01/invis-user.png"/>
+        <img class="profile-img" *ngIf="userInfo.image != null" src="{{ userInfo.image }}" />
+      <div class="user-info">
+        <p>Your Name</p>
+        <input
+          class="profile-info-name"
+          type="text"
+          value="{{ userInfo.userName }}"
+          readonly
+        />
+        <p>Your Gender</p>
+        <input
+        *ngIf = "userInfo.gender != null"
+          class="profile-info-gender"
+          type="text"
+          value="{{ userInfo.gender }}"
+          readonly
+        />
+        <input
+        *ngIf = "userInfo.gender == null"
+          class="profile-info-gender"
+          type="text"
+          value=""
+          readonly
+        />
+        <p>Date of Birth</p>
+        <div class="birth-date">
+          <input
+            class="profile-info-birth-date-month"
+            type="text"
+            value="{{ month }}"
+            readonly
+          />
+          <input
+            class="profile-info-birth-date-day"
+            type="text"
+            value="{{ day }}"
+            readonly
+          />
+          <input
+            class="profile-info-birth-date-year"
+            type="text"
+            value="{{ year }}"
+            readonly
+          />
+        </div>
+        <p>Phone Number</p>
+        <input
+        *ngIf = "userInfo.phoneNumber != null"
+          class="profile-info-phone-number"
+          type="text"
+          value="{{ userInfo.phoneNumber }}"
+          readonly
+        />
+        <input
+        *ngIf = "userInfo.phoneNumber == null"
+          class="profile-info-phone-number"
+          type="text"
+          value=""
+          readonly
+        />
+        <p>Email Address</p>
+        <input
+          class="profile-info-email"
+          type="text"
+          value="{{ userInfo.email }}"
+          readonly
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="optional" *ngIf="userInfo != undefined">
+    <div class="title">OPTIONAL</div>
+    <div class="address-info">
+        <div>
+      <p class="address-title">ADDRESS</p>
+
+      <p>Street</p>
+      <input
+      *ngIf= "userInfo.address != null && userInfo.address.street != null"
+        class="address-info-street"
+        type="text"
+        value="{{ userInfo.address.street }}"
+        placeholder="e.g. 5th Avenue"
+        readonly
+      />
+      <input
+      *ngIf= "userInfo.address == null || userInfo.address.street == null"
+        class="address-info-street"
+        type="text"
+        value=""
+        placeholder="e.g. 5th Avenue"
+        readonly
+      />
+      <div class="address-info-city-zip">
+        <div>
+      <p>City</p>
+      <input
+      *ngIf= "userInfo.address != null && userInfo.address.city != null"
+        class="address-info-city"
+        type="text"
+        value="{{ userInfo.address.city }}"
+        placeholder="e.g. New York"
+        readonly
+      />
+      <input
+      *ngIf= "userInfo.address == null || userInfo.address.city == null"
+        class="address-info-city"
+        type="text"
+        value=""
+        placeholder="e.g. New York"
+        readonly
+      />
+    </div>
+    <div>
+      <p>ZipCode</p>
+      <input
+      *ngIf= "userInfo.address != null && userInfo.address.zipCode != null"
+        class="address-info-zip"
+        type="text"
+        value="{{ userInfo.address.zipCode }}"
+        placeholder="e.g. 10065"
+        readonly
+      />
+      <input
+      *ngIf= "userInfo.address == null || userInfo.address.zipCode == null"
+        class="address-info-zip"
+        type="text"
+        value=""
+        placeholder="e.g. 10065"
+        readonly
+      />
+    </div>
+    </div>
+    <p>State</p>
+    <input
+    *ngIf= "userInfo.address != null && userInfo.address.state != null"
+      class="address-info-state"
+      type="text"
+      value="{{ userInfo.address.state }}"
+      placeholder="e.g. New York"
+      readonly
+    />
+    <input
+    *ngIf= "userInfo.address == null || userInfo.address.state == null"
+      class="address-info-state"
+      type="text"
+      value=""
+      placeholder="e.g. New York"
+      readonly
+    />
+    <p>Country</p>
+    <input
+    *ngIf= "userInfo.address != null && userInfo.address.country != null"
+      class="address-info-country"
+      type="text"
+      value="{{ userInfo.address.country }}"
+      placeholder="e.g. USA"
+      readonly
+    />
+    <input
+    *ngIf= "userInfo.address == null || userInfo.address.country == null"
+      class="address-info-country"
+      type="text"
+      value=""
+      placeholder="e.g. USA"
+      readonly
+    />
+  </div>
+</div>
+</div>
+</div>

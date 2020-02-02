@@ -1,0 +1,18 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div *ngIf="items != undefined" class="container">
+<app-tabs></app-tabs>
+<div class="tabs">
+<input class="tab" [ngClass]="{'activeTab' : activeActiveProducts}" type="button" value="Active" (click)="activeProducts()">
+<input class="tab" [ngClass]="{'activeTab' : !activeActiveProducts}" type="button" value="Sold" (click)="soldProducts()">
+</div>
+<app-my-account-products-list [items]="items" [activeActiveProducts]="activeActiveProducts"></app-my-account-products-list>
+<div class="load-button">
+<input [ngClass]="{'hide' : hide}" type="button" value="LOAD MORE" class="load" (click)="loadMore()">
+</div>
+</div>
+
+<div class="container" *ngIf="items != undefined && items.length == 0">
+<div class="message">
+     No products yet!
+</div>
+</div>

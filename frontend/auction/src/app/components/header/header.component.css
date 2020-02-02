@@ -97,15 +97,16 @@
   letter-spacing: 0.56px;
   margin-left: 28px;
 }
-.linksBelowHeader .active {
+.linksBelowHeader .active, .my-account-choice .active {
   color: #8367d8;
   font-weight: 700;
 }
-
+.linksBelowHeader a:hover {
+  color: #8367d8;
+}
 .search {
   position: relative;
 }
-
 .search > .searchIcon {
   position: absolute;
   right: 10px;
@@ -117,4 +118,44 @@
 }
 .auction > label:hover {
   cursor: pointer;
+}
+.links > a:hover {
+  color: #8367d8;
+}
+.my-account {
+  display: none;
+  justify-content: flex-end;
+}
+.my-account-choice {
+  display: flex;
+  background: #ffffff;
+  border: 1px solid #ececec;
+  height: 246px;
+  width: 172px;
+  position: absolute;
+  flex-direction: column;
+  padding-top: 30px;
+  margin-top: 30px;
+  margin-right: -40px;
+  z-index: 2;
+}
+.linksBelowHeader >.linkAcc:hover {
+  cursor: pointer;
+}
+.linksBelowHeader >.linkAcc.show {
+  color: #8367d8;
+}
+.linksBelowHeader >.linkAcc.show ~ .my-account {
+  display: flex;
+}
+.my-account-choice > a {
+  height: 55px;
+  font: 400 16px "Lato", sans-serif;
+  color: #9b9b9b;
+  letter-spacing: 0.56px;
+  text-decoration: none;
+}
+.my-account-choice > a:hover {
+  cursor: pointer;
+  color: #8367d8;
 }

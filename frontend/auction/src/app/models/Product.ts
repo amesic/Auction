@@ -14,4 +14,6 @@ export class Product {
     subcategory: Category;
     seller: User;
     images: Array<ImageProduct>;
+    timeLeft;
+    active;
   }
